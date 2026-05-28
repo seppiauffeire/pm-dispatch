@@ -1,0 +1,36 @@
+# PM Dispatch
+
+> Free product management tools and weekly newsletter, built by a Chief Product Officer with 10+ years in mobile gaming.
+
+## What is PM Dispatch?
+
+PM Dispatch (https://www.pmdispatch.com) is a free, no-login-required toolkit for product managers. Every tool runs entirely in the browser — no account, no paywall, no data sent to a server.
+
+## Tools
+
+- **RICE Prioritization Calculator** — Score backlog items by Reach, Impact, Confidence, and Effort to make data-driven prioritization decisions
+- **Stats Lab** — Frequentist A/B test significance testing, Bayesian conversion and retention analysis, and ARPU comparison calculator
+- **Growth Tools** — ROAS calculator, customer lifetime value (LTV) modeler, ad revenue projector, and cohort retention analysis
+- **A/B Sample Size Calculator** — Calculate minimum detectable effect (MDE)-based sample sizes for conversion rate, retention, and ARPU experiments
+- **PM Playbook** — Step-by-step guides on sprint planning, writing a PRD, setting OKRs, user research, and roadmap prioritization
+- **Daily PM Insight** — One product management insight per day from a rotating library of frameworks and tactics
+- **Gaming News** — Curated mobile gaming industry news for product managers
+
+## Newsletter
+
+PM Dispatch publishes a free weekly newsletter covering product management strategy, mobile game monetization, growth tactics, and PM career development.
+
+Subscribe: https://www.pmdispatch.com
+Beehiiv: https://pm-dispatch.beehiiv.com
+
+## Author
+
+Arturo Ruiz Valdés — Chief Product Officer with 10+ years in mobile gaming.
+LinkedIn: https://www.linkedin.com/in/arturoruizvaldes/
+
+## Technical
+
+- Single-page web application, no backend
+- Hosted on GitHub Pages at https://www.pmdispatch.com
+- All calculations run client-side in the browser
+- Free forever, no login required
