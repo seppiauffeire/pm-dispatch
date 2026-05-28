@@ -723,7 +723,114 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 .about-glow-blob{position:absolute;top:-40px;left:-40px;right:-40px;bottom:-40px;background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,transparent 60%);border-radius:32px;filter:blur(40px);z-index:-1;pointer-events:none}
 /* Nav SVG tab icons */
 .tab-icon-svg{width:15px;height:15px;flex-shrink:0;opacity:0.75}
-.nav-tab.active .tab-icon-svg,.nav-tab:hover .tab-icon-svg{opacity:1}</style>
+.nav-tab.active .tab-icon-svg,.nav-tab:hover .tab-icon-svg{opacity:1}
+/* Mobile tools grid — hidden on desktop */
+.mobile-tools-grid{display:none}
+.mobile-tool-btn{display:flex;flex-direction:column;align-items:center;gap:0.35rem;padding:0.85rem 0.4rem;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--t1);font-size:0.68rem;font-family:var(--sans);font-weight:500;cursor:pointer;transition:background 0.15s,border-color 0.15s;line-height:1.2;text-align:center}
+.mobile-tool-btn:hover,.mobile-tool-btn:active{background:var(--hover);border-color:var(--t3)}
+.mobile-tool-btn svg{opacity:0.8}
+.mobile-tool-btn.active{background:var(--accent1);color:#fff;border-color:transparent}
+.mobile-tool-btn.active svg{opacity:1}
+
+/* ═══════════════════════════════════════════════
+   MOBILE — all rules below only fire on phones
+   Desktop styles above are 100% untouched.
+═══════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Nav — icon-only scrollable tabs ── */
+  .topnav { padding: 0 0.6rem; }
+  .nav-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Fade right edge to hint at more tabs */
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-label { display: none; }
+  .nav-tab { padding: 0 0.7rem; min-width: 40px; gap: 0; }
+  .tab-icon-svg { width: 18px; height: 18px; opacity: 0.7; }
+
+  /* ── Page layout ── */
+  .page { padding: 1rem 0.85rem 2.5rem; }
+  .page-header { flex-direction: column; gap: 0.5rem; }
+  .page-actions { flex-wrap: wrap; }
+
+  /* ── Home hero — stack columns, hide 560px orbit ── */
+  .home-hero { flex-direction: column; padding: 2rem 1.25rem 2.5rem; gap: 1.75rem; align-items: flex-start; }
+  .home-right { display: none; }
+  .home-stats { gap: 1.5rem; }
+  .home-sub { max-width: 100%; }
+  #page-home { align-items: flex-start; overflow-y: auto; }
+
+  /* ── Mobile tools quick-access grid ── */
+  .mobile-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+    margin-top: 1.75rem;
+    width: 100%;
+  }
+
+  /* ── Guide panel & modal ── */
+  .guide-modal { padding: 0.75rem; }
+  .guide-modal-inner { padding: 1.25rem; max-width: 100%; }
+  .guide-panel { padding: 0 0.75rem 2.5rem; }
+  .guide-panel-title { font-size: 1.4rem; margin-bottom: 1.5rem; }
+
+  /* ── Newsletter modal — !important overrides inline styles ── */
+  #nl-modal > div {
+    max-width: calc(100vw - 1.5rem) !important;
+    padding: 1.5rem 1.25rem 1.25rem !important;
+    border-radius: 16px !important;
+  }
+
+  /* ── Auth modal ── */
+  #auth-modal > div {
+    max-width: calc(100vw - 1.5rem) !important;
+    padding: 1.5rem 1.25rem !important;
+    border-radius: 16px !important;
+  }
+
+  /* ── Export gate modal ── */
+  #export-gate-modal > div {
+    max-width: calc(100vw - 1.5rem) !important;
+    padding: 1.25rem !important;
+    border-radius: 16px !important;
+  }
+
+  /* ── Rail carousel — scale cards down, hide arrows ── */
+  .rail-stage { height: 280px; }
+  .rail-card {
+    width: 160px !important;
+    height: 240px !important;
+    margin-top: -120px !important;
+    margin-left: -80px !important;
+  }
+  .rail-card[data-pos="-1"] { transform: translate3d(-170px,18px,-80px) scale(0.85) rotateY(12deg) !important; }
+  .rail-card[data-pos="1"]  { transform: translate3d(170px,18px,-80px) scale(0.85) rotateY(-12deg) !important; }
+  .rail-card[data-pos="-2"] { transform: translate3d(-310px,38px,-200px) scale(0.68) rotateY(22deg) !important; }
+  .rail-card[data-pos="2"]  { transform: translate3d(310px,38px,-200px) scale(0.68) rotateY(-22deg) !important; }
+  .rail-arrow { display: none; }
+
+  /* ── Grid rows — max 2 cols on mobile ── */
+  .row3, .row4 { grid-template-columns: 1fr 1fr; }
+
+  /* ── Cards ── */
+  .card-body { padding: 0.85rem; }
+
+  /* ── Hero buttons ── */
+  .btn-hero { padding: 0.75rem 1.5rem; font-size: 0.92rem; }
+
+  /* ── Subtabs — horizontal scroll instead of wrap ── */
+  .subtabs { width: 100%; flex-wrap: nowrap; overflow-x: auto; }
+  .subtab { white-space: nowrap; }
+
+  /* ── About page ── */
+  .about-grid { gap: 0.85rem; }
+}</style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9JYM5P6SB"></script>
 <script>
@@ -744,23 +851,23 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
   <div class="nav-tabs">
     <button class="nav-tab" onclick="switchPage('rice')" data-page="rice">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>Prioritization</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="tab-label">Prioritization</span></button>
     <button class="nav-tab" onclick="switchPage('stats')" data-page="stats">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stats Lab</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span class="tab-label">Stats Lab</span></button>
     <button class="nav-tab" onclick="switchPage('growth')" data-page="growth">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Growth Tools</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span class="tab-label">Growth Tools</span></button>
     <button class="nav-tab" onclick="switchPage('samplesize')" data-page="samplesize">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg>A/B Sample Size</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg><span class="tab-label">A/B Sample Size</span></button>
     <button class="nav-tab" onclick="switchPage('guides')" data-page="guides">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>PM Playbook</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="tab-label">PM Playbook</span></button>
     <button class="nav-tab" onclick="switchPage('daily')" data-page="daily">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Daily Insight</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="tab-label">Daily Insight</span></button>
     <button class="nav-tab" onclick="switchPage('news')" data-page="news">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg>Gaming News</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg><span class="tab-label">Gaming News</span></button>
     <button class="nav-tab" onclick="switchPage('leaderboard')" data-page="leaderboard">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>Leaderboard</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span class="tab-label">Leaderboard</span></button>
     <button class="nav-tab" onclick="switchPage('about')" data-page="about">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>About</button>
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tab-label">About</span></button>
   </div>
 
 <div class="nav-right">
@@ -813,6 +920,46 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         <div class="home-stat"><div class="home-stat-val">20+</div><div class="home-stat-label">Tools</div></div>
         <div class="home-stat"><div class="home-stat-val">5</div><div class="home-stat-label">Frameworks</div></div>
         <div class="home-stat"><div class="home-stat-val">Free</div><div class="home-stat-label">Always</div></div>
+      </div>
+
+      <!-- Mobile-only tools grid — hidden on desktop via CSS -->
+      <div class="mobile-tools-grid">
+        <button class="mobile-tool-btn" data-page="rice" onclick="switchPage('rice')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Prioritization</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="stats" onclick="switchPage('stats')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Stats Lab</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="growth" onclick="switchPage('growth')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span>Growth Tools</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="samplesize" onclick="switchPage('samplesize')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+          <span>A/B Sample Size</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="guides" onclick="switchPage('guides')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>PM Playbook</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="daily" onclick="switchPage('daily')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Daily Insight</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="news" onclick="switchPage('news')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg>
+          <span>Gaming News</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="leaderboard" onclick="switchPage('leaderboard')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          <span>Leaderboard</span>
+        </button>
+        <button class="mobile-tool-btn" data-page="about" onclick="switchPage('about')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>About</span>
+        </button>
       </div>
     </div>
     <!-- Right: tool orbit — 8 nodes at 45° on r=210, orbit 560×560, center 280,280 -->
@@ -2250,8 +2397,10 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 function switchPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.mobile-tool-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   const _nb=document.querySelector('[data-page="'+name+'"]'); if(_nb) _nb.classList.add('active');
+  const _mb=document.querySelector('.mobile-tool-btn[data-page="'+name+'"]'); if(_mb) _mb.classList.add('active');
   if(name==='daily') { setTimeout(loadDailyInsight, 80); }
   if(name==='stats') { setTimeout(()=>{calcFreq();calcBayesConv();calcBayesRet();calcARPU();},50); }
   if(name==='growth') { setTimeout(()=>{calcROAS();calcLTV();calcAdRev();calcCohort();},50); }
