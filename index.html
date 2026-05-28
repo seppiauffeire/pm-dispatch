@@ -1,18 +1,65 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PM Dispatch — The PM Toolkit</title>
-<meta name="description" content="Free product management tools for PMs: A/B test stats, RICE scoring, growth modeling, retention analysis, ROAS calculators, and more. Built by an actual PM.">
-<meta property="og:title" content="PM Dispatch — The PM Toolkit">
-<meta property="og:description" content="Free PM tools: A/B testing stats, RICE scoring, growth modeling, retention analysis, and more. Built by an actual PM, not AI.">
+<meta name="description" content="Free PM tools for product managers: A/B test calculator, RICE scoring, sample size calculator, growth modeling, ROAS calculator, retention analysis, and North Star metrics. Plus a weekly newsletter on product management and mobile game monetization.">
+<meta name="author" content="Arturo Ruiz Valdés">
+<meta name="keywords" content="PM tools, product manager tools, A/B test calculator, RICE scoring, sample size calculator, growth model, ROAS calculator, retention analysis, North Star metric, mobile game monetization, product management newsletter">
+
+<!-- Open Graph -->
+<meta property="og:title" content="PM Dispatch — Free PM Tools & Newsletter">
+<meta property="og:description" content="A/B test calculator, RICE scoring, growth modeling, ROAS calculator, and more — free tools built by a senior PM with 10+ years in mobile games.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.pmdispatch.com/">
+<meta property="og:site_name" content="PM Dispatch">
+<meta property="og:image" content="https://www.pmdispatch.com/logos/profilepic.jpg">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+
+<!-- Twitter / X -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PM Dispatch — The PM Toolkit">
-<meta name="twitter:description" content="Free PM tools: A/B testing stats, RICE scoring, growth modeling, retention analysis, and more.">
+<meta name="twitter:title" content="PM Dispatch — Free PM Tools & Newsletter">
+<meta name="twitter:description" content="Free PM tools: A/B test calculator, RICE scoring, growth modeling, ROAS calculator, and more. Newsletter on PM + game monetization.">
+<meta name="twitter:image" content="https://www.pmdispatch.com/logos/profilepic.jpg">
+
 <link rel="canonical" href="https://www.pmdispatch.com/">
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "PM Dispatch",
+      "url": "https://www.pmdispatch.com/",
+      "description": "Free PM tools and newsletter for product managers",
+      "author": {
+        "@type": "Person",
+        "name": "Arturo Ruiz Valdés",
+        "jobTitle": "Chief Product Officer",
+        "url": "https://www.linkedin.com/in/arturoruizvaldes/"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "PM Dispatch Toolkit",
+      "url": "https://www.pmdispatch.com/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "isAccessibleForFree": true,
+      "description": "A collection of free product management tools including A/B test calculator, RICE scoring, growth modeling, ROAS calculator, and retention analysis.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23f2f2f2'/><text x='50' y='72' font-size='64' font-family='system-ui,sans-serif' font-weight='900' fill='%23080808' text-anchor='middle'>P</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -4032,7 +4079,10 @@ function closeNLModalBtn(){
   setTimeout(()=>{ m.style.display = 'none'; }, 280);
 }
 
-function submitNewsletter(inputId){
+// ── Replace with your Cloudflare Worker URL after deploying subscribe-worker.js ──
+const SUBSCRIBE_WORKER_URL = 'pmdispatch-subscribe.arturoruizvaldes.workers.dev';
+
+async function submitNewsletter(inputId){
   const input = document.getElementById(inputId);
   const email = (input?.value || '').trim();
   const statusId = inputId === 'nl-email' ? 'nl-status' : 'about-nl-status';
@@ -4043,23 +4093,35 @@ function submitNewsletter(inputId){
     return;
   }
 
-  // Subscribe via Beehiiv — opens their confirmation page with email pre-filled
-  window.open('https://pm-dispatch.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank', 'noopener,noreferrer');
+  // Show loading state
+  if(statusEl){ statusEl.style.color='var(--t2)'; statusEl.textContent='Subscribing…'; }
+  if(input) input.disabled = true;
 
-  // Success state
-  if(input) input.value = '';
-  if(statusEl){
-    statusEl.style.color = 'var(--green)';
-    statusEl.innerHTML = '✓ Check the new tab to confirm your subscription!';
+  try {
+    const res = await fetch(SUBSCRIBE_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+
+    if(res.ok && data.success){
+      if(input){ input.value = ''; input.disabled = false; }
+      if(statusEl){ statusEl.style.color='var(--green)'; statusEl.textContent='✓ You\'re in! First issue coming soon.'; }
+      nlDismissed = true;
+      if(inputId === 'nl-email') setTimeout(closeNLModalBtn, 2000);
+      return;
+    } else {
+      if(input) input.disabled = false;
+      if(statusEl){ statusEl.style.color='var(--red)'; statusEl.textContent = data.error || 'Something went wrong. Try again.'; }
+      return;
+    }
+  } catch(err){
+    if(input) input.disabled = false;
+    if(statusEl){ statusEl.style.color='var(--red)'; statusEl.textContent='Connection error. Please try again.'; }
+    return;
   }
 
-  // Auto-close modal after 2s if that's where they signed up
-  if(inputId === 'nl-email'){
-    setTimeout(closeNLModalBtn, 2000);
-  }
-
-  // Mark newsletter as satisfied so modal doesn't pop again
-  nlDismissed = true;
 }
 
 // Render timeline on load (in case someone lands on about directly)
@@ -4151,7 +4213,11 @@ function submitAuth(){
     if(users.find(u=>u.email===email)){st.style.color='var(--red)';st.textContent='That email already has an account. Try logging in.';return;}
     const nlChecked = document.getElementById('auth-nl-check')?.checked;
     if(nlChecked){
-      window.open('https://pm-dispatch.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank', 'noopener,noreferrer');
+      fetch(SUBSCRIBE_WORKER_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email})
+      }).catch(()=>{}); // fire-and-forget — account creation already confirmed
     }
     const localUses = lsGet(LS_MY_USES,0);
     const localStreak = lsGet(LS_MY_STREAK,{streak:0,lastDay:''});
@@ -4354,7 +4420,11 @@ function submitExportGate(){
     saveAllUsers(users);
   }
   lsSet(LS_USER,{email,name:u.name});
-  window.open('https://pm-dispatch.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank', 'noopener,noreferrer');
+  fetch(SUBSCRIBE_WORKER_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email})
+  }).catch(()=>{}); // fire-and-forget — export proceeds regardless
 
   st.style.color='var(--green)';st.textContent='✓ Account created! Downloading…';
   renderNavAuth();
