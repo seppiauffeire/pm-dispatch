@@ -779,6 +779,92 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 .mobile-tool-btn.active svg{opacity:1}
 
 /* ═══════════════════════════════════════════════
+   PM CHALLENGE
+═══════════════════════════════════════════════ */
+#page-challenge{padding:0}
+.ch-state{width:100%;height:100%;overflow-y:auto}
+
+/* Start screen */
+.ch-start-wrap{max-width:560px;margin:0 auto;padding:3rem 1.5rem 4rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0}
+.ch-mode-pill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.9rem;border-radius:99px;border:1px solid var(--border2);background:var(--bg3);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--t2);margin-bottom:1.5rem}
+.ch-start-title{font-family:var(--display);font-size:2rem;font-weight:800;color:var(--t1);letter-spacing:-0.03em;line-height:1.15;margin-bottom:0.6rem}
+.ch-start-sub{font-size:0.9rem;color:var(--t3);margin-bottom:1.75rem}
+.ch-start-meta{font-size:0.85rem;color:var(--t2);margin-bottom:1.5rem;min-height:1.4em}
+.ch-start-btn{padding:0.85rem 2.25rem;font-size:1rem;margin-bottom:2.5rem}
+.ch-start-rules{display:flex;flex-direction:column;gap:0.6rem;text-align:left;width:100%;max-width:380px}
+.ch-rule{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.82rem;color:var(--t2);line-height:1.5}
+.ch-rule span{flex-shrink:0;font-size:1rem}
+
+/* Play screen */
+.ch-play-wrap{max-width:640px;margin:0 auto;padding:1.75rem 1.5rem 3rem;display:flex;flex-direction:column;gap:1.25rem}
+.ch-play-header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.ch-progress-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);white-space:nowrap}
+.ch-timer-wrap{display:flex;align-items:center;gap:0.65rem;flex:1;max-width:280px}
+.ch-timer-track{flex:1;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.ch-timer-fill{height:100%;background:var(--t1);border-radius:99px;transition:width 1s linear;transition-timing-function:linear}
+.ch-timer-count{font-family:var(--mono);font-size:0.78rem;color:var(--t2);min-width:24px;text-align:right}
+.ch-timer-fill.warning{background:var(--amber)}
+.ch-timer-fill.danger{background:var(--red)}
+.ch-q-mode-tag{display:inline-block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);margin-bottom:0.75rem}
+.ch-q-context{font-size:0.82rem;color:var(--t2);line-height:1.65;margin-bottom:1rem;padding:0.75rem 1rem;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
+.ch-q-text{font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--t1);letter-spacing:-0.01em;line-height:1.4}
+.ch-options{display:flex;flex-direction:column;gap:0.65rem}
+.ch-option{width:100%;text-align:left;padding:1rem 1.1rem;border-radius:12px;border:1px solid var(--border2);background:var(--bg2);color:var(--t1);font-size:0.88rem;font-family:var(--sans);cursor:pointer;line-height:1.5;transition:border-color 0.15s,background 0.15s;display:flex;align-items:flex-start;gap:0.7rem}
+.ch-option:hover{border-color:var(--t3);background:var(--bg3)}
+.ch-option.selected{border-color:var(--t1);background:rgba(255,255,255,0.05)}
+.ch-option-letter{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;font-family:var(--mono);color:var(--t3);margin-top:1px;transition:all 0.15s}
+.ch-option.selected .ch-option-letter{background:var(--t1);color:var(--bg);border-color:transparent}
+.ch-option-text{flex:1}
+
+/* Reveal screen */
+.ch-reveal-wrap{max-width:640px;margin:0 auto;padding:1.75rem 1.5rem 3rem;display:flex;flex-direction:column;gap:1.25rem}
+.ch-reveal-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
+.ch-reveal-score-badge{font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--t1)}
+.ch-reveal-speed{font-size:0.75rem;color:var(--t3)}
+.ch-reveal-options{display:flex;flex-direction:column;gap:0.5rem}
+.ch-rev-option{padding:0.85rem 1.1rem;border-radius:12px;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:flex-start;gap:0.75rem}
+.ch-rev-option.chosen{border-color:var(--t3);background:rgba(255,255,255,0.04)}
+.ch-rev-option.best-answer{border-color:var(--green);background:var(--green-bg)}
+.ch-rev-option-score{flex-shrink:0;font-family:var(--mono);font-size:0.78rem;font-weight:700;width:32px;text-align:right;padding-top:2px}
+.ch-rev-option.best-answer .ch-rev-option-score{color:var(--green)}
+.ch-rev-option-body{flex:1}
+.ch-rev-option-text{font-size:0.86rem;color:var(--t1);line-height:1.5;margin-bottom:0.3rem}
+.ch-rev-option-rationale{font-size:0.75rem;color:var(--t3);line-height:1.55}
+.ch-rev-option-label{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:2px 6px;border-radius:4px;margin-left:0.4rem}
+.ch-rev-option.chosen .ch-rev-option-label{background:rgba(255,255,255,0.08);color:var(--t3)}
+.ch-reveal-insight{border-left:3px solid var(--t3) !important}
+.ch-reveal-insight-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);margin-bottom:0.5rem}
+.ch-reveal-insight-text{font-size:0.86rem;color:var(--t1);line-height:1.65}
+.ch-next-btn{align-self:flex-end;padding:0.7rem 1.75rem}
+
+/* End screen */
+.ch-end-wrap{max-width:640px;margin:0 auto;padding:2rem 1.5rem 3.5rem;display:flex;flex-direction:column;gap:1.5rem}
+.ch-end-top{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.ch-end-score-ring{width:110px;height:110px;border-radius:50%;border:3px solid var(--t1);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.ch-end-score-val{font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--t1);line-height:1}
+.ch-end-score-max{font-size:0.68rem;color:var(--t3)}
+.ch-end-meta{display:flex;flex-direction:column;gap:0.5rem;flex:1}
+.ch-end-rank{font-family:var(--display);font-size:1.35rem;font-weight:700;color:var(--t1)}
+.ch-end-streak{font-size:0.88rem;color:var(--t2)}
+.ch-end-next{font-size:0.78rem;color:var(--t3)}
+.ch-end-breakdown{display:flex;flex-direction:column;gap:0.5rem}
+.ch-end-q-row{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-radius:10px;background:var(--bg2);border:1px solid var(--border)}
+.ch-end-q-label{font-size:0.82rem;color:var(--t2);flex:1}
+.ch-end-q-score{font-family:var(--mono);font-size:0.88rem;font-weight:600;color:var(--t1)}
+.ch-end-save{padding:1.25rem;border-radius:14px;border:1px solid var(--border2);background:var(--bg2)}
+.ch-end-share{display:flex;gap:0.75rem;flex-wrap:wrap}
+.ch-share-btn{display:flex;align-items:center;gap:0.5rem;font-size:0.85rem}
+
+/* Done screen */
+.ch-done-check{font-size:3rem;margin-bottom:0.5rem}
+.ch-done-score{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--t1);margin:0.5rem 0 1rem}
+.ch-done-countdown{font-size:0.85rem;color:var(--t3);margin-bottom:2rem}
+
+/* Feedback modal type buttons */
+.fb-type-btn{padding:0.4rem 0.85rem;border-radius:99px;border:1px solid var(--border2);background:var(--bg3);color:var(--t2);font-size:0.78rem;font-family:var(--sans);cursor:pointer;transition:all 0.15s}
+.fb-type-btn.active{border-color:var(--t1);background:rgba(255,255,255,0.08);color:var(--t1)}
+
+/* ═══════════════════════════════════════════════
    MOBILE — all rules below only fire on phones
    Desktop styles above are 100% untouched.
 ═══════════════════════════════════════════════ */
@@ -810,6 +896,15 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   .home-stats { gap: 1.5rem; }
   .home-sub { max-width: 100%; }
   #page-home { align-items: flex-start; overflow-y: auto; }
+
+  /* ── Challenge page on mobile ── */
+  .ch-start-wrap { padding: 2rem 1rem 3rem; }
+  .ch-start-title { font-size: 1.6rem; }
+  .ch-play-wrap, .ch-reveal-wrap, .ch-end-wrap { padding: 1.25rem 1rem 2.5rem; }
+  .ch-end-top { gap: 1.25rem; }
+  .ch-end-score-ring { width: 88px; height: 88px; }
+  .ch-end-score-val { font-size: 1.6rem; }
+  .ch-end-share { flex-direction: column; }
 
   /* ── Mobile tools quick-access grid ── */
   .mobile-tools-grid {
@@ -928,8 +1023,8 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg><span class="tab-label">A/B Sample Size</span></button>
     <button class="nav-tab" onclick="switchPage('guides')" data-page="guides">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="tab-label">PM Playbook</span></button>
-    <button class="nav-tab" onclick="switchPage('daily')" data-page="daily">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="tab-label">Daily Insight</span></button>
+    <button class="nav-tab" onclick="switchPage('challenge')" data-page="challenge">
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span class="tab-label">PM Challenge</span></button>
     <button class="nav-tab" onclick="switchPage('news')" data-page="news">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg><span class="tab-label">Gaming News</span></button>
     <button class="nav-tab" onclick="switchPage('leaderboard')" data-page="leaderboard">
@@ -1012,9 +1107,9 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           <span>PM Playbook</span>
         </button>
-        <button class="mobile-tool-btn" data-page="daily" onclick="switchPage('daily')">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <span>Daily Insight</span>
+        <button class="mobile-tool-btn" data-page="challenge" onclick="switchPage('challenge')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          <span>PM Challenge</span>
         </button>
         <button class="mobile-tool-btn" data-page="news" onclick="switchPage('news')">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg>
@@ -2208,6 +2303,20 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       </div>
     </div>
 
+    <!-- ── Feedback CTA ── -->
+    <div class="glass-card" style="background:rgba(255,255,255,0.02);margin-bottom:1.25rem">
+      <div style="padding:1.75rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+        <div>
+          <div style="font-family:var(--display);font-size:1rem;font-weight:700;color:var(--t1);margin-bottom:0.3rem">Got feedback?</div>
+          <p style="font-size:0.84rem;color:var(--t2);line-height:1.6;max-width:420px">Bug, idea, feature request, or just a thought — I read every message. PM Dispatch is built in public and your input shapes what gets built next.</p>
+        </div>
+        <button onclick="openFeedbackModal()" style="flex-shrink:0;padding:0.7rem 1.5rem;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);color:var(--t1);font-size:0.88rem;font-weight:600;font-family:var(--sans);cursor:pointer;display:flex;align-items:center;gap:0.5rem;transition:all 0.15s;white-space:nowrap" onmouseover="this.style.background='var(--bg4)';this.style.borderColor='var(--t3)'" onmouseout="this.style.background='var(--bg3)';this.style.borderColor='var(--border2)'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Leave feedback
+        </button>
+      </div>
+    </div>
+
     <!-- ── Newsletter CTA ── -->
     <div class="glass-card" style="background:rgba(255,255,255,0.03)">
       <div style="padding:2.25rem;text-align:center;position:relative">
@@ -2258,6 +2367,35 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
     <p style="font-size:0.74rem;color:var(--t2);text-align:center;margin-top:0.6rem">No spam. Unsubscribe any time.</p>
     <button onclick="closeNLModalBtn()" style="display:block;width:100%;margin-top:0.65rem;background:transparent;border:none;color:var(--t3);font-size:0.78rem;cursor:pointer;font-family:var(--sans);padding:0.3rem;transition:color 0.15s" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">Maybe later</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     FEEDBACK MODAL
+══════════════════════════════════════════════ -->
+<div id="feedback-modal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.78);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:1.5rem" onclick="closeFeedbackModal(event)">
+  <div onclick="event.stopPropagation()" style="background:rgba(17,17,17,0.97);border:1px solid rgba(255,255,255,0.08);border-radius:20px;max-width:480px;width:100%;padding:2.25rem 2rem 1.75rem;position:relative;box-shadow:0 40px 100px rgba(0,0,0,0.7)">
+    <button onclick="closeFeedbackModal()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--t2);font-size:1rem;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--sans)">✕</button>
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem">
+      <div style="width:42px;height:42px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--t1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div>
+        <div style="font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--t1);letter-spacing:-0.02em">Leave feedback</div>
+        <div style="font-size:0.78rem;color:var(--t3)">Bugs, ideas, requests — I read everything</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap" id="fb-type-row">
+      <button class="fb-type-btn active" data-type="idea" onclick="setFbType(this,'idea')">💡 Idea</button>
+      <button class="fb-type-btn" data-type="bug" onclick="setFbType(this,'bug')">🐛 Bug</button>
+      <button class="fb-type-btn" data-type="praise" onclick="setFbType(this,'praise')">⭐ Praise</button>
+      <button class="fb-type-btn" data-type="other" onclick="setFbType(this,'other')">💬 Other</button>
+    </div>
+    <textarea id="fb-message" rows="4" placeholder="What's on your mind?" style="width:100%;resize:vertical;margin-bottom:0.85rem;font-size:0.88rem;line-height:1.6"></textarea>
+    <input type="email" id="fb-email" placeholder="your@email.com (optional — for a reply)" style="width:100%;text-align:left;font-size:0.88rem;padding:0.7rem 0.9rem;border-radius:10px;margin-bottom:0.85rem">
+    <div id="fb-status" style="font-size:0.78rem;min-height:1.2em;margin-bottom:0.75rem;text-align:center"></div>
+    <button onclick="submitFeedback()" style="width:100%;padding:0.8rem;border:none;border-radius:10px;background:var(--t1);color:var(--bg);font-size:0.92rem;font-weight:700;font-family:var(--display);cursor:pointer;letter-spacing:-0.01em;transition:opacity 0.15s" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">Send feedback →</button>
   </div>
 </div>
 
@@ -2469,13 +2607,12 @@ function switchPage(name){
   document.getElementById('page-'+name).classList.add('active');
   const _nb=document.querySelector('[data-page="'+name+'"]'); if(_nb) _nb.classList.add('active');
   const _mb=document.querySelector('.mobile-tool-btn[data-page="'+name+'"]'); if(_mb) _mb.classList.add('active');
-  if(name==='daily') { setTimeout(loadDailyInsight, 80); }
+  if(name==='challenge') { setTimeout(initChallenge, 80); }
   if(name==='stats') { setTimeout(()=>{calcFreq();calcBayesConv();calcBayesRet();calcARPU();},50); }
   if(name==='growth') { setTimeout(()=>{calcROAS();calcLTV();calcAdRev();calcCohort();},50); }
   if(name==='samplesize') { setTimeout(()=>{calcSS();calcSSRet();calcSSARPU();calcMV();},50); }
   if(name==='northstar') { setTimeout(()=>{parseNSCSV();renderNS();},50); }
   if(name==='about') { /* about page is static */ }
-  if(name==='insight') { renderInsight(getTodayInsightIndex()); }
   if(name==='news') { loadGamingNews(); }
   // Count tool interactions for newsletter trigger
   if(['stats','growth','samplesize','vw','northstar','rice'].includes(name)) trackToolUse();
@@ -4717,84 +4854,241 @@ const INSIGHTS = [
 
 let currentInsightIdx = 0;
 
-function loadDailyInsight(idx) {
-  if (idx === undefined) {
-    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-    idx = dayOfYear % INSIGHTS.length;
+// ═══════════════════════════════════════════════
+// PM CHALLENGE
+// ═══════════════════════════════════════════════
+
+const LS_CH_STREAK  = 'pmch_streak';   // {streak, lastDate, longestStreak}
+const LS_CH_TODAY   = 'pmch_today';    // {date, finalScore, rawScore, multiplier, mode, qScores}
+const LS_CH_ALLTIME = 'pmch_alltime';  // {totalPoints}
+const FORMSPREE_ID  = 'https://formspree.io/f/xeednpre';              // Paste your Formspree form ID here (free at formspree.io)
+
+const RANK_TITLES = [
+  {title:'Associate PM', min:0},
+  {title:'PM',           min:500},
+  {title:'Senior PM',    min:1500},
+  {title:'Lead PM',      min:3500},
+  {title:'Director',     min:7000},
+  {title:'VP of Product',min:14000},
+  {title:'CPO',          min:28000},
+];
+const MODES = ['scenario','triage','kpi'];
+const MODE_LABELS = {scenario:'The Scenario', triage:'Screen Triage', kpi:'KPI Detective'};
+
+const CHALLENGE_QUESTIONS = {
+  scenario:[
+    {id:'S-001',title:'Dungeon Rush',context:'Mobile RPG. D1: 42%, D7: 18%, D30: 7%. IAP conversion: 1.4%. Last week: revenue -22%, sessions +8%. No major update shipped.',question:"Revenue is down 22% while sessions are up. What's your first diagnostic move?",options:[{text:'New content is driving sessions but not spending — audit monetization touchpoints in new content',points:60,rationale:"Reasonable hypothesis but skips a critical diagnostic step."},{text:'An A/B test may have misfired with pricing too high — check offer analytics immediately',points:40,rationale:"Possible, but no evidence of an A/B test running."},{text:'Session growth is masking churn from high-LTV spenders — segment DAU by spend tier first',points:80,rationale:"Best answer. When sessions rise and revenue falls, check if low-LTV users are inflating engagement while high-LTV users churn."},{text:'Push re-engagement is working but not converting — pivot to email',points:10,rationale:"No evidence push is the mechanism here."}],reveal:"When sessions go up but revenue falls, low-LTV users may be inflating the numbers while your actual spenders churn quietly. Segment before you diagnose."},
+    {id:'S-002',title:'BrainFlip',context:'Mobile puzzle, subscription. 50k DAU, $9.99/month. Trial conversion: 3.1%. Avg trial length before churn: 4.2 days out of a 7-day trial. D1: 61%, D7: 34%.',question:"Users are leaving trials 3 days early. What's the highest-impact first test?",options:[{text:'Shorten the trial to 3 days to create urgency before they self-select out',points:30,rationale:"Solves urgency, not the underlying value problem."},{text:'Add a hard paywall at day 3 mid-session to force the conversion decision',points:20,rationale:"Aggressive and likely to backfire — users haven't found value yet."},{text:'Find the aha moment feature and surface it in the first 48 hours of the trial',points:80,rationale:"Best answer. When trials end early, users aren't reaching value — not running out of time."},{text:'Extend the trial to 14 days and add a D14 content depth layer',points:40,rationale:"Valid but wrong direction — more time doesn't solve the value gap."}],reveal:"When trials end before they expire, users are not reaching value. Accelerate the aha moment, don't adjust the clock."},
+    {id:'S-003',title:'SnackQuest',context:'Food discovery app, freemium. MAU: 180k, DAU/MAU: 22%. Premium conversion: 2.8%. This month: premium subs +15%, DAU flat, revenue +12%. NPS dropped from +42 to +19.',question:'Revenue is up but NPS dropped 23 points in the same month. What do you investigate first?',options:[{text:"The NPS drop is from non-paying users who don't matter for the business",points:10,rationale:"NPS detractors spread negative word of mouth regardless of spend."},{text:'A recent UI change created friction for free users, hurting their experience',points:60,rationale:"Plausible, but the timing with sub growth makes the paywall hypothesis stronger."},{text:'The subscription paywall is blocking features free users expected, creating resentment',points:80,rationale:"Best answer. NPS drops when a product takes something away."},{text:'NPS methodology changed and the drop is a measurement artifact',points:20,rationale:"Always possible but lowest prior — investigate the product first."}],reveal:"NPS drops when a product takes something away. Subs going up alongside NPS decline almost always means monetization expansion came at the cost of the free-tier experience."},
+    {id:'S-004',title:'RocketMerge',context:'Casual merge game. D1: 55%, D7: 24%, D30: 9%. Sessions: 3.2/DAU/day. Avg session: 4.1 min. Energy cap of 5, 30-min recharge. D7-to-D30 drop steeper than benchmarks.',question:"The D7-to-D30 drop looks like an energy wall problem. What do you do first?",options:[{text:'Add a 3rd-session daily bonus to incentivize return visits beyond 2 sessions',points:40,rationale:"Potentially useful, but assumes energy is the root cause before confirming."},{text:'Increase energy cap from 5 to 8 so players can do more in one sitting',points:30,rationale:"Longer sessions ≠ better retention if the content runs out."},{text:'Pull session behavior for D7-D30 churners before assuming energy is the root cause',points:80,rationale:"Best answer. Energy systems get blamed first. The real question: are churners hitting the wall or exhausting content?"},{text:'Add offline progression so the game moves while users are away',points:50,rationale:"Reasonable but a big scope change. Diagnose first."}],reveal:"Energy systems get blamed first — are D7-D30 churners hitting the wall or churning from content exhaustion? Pull that cohort's session data before building."},
+    {id:'S-005',title:'CityStack',context:'City builder, F2P. New seasonal event launched. Week 1: DAU +18%, session length +22%, event completion rate 67%. IAP revenue: -8% WoW. No pricing change.',question:'Engagement is up across the board but revenue fell after the event launch. Most likely explanation?',options:[{text:'Event rewards are too generous, reducing scarcity and undercutting purchase motivation',points:80,rationale:"Best answer. Events that give too much for free train players to wait for the next one."},{text:'The event attracted low-LTV users who inflate engagement without spending',points:60,rationale:"Valid secondary hypothesis — worth checking alongside the rewards hypothesis."},{text:'A bug in the payment flow shipped alongside the event',points:40,rationale:"Possible, but would expect sharper revenue signal."},{text:'The event distracted users from the core loop where monetization lives',points:70,rationale:"Also plausible — check where in-game time is being spent."}],reveal:"Events that give too much for free train players to wait. Check what the event rewards versus what the store sells. Overlap = revenue cannibalization."},
+  ],
+  triage:[
+    {id:'T-001',title:'Onboarding Step 3',context:'Fitness app. 4-step onboarding completion: Step 1: 94%, Step 2: 81%, Step 3: 43%, Step 4 (of those reaching it): 71%. Step 3 asks users to select fitness goals from 12 checkbox options.',question:'Step 3 drops 38 points from the prior step. What\'s the highest-impact fix?',options:[{text:'Reduce to 3-5 options and make selection feel decisive (visual state, clear hierarchy)',points:80,rationale:"Best answer. 12 choices is decision paralysis. A 2-hour change with measurable lift."},{text:'Make the step optional with a "Skip for now" link',points:40,rationale:"Reduces drop-off but loses the personalization signal."},{text:'Add a progress indicator showing "Step 3 of 4"',points:20,rationale:"Marginal impact — the problem is choice overload, not context."},{text:'Move this step to after the first session when users are more invested',points:60,rationale:"Architecturally valid but bigger scope. Start with fewer options first."}],reveal:"12 choices is a decision paralysis problem. Fewer options with stronger visual feedback on selection — a 2-hour change with a measurable lift."},
+    {id:'T-002',title:'IAP Store Layout',context:'Mobile RPG. Store has 14 visible offers. Store open rate: 34% of DAU. Store conversion: 0.8%. Category benchmark: 2.1%. The top 3 purchased items are in the bottom third of the scroll.',question:"The store converts at less than half the benchmark. What's your first hypothesis?",options:[{text:'Prices are too high — run a 30% discount test on the top SKUs',points:30,rationale:"Price testing makes sense but only after layout is fixed."},{text:'Value prop per offer is unclear — add benefit labels',points:40,rationale:"Useful, but not the primary driver when the best items are buried."},{text:'The best-converting items are buried by scroll — surface the top 3 above the fold first',points:80,rationale:"Best answer. When your best-sellers are hidden, fix the layout before price or messaging."},{text:'Too many offers create choice paralysis — consolidate to 6-8 total',points:60,rationale:"Valid long-term fix, but layout is a 1-day test that tells you a lot first."}],reveal:"When your best-sellers are hidden, fix the layout before price or messaging. Merchandising beats discounting."},
+    {id:'T-003',title:'Push Opt-In Screen',context:'Social app. Push opt-in shown immediately after sign-up. Opt-in rate: 31%. iOS benchmark: 52%. Current: plain white background, one line of copy, then native iOS dialog.',question:"The opt-in rate is 21 points below benchmark. What's the fix?",options:[{text:'Add social proof: "Join 2M+ users who stay connected"',points:30,rationale:"Minor uplift — doesn't solve triggering iOS dialog too early."},{text:'Add a custom pre-permission screen explaining specific notification value before triggering the iOS dialog',points:80,rationale:"Best answer. iOS gives you one shot. A pre-permission screen sells the value before it counts."},{text:'Delay the prompt to day 2, after at least one session',points:70,rationale:"Also valid — D2 intent is often much higher."},{text:'Show example notifications so users know what they\'re opting into',points:50,rationale:"Good idea, but works best as part of the pre-permission screen."}],reveal:"iOS gives you one shot at the native dialog. A pre-permission screen sells the value before it counts. This single change typically moves opt-in 15-25 points."},
+    {id:'T-004',title:'Daily Login Reward',context:'Casual game. 120k DAU. Daily reward appears on first session: 7-day calendar, today\'s reward (500 coins), Claim button, 3 prior days greyed out. Screen skip rate: 28%.',question:'28% of DAUs close this screen without claiming a free reward. Most likely fix?',options:[{text:'Increase the reward value on days 4-7 to make the calendar feel worth tracking',points:30,rationale:"Better rewards help long-term but don't fix the immediate skip rate."},{text:'Add a countdown timer to create urgency before the reward expires',points:20,rationale:"Adds friction — won't fix the fundamental UX problem."},{text:'Make the Claim button more prominent and reduce visual noise from the full calendar',points:70,rationale:"Valid, but the calendar itself is the problem."},{text:'Remove the calendar entirely — show only today\'s reward and a streak counter',points:80,rationale:"Best answer. The calendar creates cognitive work. Greyed-out past days feel like a report card."}],reveal:"The calendar creates cognitive work. Greyed-out past days feel like a report card, not a reward. Simplify to one action: here's your reward, claim it."},
+    {id:'T-005',title:'Subscription Paywall',context:"Productivity app. Free users can create up to 3 projects. Paywall triggers at project 4: full-screen modal with 3-column feature comparison table (8 rows), monthly/annual pricing, 'Start Free Trial' CTA. Conversion: 1.9%. Benchmark: 3.5%.",question:'The paywall converts at nearly half the benchmark. Most likely reason?',options:[{text:'The free limit is too generous — users are satisfied with 3 projects',points:50,rationale:"Possible, but we know they're trying to create a 4th project — they hit the limit."},{text:'The feature comparison table creates too much friction at the moment of purchase decision',points:80,rationale:"Best answer. Paywalls that explain instead of sell kill the momentum a user just gave you."},{text:'Annual pricing should be the default displayed plan',points:40,rationale:"Worth testing, but not the primary driver of a 1.9% rate."},{text:"The wall triggers too early — 4-project users aren't invested enough",points:30,rationale:"Incorrect — 4-project users have self-selected as active. They're primed."}],reveal:"Paywalls that explain instead of sell kill momentum. Show them one thing they unlock, the price, and the trial button. A feature matrix belongs in a comparison page, not a paywall."},
+  ],
+  kpi:[
+    {id:'K-001',title:'Wednesday Revenue Spike',context:'Mobile RPG. Normal daily revenue: $12k-$15k. Last Wednesday: $47k. No planned promotion. No new content. No A/B test running. Spike lasted one day, returned to baseline Thursday.',question:"What's the most likely cause of a one-day 3× revenue spike with no owned action?",options:[{text:'A competitor had an outage, sending a wave of new users your way',points:20,rationale:"Would show in installs data, not just revenue."},{text:'A major content creator or influencer posted about the game',points:60,rationale:"Plausible, but would typically show a DAU spike alongside revenue."},{text:'An accidental offer or pricing error went live and users exploited it',points:70,rationale:"Possible — check offer history for display price anomalies."},{text:"A third-party app store promotion ran without the team's direct knowledge",points:80,rationale:"Best answer. Unexplained revenue spikes almost always trace to distribution. Pull store console data first."}],reveal:"Unexplained revenue spikes almost always trace to distribution, not product. App store featuring, a deal someone set up, a price display error. Pull store console data first."},
+    {id:'K-002',title:'Conversion Up, ARPU Flat',context:'Casual strategy game. Last patch added a Starter Pack: $1.99, shown to new users in session 1. Ever-converted rate: jumped from 2.1% to 4.3%. ARPU: moved from $0.41 to $0.42. DAU stable.',question:'Conversion doubled but ARPU barely moved. What happened?',options:[{text:'The starter pack cannibalized higher-ticket purchases — new buyers chose $1.99 instead of $9.99',points:80,rationale:"Best answer. Cheap entry offers boost conversion but can cannibalize ARPU if they replace, not supplement, higher-value purchases."},{text:'The new converters are from a low-LTV source and won\'t spend more',points:50,rationale:"Plausible — check traffic source segmentation."},{text:"Too early to judge — these converters haven't had time to make second purchases",points:40,rationale:"Valid if 1 week old. Less valid if 3+ weeks of data."},{text:"The $1.99 pack has low perceived value and doesn't lead to follow-on purchases",points:60,rationale:"Related hypothesis — check re-purchase rate for Starter Pack buyers."}],reveal:"Cheap entry offers boost conversion but can cannibalize ARPU if they replace rather than supplement higher-value purchases. Check whether existing spenders shifted their behavior."},
+    {id:'K-003',title:'D1 Jumped 8 Points Post-Patch',context:'Hypercasual game. D1 stable at 34% for 3 months. Patch last Tuesday: bug fixes, redesigned tutorial flow, minor visual update. Post-patch D1: 42%. No UA change.',question:'D1 jumped 8 points after a multi-part patch. Which element most likely explains it?',options:[{text:'The visual update made the game feel more polished, improving first impressions',points:30,rationale:"Visual polish helps but rarely drives 8-point D1 swings."},{text:'A bug fix resolved a crash on a specific device segment, silently recovering that cohort\'s D1',points:60,rationale:"Worth checking crash logs — if a device-specific crash was fixed, it would show here."},{text:'The new tutorial reduced early friction and got more users to the core loop before session end',points:80,rationale:"Best answer. Tutorial changes are the most common driver of large D1 swings."},{text:'The patch reduced APK size, lowering install-to-play friction',points:40,rationale:"Possible, but would show in time-to-first-session, not D1."}],reveal:"Tutorial changes are the most common driver of large D1 swings because they directly affect whether new users understand why they should come back."},
+    {id:'K-004',title:'Cohort-Specific Churn Spike',context:'SaaS productivity tool. Monthly churn: stable at 3.2% overall. This month, users who signed up 14 months ago are churning at 6.8%. No pricing change. No major product change.',question:'One specific cohort is churning at more than twice the average. Most likely explanation?',options:[{text:'12-month tools follow a natural lifecycle — these users extracted the value and moved on',points:40,rationale:"Plausible, but the cohort timing makes a billing event much more likely."},{text:'Annual contracts from that signup cohort are expiring this month',points:80,rationale:"Best answer. Cohort-specific churn spikes almost always trace to a contract or billing event."},{text:'A competitor launched something better 2 months ago and early adopters are most informed',points:50,rationale:"Worth investigating, but would expect spread across more cohorts."},{text:"Onboarding from 14 months ago was weaker — those users never activated and are finally churning",points:30,rationale:"Would expect higher churn earlier in their lifecycle if onboarding was truly bad."}],reveal:"Cohort-specific churn spikes almost always trace to a billing event. M-14 churning hard = annual subscriptions from month 2 are expiring. Pull billing data before anything else."},
+    {id:'K-005',title:'Longer Sessions, Fewer Sessions',context:'Mobile RPG. Baseline: 2.8 sessions/DAU/day, 6.2 min avg session. This week: 1.9 sessions/DAU/day, 11.8 min avg session. DAU flat. Total daily play time roughly unchanged.',question:'Players are playing in fewer but much longer sessions. Most likely cause?',options:[{text:'A new raid or guild event requires sustained play, creating longer single sessions',points:70,rationale:"Likely if a guild/raid event launched — check content update log."},{text:'A server issue is causing reconnection loops that artificially inflate session length',points:60,rationale:"Would show in error logs and support tickets."},{text:'An energy system change or removal allowed users to exhaust resources in one sitting',points:80,rationale:"Best answer. When session count drops proportionally to session length and total time holds flat, play time redistributed."},{text:"The new content is so engaging users enter flow state and don't stop",points:30,rationale:"Flow state is real but rarely explains this specific pattern overnight."}],reveal:"When session count drops proportionally to session length increase and total play time holds flat, the play time redistributed — didn't grow. Most common cause: energy or gate change removed the natural break point."},
+  ],
+};
+
+let CH = { mode:null, questions:[], qIdx:0, answers:[], timerStart:0, timerInterval:null };
+
+function getChallenge(){
+  const day = Math.floor(Date.now()/86400000);
+  const mode = MODES[day%3];
+  const pool = CHALLENGE_QUESTIONS[mode];
+  const off = Math.floor(day/3)%pool.length;
+  return {mode, questions:[pool[off%pool.length], pool[(off+1)%pool.length], pool[(off+2)%pool.length]]};
+}
+
+function initChallenge(){
+  const today = todayStr();
+  const done = lsGet(LS_CH_TODAY,null);
+  if(done && done.date===today){ showChState('done'); renderDoneScreen(done); return; }
+  const ch = getChallenge();
+  CH.mode=ch.mode; CH.questions=ch.questions;
+  const pill=document.getElementById('ch-mode-badge');
+  if(pill) pill.textContent=MODE_LABELS[ch.mode]||ch.mode;
+  const streak=lsGet(LS_CH_STREAK,{streak:0,lastDate:'',longestStreak:0});
+  const meta=document.getElementById('ch-start-meta');
+  if(meta) meta.innerHTML=streak.streak>0?`🔥 <strong style="color:var(--t1)">${streak.streak}-day streak</strong>`:'Start your streak today';
+  showChState('start');
+}
+
+function showChState(s){
+  ['start','play','reveal','end','done'].forEach(n=>{
+    const el=document.getElementById('ch-'+n);
+    if(el) el.style.display=(n===s)?'':'none';
+  });
+}
+
+function startChallenge(){ CH.qIdx=0; CH.answers=[]; showChState('play'); renderQuestion(); }
+
+function renderQuestion(){
+  const q=CH.questions[CH.qIdx];
+  const LETTERS=['A','B','C','D'];
+  document.getElementById('ch-progress-label').textContent=`Question ${CH.qIdx+1} of 3`;
+  document.getElementById('ch-q-mode-tag').textContent=MODE_LABELS[CH.mode];
+  document.getElementById('ch-q-context').textContent=q.context;
+  document.getElementById('ch-q-text').textContent=q.question;
+  document.getElementById('ch-options').innerHTML=q.options.map((o,i)=>
+    `<button class="ch-option" onclick="selectOption(${i})"><span class="ch-option-letter">${LETTERS[i]}</span><span class="ch-option-text">${o.text}</span></button>`
+  ).join('');
+  startTimer();
+}
+
+function startTimer(){
+  const DUR=60; CH.timerStart=Date.now(); let sLeft=DUR;
+  const fill=document.getElementById('ch-timer-fill');
+  const cnt=document.getElementById('ch-timer-count');
+  if(fill){fill.style.width='100%'; fill.className='ch-timer-fill';}
+  clearInterval(CH.timerInterval);
+  CH.timerInterval=setInterval(()=>{
+    sLeft=Math.max(0,DUR-Math.floor((Date.now()-CH.timerStart)/1000));
+    const pct=(sLeft/DUR)*100;
+    if(fill){fill.style.width=pct+'%'; fill.className='ch-timer-fill'+(sLeft<=10?' danger':sLeft<=20?' warning':'');}
+    if(cnt) cnt.textContent=sLeft;
+    if(sLeft===0){clearInterval(CH.timerInterval); selectOption(-1);}
+  },500);
+}
+
+function selectOption(optIdx){
+  clearInterval(CH.timerInterval);
+  const ms=Date.now()-CH.timerStart;
+  const q=CH.questions[CH.qIdx];
+  const pts=optIdx>=0?q.options[optIdx].points:0;
+  const spd=optIdx>=0?Math.round(Math.max(0,(60-ms/1000)/60)*20):0;
+  if(optIdx>=0){ const btns=document.querySelectorAll('.ch-option'); if(btns[optIdx]) btns[optIdx].classList.add('selected'); }
+  CH.answers.push({optIdx,points:pts,speedBonus:spd,ms});
+  setTimeout(()=>showReveal(),250);
+}
+
+function showReveal(){
+  const q=CH.questions[CH.qIdx];
+  const ans=CH.answers[CH.qIdx];
+  const total=ans.points+ans.speedBonus;
+  const LETTERS=['A','B','C','D'];
+  const bestPts=Math.max(...q.options.map(o=>o.points));
+  document.getElementById('ch-reveal-score-badge').textContent=`+${total} pts`;
+  document.getElementById('ch-reveal-speed').textContent=ans.speedBonus>0?`Includes +${ans.speedBonus} speed bonus`:'No speed bonus this time';
+  document.getElementById('ch-reveal-options').innerHTML=q.options.map((o,i)=>{
+    const chosen=i===ans.optIdx, best=o.points===bestPts;
+    let cls='ch-rev-option'+(best?' best-answer':(chosen?' chosen':''));
+    const lbl=chosen?'<span class="ch-rev-option-label">Your pick</span>':'';
+    const blbl=(best&&!chosen)?'<span class="ch-rev-option-label" style="background:rgba(34,197,94,0.15);color:var(--green)">Best</span>':'';
+    return `<div class="${cls}"><div class="ch-rev-option-score">${o.points}</div><div class="ch-rev-option-body"><div class="ch-rev-option-text"><strong>${LETTERS[i]}.</strong> ${o.text}${lbl}${blbl}</div><div class="ch-rev-option-rationale">${o.rationale}</div></div></div>`;
+  }).join('');
+  document.getElementById('ch-reveal-insight').textContent=q.reveal;
+  const nb=document.getElementById('ch-next-btn');
+  if(nb) nb.textContent=CH.qIdx<2?'Next question →':'See results →';
+  showChState('reveal');
+}
+
+function nextQuestion(){ CH.qIdx++; if(CH.qIdx>=3) showEndScreen(); else{ showChState('play'); renderQuestion(); } }
+
+function getRankTitle(pts){ let r=RANK_TITLES[0]; for(const t of RANK_TITLES){if(pts>=t.min)r=t;else break;} return r; }
+function getNextRank(pts){ for(const r of RANK_TITLES){if(r.min>pts)return r;} return null; }
+function getStreakMult(s){ return s>=21?1.5:s>=14?1.25:s>=7?1.1:1.0; }
+
+function showEndScreen(){
+  const today=todayStr();
+  const raw=CH.answers.reduce((s,a)=>s+a.points+a.speedBonus,0);
+  let sd=lsGet(LS_CH_STREAK,{streak:0,lastDate:'',longestStreak:0});
+  const yest=new Date(); yest.setDate(yest.getDate()-1);
+  const yStr=yest.toISOString().slice(0,10);
+  if(sd.lastDate===yStr) sd.streak++;
+  else if(sd.lastDate!==today) sd.streak=1;
+  sd.lastDate=today; sd.longestStreak=Math.max(sd.longestStreak,sd.streak);
+  lsSet(LS_CH_STREAK,sd);
+  const mult=getStreakMult(sd.streak);
+  const final=Math.round(raw*mult);
+  let at=lsGet(LS_CH_ALLTIME,{totalPoints:0}); at.totalPoints+=final; lsSet(LS_CH_ALLTIME,at);
+  lsSet(LS_CH_TODAY,{date:today,rawScore:raw,finalScore:final,multiplier:mult,mode:CH.mode,qScores:CH.answers.map(a=>a.points+a.speedBonus)});
+  document.getElementById('ch-end-score-val').textContent=final;
+  const rank=getRankTitle(at.totalPoints), next=getNextRank(at.totalPoints);
+  document.getElementById('ch-end-rank').innerHTML=`<span style="font-size:0.9rem;color:var(--t3);font-family:var(--sans);font-weight:400">Rank: </span>${rank.title}`;
+  document.getElementById('ch-end-streak').innerHTML=`🔥 ${sd.streak}-day streak &nbsp;·&nbsp; ${mult>1?mult+'× multiplier applied':'Keep going for a streak bonus!'}`;
+  document.getElementById('ch-end-next').textContent=next?`${next.title} at ${next.min.toLocaleString()} pts · you have ${at.totalPoints.toLocaleString()}`:"🏆 You've reached CPO — the highest rank!";
+  const LBLS=['Q1','Q2','Q3'];
+  document.getElementById('ch-end-breakdown').innerHTML=
+    `<div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);margin-bottom:0.5rem">Score breakdown</div>`+
+    CH.answers.map((a,i)=>`<div class="ch-end-q-row"><span class="ch-end-q-label">${LBLS[i]} — ${CH.questions[i].title}</span><span class="ch-end-q-score">${a.points+a.speedBonus} pts</span></div>`).join('')+
+    (mult>1?`<div class="ch-end-q-row" style="border-color:var(--amber)"><span class="ch-end-q-label" style="color:var(--amber)">Streak multiplier (${mult}×)</span><span class="ch-end-q-score" style="color:var(--amber)">+${final-raw} pts</span></div>`:'');
+  const user=getCurrentUser();
+  document.getElementById('ch-end-save').innerHTML=user
+    ?`<div style="font-size:0.82rem;color:var(--t3);text-align:center">Logged in as <strong style="color:var(--t2)">${user.name||user.email}</strong></div>`
+    :`<div style="text-align:center"><div style="font-size:0.88rem;color:var(--t2);margin-bottom:0.85rem">Log in to save your score to the leaderboard</div><button class="btn btn-primary btn-sm" onclick="openAuthModal()">Save score &amp; join leaderboard</button></div>`;
+  showChState('end');
+}
+
+function shareChallenge(){
+  const done=lsGet(LS_CH_TODAY,null);
+  const score=done?done.finalScore:'?';
+  const mode=done?(MODE_LABELS[done.mode]||done.mode):'PM Challenge';
+  const text=`I scored ${score}/300 on today's PM Challenge ("${mode}") at pmdispatch.com — can you beat me?`;
+  if(navigator.share){ navigator.share({title:'PM Challenge',text,url:'https://www.pmdispatch.com'}).catch(()=>{}); }
+  else { navigator.clipboard.writeText(text+' https://www.pmdispatch.com').then(()=>{const b=document.querySelector('.ch-share-btn');if(b){const o=b.textContent;b.textContent='Copied!';setTimeout(()=>b.textContent=o,2000);}}).catch(()=>prompt('Copy this:',text+' https://www.pmdispatch.com')); }
+}
+
+function renderDoneScreen(done){
+  document.getElementById('ch-done-score').textContent=`${done.finalScore} / 300 pts`;
+  function tick(){
+    const now=new Date();
+    const nm=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1));
+    const d=Math.max(0,nm-now);
+    const h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+    const el=document.getElementById('ch-done-countdown');
+    if(el) el.textContent=`Next challenge in ${h}h ${m}m ${s}s`;
   }
-  currentInsightIdx = idx;
-  const ins = INSIGHTS[idx];
-  document.getElementById('insight-number').textContent = 'Insight ' + (idx+1) + ' of ' + INSIGHTS.length;
-  document.getElementById('insight-tag').textContent = ins.tag;
-  document.getElementById('insight-title').textContent = ins.title;
-  document.getElementById('insight-body').textContent = ins.body;
+  tick(); setInterval(tick,1000);
+}
 
-  // Reactions from localStorage
-  const reactions = lsGet('pmtbx_reactions_' + idx, {knew:0, new:0});
-  const myReact = lsGet('pmtbx_myreact_' + idx, null);
-  document.getElementById('rc-knew').textContent = reactions.knew > 0 ? reactions.knew : '';
-  document.getElementById('rc-new').textContent = reactions.new > 0 ? reactions.new : '';
-  document.getElementById('react-knew').classList.toggle('reacted', myReact==='knew');
-  document.getElementById('react-new').classList.toggle('reacted', myReact==='new');
-
-  // Comments
-  renderInsightComments(idx);
-
-  // Dots
-  const dots = document.getElementById('insight-dots');
-  if(dots) {
-    dots.innerHTML = INSIGHTS.slice(0,15).map((_, i) => "<div class=\"insight-dot "+(i===idx?"active":"")+"\" onclick=\"loadDailyInsight("+i+")\" style=\"cursor:pointer\" title=\"Insight "+(i+1)+"\"></div>").join("");
+// ── Feedback modal ──
+let _fbType='idea';
+function openFeedbackModal(){
+  document.getElementById('feedback-modal').style.display='flex';
+  ['fb-message','fb-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('fb-status').textContent='';
+  _fbType='idea';
+  document.querySelectorAll('.fb-type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type==='idea'));
+  setTimeout(()=>document.getElementById('fb-message').focus(),100);
+}
+function closeFeedbackModal(e){
+  if(!e||e.target===document.getElementById('feedback-modal'))
+    document.getElementById('feedback-modal').style.display='none';
+}
+function setFbType(btn,type){
+  _fbType=type;
+  document.querySelectorAll('.fb-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+async function submitFeedback(){
+  const msg=(document.getElementById('fb-message').value||'').trim();
+  const email=(document.getElementById('fb-email').value||'').trim();
+  const st=document.getElementById('fb-status');
+  if(!msg){st.style.color='var(--red)';st.textContent='Please write a message.';return;}
+  st.style.color='var(--t3)';st.textContent='Sending…';
+  if(FORMSPREE_ID){
+    try{
+      const res=await fetch(`https://formspree.io/f/${FORMSPREE_ID}`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({type:_fbType,message:msg,email:email||'(not provided)'})});
+      if(res.ok){st.style.color='var(--green)';st.textContent='Sent! Thank you 🙏';setTimeout(()=>closeFeedbackModal(),2000);}
+      else throw new Error('failed');
+    }catch{st.style.color='var(--red)';st.textContent='Could not send. Try emailing directly.';}
+  } else {
+    const subj=encodeURIComponent(`PM Dispatch feedback: ${_fbType}`);
+    const body=encodeURIComponent(`${msg}\n\n— ${email||'Anonymous'}`);
+    window.open(`mailto:arturoruizvaldes@gmail.com?subject=${subj}&body=${body}`);
+    st.style.color='var(--green)';st.textContent='Opening your email app…';
+    setTimeout(()=>closeFeedbackModal(),2000);
   }
-
-  // Archive
-  const archive = document.getElementById('insight-archive');
-  if(archive) {
-    archive.innerHTML = INSIGHTS.map((ins, i) =>
-      `<div onclick="loadDailyInsight(${i})" style="padding:6px 8px;border-radius:6px;cursor:pointer;font-size:0.75rem;color:${i===idx?'var(--ind2)':'var(--t2)'};background:${i===idx?'rgba(139,92,246,0.1)':'transparent'};transition:background 0.15s" onmouseover="this.style.background='rgba(139,92,246,0.07)'" onmouseout="this.style.background='${i===idx?'rgba(139,92,246,0.1)':'transparent'}'">${i+1}. ${ins.title}</div>`
-    ).join('');
-  }
-}
-
-function changeInsight(dir) {
-  const next = (currentInsightIdx + dir + INSIGHTS.length) % INSIGHTS.length;
-  loadDailyInsight(next);
-}
-
-function reactInsight(type) {
-  const idx = currentInsightIdx;
-  const myReact = lsGet('pmtbx_myreact_' + idx, null);
-  if(myReact === type) return; // already reacted with this
-  const reactions = lsGet('pmtbx_reactions_' + idx, {knew:0, new:0});
-  if(myReact) reactions[myReact] = Math.max(0, reactions[myReact]-1); // remove old
-  reactions[type]++;
-  lsSet('pmtbx_reactions_' + idx, reactions);
-  lsSet('pmtbx_myreact_' + idx, type);
-  loadDailyInsight(idx);
-}
-
-function submitInsightComment() {
-  const el = document.getElementById('insight-comment');
-  const text = el.value.trim();
-  if(!text) return;
-  const idx = currentInsightIdx;
-  const comments = lsGet('pmtbx_comments_' + idx, []);
-  comments.push({ text, ts: Date.now(), name: (getCurrentUser()?.name || 'Anonymous') });
-  lsSet('pmtbx_comments_' + idx, comments);
-  el.value = '';
-  renderInsightComments(idx);
-}
-
-function renderInsightComments(idx) {
-  const list = document.getElementById('insight-comments-list');
-  if(!list) return;
-  const comments = lsGet('pmtbx_comments_' + idx, []);
-  if(!comments.length) { list.innerHTML = ''; return; }
-  list.innerHTML = comments.map(c => `
-    <div style="padding:0.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px">
-      <div style="font-size:0.7rem;color:var(--t3);margin-bottom:4px">${c.name} · ${new Date(c.ts).toLocaleDateString()}</div>
-      <div style="font-size:0.84rem;color:var(--t2)">${c.text}</div>
-    </div>
-  `).join('');
 }
 
 // ═══════════════════════════════════════════════
@@ -4977,13 +5271,103 @@ function renderNews(items){
   `).join('');
 }
 </script>
-<div class="page" id="page-daily">
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="page-title">Daily Insight</div>
-      <div class="page-sub">One PM concept, framework, or mental model — every day.</div>
+<div class="page" id="page-challenge">
+  <!-- ── State: not-started ── -->
+  <div id="ch-start" class="ch-state">
+    <div class="ch-start-wrap">
+      <div id="ch-mode-badge" class="ch-mode-pill"></div>
+      <h1 class="ch-start-title">Today's PM Challenge</h1>
+      <p class="ch-start-sub">3 questions · 60 seconds each · Real PM scenarios</p>
+      <div class="ch-start-meta" id="ch-start-meta"></div>
+      <button class="btn btn-primary ch-start-btn" onclick="startChallenge()">Start Challenge →</button>
+      <div class="ch-start-rules">
+        <div class="ch-rule"><span>⏱</span> 60-second timer per question — speed earns bonus points</div>
+        <div class="ch-rule"><span>🎯</span> Weighted answers — no binary right/wrong</div>
+        <div class="ch-rule"><span>🔥</span> Daily streaks multiply your score</div>
+      </div>
     </div>
   </div>
+
+  <!-- ── State: in-progress ── -->
+  <div id="ch-play" class="ch-state" style="display:none">
+    <div class="ch-play-wrap">
+      <div class="ch-play-header">
+        <div class="ch-progress-label" id="ch-progress-label">Question 1 of 3</div>
+        <div class="ch-timer-wrap">
+          <div class="ch-timer-track">
+            <div class="ch-timer-fill" id="ch-timer-fill"></div>
+          </div>
+          <div class="ch-timer-count" id="ch-timer-count">60</div>
+        </div>
+      </div>
+      <div class="card ch-question-card">
+        <div class="card-body" style="padding:1.75rem">
+          <div class="ch-q-mode-tag" id="ch-q-mode-tag"></div>
+          <div class="ch-q-context" id="ch-q-context"></div>
+          <div class="ch-q-text" id="ch-q-text"></div>
+        </div>
+      </div>
+      <div class="ch-options" id="ch-options"></div>
+    </div>
+  </div>
+
+  <!-- ── State: reveal ── -->
+  <div id="ch-reveal" class="ch-state" style="display:none">
+    <div class="ch-reveal-wrap">
+      <div class="ch-reveal-header">
+        <div class="ch-reveal-score-badge" id="ch-reveal-score-badge"></div>
+        <div class="ch-reveal-speed" id="ch-reveal-speed"></div>
+      </div>
+      <div id="ch-reveal-options" class="ch-reveal-options"></div>
+      <div class="ch-reveal-insight card" id="ch-reveal-insight-card">
+        <div class="card-body" style="padding:1.25rem 1.5rem">
+          <div class="ch-reveal-insight-label">Key insight</div>
+          <div class="ch-reveal-insight-text" id="ch-reveal-insight"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary ch-next-btn" id="ch-next-btn" onclick="nextQuestion()">Next question →</button>
+    </div>
+  </div>
+
+  <!-- ── State: completed (end screen) ── -->
+  <div id="ch-end" class="ch-state" style="display:none">
+    <div class="ch-end-wrap">
+      <div class="ch-end-top">
+        <div class="ch-end-score-ring" id="ch-end-score-ring">
+          <div class="ch-end-score-val" id="ch-end-score-val">0</div>
+          <div class="ch-end-score-max">/ 300</div>
+        </div>
+        <div class="ch-end-meta">
+          <div class="ch-end-rank" id="ch-end-rank"></div>
+          <div class="ch-end-streak" id="ch-end-streak"></div>
+          <div class="ch-end-next" id="ch-end-next"></div>
+        </div>
+      </div>
+      <div class="ch-end-breakdown" id="ch-end-breakdown"></div>
+      <div class="ch-end-save" id="ch-end-save"></div>
+      <div class="ch-end-share">
+        <button class="btn btn-ghost ch-share-btn" onclick="shareChallenge()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share your score
+        </button>
+        <button class="btn btn-ghost ch-share-btn" onclick="switchPage('leaderboard')">View leaderboard →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── State: already played today ── -->
+  <div id="ch-done" class="ch-state" style="display:none">
+    <div class="ch-start-wrap">
+      <div class="ch-done-check">✓</div>
+      <h2 class="ch-start-title">Challenge complete!</h2>
+      <div class="ch-done-score" id="ch-done-score"></div>
+      <div class="ch-done-countdown" id="ch-done-countdown"></div>
+      <button class="btn btn-ghost" onclick="switchPage('leaderboard')">View leaderboard →</button>
+    </div>
+  </div>
+</div>
+
+<!-- (old daily insight removed) -->
   <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
     <!-- Main insight card -->
     <div class="card insight-card" style="flex:1;min-width:280px">
@@ -5025,53 +5409,6 @@ function renderNews(items){
   </div>
 </div>
 
-
-<!-- DAILY INSIGHT PAGE -->
-<div class="page" id="page-insight">
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="page-title">Daily Insight</div>
-      <div class="page-sub">One product concept, framework, or lesson — every day.</div>
-    </div>
-  </div>
-  <div style="max-width:680px;margin:0 auto">
-    <div class="card" id="insight-card" style="margin-bottom:1.5rem">
-      <div class="card-body" style="padding:2rem">
-        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.5rem">
-          <span id="insight-date-badge" style="font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--t3);background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:3px 10px"></span>
-          <span id="insight-tag-badge" style="font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--ind2);background:rgba(91,110,245,0.1);border:1px solid rgba(91,110,245,0.25);border-radius:99px;padding:3px 10px"></span>
-        </div>
-        <h2 id="insight-title" style="font-family:var(--display);font-size:1.45rem;font-weight:700;color:var(--t1);letter-spacing:-0.02em;margin-bottom:1rem;line-height:1.3"></h2>
-        <div id="insight-body" style="font-size:0.9rem;color:var(--t2);line-height:1.8;margin-bottom:1.5rem"></div>
-        <div id="insight-takeaway" style="background:rgba(91,110,245,0.06);border-left:3px solid var(--ind);border-radius:0 8px 8px 0;padding:0.85rem 1rem;font-size:0.85rem;color:var(--t1);line-height:1.65;margin-bottom:2rem"></div>
-        <div style="border-top:1px solid var(--border);padding-top:1.25rem">
-          <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3);margin-bottom:0.75rem">How did this land?</div>
-          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem">
-            <button id="react-knew" onclick="reactInsight('knew')" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 1rem;border-radius:99px;border:1px solid var(--border);background:var(--bg3);color:var(--t2);font-size:0.82rem;cursor:pointer;font-family:var(--sans);transition:all 0.15s">
-              <span>🧠</span> Already knew it <span id="react-knew-count" style="font-size:0.75rem;color:var(--t3);margin-left:2px"></span>
-            </button>
-            <button id="react-learned" onclick="reactInsight('learned')" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 1rem;border-radius:99px;border:1px solid var(--border);background:var(--bg3);color:var(--t2);font-size:0.82rem;cursor:pointer;font-family:var(--sans);transition:all 0.15s">
-              <span>✨</span> Learned something new <span id="react-learned-count" style="font-size:0.75rem;color:var(--t3);margin-left:2px"></span>
-            </button>
-          </div>
-          <div>
-            <textarea id="insight-comment-input" rows="2" placeholder="Share a thought or example from your own work..." style="width:100%;resize:vertical;margin-bottom:0.5rem;font-size:0.84rem"></textarea>
-            <button class="btn btn-primary btn-sm" onclick="submitInsightComment()">Post comment</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="insight-comments-section" style="display:none;margin-bottom:1.5rem">
-      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3);margin-bottom:0.75rem">Comments</div>
-      <div id="insight-comments-list" style="display:flex;flex-direction:column;gap:0.75rem"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0">
-      <button class="btn btn-ghost btn-sm" id="insight-prev" onclick="navigateInsight(-1)">&#8592; Previous</button>
-      <span id="insight-counter" style="font-size:0.75rem;color:var(--t3)"></span>
-      <button class="btn btn-ghost btn-sm" id="insight-next" onclick="navigateInsight(1)">Next &#8594;</button>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ GAMING NEWS PAGE ═══ -->
 <div class="page" id="page-news">
