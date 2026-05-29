@@ -135,7 +135,7 @@
   --amber-bg:rgba(245,158,11,0.08);
   --sans:'Figtree',system-ui,sans-serif;
   --display:'Syne',system-ui,sans-serif;
-  --mono:'JetBrains Mono',monospace;
+  --mono:'Figtree',system-ui,sans-serif;
   --r:8px;
   --r2:12px;
 }
@@ -165,7 +165,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 }
 .brand-mark{
   width:30px;height:30px;
-  background:linear-gradient(135deg,var(--ind),var(--cyan));
+  background:linear-gradient(135deg,#7c3aed,#5b6ef5);
   border-radius:7px;
   display:flex;align-items:center;justify-content:center;
   font-family:var(--display);font-size:11px;font-weight:800;
@@ -523,6 +523,21 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 .guide-search-results{display:none;padding:0 0 2rem}
 .guide-search-results.visible{display:block}
 
+/* ═══ GUIDE TOC DROPDOWN ═══ */
+.guide-toc-item{
+  display:block;width:100%;text-align:left;background:none;border:none;
+  padding:0.45rem 0.75rem;border-radius:7px;cursor:pointer;
+  font-size:0.8rem;font-family:var(--sans);color:var(--t2);
+  transition:background 0.12s,color 0.12s;
+}
+.guide-toc-item:hover{background:rgba(255,255,255,0.06);color:var(--t1)}
+.guide-toc-cat-header{
+  font-size:0.62rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.12em;color:var(--t3);
+  padding:0.55rem 0.75rem 0.2rem;margin-top:0.25rem;
+}
+.guide-toc-cat-header:first-child{margin-top:0}
+
 /* ═══ INLINE GUIDE PANEL ═══ */
 .guide-panel{
   max-width:740px;margin:0 auto;padding:0 1.5rem 4rem;
@@ -556,7 +571,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 .guide-panel-body strong{color:var(--t1);font-weight:600}
 .guide-panel-body em{color:var(--t1)}
 .guide-panel-body code{
-  font-family:var(--mono);font-size:0.82rem;
+  font-family:'JetBrains Mono',monospace;font-size:0.82rem;
   background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
   border-radius:5px;padding:2px 6px;color:var(--t1);
 }
@@ -574,7 +589,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 .guide-modal-body p{margin-bottom:0.8rem}
 .guide-modal-body ul{margin:0.5rem 0 0.8rem 1.3rem}
 .guide-modal-body li{margin-bottom:0.4rem}
-.guide-modal-body code{font-family:var(--mono);font-size:0.82rem;background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--cyan)}
+.guide-modal-body code{font-family:'JetBrains Mono',monospace;font-size:0.82rem;background:var(--bg3);padding:2px 6px;border-radius:4px;color:var(--cyan)}
 
 /* ═══ CHART WRAP ═══ */
 .chart-wrap{position:relative;height:240px}
@@ -2090,9 +2105,14 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
   <!-- Header -->
   <div class="page-header" style="position:relative;z-index:2">
-    <div class="page-header-left">
+    <div class="page-header-left" style="position:relative">
       <div class="page-title">PM Playbook</div>
       <div class="page-sub">Frameworks, guides, and mental models for every stage of product work</div>
+      <button id="guide-toc-btn" onclick="toggleGuideToc()" style="margin-top:0.55rem;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;font-size:0.78rem;color:var(--t2);cursor:pointer;font-family:var(--sans);transition:color 0.15s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t2)'">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="width:12px;height:12px"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
+        All guides
+      </button>
+      <div id="guide-toc" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:0.4rem;min-width:260px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.55)"></div>
     </div>
     <div class="page-actions">
       <input type="text" id="guide-search" placeholder="Search guides..." style="width:220px;padding:5px 10px;font-size:0.78rem" oninput="filterGuideRail()">
@@ -2402,7 +2422,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <div class="card" style="background:linear-gradient(135deg,rgba(91,110,245,0.1),rgba(34,211,238,0.06));border-color:rgba(91,110,245,0.3)">
       <div class="card-body" style="padding:1.25rem">
         <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--ind),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0" id="lb-my-avatar">?</div>
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0" id="lb-my-avatar">?</div>
           <div style="flex:1;min-width:0">
             <div style="font-family:var(--display);font-size:1rem;font-weight:600;color:var(--t1)" id="lb-my-name">—</div>
             <div style="font-size:0.75rem;color:var(--t3);margin-top:2px">Your stats</div>
@@ -2431,7 +2451,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(91,110,245,0.06));border-color:rgba(245,158,11,0.3)">
       <div class="card-body" style="padding:1.25rem">
         <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--ind));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0" id="lb-ch-my-avatar">?</div>
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0" id="lb-ch-my-avatar">?</div>
           <div style="flex:1;min-width:0">
             <div style="font-family:var(--display);font-size:1rem;font-weight:600;color:var(--t1)" id="lb-ch-my-name">—</div>
             <div style="font-size:0.75rem;color:var(--amber);margin-top:2px;font-weight:500" id="lb-ch-my-rank-title">Associate PM</div>
@@ -3744,6 +3764,46 @@ function updateRailDots(){
   document.querySelectorAll('.rail-dot').forEach((d,i) => d.classList.toggle('active', i===railIndex));
 }
 
+// ── Guide TOC ──────────────────────────────────
+let _tocBuilt = false;
+function toggleGuideToc(){
+  const toc = document.getElementById('guide-toc');
+  const btn = document.getElementById('guide-toc-btn');
+  if(!toc) return;
+  const isOpen = toc.style.display !== 'none';
+  if(isOpen){ toc.style.display = 'none'; return; }
+  // Build once
+  if(!_tocBuilt){
+    // Group guides by category
+    const cats = {};
+    guides.forEach((g, i) => {
+      if(!cats[g.cat]) cats[g.cat] = [];
+      cats[g.cat].push({g, i});
+    });
+    let html = '';
+    for(const cat of Object.keys(cats)){
+      html += `<div class="guide-toc-cat-header">${cat}</div>`;
+      html += cats[cat].map(({g, i}) =>
+        `<button class="guide-toc-item" onclick="openGuide(${i});closeToc()">${g.title}</button>`
+      ).join('');
+    }
+    toc.innerHTML = html;
+    _tocBuilt = true;
+  }
+  toc.style.display = 'block';
+  // Close on outside click
+  setTimeout(() => document.addEventListener('click', _tocOutside, {once:true}), 0);
+}
+function _tocOutside(e){
+  const toc = document.getElementById('guide-toc');
+  const btn = document.getElementById('guide-toc-btn');
+  if(toc && !toc.contains(e.target) && !btn.contains(e.target)) closeToc();
+}
+function closeToc(){
+  const toc = document.getElementById('guide-toc');
+  if(toc) toc.style.display = 'none';
+}
+
 function openCurrentGuide(){
   // Clicking the center card scrolls to the always-visible article below
   const panel = document.getElementById('guide-panel');
@@ -4443,6 +4503,8 @@ function trackToolUse(){
 
 function showNLModal(){
   if(nlShown || nlDismissed) return;
+  if(getCurrentUser()) return;              // logged-in users don't need this
+  if(lsGet('pmch_nl_sub', false)) return;  // already subscribed on this device
   nlShown = true;
   const m = document.getElementById('nl-modal');
   m.style.display = 'flex';
@@ -4501,6 +4563,7 @@ async function submitNewsletter(inputId){
     if(res.ok && data.success){
       if(input){ input.value = ''; input.disabled = false; }
       if(statusEl){ statusEl.style.color='var(--green)'; statusEl.textContent='✓ You\'re in! First issue coming soon.'; }
+      lsSet('pmch_nl_sub', true); // persist so popup never returns on this device
       nlDismissed = true;
       if(inputId === 'nl-email') setTimeout(closeNLModalBtn, 2000);
       return;
@@ -4781,7 +4844,7 @@ function renderLeaderboard(){
       <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
       <td>
         <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--ind),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">${(u.name||u.email||'?')[0].toUpperCase()}</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">${(u.name||u.email||'?')[0].toUpperCase()}</div>
           <span class="td-name">${u.name||u.email.split('@')[0]}</span>
           ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
         </div>
@@ -4797,7 +4860,7 @@ function renderLeaderboard(){
       <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
       <td>
         <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--ind));display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">${(u.name||u.email||'?')[0].toUpperCase()}</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">${(u.name||u.email||'?')[0].toUpperCase()}</div>
           <span class="td-name">${u.name||u.email.split('@')[0]}</span>
           ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
         </div>
@@ -4866,7 +4929,7 @@ function renderLeaderboard(){
     return `<tr style="${rowChColor(u)}">
       <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
       <td><div style="display:flex;align-items:center;gap:8px">
-        ${chAvatar(u,'linear-gradient(135deg,var(--amber),var(--ind))')}
+        ${chAvatar(u,'linear-gradient(135deg,#7c3aed,#5b6ef5)')}
         <span class="td-name">${u.name||u.email.split('@')[0]}</span>
         ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
       </div></td>
@@ -4882,7 +4945,7 @@ function renderLeaderboard(){
     return `<tr style="${rowChColor(u)}">
       <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
       <td><div style="display:flex;align-items:center;gap:8px">
-        ${chAvatar(u,'linear-gradient(135deg,var(--ind),var(--amber))')}
+        ${chAvatar(u,'linear-gradient(135deg,#7c3aed,#5b6ef5)')}
         <span class="td-name">${u.name||u.email.split('@')[0]}</span>
         ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
       </div></td>
@@ -5002,18 +5065,21 @@ setTimeout(renderLeaderboard, 0);
 
 const LS_CH_STREAK  = 'pmch_streak';   // {streak, lastDate, longestStreak}
 const LS_CH_TODAY   = 'pmch_today';    // {date, finalScore, rawScore, multiplier, mode, qScores}
-const LS_CH_ALLTIME = 'pmch_alltime';  // {totalPoints}
-const LS_CH_WEEKLY  = 'pmch_weekly';   // {week:'YYYY-MM-DD', pts}
+const LS_CH_ALLTIME  = 'pmch_alltime';   // {totalPoints}
+const LS_CH_WEEKLY   = 'pmch_weekly';    // {week:'YYYY-MM-DD', pts}
+const LS_CH_HISTORY  = 'pmch_history';   // [{date,week,score,questions:[{...}]}] newest first
 const FORMSPREE_ID  = 'https://formspree.io/f/xeednpre';              // Paste your Formspree form ID here (free at formspree.io)
 
 const RANK_TITLES = [
-  {title:'Associate PM', min:0},
-  {title:'PM',           min:500},
-  {title:'Senior PM',    min:1500},
-  {title:'Lead PM',      min:3500},
-  {title:'Director',     min:7000},
-  {title:'VP of Product',min:14000},
-  {title:'CPO',          min:28000},
+  {title:'APM',            min:0},
+  {title:'Associate PM',   min:150},
+  {title:'PM',             min:500},
+  {title:'Senior PM',      min:1500},
+  {title:'Staff PM',       min:3500},
+  {title:'Group PM',       min:7000},
+  {title:'Director',       min:13000},
+  {title:'VP of Product',  min:25000},
+  {title:'CPO',            min:50000},
 ];
 const MODES = ['scenario','triage','kpi'];
 const MODE_LABELS = {scenario:'The Scenario', triage:'Screen Triage', kpi:'KPI Detective'};
@@ -5162,6 +5228,31 @@ function showEndScreen(){
   chWkData.pts+=final; lsSet(LS_CH_WEEKLY,chWkData);
   // Save to user profile for leaderboard
   saveChallengeToProfile(final);
+
+  // Save full session to history log (used by learning log below end screen)
+  const sessionLog={
+    date:today, week:getWeekStart(), score:final, rawScore:raw, multiplier:mult,
+    questions:CH.questions.map((q,i)=>{
+      const ans=CH.answers[i]||{optIdx:-1,points:0,speedBonus:0,ms:0};
+      const bestIdx=q.options.reduce((bi,o,oi)=>o.points>q.options[bi].points?oi:bi,0);
+      return {
+        title:q.title, question:q.question,
+        userOptIdx:ans.optIdx,
+        userOptText:ans.optIdx>=0?q.options[ans.optIdx].text:'(timed out)',
+        userPts:ans.points+ans.speedBonus,
+        bestOptIdx:bestIdx,
+        bestOptText:q.options[bestIdx].text,
+        bestPts:q.options[bestIdx].points,
+        rationale:ans.optIdx>=0?q.options[ans.optIdx].rationale:'',
+        reveal:q.reveal, ms:ans.ms
+      };
+    })
+  };
+  let hist=lsGet(LS_CH_HISTORY,[]);
+  hist.unshift(sessionLog);
+  if(hist.length>30) hist=hist.slice(0,30);
+  lsSet(LS_CH_HISTORY,hist);
+
   document.getElementById('ch-end-score-val').textContent=final;
   const rank=getRankTitle(at.totalPoints), next=getNextRank(at.totalPoints);
   document.getElementById('ch-end-rank').innerHTML=`<span style="font-size:0.9rem;color:var(--t3);font-family:var(--sans);font-weight:400">Rank: </span>${rank.title}`;
@@ -5176,7 +5267,69 @@ function showEndScreen(){
   document.getElementById('ch-end-save').innerHTML=user
     ?`<div style="font-size:0.82rem;color:var(--t3);text-align:center">Logged in as <strong style="color:var(--t2)">${user.name||user.email}</strong></div>`
     :`<div style="text-align:center"><div style="font-size:0.88rem;color:var(--t2);margin-bottom:0.85rem">Log in to save your score to the leaderboard</div><button class="btn btn-primary btn-sm" onclick="openAuthModal()">Save score &amp; join leaderboard</button></div>`;
+  renderHistoryLog();
   showChState('end');
+}
+
+function renderHistoryLog(){
+  const hist=lsGet(LS_CH_HISTORY,[]);
+  if(!hist.length) return;
+  const current=hist[0]; // most recent (just completed)
+  const past=hist.slice(1);
+  const el=document.getElementById('ch-end-history');
+  if(!el) return;
+
+  // ── Session detail: this session's Q&A ──
+  const correct=q=>q.userOptIdx===q.bestOptIdx;
+  const qHTML=current.questions.map((q,i)=>{
+    const ok=correct(q);
+    const pct=Math.round((q.userPts/Math.max(q.bestPts,1))*100);
+    return `
+    <div style="background:var(--bg2);border:1px solid ${ok?'rgba(34,197,94,0.3)':'rgba(245,158,11,0.25)'};border-radius:12px;padding:1rem;margin-bottom:0.65rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3)">Q${i+1} · ${q.title}</div>
+        <div style="font-size:0.82rem;font-weight:600;color:${ok?'var(--green)':'var(--amber)'}">${q.userPts} pts ${ok?'✓':''}</div>
+      </div>
+      <div style="font-size:0.82rem;color:var(--t2);margin-bottom:0.6rem;line-height:1.5">${q.question}</div>
+      <div style="font-size:0.79rem;padding:0.55rem 0.75rem;border-radius:8px;background:${ok?'rgba(34,197,94,0.08)':'rgba(245,158,11,0.08)'};border:1px solid ${ok?'rgba(34,197,94,0.2)':'rgba(245,158,11,0.2)'};color:var(--t1);margin-bottom:${ok?'0':'0.45rem'}">
+        <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:${ok?'var(--green)':'var(--amber)'};display:block;margin-bottom:2px">Your answer</span>
+        ${q.userOptText}
+      </div>
+      ${!ok?`<div style="font-size:0.79rem;padding:0.55rem 0.75rem;border-radius:8px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:var(--t1);margin-bottom:0.45rem">
+        <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);display:block;margin-bottom:2px">Best answer</span>
+        ${q.bestOptText}
+      </div>`:''}
+      ${q.rationale?`<div style="font-size:0.77rem;color:var(--t2);font-style:italic;line-height:1.5;margin-bottom:${q.reveal?'0.4rem':'0'}">${q.rationale}</div>`:''}
+      ${q.reveal?`<div style="font-size:0.77rem;color:var(--t3);border-top:1px solid var(--border);padding-top:0.4rem;margin-top:0.4rem;line-height:1.5">💡 ${q.reveal}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // ── Past sessions ──
+  const pastHTML=past.length?`
+  <details style="margin-top:1rem">
+    <summary style="cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--t2);list-style:none;display:flex;align-items:center;gap:6px;user-select:none;padding:0.5rem 0">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="width:12px;height:12px"><polyline points="4,6 8,10 12,6"/></svg>
+      Past sessions (${past.length})
+    </summary>
+    <div style="margin-top:0.5rem;display:flex;flex-direction:column;gap:0.4rem">
+      ${past.slice(0,10).map(s=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.85rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px">
+          <div style="font-size:0.78rem;color:var(--t3)">${s.date}</div>
+          <div style="font-size:0.78rem;color:var(--t2)">Week of ${s.week}</div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--t1)">${s.score}<span style="color:var(--t3);font-weight:400"> / 300 pts</span></div>
+        </div>`).join('')}
+    </div>
+  </details>`:''
+
+  el.innerHTML=`
+  <details open>
+    <summary style="cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--t2);list-style:none;display:flex;align-items:center;gap:6px;user-select:none;padding:0.5rem 0;border-top:1px solid var(--border);margin-top:0.25rem">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="width:12px;height:12px"><polyline points="4,6 8,10 12,6"/></svg>
+      Session details &amp; learning log
+    </summary>
+    <div style="margin-top:0.65rem">${qHTML}</div>
+  </details>
+  ${pastHTML}`;
 }
 
 function shareChallenge(){
@@ -5495,6 +5648,10 @@ function renderNews(items){
       </div>
       <div class="ch-end-breakdown" id="ch-end-breakdown"></div>
       <div class="ch-end-save" id="ch-end-save"></div>
+
+      <!-- Session details + history log -->
+      <div id="ch-end-history" style="margin-top:1rem"></div>
+
       <div class="ch-end-share">
         <button class="btn btn-ghost ch-share-btn" onclick="shareChallenge()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
