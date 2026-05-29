@@ -2388,14 +2388,20 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   <div class="page-header">
     <div class="page-header-left">
       <div class="page-title">Leaderboard</div>
-      <div class="page-sub">Top PM Dispatch users — ranked by tool usage. Log in to claim your spot.</div>
+      <div class="page-sub">Top PM Dispatch users — ranked by activity and PM Challenge score. Log in to claim your spot.</div>
     </div>
     <div class="page-actions">
       <button class="btn btn-primary btn-sm" onclick="openAuthModal()">🏆 Join the board</button>
     </div>
   </div>
 
-  <!-- User's own card (shown when logged in) -->
+  <!-- Tab toggle -->
+  <div class="subtabs" style="margin-bottom:1.25rem">
+    <button class="subtab active" id="lb-tab-activity" onclick="switchLbTab('activity')">Activity &amp; Streaks</button>
+    <button class="subtab" id="lb-tab-challenge" onclick="switchLbTab('challenge')">🎯 PM Challenge</button>
+  </div>
+
+  <!-- User's own card — Activity tab (shown when logged in + on activity tab) -->
   <div id="lb-my-card" style="display:none;margin-bottom:1.5rem">
     <div class="card" style="background:linear-gradient(135deg,rgba(91,110,245,0.1),rgba(34,211,238,0.06));border-color:rgba(91,110,245,0.3)">
       <div class="card-body" style="padding:1.25rem">
@@ -2424,6 +2430,35 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     </div>
   </div>
 
+  <!-- User's own card — PM Challenge tab (shown when logged in + on challenge tab) -->
+  <div id="lb-ch-my-card" style="display:none;margin-bottom:1.5rem">
+    <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(91,110,245,0.06));border-color:rgba(245,158,11,0.3)">
+      <div class="card-body" style="padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--ind));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0" id="lb-ch-my-avatar">?</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--display);font-size:1rem;font-weight:600;color:var(--t1)" id="lb-ch-my-name">—</div>
+            <div style="font-size:0.75rem;color:var(--amber);margin-top:2px;font-weight:500" id="lb-ch-my-rank-title">Associate PM</div>
+          </div>
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--amber)" id="lb-ch-my-alltime">0</div>
+              <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3)">All-time pts</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--ind2)" id="lb-ch-my-weekly">0</div>
+              <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3)">This week</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--t2)" id="lb-ch-my-wrank">#—</div>
+              <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3)">Weekly rank</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Not logged in CTA -->
   <div id="lb-join-cta" class="card" style="margin-bottom:1.5rem;border-color:var(--border2)">
     <div class="card-body" style="text-align:center;padding:1.75rem">
@@ -2434,36 +2469,64 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     </div>
   </div>
 
-  <!-- Leaderboard table -->
-  <div class="col2" style="gap:1.5rem;margin-bottom:1.5rem">
-    <div class="card">
-      <div class="card-head">
-        <div><div class="card-title">Most Active Users</div><div class="card-sub">All-time tool uses</div></div>
+  <!-- ── Activity & Streaks section ── -->
+  <div id="lb-activity-section">
+    <div class="col2" style="gap:1.5rem;margin-bottom:1.5rem">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">Most Active Users</div><div class="card-sub">All-time tool uses</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>User</th><th>Tool Uses</th><th>Streak</th><th>Member Since</th></tr></thead>
+            <tbody id="lb-uses-body"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th style="width:40px">#</th><th>User</th><th>Tool Uses</th><th>Streak</th><th>Member Since</th></tr></thead>
-          <tbody id="lb-uses-body"></tbody>
-        </table>
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">Longest Streaks</div><div class="card-sub">Consecutive days using PM Dispatch</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>User</th><th>Streak 🔥</th><th>Tool Uses</th><th>Member Since</th></tr></thead>
+            <tbody id="lb-streak-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <div><div class="card-title">Longest Streaks</div><div class="card-sub">Consecutive days using PM Dispatch</div></div>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th style="width:40px">#</th><th>User</th><th>Streak 🔥</th><th>Tool Uses</th><th>Member Since</th></tr></thead>
-          <tbody id="lb-streak-body"></tbody>
-        </table>
-      </div>
+      <div class="card-head"><div class="card-title">Community Activity (last 14 days)</div><div class="card-sub">Total tool uses across all logged-in users</div></div>
+      <div class="card-body"><div style="position:relative;height:200px"><canvas id="lb-activity-chart"></canvas></div></div>
     </div>
   </div>
 
-  <!-- Activity chart -->
-  <div class="card">
-    <div class="card-head"><div class="card-title">Community Activity (last 14 days)</div><div class="card-sub">Total tool uses across all logged-in users</div></div>
-    <div class="card-body"><div style="position:relative;height:200px"><canvas id="lb-activity-chart"></canvas></div></div>
+  <!-- ── PM Challenge section ── -->
+  <div id="lb-challenge-section" style="display:none">
+    <div class="col2" style="gap:1.5rem">
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">All-time Rankings</div><div class="card-sub">Total PM Challenge points ever earned</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>User</th><th>PM Rank</th><th>All-time Pts</th><th>This Week</th></tr></thead>
+            <tbody id="lb-ch-alltime-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title">This Week</div><div class="card-sub">Points earned since Monday — resets weekly</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>User</th><th>PM Rank</th><th>Weekly Pts</th><th>All-time</th></tr></thead>
+            <tbody id="lb-ch-weekly-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -4634,6 +4697,22 @@ const _origSwitchPage = switchPage;
 // (re-assigned below after full definition)
 
 // ── Leaderboard ───────────────────────────────
+function getWeekStart(){
+  const d=new Date(), day=d.getDay();
+  const m=new Date(d); m.setDate(d.getDate()-day+(day===0?-6:1));
+  return m.toISOString().slice(0,10);
+}
+function switchLbTab(tab){
+  document.getElementById('lb-activity-section').style.display=tab==='activity'?'':'none';
+  document.getElementById('lb-challenge-section').style.display=tab==='challenge'?'':'none';
+  document.getElementById('lb-tab-activity').classList.toggle('active',tab==='activity');
+  document.getElementById('lb-tab-challenge').classList.toggle('active',tab==='challenge');
+  const me=getCurrentUser();
+  if(me){
+    document.getElementById('lb-my-card').style.display=tab==='activity'?'block':'none';
+    document.getElementById('lb-ch-my-card').style.display=tab==='challenge'?'block':'none';
+  }
+}
 let lbActivityChart=null;
 function renderLeaderboard(){
   const me=getCurrentUser();
@@ -4657,14 +4736,23 @@ function renderLeaderboard(){
 
   // Seed some demo users for an interesting leaderboard (real users will join these)
   let users=getAllUsers();
+  const wkNow=getWeekStart();
   const seeds=[
-    {email:'sarah@pm.co',name:'Sarah K.',passwordHash:'demo',joinedAt:'2025-04-01',uses:284,streak:22,lastDay:todayStr(),activityLog:[]},
-    {email:'marco@growth.io',name:'Marco R.',passwordHash:'demo',joinedAt:'2025-03-15',uses:201,streak:15,lastDay:todayStr(),activityLog:[]},
-    {email:'priya@mobile.co',name:'Priya M.',passwordHash:'demo',joinedAt:'2025-04-10',uses:156,streak:18,lastDay:todayStr(),activityLog:[]},
-    {email:'james@studio.gg',name:'James T.',passwordHash:'demo',joinedAt:'2025-02-28',uses:143,streak:31,lastDay:todayStr(),activityLog:[]},
-    {email:'li@analytics.co',name:'Li W.',passwordHash:'demo',joinedAt:'2025-04-20',uses:98,streak:8,lastDay:todayStr(),activityLog:[]},
+    {email:'sarah@pm.co',name:'Sarah K.',passwordHash:'demo',joinedAt:'2025-04-01',uses:284,streak:22,lastDay:todayStr(),activityLog:[],chPoints:6200,chWeekly:{week:wkNow,pts:520}},
+    {email:'marco@growth.io',name:'Marco R.',passwordHash:'demo',joinedAt:'2025-03-15',uses:281,streak:15,lastDay:todayStr(),activityLog:[],chPoints:3600,chWeekly:{week:wkNow,pts:290}},
+    {email:'priya@mobile.co',name:'Priya M.',passwordHash:'demo',joinedAt:'2025-04-10',uses:156,streak:18,lastDay:todayStr(),activityLog:[],chPoints:4100,chWeekly:{week:wkNow,pts:380}},
+    {email:'james@studio.gg',name:'James T.',passwordHash:'demo',joinedAt:'2025-02-28',uses:143,streak:31,lastDay:todayStr(),activityLog:[],chPoints:8400,chWeekly:{week:wkNow,pts:640}},
+    {email:'li@analytics.co',name:'Li W.',passwordHash:'demo',joinedAt:'2025-04-20',uses:98,streak:8,lastDay:todayStr(),activityLog:[],chPoints:2200,chWeekly:{week:wkNow,pts:180}},
   ];
-  seeds.forEach(s=>{ if(!users.find(u=>u.email===s.email)) users.push(s); });
+  seeds.forEach(s=>{
+    const existing=users.find(u=>u.email===s.email);
+    if(!existing){ users.push(s); }
+    else if(existing.passwordHash==='demo'){
+      // Backfill challenge data on existing demo users
+      if(existing.chPoints===undefined) existing.chPoints=s.chPoints;
+      if(!existing.chWeekly||existing.chWeekly.week!==wkNow) existing.chWeekly=s.chWeekly;
+    }
+  });
   saveAllUsers(users);
 
   // Rank by uses
@@ -4727,6 +4815,86 @@ function renderLeaderboard(){
     data:{labels:days.map(d=>d.slice(5)),datasets:[{label:'Active users',data:chartData,backgroundColor:'rgba(91,110,245,0.55)',borderColor:'rgba(91,110,245,0.8)',borderWidth:1,borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c6487',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}
   }); }
+
+  // ── PM Challenge leaderboard ──
+  const wk=getWeekStart();
+  const rowChColor=(u)=>me&&u.email===me.email?'background:rgba(245,158,11,0.07)':'';
+
+  // Populate the logged-in user's challenge my-card
+  if(me){
+    document.getElementById('lb-ch-my-avatar').textContent=(me.name||me.email||'?')[0].toUpperCase();
+    document.getElementById('lb-ch-my-name').textContent=me.name||me.email;
+    const atPts=lsGet(LS_CH_ALLTIME,{totalPoints:0}).totalPoints;
+    const rnk=getRankTitle(atPts);
+    document.getElementById('lb-ch-my-rank-title').textContent=rnk.title;
+    document.getElementById('lb-ch-my-alltime').textContent=atPts.toLocaleString();
+    const chWkData=lsGet(LS_CH_WEEKLY,{week:'',pts:0});
+    const weekPts=chWkData.week===wk?chWkData.pts:0;
+    document.getElementById('lb-ch-my-weekly').textContent=weekPts.toLocaleString();
+    // Weekly rank — use user store (updated by saveChallengeToProfile)
+    const usersForRank=getAllUsers();
+    const wkSorted=[...usersForRank].sort((a,b)=>{
+      const bw=b.chWeekly&&b.chWeekly.week===wk?b.chWeekly.pts:0;
+      const aw=a.chWeekly&&a.chWeekly.week===wk?a.chWeekly.pts:0;
+      return bw-aw;
+    });
+    const myWkRk=wkSorted.findIndex(u=>u.email===me.email)+1;
+    document.getElementById('lb-ch-my-wrank').textContent=myWkRk>0?'#'+myWkRk:'#—';
+  }
+
+  // Sort users for challenge tables
+  const sortedCh=[...users].sort((a,b)=>(b.chPoints||0)-(a.chPoints||0));
+  const sortedChWk=[...users].sort((a,b)=>{
+    const bw=b.chWeekly&&b.chWeekly.week===wk?b.chWeekly.pts:0;
+    const aw=a.chWeekly&&a.chWeekly.week===wk?a.chWeekly.pts:0;
+    return bw-aw;
+  });
+
+  const chAvatar=(u,grad)=>`<div style="width:28px;height:28px;border-radius:50%;background:${grad};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">${(u.name||u.email||'?')[0].toUpperCase()}</div>`;
+
+  document.getElementById('lb-ch-alltime-body').innerHTML=sortedCh.slice(0,10).map((u,i)=>{
+    const rank=getRankTitle(u.chPoints||0);
+    const wkPts=u.chWeekly&&u.chWeekly.week===wk?u.chWeekly.pts:0;
+    return `<tr style="${rowChColor(u)}">
+      <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        ${chAvatar(u,'linear-gradient(135deg,var(--amber),var(--ind))')}
+        <span class="td-name">${u.name||u.email.split('@')[0]}</span>
+        ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
+      </div></td>
+      <td style="font-size:0.75rem;color:var(--amber);white-space:nowrap">${rank.title}</td>
+      <td style="font-family:var(--mono);font-weight:600;color:var(--t1)">${(u.chPoints||0).toLocaleString()}</td>
+      <td style="font-family:var(--mono);font-size:0.82rem;color:var(--t3)">${wkPts>0?wkPts.toLocaleString():'—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('lb-ch-weekly-body').innerHTML=sortedChWk.slice(0,10).map((u,i)=>{
+    const wkPts=u.chWeekly&&u.chWeekly.week===wk?u.chWeekly.pts:0;
+    const rank=getRankTitle(u.chPoints||0);
+    return `<tr style="${rowChColor(u)}">
+      <td style="font-family:var(--mono);font-size:0.85rem;color:${i<3?'var(--amber)':'var(--t3)'}">${medalFor(i)||('#'+(i+1))}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        ${chAvatar(u,'linear-gradient(135deg,var(--ind),var(--amber))')}
+        <span class="td-name">${u.name||u.email.split('@')[0]}</span>
+        ${me&&u.email===me.email?'<span class="pill pill-ind" style="font-size:0.6rem">you</span>':''}
+      </div></td>
+      <td style="font-size:0.75rem;color:var(--amber);white-space:nowrap">${rank.title}</td>
+      <td style="font-family:var(--mono);font-weight:600;color:var(--ind2)">${wkPts>0?wkPts.toLocaleString():'—'}</td>
+      <td style="font-family:var(--mono);font-size:0.82rem;color:var(--t3)">${(u.chPoints||0).toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── PM Challenge profile save ─────────────────
+function saveChallengeToProfile(pts){
+  const me=getCurrentUser(); if(!me) return;
+  const users=getAllUsers();
+  const u=users.find(u=>u.email===me.email); if(!u) return;
+  u.chPoints=(u.chPoints||0)+pts;
+  const wk=getWeekStart();
+  if(!u.chWeekly||u.chWeekly.week!==wk) u.chWeekly={week:wk,pts:0};
+  u.chWeekly.pts+=pts;
+  saveAllUsers(users);
 }
 
 // ── Export Gate ───────────────────────────────
@@ -4825,6 +4993,7 @@ renderLeaderboard();
 const LS_CH_STREAK  = 'pmch_streak';   // {streak, lastDate, longestStreak}
 const LS_CH_TODAY   = 'pmch_today';    // {date, finalScore, rawScore, multiplier, mode, qScores}
 const LS_CH_ALLTIME = 'pmch_alltime';  // {totalPoints}
+const LS_CH_WEEKLY  = 'pmch_weekly';   // {week:'YYYY-MM-DD', pts}
 const FORMSPREE_ID  = 'https://formspree.io/f/xeednpre';              // Paste your Formspree form ID here (free at formspree.io)
 
 const RANK_TITLES = [
@@ -4976,6 +5145,13 @@ function showEndScreen(){
   const final=Math.round(raw*mult);
   let at=lsGet(LS_CH_ALLTIME,{totalPoints:0}); at.totalPoints+=final; lsSet(LS_CH_ALLTIME,at);
   lsSet(LS_CH_TODAY,{date:today,rawScore:raw,finalScore:final,multiplier:mult,mode:CH.mode,qScores:CH.answers.map(a=>a.points+a.speedBonus)});
+  // Accumulate weekly points locally
+  const wkNowEnd=getWeekStart();
+  let chWkData=lsGet(LS_CH_WEEKLY,{week:'',pts:0});
+  if(chWkData.week!==wkNowEnd) chWkData={week:wkNowEnd,pts:0};
+  chWkData.pts+=final; lsSet(LS_CH_WEEKLY,chWkData);
+  // Save to user profile for leaderboard
+  saveChallengeToProfile(final);
   document.getElementById('ch-end-score-val').textContent=final;
   const rank=getRankTitle(at.totalPoints), next=getNextRank(at.totalPoints);
   document.getElementById('ch-end-rank').innerHTML=`<span style="font-size:0.9rem;color:var(--t3);font-family:var(--sans);font-weight:400">Rank: </span>${rank.title}`;
