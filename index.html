@@ -648,24 +648,6 @@ body.light #page-home::before{background:
 .tool-node-label{font-size:0.62rem;color:var(--t2);font-weight:500;white-space:nowrap;letter-spacing:0.02em}
 .tool-node:hover .tool-node-label{color:var(--t1)}
 
-/* ═══ DAILY INSIGHT PAGE ═══ */
-.insight-card { max-width: 680px; }
-.insight-number { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--t3); margin-bottom: 0.5rem; }
-.insight-title { font-family: var(--display); font-size: 1.5rem; font-weight: 800; color: var(--t1); line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.02em; }
-.insight-body { font-size: 0.92rem; color: var(--t2); line-height: 1.8; margin-bottom: 1.5rem; }
-.insight-tag { display: inline-block; font-size: 0.67rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--t2); margin-bottom: 1.5rem; }
-.reaction-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.reaction-btn { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid var(--border2); background: var(--bg2); color: var(--t2); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: var(--sans); }
-.reaction-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--t1); background: rgba(255,255,255,0.06); }
-.reaction-btn.reacted { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); color: var(--t1); }
-.reaction-count { font-size: 0.72rem; color: var(--t3); margin-left: 2px; }
-.insight-comment-area { margin-top: 0.5rem; }
-.insight-nav { display: flex; align-items: center; gap: 1rem; margin-top: 2rem; }
-.insight-nav-btn { padding: 0.4rem 1rem; font-size: 0.8rem; }
-.insight-dot-row { display: flex; gap: 5px; }
-.insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border2); transition: background 0.2s; }
-.insight-dot.active { background: var(--t1); }
-
 /* ═══ THEME TRANSITIONS ═══ */
 body *{transition-property:background-color,border-color,color,box-shadow;transition-duration:0.22s;transition-timing-function:cubic-bezier(0.4,0,0.2,1)}
 .theme-svg,.th-sun,.th-moon{transition-property:opacity,transform;transition-duration:0.45s;transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)}
@@ -1219,7 +1201,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <thead>
             <tr>
               <th style="min-width:160px">Feature / Initiative</th>
-              <th>Player Lifecycle</th>
               <th data-tip="% of users affected">Reach %</th>
               <th data-tip="KPI impact 1–5">Impact</th>
               <th data-tip="50% / 75% / 90%">Confidence</th>
@@ -2653,7 +2634,7 @@ let riceId = 0;
 
 function addRiceRow(data){
   const id = riceId++;
-  const d = data || {name:'New Feature',lifecycle:'D0-D30',reach:80,impact:3,conf:'75%',effort:2,tshirt:'M'};
+  const d = data || {name:'New Feature',reach:80,impact:3,conf:'75%',effort:2,tshirt:'M'};
   riceRows.push({id,...d});
   renderRiceTable();
 }
@@ -2666,9 +2647,6 @@ function renderRiceTable(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input class="name-input" value="${row.name}" oninput="updateRice(${row.id},'name',this.value)"></td>
-      <td><select style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'lifecycle',this.value)">
-        ${['D0-D30','D2-D30','D4-D90','D2-D90','D0-D90'].map(l=>`<option ${row.lifecycle===l?'selected':''}>${l}</option>`).join('')}
-      </select></td>
       <td><input class="rice-input" type="number" value="${row.reach}" min="0" max="100" oninput="updateRice(${row.id},'reach',+this.value)"></td>
       <td><input class="rice-input" type="number" value="${row.impact}" min="1" max="5" step="0.5" oninput="updateRice(${row.id},'impact',+this.value)"></td>
       <td><select style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'conf',this.value)">
@@ -2695,7 +2673,13 @@ function scoreBadgeStyle(score){
   if(score>=0.5) return 'background:var(--amber-bg);color:var(--amber)';
   return 'background:var(--bg3);color:var(--t3)';
 }
-function updateRice(id,field,val){ const r=riceRows.find(r=>r.id===id); if(r) r[field]=val; renderRiceTable(); }
+function updateRice(id,field,val){
+  const r=riceRows.find(r=>r.id===id); if(!r) return;
+  r[field]=val;
+  if(field==='tshirt') r.effort={XS:1,S:2,M:3,L:4,XL:5}[val]||2;
+  if(field==='effort') r.tshirt={1:'XS',2:'S',3:'M',4:'L',5:'XL'}[Math.round(val)]||'M';
+  renderRiceTable();
+}
 function removeRice(id){ riceRows=riceRows.filter(r=>r.id!==id); renderRiceTable(); }
 function renderRiceRanking(){
   const sorted=[...riceRows].sort((a,b)=>riceScore(b)-riceScore(a));
@@ -2713,12 +2697,12 @@ function renderRiceRanking(){
 
 // seed
 [
-  {name:'Onboarding Flow Redesign',lifecycle:'D0-D30',reach:100,impact:4,conf:'90%',effort:3,tshirt:'M'},
-  {name:'Core Loop Improvement',lifecycle:'D0-D30',reach:100,impact:5,conf:'90%',effort:4,tshirt:'L'},
-  {name:'Monetization Offer A/B Test',lifecycle:'D4-D90',reach:80,impact:4,conf:'90%',effort:3,tshirt:'M'},
-  {name:'Retention Push Notifications',lifecycle:'D2-D90',reach:80,impact:2,conf:'75%',effort:2,tshirt:'M'},
-  {name:'Social / Multiplayer Feature',lifecycle:'D2-D90',reach:80,impact:2,conf:'90%',effort:2,tshirt:'S'},
-  {name:'Pricing Experiment (Price X)',lifecycle:'D0-D90',reach:100,impact:2,conf:'50%',effort:2,tshirt:'S'},
+  {name:'Onboarding Flow Redesign',reach:100,impact:4,conf:'90%',effort:3,tshirt:'M'},
+  {name:'Core Loop Improvement',reach:100,impact:5,conf:'90%',effort:4,tshirt:'L'},
+  {name:'Monetization Offer A/B Test',reach:80,impact:4,conf:'90%',effort:3,tshirt:'M'},
+  {name:'Retention Push Notifications',reach:80,impact:2,conf:'75%',effort:2,tshirt:'S'},
+  {name:'Social / Multiplayer Feature',reach:80,impact:2,conf:'90%',effort:2,tshirt:'S'},
+  {name:'Pricing Experiment (Price X)',reach:100,impact:2,conf:'50%',effort:2,tshirt:'S'},
 ].forEach(d=>addRiceRow(d));
 
 // ═══════════════════════════════════════════════
@@ -3832,9 +3816,9 @@ function dlCSV(filename, content){
 function _origExportCSV(page){
   const ts = new Date().toISOString().slice(0,10);
   if(page==='rice'){
-    let csv='Feature,Lifecycle,Reach%,Impact,Confidence,Effort,T-Shirt,RICE Score\n';
+    let csv='Feature,Reach%,Impact,Confidence,Effort,T-Shirt,RICE Score\n';
     [...riceRows].sort((a,b)=>riceScore(b)-riceScore(a)).forEach(r=>{
-      csv+=`"${r.name}","${r.lifecycle}",${r.reach},${r.impact},"${r.conf}",${r.effort},"${r.tshirt}",${riceScore(r).toFixed(2)}\n`;
+      csv+=`"${r.name}",${r.reach},${r.impact},"${r.conf}",${r.effort},"${r.tshirt}",${riceScore(r).toFixed(2)}\n`;
     });
     dlCSV(`pm-toolbox-rice-${ts}.csv`, csv);
   } else if(page==='stats'){
@@ -4834,26 +4818,6 @@ renderLeaderboard();
 // ═══════════════════════════════════════════
 // DAILY INSIGHT
 // ═══════════════════════════════════════════
-const INSIGHTS = [
-  { tag: "Framework", title: "RICE Scoring", body: "RICE helps you prioritize by combining four factors: Reach (how many users are affected per quarter), Impact (how much it moves the needle, 0.25-3x), Confidence (how sure you are, 50-100%), and Effort (person-months). Divide R x I x C by Effort. Higher score = higher priority. The key insight: Effort is in the denominator, so small high-confidence wins often beat big uncertain bets." },
-  { tag: "Statistics", title: "P-value ≠ Effect Size", body: "A p-value tells you how surprising your result is if there were no real effect. It does NOT tell you how big the effect is. A tiny, meaningless difference can achieve p<0.05 with a large enough sample. Always pair significance with effect size (lift %) and practical significance. Ask: Is this big enough to matter to the business? Not just: Is it statistically significant?" },
-  { tag: "Growth", title: "The ROAS Curve is Cumulative", body: "Day-N ARPU (Average Revenue Per User by day N) is cumulative and should never decrease. If your D30 ARPU is lower than D7, that is a data error. A healthy ROAS curve rises steeply early (monetization hooks), then flattens as you reach the tail of your payers. The slope of the flattening tells you how much long-term retention is contributing to LTV." },
-  { tag: "Mental Model", title: "The Kano Model", body: "Features fall into 3 buckets: Must-Be (their absence causes dissatisfaction but their presence goes unnoticed - table stakes), Performance (more = better, linear satisfaction), and Delighters (unexpected features that cause joy). Over time, Delighters become Performance features, and Performance features become Must-Bes. Your job is to keep finding new Delighters." },
-  { tag: "Metrics", title: "North Star Metric", body: "A North Star Metric captures the core value your product delivers to users. It should be a leading indicator of revenue, not revenue itself. For Spotify it is time spent listening. For Airbnb it is nights booked. For a mobile RPG it might be Weekly Active Spenders or D30 Retention. The test: if this metric goes up, does the business sustainably grow?" },
-  { tag: "Prioritization", title: "MoSCoW Method", body: "MoSCoW forces you to categorize everything as: Must Have (non-negotiable for launch), Should Have (important but not launch-blocking), Could Have (nice-to-have if time allows), or Won't Have (explicitly out of scope this cycle). Its power is the forcing function to have the conversation about what 'must' actually means with stakeholders." },
-  { tag: "Statistics", title: "Bayesian vs Frequentist A/B Testing", body: "Frequentist testing asks: what is the probability of seeing this result if there is no real effect? (p-value). Bayesian testing asks: given what we have seen, what is the probability that variant B is better than A? Bayesian gives a direct probability of winning, handles early stopping better, and lets you incorporate prior knowledge. For mobile games with small samples, Bayesian is often more appropriate." },
-  { tag: "Growth", title: "LTV:CAC Ratio", body: "The LTV:CAC ratio measures whether you are acquiring users profitably. LTV is lifetime value (D180 ARPU x installs). CAC is Cost per Acquisition (CPI). A ratio above 3:1 is generally healthy - you are making 3x what you spend to acquire a user. Below 1:1, you are losing money on every install. Between 1-3, you are marginally profitable but have no room for error." },
-  { tag: "Framework", title: "ICE Scoring", body: "ICE = Impact x Confidence x Ease. It is a simplified RICE for when you do not have good reach data. Impact: how much will it move the key metric (1-10). Confidence: how sure are you it will work (1-10). Ease: how easy is it to implement (1-10, where 10 = trivial). ICE is fast, but be careful - the Ease bias can lead teams to pick small wins over high-impact hard work." },
-  { tag: "Product", title: "Jobs-To-Be-Done Framework", body: "People do not buy products - they hire them to do a job. Understanding the Job-To-Be-Done (JTBD) means asking: what progress is the user trying to make? A milkshake sold at 8am is not competing with other milkshakes - it is competing with bagels and bananas as a one-handed commute breakfast. Reframing competition through JTBD reveals non-obvious insights and new market opportunities." },
-  { tag: "Metrics", title: "Retention Curves: D1/D7/D30", body: "Retention is the most important metric in mobile gaming. Healthy benchmarks for casual games: D1 >= 40%, D7 >= 20%, D30 >= 10%. Core/mid-core games aim higher. A steep early drop (D1 to D7) suggests onboarding problems. A slow D7 to D30 drop suggests engagement loops are working. Always look at the shape of the curve, not just the numbers." },
-  { tag: "Growth", title: "Cohort Analysis", body: "Cohort analysis groups users by when they joined (acquisition cohort) or by a behavior (behavioral cohort). Watching how different acquisition cohorts monetize over time reveals whether your product is improving: if newer cohorts have higher D30 ARPU, your changes are working. If older cohorts outperform, you may have quality decay in UA or product regression." },
-  { tag: "Framework", title: "Weighted Scoring Model", body: "Weighted scoring lets you customize prioritization by assigning weights to criteria that matter most to your team. Strategic alignment might be worth 30%, user impact 25%, revenue potential 25%, effort 20%. Each feature scores each criterion (1-5), multiplied by weight, then summed. Unlike RICE, it captures strategic nuance. The danger: weights are political. Agree on them before scoring." },
-  { tag: "Statistics", title: "Sample Size and Statistical Power", body: "Running an A/B test without enough sample size is like flipping a coin 5 times and concluding it is unfair. Power (1-beta) is the probability of detecting a real effect when it exists - typically you want 80% power. To detect a smaller lift, you need a larger sample. The formula is sensitive to baseline conversion rate: a 3% conversion needs far more users to detect a 10% lift than a 30% conversion rate." },
-  { tag: "Mental Model", title: "Opportunity Cost in Roadmapping", body: "Every yes on a roadmap is a no to everything else you could have built. Opportunity cost forces you to ask: what is the best alternative use of this team's time? It is not enough to show that a feature is worth building - you must show it is worth building more than everything else competing for the same resources. This is why prioritization frameworks exist: to make opportunity cost explicit." },
-];
-
-let currentInsightIdx = 0;
-
 // ═══════════════════════════════════════════════
 // PM CHALLENGE
 // ═══════════════════════════════════════════════
@@ -4946,7 +4910,7 @@ function renderQuestion(){
 }
 
 function startTimer(){
-  const DUR=60; CH.timerStart=Date.now(); let sLeft=DUR;
+  const DUR=120; CH.timerStart=Date.now(); let sLeft=DUR;
   const fill=document.getElementById('ch-timer-fill');
   const cnt=document.getElementById('ch-timer-count');
   if(fill){fill.style.width='100%'; fill.className='ch-timer-fill';}
@@ -4954,7 +4918,7 @@ function startTimer(){
   CH.timerInterval=setInterval(()=>{
     sLeft=Math.max(0,DUR-Math.floor((Date.now()-CH.timerStart)/1000));
     const pct=(sLeft/DUR)*100;
-    if(fill){fill.style.width=pct+'%'; fill.className='ch-timer-fill'+(sLeft<=10?' danger':sLeft<=20?' warning':'');}
+    if(fill){fill.style.width=pct+'%'; fill.className='ch-timer-fill'+(sLeft<=20?' danger':sLeft<=40?' warning':'');}
     if(cnt) cnt.textContent=sLeft;
     if(sLeft===0){clearInterval(CH.timerInterval); selectOption(-1);}
   },500);
@@ -4965,7 +4929,7 @@ function selectOption(optIdx){
   const ms=Date.now()-CH.timerStart;
   const q=CH.questions[CH.qIdx];
   const pts=optIdx>=0?q.options[optIdx].points:0;
-  const spd=optIdx>=0?Math.round(Math.max(0,(60-ms/1000)/60)*20):0;
+  const spd=optIdx>=0?Math.round(Math.max(0,(120-ms/1000)/120)*20):0;
   if(optIdx>=0){ const btns=document.querySelectorAll('.ch-option'); if(btns[optIdx]) btns[optIdx].classList.add('selected'); }
   CH.answers.push({optIdx,points:pts,speedBonus:spd,ms});
   setTimeout(()=>showReveal(),250);
@@ -5277,11 +5241,11 @@ function renderNews(items){
     <div class="ch-start-wrap">
       <div id="ch-mode-badge" class="ch-mode-pill"></div>
       <h1 class="ch-start-title">Today's PM Challenge</h1>
-      <p class="ch-start-sub">3 questions · 60 seconds each · Real PM scenarios</p>
+      <p class="ch-start-sub">3 questions · 2 minutes each · Real PM scenarios</p>
       <div class="ch-start-meta" id="ch-start-meta"></div>
       <button class="btn btn-primary ch-start-btn" onclick="startChallenge()">Start Challenge →</button>
       <div class="ch-start-rules">
-        <div class="ch-rule"><span>⏱</span> 60-second timer per question — speed earns bonus points</div>
+        <div class="ch-rule"><span>⏱</span> 2-minute timer per question — speed earns bonus points</div>
         <div class="ch-rule"><span>🎯</span> Weighted answers — no binary right/wrong</div>
         <div class="ch-rule"><span>🔥</span> Daily streaks multiply your score</div>
       </div>
@@ -5367,47 +5331,6 @@ function renderNews(items){
   </div>
 </div>
 
-<!-- (old daily insight removed) -->
-  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
-    <!-- Main insight card -->
-    <div class="card insight-card" style="flex:1;min-width:280px">
-      <div class="card-body" style="padding:2rem">
-        <div class="insight-number" id="insight-number">Day 1 of 30</div>
-        <div class="insight-tag" id="insight-tag">Framework</div>
-        <h2 class="insight-title" id="insight-title">Loading…</h2>
-        <p class="insight-body" id="insight-body"></p>
-        <div class="reaction-row">
-          <button class="reaction-btn" id="react-knew" onclick="reactInsight('knew')">🧠 <span>Already knew it</span><span class="reaction-count" id="rc-knew"></span></button>
-          <button class="reaction-btn" id="react-new" onclick="reactInsight('new')">✨ <span>Learned something new!</span><span class="reaction-count" id="rc-new"></span></button>
-        </div>
-        <div class="insight-comment-area">
-          <textarea id="insight-comment" rows="3" placeholder="Leave a comment or your take on this concept…" style="width:100%;margin-bottom:0.6rem"></textarea>
-          <button class="btn btn-primary btn-sm" onclick="submitInsightComment()">Post comment</button>
-        </div>
-        <div id="insight-comments-list" style="margin-top:1.25rem;display:flex;flex-direction:column;gap:0.75rem"></div>
-      </div>
-    </div>
-    <!-- Nav + upcoming -->
-    <div style="display:flex;flex-direction:column;gap:1rem;min-width:220px;max-width:280px">
-      <div class="card">
-        <div class="card-head"><div class="card-title">Navigate</div></div>
-        <div class="card-body" style="padding:1rem">
-          <div class="insight-nav">
-            <button class="btn btn-ghost btn-sm insight-nav-btn" onclick="changeInsight(-1)">← Prev</button>
-            <button class="btn btn-ghost btn-sm insight-nav-btn" onclick="changeInsight(1)">Next →</button>
-          </div>
-          <div class="insight-dot-row" id="insight-dots" style="margin-top:1rem;flex-wrap:wrap;gap:5px"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">Archive</div></div>
-        <div class="card-body" style="padding:0.75rem">
-          <div id="insight-archive" style="display:flex;flex-direction:column;gap:0.4rem;max-height:320px;overflow-y:auto"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- ═══ GAMING NEWS PAGE ═══ -->
