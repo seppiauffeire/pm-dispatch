@@ -544,13 +544,13 @@ tr:hover td{background:rgba(255,255,255,0.02)}
   color:var(--t1);letter-spacing:-0.03em;line-height:1.15;
   text-align:center;margin-bottom:2.5rem;
 }
-.guide-panel-body{font-size:0.92rem;color:var(--t2);line-height:1.85}
+.guide-panel-body{font-size:0.92rem;color:var(--t1);line-height:1.85}
 .guide-panel-body h3{
   font-family:var(--display);font-size:0.78rem;font-weight:700;
   text-transform:uppercase;letter-spacing:0.12em;
-  color:var(--t3);margin:2rem 0 0.65rem;
+  color:var(--t2);margin:2rem 0 0.65rem;
 }
-.guide-panel-body p{margin-bottom:1rem;color:var(--t2)}
+.guide-panel-body p{margin-bottom:1rem;color:var(--t1)}
 .guide-panel-body ul{margin:0 0 1rem 1.25rem}
 .guide-panel-body li{margin-bottom:0.45rem}
 .guide-panel-body strong{color:var(--t1);font-weight:600}
@@ -2117,10 +2117,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       <div class="rail-info-cat" id="rail-cat"></div>
       <div class="rail-info-title" id="rail-title"></div>
       <div class="rail-info-desc" id="rail-desc"></div>
-      <button class="rail-explore-btn" id="rail-explore" onclick="openCurrentGuide()">
-        Explore guide
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
     </div>
 
     <!-- Dot indicators -->
@@ -2132,8 +2128,8 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <div class="guide-grid" id="guide-grid"></div>
   </div>
 
-  <!-- Inline guide panel (replaces modal) -->
-  <div id="guide-panel" style="display:none">
+  <!-- Inline guide panel — always visible, content updated on rail navigation -->
+  <div id="guide-panel">
     <div class="guide-panel-divider"></div>
     <div class="guide-panel">
       <div class="guide-panel-cat" id="panel-cat"></div>
@@ -3699,9 +3695,6 @@ function buildRail(){
 }
 
 function railGoTo(idx, animate=true){
-  // Close open panel when navigating
-  const panel = document.getElementById('guide-panel');
-  if(panel && panel.style.display !== 'none') closeGuidePanel();
   railIndex = ((idx % railList.length) + railList.length) % railList.length;
   const cards = document.querySelectorAll('.rail-card');
   cards.forEach(card => {
@@ -3731,6 +3724,8 @@ function updateRailInfo(){
   document.getElementById('rail-cat').textContent = g.cat;
   document.getElementById('rail-title').textContent = g.title;
   document.getElementById('rail-desc').textContent = g.desc;
+  // Auto-populate the article panel without scrolling
+  showGuidePanel(g, false);
   // Re-trigger animation
   infoEl.style.animation = 'none';
   void infoEl.offsetWidth;
@@ -3750,31 +3745,28 @@ function updateRailDots(){
 }
 
 function openCurrentGuide(){
-  const g = railList[railIndex];
-  if(!g) return;
-  showGuidePanel(g);
+  // Clicking the center card scrolls to the always-visible article below
+  const panel = document.getElementById('guide-panel');
+  if(panel) setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 30);
 }
 
 function openGuide(i){
   showGuidePanel(guides[i]);
 }
 
-function showGuidePanel(g){
+function showGuidePanel(g, scrollTo=true){
   const panel = document.getElementById('guide-panel');
   document.getElementById('panel-cat').textContent = g.cat;
   document.getElementById('panel-title').textContent = g.title;
   document.getElementById('panel-body').innerHTML = g.body;
-  panel.style.display = 'block';
-  // Force re-animation
-  const inner = panel.querySelector('.guide-panel');
-  inner.style.animation = 'none';
-  void inner.offsetWidth;
-  inner.style.animation = '';
-  // Smooth scroll to panel
-  setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 60);
-  // Update button label
-  const btn = document.getElementById('rail-explore');
-  if(btn){ btn.innerHTML = 'Close guide <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'; btn.onclick = closeGuidePanel; }
+  // Scroll to article only when user explicitly clicks a card (not on auto-update)
+  if(scrollTo){
+    const inner = panel.querySelector('.guide-panel');
+    inner.style.animation = 'none';
+    void inner.offsetWidth;
+    inner.style.animation = '';
+    setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  }
 }
 
 function closeGuidePanel(){
