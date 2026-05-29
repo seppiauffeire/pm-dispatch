@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -4967,7 +4967,9 @@ document.querySelectorAll('.nav-tab[data-page]').forEach(btn=>{
 
 // ── Init ──────────────────────────────────────
 renderNavAuth();
-renderLeaderboard();
+// Defer renderLeaderboard so all const declarations (RANK_TITLES, LS_CH_*, etc.)
+// defined later in this script are fully initialized before the function runs.
+setTimeout(renderLeaderboard, 0);
 // Initialise my-card stats
 (()=>{
   document.getElementById('lb-my-uses').textContent=lsGet(LS_MY_USES,0);
