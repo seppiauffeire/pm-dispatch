@@ -1524,15 +1524,15 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
 
   <div class="subtabs">
-    <button class="subtab active" onclick="switchSub('growth','roas-sub')">ROAS Curve</button>
-    <button class="subtab" onclick="switchSub('growth','roas-proj-sub')">📂 ROAS Projection</button>
+    <button class="subtab active" onclick="switchSub('growth','roas-proj-sub')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px"><polyline points="1,11 4,7 7,9 12,3"/><polyline points="9,3 12,3 12,6"/></svg>ROAS Projection</button>
+    <button class="subtab" onclick="switchSub('growth','roas-sub')">ROAS Curve</button>
     <button class="subtab" onclick="switchSub('growth','ltv-sub')">LTV Calculator</button>
     <button class="subtab" onclick="switchSub('growth','adrev-sub')">Ad Revenue</button>
     <button class="subtab" onclick="switchSub('growth','cohort-sub')">Cohort Revenue</button>
   </div>
 
   <!-- ROAS CURVE -->
-  <div class="subpage active" id="roas-sub">
+  <div class="subpage" id="roas-sub">
     <div class="card" style="margin-bottom:1rem">
       <div class="card-head"><div class="card-title">ROAS Curve Projection</div><div class="card-sub">Model cumulative ROAS over time across spend scenarios</div></div>
       <div class="card-body">
@@ -1553,7 +1553,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
 
   <!-- ROAS PROJECTION (Cohort CSV) -->
-  <div class="subpage" id="roas-proj-sub">
+  <div class="subpage active" id="roas-proj-sub">
 
     <!-- Upload row -->
     <div class="col2" style="margin-bottom:1.25rem">
@@ -2398,7 +2398,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   <!-- Tab toggle -->
   <div class="subtabs" style="margin-bottom:1.25rem">
     <button class="subtab active" id="lb-tab-activity" onclick="switchLbTab('activity')">Activity &amp; Streaks</button>
-    <button class="subtab" id="lb-tab-challenge" onclick="switchLbTab('challenge')">🎯 PM Challenge</button>
+    <button class="subtab" id="lb-tab-challenge" onclick="switchLbTab('challenge')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px"><path d="M3 1h8v5a4 4 0 0 1-8 0V1z"/><line x1="7" y1="10" x2="7" y2="12"/><line x1="4" y1="12" x2="10" y2="12"/><path d="M3 2H1.5a1 1 0 0 0 0 3H3"/><path d="M11 2h1.5a1 1 0 0 1 0 3H11"/></svg>PM Challenge</button>
   </div>
 
   <!-- User's own card — Activity tab (shown when logged in + on activity tab) -->
@@ -4753,18 +4753,16 @@ function renderLeaderboard(){
       if(!existing.chWeekly||existing.chWeekly.week!==wkNow) existing.chWeekly=s.chWeekly;
     }
   });
-  // Sync logged-in user's localStorage challenge data into user store
-  // localStorage is the authoritative source (written by showEndScreen).
-  // The user store copy (used for table display) may lag if saveChallengeToProfile
-  // ran into a timing issue or the session wasn't flushed yet.
+  // Sync logged-in user's weekly challenge pts from localStorage into user store.
+  // LS_CH_WEEKLY is the authoritative source written by showEndScreen; the user
+  // store copy can lag if saveChallengeToProfile had a timing gap.
+  // NOTE: We do NOT sync LS_CH_ALLTIME → u.chPoints — that would attribute
+  // anonymous (pre-login) sessions to the user, inflating the table total.
+  // All-time pts accumulate only via saveChallengeToProfile (logged-in sessions).
   if(me){
     const myRec=users.find(u=>u.email===me.email);
     if(myRec){
-      const localAt=lsGet(LS_CH_ALLTIME,{totalPoints:0});
       const localWk=lsGet(LS_CH_WEEKLY,{week:'',pts:0});
-      // Use whichever is higher for all-time
-      if(localAt.totalPoints>(myRec.chPoints||0)) myRec.chPoints=localAt.totalPoints;
-      // Use localStorage weekly if it's for the current week and is higher
       const storedWkPts=myRec.chWeekly&&myRec.chWeekly.week===wkNow?myRec.chWeekly.pts:0;
       if(localWk.week===wkNow && localWk.pts>storedWkPts){
         myRec.chWeekly={week:wkNow,pts:localWk.pts};
