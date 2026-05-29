@@ -1082,6 +1082,16 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         <div class="home-stat"><div class="home-stat-val">Free</div><div class="home-stat-label">Always</div></div>
       </div>
 
+      <!-- Newsletter inline form -->
+      <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border2)">
+        <div style="font-size:0.78rem;color:var(--t3);margin-bottom:0.65rem">📮 Weekly newsletter on PM, growth, and mobile monetization</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <input type="email" id="home-email" placeholder="your@email.com" style="flex:1;min-width:160px;padding:0.55rem 0.8rem;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;color:var(--t1);font-size:0.82rem;font-family:var(--sans);outline:none">
+          <button onclick="submitNewsletter('home-email')" style="padding:0.55rem 1rem;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff;font-size:0.82rem;font-weight:600;font-family:var(--sans);white-space:nowrap;box-shadow:0 2px 12px rgba(124,58,237,0.35);transition:all 0.18s" onmouseover="this.style.boxShadow='0 4px 18px rgba(124,58,237,0.6)';this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(124,58,237,0.35)';this.style.transform=''">Subscribe →</button>
+        </div>
+        <div id="home-nl-status" style="font-size:0.75rem;margin-top:0.4rem;min-height:16px;color:var(--t3)"></div>
+      </div>
+
       <!-- Mobile-only tools grid — hidden on desktop via CSS -->
       <div class="mobile-tools-grid">
         <button class="mobile-tool-btn" data-page="rice" onclick="switchPage('rice')">
@@ -4540,7 +4550,9 @@ const SUBSCRIBE_WORKER_URL = 'https://pmdispatch-subscribe.arturoruizvaldes.work
 async function submitNewsletter(inputId){
   const input = document.getElementById(inputId);
   const email = (input?.value || '').trim();
-  const statusId = inputId === 'nl-email' ? 'nl-status' : 'about-nl-status';
+  const statusId = inputId === 'nl-email' ? 'nl-status'
+                 : inputId === 'home-email' ? 'home-nl-status'
+                 : 'about-nl-status';
   const statusEl = document.getElementById(statusId);
 
   if(!email || !email.includes('@') || !email.includes('.') ){
