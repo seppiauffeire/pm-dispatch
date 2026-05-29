@@ -627,13 +627,13 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 #page-home{padding:0;overflow:hidden;position:relative;min-height:calc(100vh - 56px)}
 #page-home.active{display:flex;align-items:center}
 .home-hero{display:flex;align-items:center;gap:4rem;width:100%;padding:2rem 5rem;position:relative;z-index:1;max-width:1500px;margin:0 auto}
-#page-home::before{content:'';position:absolute;inset:-2px;background:
-  radial-gradient(ellipse 90% 80% at -5% 60%, rgba(255,255,255,0.04) 0%,transparent 60%),
-  radial-gradient(ellipse 70% 60% at 105% 5%, rgba(255,255,255,0.025) 0%,transparent 55%),
+#page-home::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 100% 80% at 0% 60%, rgba(255,255,255,0.04) 0%,transparent 60%),
+  radial-gradient(ellipse 80% 60% at 100% 5%, rgba(255,255,255,0.025) 0%,transparent 55%),
   radial-gradient(ellipse 100% 100% at 50% 50%, rgba(8,8,8,0) 40%,rgba(8,8,8,0.5) 100%);
   pointer-events:none;z-index:0}
 body.light #page-home::before{background:
-  radial-gradient(ellipse 90% 80% at -5% 60%, rgba(0,0,0,0.03) 0%,transparent 60%)}
+  radial-gradient(ellipse 100% 80% at 0% 60%, rgba(0,0,0,0.03) 0%,transparent 60%)}
 .home-left{flex:1;min-width:0;max-width:600px}
 .home-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;border:1px solid rgba(167,139,250,0.35);background:rgba(124,58,237,0.12);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.28em;color:#c4b5fd;margin-bottom:1.5rem;box-shadow:0 0 18px rgba(124,58,237,0.18)}
 .home-badge-dot{width:6px;height:6px;border-radius:50%;background:#a78bfa;box-shadow:0 0 8px rgba(167,139,250,0.9),0 0 16px rgba(124,58,237,0.5)}
