@@ -4753,6 +4753,24 @@ function renderLeaderboard(){
       if(!existing.chWeekly||existing.chWeekly.week!==wkNow) existing.chWeekly=s.chWeekly;
     }
   });
+  // Sync logged-in user's localStorage challenge data into user store
+  // localStorage is the authoritative source (written by showEndScreen).
+  // The user store copy (used for table display) may lag if saveChallengeToProfile
+  // ran into a timing issue or the session wasn't flushed yet.
+  if(me){
+    const myRec=users.find(u=>u.email===me.email);
+    if(myRec){
+      const localAt=lsGet(LS_CH_ALLTIME,{totalPoints:0});
+      const localWk=lsGet(LS_CH_WEEKLY,{week:'',pts:0});
+      // Use whichever is higher for all-time
+      if(localAt.totalPoints>(myRec.chPoints||0)) myRec.chPoints=localAt.totalPoints;
+      // Use localStorage weekly if it's for the current week and is higher
+      const storedWkPts=myRec.chWeekly&&myRec.chWeekly.week===wkNow?myRec.chWeekly.pts:0;
+      if(localWk.week===wkNow && localWk.pts>storedWkPts){
+        myRec.chWeekly={week:wkNow,pts:localWk.pts};
+      }
+    }
+  }
   saveAllUsers(users);
 
   // Rank by uses
