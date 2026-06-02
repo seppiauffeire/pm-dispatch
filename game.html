@@ -42,8 +42,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 @keyframes pred{0%,100%{opacity:1}50%{opacity:.45}}
 
 /* Layout */
-.gwrap{max-width:1100px;margin:0 auto;padding:1.25rem;display:grid;grid-template-columns:1fr 290px;gap:1.25rem;align-items:start}
-@media(max-width:740px){.gwrap{grid-template-columns:1fr}}
+.gwrap{max-width:1200px;margin:0 auto;padding:1.25rem;display:grid;grid-template-columns:240px 1fr 280px;gap:1.25rem;align-items:start}
+@media(max-width:1000px){.gwrap{grid-template-columns:1fr 270px}}
+@media(max-width:660px){.gwrap{grid-template-columns:1fr}}
+.col-left{display:flex;flex-direction:column;gap:1rem}
 .col-main{display:flex;flex-direction:column;gap:1rem}
 .col-side{display:flex;flex-direction:column;gap:1rem}
 
@@ -219,7 +221,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 
 <div class="gwrap">
 
-  <!-- Main column -->
+  <!-- Left column: research panels -->
+  <div class="col-left">
+
+    <div class="panel hidden" id="panel-res">
+      <div class="ptitle">🔬 Research Queue</div>
+      <div id="res-list"></div>
+    </div>
+
+    <div class="panel hidden" id="panel-adv-res">
+      <div class="ptitle">🧠 Advanced Research</div>
+      <div id="adv-res-list"></div>
+    </div>
+
+    <div class="panel hidden" id="panel-upgrades">
+      <div class="ptitle">🏗 Studio Upgrades</div>
+      <div id="upgrades-list"></div>
+    </div>
+
+  </div>
+
+  <!-- Center column: core game -->
   <div class="col-main">
 
     <div class="panel" id="panel-p1">
@@ -231,19 +253,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       </div>
     </div>
 
-    <!-- Portfolio (Phase 2+) -->
     <div class="panel hidden" id="panel-port">
       <div class="ptitle">📱 Active Portfolio</div>
       <div id="gcards"></div>
     </div>
 
-    <!-- Sprint sliders (Phase 2+) -->
     <div class="panel hidden" id="panel-sprint">
       <div class="sphead">
         <div class="sptitle">⚡ PM Focus — Sprint</div>
         <div id="sp-timer">30s</div>
       </div>
-
       <div class="slitem">
         <div class="slrow"><span class="slname">💰 Monetization</span><span class="slpct" id="l-mon">25%</span></div>
         <input type="range" id="sl-mon" min="0" max="100" value="25" oninput="onSl('mon',this.value)">
@@ -263,27 +282,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div id="sp-note" style="margin-top:.6rem;font-size:.78rem;color:var(--t2);text-align:center;min-height:1em"></div>
     </div>
 
-    <!-- Research Queue (PP) -->
-    <div class="panel hidden" id="panel-res">
-      <div class="ptitle">🔬 Research Queue</div>
-      <div id="res-list"></div>
-    </div>
-
-    <!-- Advanced Research (unlocks after 4 tier-1 researches) -->
-    <div class="panel hidden" id="panel-adv-res">
-      <div class="ptitle">🧠 Advanced Research</div>
-      <div id="adv-res-list"></div>
-    </div>
-
-    <!-- Studio Upgrades (revenue, unlocks after first game) -->
-    <div class="panel hidden" id="panel-upgrades">
-      <div class="ptitle">🏗 Studio Upgrades</div>
-      <div id="upgrades-list"></div>
-    </div>
-
   </div>
 
-  <!-- Side column -->
+  <!-- Right column: log + automation -->
   <div class="col-side">
 
     <div id="panel-log">
@@ -329,7 +330,7 @@ const RESEARCH = [
   {id:'comp',      tier:1, name:'Competitive Analysis',  cost:35,  cur:'pp', desc:'Shows competitor activity in the log. Unsettling.'},
   {id:'agile',     tier:1, name:'Agile Methodology',     cost:60,  cur:'pp', desc:'Doubles PP per click.'},
   {id:'lean',      tier:1, name:'Lean Canvas',           cost:80,  cur:'pp', desc:'Next game launch requires 20% fewer PP.'},
-  {id:'okrs',      tier:1, name:'OKRs',                  cost:100, cur:'pp', desc:'Required to unlock Soft Launch. The beginning of everything.'},
+  {id:'okrs',      tier:1, name:'OKRs',                  cost:100, cur:'pp', desc:'Aligns the team on what success looks like. Improves sprint efficiency.'},
   {id:'analytics', tier:1, name:'Analytics SDK',         cost:150, cur:'pp', desc:'Shows exact churn % instead of health emoji.'},
   {id:'user_res',  tier:1, name:'User Research',         cost:200, cur:'pp', desc:'New games start with 2% lower churn.'},
   {id:'sprint_pl', tier:1, name:'Sprint Planning',       cost:250, cur:'pp', desc:'Sprint cycle: 30s → 20s. More frequent focus boosts.'},
@@ -569,7 +570,7 @@ function tick(){
   checkMilestones();
 
   // fire popup when idle
-  if(S.popQ.length>0 && !popOpen && Date.now()-S.lastClick>3500) fireNextPop();
+  if(S.popQ.length>0 && !popOpen && Date.now()-S.lastClick>1500) fireNextPop();
 
   // autosave
   if(ticks%30===0) save();
@@ -601,10 +602,8 @@ function checkMilestones(){
   const t1done = RESEARCH.filter(r=>r.tier===1 && S.research.includes(r.id)).length;
   if(t1done>=4 && !S.panels.advRes){ S.panels.advRes=true; reveal('panel-adv-res'); log('Advanced Research unlocked. Deeper systems available.'); }
 
-  // Soft Launch: requires OKRs research
-  if(S.pp>=100 && S.research.includes('okrs') && !S.game && !S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
-  // Hint when PP ready but OKRs not researched
-  if(S.pp>=100 && !S.research.includes('okrs') && !S.game) set('p1s', 'Research OKRs to unlock Soft Launch.');
+  // Soft Launch: fires automatically at 100 PP
+  if(S.pp>=100 && !S.game && !S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
 
   if(S.game && !S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.game && !S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked. Every sprint is a choice.'); }
@@ -649,9 +648,8 @@ function updateUI(){
   set('l-ua',  Math.round(n.ua*100)+'%');
   set('l-feat',Math.round(n.feat*100)+'%');
 
-  // p1 sub text (don't overwrite the OKRs hint set by checkMilestones)
+  // p1 sub text
   if(S.clicks>0&&S.clicks<10) set('p1s','Keep going. Someone has to.');
-  else if(S.pp>=100&&!S.research.includes('okrs')&&!S.game){ /* hint set by checkMilestones */ }
   else if(S.pp>=50&&S.pp<100&&!S.game) set('p1s','Almost. The breakthrough is close. Probably.');
   else if(S.game) set('p1s','Your game is live. Don\'t ignore it.');
 
