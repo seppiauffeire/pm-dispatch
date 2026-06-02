@@ -1095,10 +1095,10 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <div class="home-left">
       <div class="home-badge"><span class="home-badge-dot"></span>Built by a CPO · Always free</div>
       <h1 class="home-headline">The <em style="-webkit-text-fill-color:inherit;font-style:italic">PM Toolkit</em><br>Built for<br><span>Shipping.</span></h1>
-      <p class="home-sub">Prioritization frameworks, A/B statistics, growth models, sample size calculators, and more — all in one place, no login required.</p>
+      <p class="home-sub">Prioritization frameworks, A/B statistics, growth models, sample size calculators, gaming industry news, and more — all in one place, no login required.</p>
       <div class="home-actions">
         <button class="btn btn-primary btn-hero" onclick="switchPage('rice')">Start prioritizing →</button>
-        <button class="btn btn-ghost btn-hero" onclick="switchPage('guides')">Open Playbook</button>
+        <button class="btn btn-ghost btn-hero" onclick="switchPage('challenge')">Check Out the PM Challenge</button>
       </div>
       <div class="home-stats">
         <div class="home-stat"><div class="home-stat-val">20+</div><div class="home-stat-label">Tools</div></div>
@@ -4010,7 +4010,7 @@ function openGuideReader(i){
   document.getElementById('reader-title').textContent = g.title;
   document.getElementById('reader-body').innerHTML = g.body;
   reader.classList.add('open');
-  reader.scrollTop = 0;
+  setTimeout(() => { reader.scrollTop = 0; }, 0);
 }
 function closeGuideReader(){
   const reader = document.getElementById('guide-reader');
