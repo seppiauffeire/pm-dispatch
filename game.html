@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ship It — PM Idle | PM Dispatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+  --border:#242424;--border2:#333;
+  --t1:#f2f2f2;--t2:#888;--t3:#444;
+  --ind:#a78bfa;--ind2:#c4b5fd;
+  --green:#4ade80;--red:#f87171;--yellow:#fbbf24;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Figtree',system-ui,sans-serif;
+  --display:'Syne',system-ui,sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:14px}
+
+/* Nav */
+.gnav{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.gnav-back{display:flex;align-items:center;gap:5px;color:var(--t3);font-size:0.78rem;text-decoration:none;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--sans)}
+.gnav-back:hover{color:var(--t1)}
+.gnav-title{font-family:var(--display);font-size:0.95rem;font-weight:800;letter-spacing:0.04em}
+.gnav-right{display:flex;gap:0.75rem;align-items:center}
+.gnav-save{font-size:0.68rem;color:var(--t3);font-family:var(--mono)}
+.btn-reset{font-size:0.68rem;color:var(--t3);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:2px 6px;border-radius:4px;transition:color .12s}
+.btn-reset:hover{color:var(--red)}
+
+/* Resource bar */
+.res-bar{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto}
+.res-item{flex:1;min-width:110px;padding:0.6rem 1rem;border-right:1px solid var(--border)}
+.res-item:last-child{border-right:none}
+.res-label{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:3px}
+.res-val{font-family:var(--mono);font-size:0.95rem;font-weight:600;color:var(--t1);line-height:1}
+.res-sub{font-size:0.65rem;color:var(--t3);margin-top:2px;font-family:var(--mono)}
+#ri-debt .res-val{color:var(--red)}
+#ri-debt.pulsing .res-val{animation:pred 1.2s ease-in-out infinite}
+@keyframes pred{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* Layout */
+.gwrap{max-width:1100px;margin:0 auto;padding:1.25rem;display:grid;grid-template-columns:1fr 290px;gap:1.25rem;align-items:start}
+@media(max-width:740px){.gwrap{grid-template-columns:1fr}}
+.col-main{display:flex;flex-direction:column;gap:1rem}
+.col-side{display:flex;flex-direction:column;gap:1rem}
+
+/* Panels */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem}
+.ptitle{font-family:var(--display);font-size:0.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:.85rem}
+.hidden{display:none!important}
+.fade-in{animation:fi .55s ease forwards}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* Phase 1 */
+#p1{text-align:center;padding:2rem 1rem 1.5rem}
+.p1h{font-family:var(--display);font-size:1.35rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.35rem}
+.p1s{font-size:.78rem;color:var(--t3);margin-bottom:1.75rem;min-height:1.2em}
+#btn-proto{
+  width:100%;max-width:300px;padding:1rem 1.75rem;
+  font-family:var(--display);font-size:.95rem;font-weight:800;letter-spacing:.04em;
+  background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff;
+  border:none;border-radius:11px;cursor:pointer;
+  box-shadow:0 4px 22px rgba(124,58,237,.4);transition:all .14s;user-select:none
+}
+#btn-proto:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.6)}
+#btn-proto:active{transform:scale(.97)}
+.pcount{font-family:var(--mono);font-size:.72rem;color:var(--t3);margin-top:.85rem}
+
+/* Rejection log */
+#panel-log{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.log-head{padding:.6rem .9rem;border-bottom:1px solid var(--border);font-family:var(--display);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+#rlog{height:200px;overflow-y:auto}
+.le{padding:.5rem .9rem;border-bottom:1px solid var(--border);font-size:.75rem;color:var(--t2);line-height:1.5;animation:le .3s ease}
+.le:last-child{border-bottom:none}
+.let{font-family:var(--mono);font-size:.65rem;color:var(--t3);margin-right:5px}
+@keyframes le{from{opacity:0}to{opacity:1}}
+
+/* Automation */
+.ai{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border)}
+.ai:last-child{border-bottom:none}
+.ain{font-size:.84rem;font-weight:600;color:var(--t1)}
+.aif{font-size:.68rem;color:var(--t3);margin-top:2px;font-style:italic}
+.air{text-align:right;flex-shrink:0;margin-left:.5rem}
+.aio{font-family:var(--mono);font-size:.75rem;color:var(--ind2);font-weight:600}
+.airt{font-size:.63rem;color:var(--t3);font-family:var(--mono)}
+.bbuy{
+  margin-top:3px;padding:3px 9px;font-size:.68rem;font-weight:600;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:5px;
+  color:var(--t3);cursor:pointer;font-family:var(--sans);transition:all .12s;white-space:nowrap
+}
+.bbuy:hover:not(:disabled){background:var(--bg4);color:var(--t1);border-color:var(--t3)}
+.bbuy:disabled{opacity:.3;cursor:not-allowed}
+.bbuy.aff{color:var(--ind2);border-color:var(--ind)}
+
+/* Research */
+.ri{padding:.6rem 0;border-bottom:1px solid var(--border)}
+.ri:last-child{border-bottom:none}
+.rin{font-size:.82rem;font-weight:600;color:var(--t1);margin-bottom:2px}
+.rid{font-size:.68rem;color:var(--t3);line-height:1.4;margin-bottom:5px}
+.ric{font-family:var(--mono);font-size:.68rem;color:var(--ind2)}
+.ridone{font-size:.68rem;color:var(--green);font-weight:700}
+
+/* Game card */
+.gcard{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:1rem}
+.gch{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap}
+.gcn{font-family:var(--display);font-size:.98rem;font-weight:800;letter-spacing:-.015em}
+.gctags{display:flex;gap:4px;flex-shrink:0}
+.gctag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:99px;background:rgba(167,139,250,.12);color:var(--ind2)}
+.gcstats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.65rem;margin-bottom:.8rem}
+@media(max-width:500px){.gcstats{grid-template-columns:1fr 1fr}}
+.gcsl{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:3px;font-weight:700}
+.gcsv{font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--t1)}
+.daubar{height:3px;background:var(--bg4);border-radius:2px;margin-top:3px;overflow:hidden}
+.daufill{height:100%;background:linear-gradient(90deg,var(--ind),var(--ind2));border-radius:2px;transition:width .6s}
+.gcactions{display:flex;gap:.4rem;flex-wrap:wrap}
+.bact{padding:5px 12px;font-size:.74rem;font-weight:600;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all .12s;border:1px solid var(--border2);background:var(--bg4);color:var(--t2)}
+.bact:hover{background:var(--bg2);color:var(--t1);border-color:var(--t3)}
+.bact.pri{background:rgba(124,58,237,.15);color:var(--ind2);border-color:var(--ind)}
+.bact.pri:hover{background:rgba(124,58,237,.25)}
+.bact.dan{color:var(--red);border-color:#7f1d1d}
+.bact.dan:hover{background:rgba(248,113,113,.08)}
+.bact:disabled{opacity:.35;cursor:not-allowed}
+
+/* Invest dropdown */
+.idrop{position:relative;display:inline-block}
+.imenu{display:none;position:absolute;top:100%;left:0;margin-top:3px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;min-width:240px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.5);overflow:hidden}
+.imenu.open{display:block}
+.iopt{padding:.65rem .9rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.iopt:last-child{border-bottom:none}
+.iopt:hover:not(.idis){background:var(--bg4)}
+.idis{opacity:.35;cursor:not-allowed}
+.ion{font-size:.8rem;font-weight:600;color:var(--t1)}
+.iom{font-size:.67rem;color:var(--t3);font-family:var(--mono);margin-top:2px}
+
+/* Sprint panel */
+.sphead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.sptitle{font-family:var(--display);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+#sp-timer{font-family:var(--mono);font-size:.88rem;font-weight:700;color:var(--ind2)}
+.slitem{margin-bottom:.75rem}
+.slitem:last-child{margin-bottom:0}
+.slrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.slname{font-size:.78rem;font-weight:600;color:var(--t2)}
+.slpct{font-family:var(--mono);font-size:.74rem;color:var(--ind2);font-weight:600}
+input[type=range]{width:100%;height:4px;border-radius:2px;-webkit-appearance:none;appearance:none;background:var(--border2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ind);cursor:pointer;box-shadow:0 0 6px rgba(167,139,250,.5)}
+
+/* Morale dots */
+.mdots{display:flex;gap:3px;margin-top:3px}
+.md{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:background .3s}
+.md.g{background:var(--green)}
+.md.y{background:var(--yellow)}
+.md.r{background:var(--red)}
+
+/* Popup */
+#poverlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.25rem}
+#poverlay.hidden{display:none}
+.pbox{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;max-width:460px;width:100%;padding:1.75rem;box-shadow:0 40px 80px rgba(0,0,0,.7);animation:pin .22s ease}
+@keyframes pin{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+.ptit{font-family:var(--display);font-size:1.1rem;font-weight:800;color:var(--t1);margin-bottom:.85rem;letter-spacing:-.02em;line-height:1.3}
+.pbdy{font-size:.82rem;color:var(--t2);line-height:1.8;margin-bottom:1.1rem;white-space:pre-wrap}
+.pchoices{display:flex;flex-direction:column;gap:.4rem}
+.pchoice{padding:.65rem .9rem;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;cursor:pointer;text-align:left;color:var(--t2);font-size:.79rem;font-family:var(--sans);transition:all .12s;line-height:1.45}
+.pchoice:hover{background:var(--bg4);color:var(--t1);border-color:var(--t3)}
+.pflav{font-size:.67rem;color:var(--t3);margin-top:3px;display:block;font-style:italic}
+.pinput{width:100%;padding:.6rem .85rem;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--t1);font-size:.88rem;font-family:var(--sans);margin-bottom:.85rem;outline:none;transition:border-color .15s}
+.pinput:focus{border-color:var(--ind)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <a href="/" class="gnav-back">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    PM Dispatch
+  </a>
+  <div class="gnav-title">SHIP IT — PM IDLE</div>
+  <div class="gnav-right">
+    <div class="gnav-save" id="save-ind">● autosave on</div>
+    <button class="btn-reset" onclick="resetGame()">reset</button>
+  </div>
+</nav>
+
+<!-- Resource bar -->
+<div class="res-bar">
+  <div class="res-item">
+    <div class="res-label">Prototype Points</div>
+    <div class="res-val" id="r-pp">0</div>
+    <div class="res-sub" id="r-pps">0 pp/s</div>
+  </div>
+  <div class="res-item">
+    <div class="res-label">Revenue</div>
+    <div class="res-val" id="r-rev">$0</div>
+    <div class="res-sub" id="r-revs">$0/s</div>
+  </div>
+  <div class="res-item" id="ri-debt">
+    <div class="res-label">Debt</div>
+    <div class="res-val" id="r-debt">$0</div>
+    <div class="res-sub" id="r-dflav">—</div>
+  </div>
+  <div class="res-item">
+    <div class="res-label">Respect</div>
+    <div class="res-val" id="r-resp">0</div>
+    <div class="res-sub">industry capital</div>
+  </div>
+  <div class="res-item">
+    <div class="res-label">Team Morale</div>
+    <div class="res-val" id="r-morale">😐</div>
+    <div class="mdots" id="mdots"></div>
+  </div>
+</div>
+
+<div class="gwrap">
+
+  <!-- Main column -->
+  <div class="col-main">
+
+    <div class="panel" id="panel-p1">
+      <div id="p1">
+        <div class="p1h">You are a mobile games PM.</div>
+        <div class="p1s" id="p1s">Nobody said it would be easy.</div>
+        <button id="btn-proto" onclick="clickProto()">WRITE PROTOTYPE</button>
+        <div class="pcount" id="pcount">Prototypes attempted: 0</div>
+      </div>
+    </div>
+
+    <!-- Portfolio (Phase 2+) -->
+    <div class="panel hidden" id="panel-port">
+      <div class="ptitle">📱 Active Portfolio</div>
+      <div id="gcards"></div>
+    </div>
+
+    <!-- Sprint sliders (Phase 2+) -->
+    <div class="panel hidden" id="panel-sprint">
+      <div class="sphead">
+        <div class="sptitle">⚡ PM Focus — Sprint</div>
+        <div id="sp-timer">30s</div>
+      </div>
+      <div class="slitem">
+        <div class="slrow"><span class="slname">💰 Monetization</span><span class="slpct" id="l-mon">25%</span></div>
+        <input type="range" id="sl-mon" min="0" max="100" value="25" oninput="onSl('mon',this.value)">
+      </div>
+      <div class="slitem">
+        <div class="slrow"><span class="slname">🔁 Retention</span><span class="slpct" id="l-ret">25%</span></div>
+        <input type="range" id="sl-ret" min="0" max="100" value="25" oninput="onSl('ret',this.value)">
+      </div>
+      <div class="slitem">
+        <div class="slrow"><span class="slname">📈 UA / Growth</span><span class="slpct" id="l-ua">25%</span></div>
+        <input type="range" id="sl-ua" min="0" max="100" value="25" oninput="onSl('ua',this.value)">
+      </div>
+      <div class="slitem">
+        <div class="slrow"><span class="slname">🛠 Feature Dev</span><span class="slpct" id="l-feat">25%</span></div>
+        <input type="range" id="sl-feat" min="0" max="100" value="25" oninput="onSl('feat',this.value)">
+      </div>
+      <div id="sp-note" style="margin-top:.6rem;font-size:.68rem;color:var(--t3);text-align:center;min-height:1em"></div>
+    </div>
+
+  </div>
+
+  <!-- Side column -->
+  <div class="col-side">
+
+    <div id="panel-log">
+      <div class="log-head">📋 Rejection Log</div>
+      <div id="rlog"></div>
+    </div>
+
+    <div class="panel hidden" id="panel-auto">
+      <div class="ptitle">🤖 Automation</div>
+      <div id="auto-list"></div>
+    </div>
+
+    <div class="panel hidden" id="panel-res">
+      <div class="ptitle">🔬 Research Queue</div>
+      <div id="res-list"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Popup -->
+<div id="poverlay" class="hidden">
+  <div class="pbox">
+    <div class="ptit" id="p-title"></div>
+    <div class="pbdy" id="p-body"></div>
+    <div class="pchoices" id="p-choices"></div>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ─────────────────────────────────────────
+
+const AUTOS = [
+  {id:'intern', name:'Intern', cost:15, rate:1, flavor:'Does it for the experience.'},
+  {id:'junior', name:'Junior PM', cost:80, rate:5, flavor:'Writes tickets nobody reads.'},
+  {id:'senior', name:'Senior PM', cost:400, rate:22, flavor:'Delegates the clicking.'},
+  {id:'ai', name:'AI Brainstorm Tool', cost:2000, rate:80, flavor:'Wrong 40% of the time, every time.'},
+];
+
+const RTREE = [
+  {id:'market',  t:1, name:'Market Sizing',         cost:20,    cur:'pp',  desc:'Reveals Genre × Audience combos in your game launch.'},
+  {id:'comp',    t:1, name:'Competitive Analysis',   cost:35,    cur:'pp',  desc:'Shows a competitor sidebar. Unsettling.'},
+  {id:'agile',   t:1, name:'Agile Methodology',      cost:60,    cur:'pp',  desc:'Doubles PP per click.'},
+  {id:'okrs',    t:1, name:'OKRs',                   cost:100,   cur:'pp',  desc:'Unlocks Soft Launch. The beginning of debt.'},
+  {id:'analytics',t:1,name:'Analytics SDK',          cost:150,   cur:'pp',  desc:'Reveals exact churn %. Previously: vibes.'},
+  {id:'abt',     t:2, name:'A/B Testing',             cost:5000,  cur:'rev', desc:'Run two event variants. Best result applied.'},
+  {id:'push',    t:2, name:'Push Notifications',      cost:8000,  cur:'rev', desc:'Free +200 DAU tool. 24h cooldown.'},
+  {id:'pivot',   t:2, name:'The Pivot',               cost:12000, cur:'rev', desc:'Allows genre reroll on any live game.'},
+  {id:'psych',   t:3, name:'Player Psychology',       cost:0,     cur:'resp',desc:'Reveals hidden churn causes in pop-ups.', special:true},
+];
+
+const INV = [
+  {id:'micro',  name:'Micro',  cost:500,   dau:50,    roas:1.4},
+  {id:'growth', name:'Growth', cost:2500,  dau:300,   roas:1.8},
+  {id:'scale',  name:'Scale',  cost:15000, dau:2000,  roas:2.2},
+  {id:'blitz',  name:'Blitz',  cost:75000, dau:12000, roas:2.8},
+];
+
+const GENRES   = ['Merge','RPG/Gacha','Puzzle','Hyper-casual','4X Strategy','Battle Royale'];
+const AUDIENCES = ['Casual','Mid-core','Hardcore'];
+
+const GENRE_FLAVOR = {
+  'Merge':        {Casual:'Low CPI, low ARPU. Scales well.',       'Mid-core':'High variance. Strange fit.', Hardcore:'Nobody wants this.'},
+  'RPG/Gacha':    {Casual:'High churn. Wrong crowd.',              'Mid-core':'High ARPU, long tail.',        Hardcore:'Whales exist here.'},
+  'Puzzle':       {Casual:'Best D1 retention you\'ll ever see.',   'Mid-core':'Solid all-around.',            Hardcore:'Gets bored fast.'},
+  'Hyper-casual': {Casual:'Viral, low LTV. Volume game.',          'Mid-core':'Audience confused.',           Hardcore:'Wrong genre.'},
+  '4X Strategy':  {Casual:'Too complex. Catastrophic.',            'Mid-core':'Niche. Surprisingly loyal.',   Hardcore:'Discord community forms.'},
+  'Battle Royale':{Casual:'Can\'t execute on budget.',             'Mid-core':'High hype, high crash.',       Hardcore:'Streamers exist.'},
+};
+
+const REJECTIONS = [
+  "Tested at 0.2/5. Focus group thought it was a banking app.",
+  "Engineering said '14 sprints.' You nodded like you understood.",
+  "Marketing loved it. Legal killed it. Something about IP.",
+  "CEO saw the deck. Said 'what about blockchain?' Meeting ended.",
+  "73% of testers asked: 'but what do you actually DO in it?'",
+  "Too similar to Candy Crush. (It was nothing like Candy Crush.)",
+  "Art direction described as 'PowerPoint.' You don't fully disagree.",
+  "Core loop took 11 minutes to explain. Review slot was 8 minutes.",
+  "Board feedback: 'Can we make it more like Clash of Clans?'",
+  "No one agreed on tutorial length. Game shipped without one.",
+  "Concept: 'Wordle but for PMs.' Legal responded within 48 hours.",
+  "D1 retention: 8%. You reported it as 'tracking to target.'",
+  "3-hour kickoff held to discuss the 1-page brief.",
+  "Green-lit, then cancelled. Market timing was 'fine.'",
+  "Scope agreed Thursday. Re-scoped Friday. Again Monday.",
+  "QA found 47 bugs. You fixed 3. Called it a launch candidate.",
+  "Stakeholders aligned on the vision. Nobody wrote it down.",
+  "Monetization strategy was 'figure it out post-launch.'",
+  "47-slide pitch deck. 15-minute slot. You 'moved quickly.'",
+  "Killed by a competitor who shipped it while you were in review.",
+  "Pilot tested well with 10 users — all of whom were colleagues.",
+  "Roadmap presented. CEO asked why there's no social layer.",
+  "Shipped the feature. Users asked for the old version back.",
+  "App store description required 3 rounds of legal review.",
+];
+
+// ── STATE ─────────────────────────────────────────────
+
+function mkState(){
+  return {
+    pp:0, pppc:1, clicks:0,
+    revenue:0, debt:0, respect:0, morale:5,
+    autos:{intern:0,junior:0,senior:0,ai:0},
+    research:[],
+    game:null,
+    sl:{mon:25,ret:25,ua:25,feat:25},
+    spTimer:30, featDebt:0,
+    panels:{auto:false,res:false,port:false,sprint:false},
+    popQ:[], fired:[],
+    lastClick:Date.now(), lastSave:Date.now(),
+    totalRev:0, peakDAU:0, gLaunched:0, gSunset:0,
+    dayTimer:60,
+    roasDone:false, compDone:false, bugDone:false,
+    namedPopDone:false,
+  };
+}
+
+let S = mkState();
+
+// ── SAVE/LOAD ──────────────────────────────────────────
+
+function save(){
+  S.lastSave = Date.now();
+  localStorage.setItem('shipIt2', JSON.stringify(S));
+  const el = $('save-ind');
+  if(el){el.textContent='● saved';setTimeout(()=>el.textContent='● autosave on',1000)}
+}
+
+function load(){
+  const raw = localStorage.getItem('shipIt2');
+  if(!raw) return;
+  try{
+    const sv = JSON.parse(raw);
+    S = Object.assign(mkState(), sv);
+    // offline progress (capped 2h, 50% efficiency)
+    const dt = Math.min(7200, (Date.now()-S.lastSave)/1000);
+    if(dt > 10){
+      S.pp += ppps() * dt * 0.5;
+      if(S.game){
+        const rev = revps() * dt * 0.5;
+        S.revenue += rev; S.totalRev += rev;
+        if(S.debt>0) S.debt = Math.max(0, S.debt-rev);
+      }
+    }
+    S.lastSave = Date.now();
+    S.lastClick = Date.now();
+  }catch(e){console.warn('load failed',e)}
+}
+
+function resetGame(){
+  if(!confirm('Reset all progress? Cannot be undone.')) return;
+  localStorage.removeItem('shipIt2');
+  location.reload();
+}
+
+// ── MATH ──────────────────────────────────────────────
+
+function ppps(){
+  const {intern,junior,senior,ai} = S.autos;
+  return intern*1 + junior*5 + senior*22 + ai*80;
+}
+
+function normSl(){
+  const sum = S.sl.mon+S.sl.ret+S.sl.ua+S.sl.feat || 100;
+  return {mon:S.sl.mon/sum, ret:S.sl.ret/sum, ua:S.sl.ua/sum, feat:S.sl.feat/sum};
+}
+
+function revps(){
+  if(!S.game || S.game.dau<=0) return 0;
+  const n = normSl();
+  return S.game.dau * 0.018 * (1 + n.mon*0.6);
+}
+
+function churnPerDay(){
+  if(!S.game) return 0;
+  const n = normSl();
+  return S.game.churn * (1 - n.ret*0.55);
+}
+
+function growthPerSec(){
+  if(!S.game) return 0;
+  const n = normSl();
+  return 0.08 + n.ua*3.5;
+}
+
+function debtFlavor(){
+  if(S.debt<=0) return 'debt-free. enjoy it.';
+  if(S.debt<5000) return 'manageable.';
+  if(S.debt<25000) return 'finance has noticed.';
+  if(S.debt<100000) return 'finance has opinions.';
+  return 'CFO has a calendar invite for you.';
+}
+
+function moraleEmoji(){
+  return ['😰','😕','😐','🙂','😄'][Math.max(0,Math.min(4,S.morale-1))];
+}
+
+function health(c){
+  if(c<3) return '🟢';
+  if(c<6) return '🟡';
+  if(c<10) return '🟠';
+  return '🔴';
+}
+
+function fmt(n){
+  if(!n||isNaN(n)) return '0';
+  if(n>=1e6) return (n/1e6).toFixed(2)+'M';
+  if(n>=10000) return (n/1000).toFixed(1)+'K';
+  if(n>=1000) return (n/1000).toFixed(2)+'K';
+  return Math.floor(n).toLocaleString();
+}
+const $m = n => '$'+fmt(n);
+const $  = id => document.getElementById(id);
+const set = (id,v) => { const e=$(id); if(e) e.textContent=v; };
+
+// ── TICK ──────────────────────────────────────────────
+
+let ticks = 0;
+function tick(){
+  ticks++;
+  S.pp += ppps();
+
+  if(S.game){
+    const rev = revps();
+    S.revenue += rev; S.totalRev += rev;
+    if(S.debt>0) S.debt = Math.max(0, S.debt-rev);
+
+    S.game.dau += growthPerSec();
+    if(S.game.dau > S.peakDAU) S.peakDAU = S.game.dau;
+
+    // day tick
+    S.dayTimer = (S.dayTimer||60) - 1;
+    if(S.dayTimer<=0){
+      S.dayTimer = 60;
+      S.game.daysLive = (S.game.daysLive||0)+1;
+      const lost = S.game.dau * (churnPerDay()/100);
+      S.game.dau = Math.max(0, S.game.dau - lost);
+
+      // feature debt
+      const n = normSl();
+      if(n.feat < 0.05){
+        S.featDebt = (S.featDebt||0)+1;
+        if(S.featDebt>=3) qEv('featDebt');
+      } else {
+        S.featDebt = Math.max(0,(S.featDebt||0)-1);
+      }
+    }
+
+    // event triggers
+    if(!S.roasDone && S.debt<=0 && S.totalRev>600){ S.roasDone=true; qEv('roas'); }
+    if(!S.fired.includes('10k') && S.game.dau>=10000) qEv('10k');
+    if(!S.compDone && (S.game.daysLive||0)>=5){ S.compDone=true; qEv('comp'); }
+    if(!S.bugDone && S.game.dau>800 && Math.random()<0.0004){ S.bugDone=true; qEv('bug'); }
+  }
+
+  // sprint
+  S.spTimer = (S.spTimer||30)-1;
+  if(S.spTimer<=0){ S.spTimer=30; sprintEffect(); }
+
+  // milestones
+  checkMilestones();
+
+  // fire popup when idle
+  if(S.popQ.length>0 && !popOpen && Date.now()-S.lastClick>3500) fireNextPop();
+
+  // autosave
+  if(ticks%30===0) save();
+
+  updateUI();
+}
+
+function sprintEffect(){
+  if(!S.game) return;
+  const n = normSl();
+  // UA burst
+  const uaBurst = n.ua * 45;
+  if(uaBurst>3) S.game.dau += uaBurst;
+  // Retention slowly improves churn
+  if(n.ret>0.3) S.game.churn = Math.max(1.5, S.game.churn - n.ret*0.3);
+  // Sprint note
+  const note = uaBurst>5 ? `+${Math.round(uaBurst)} DAU from UA push` : 'Sprint complete.';
+  set('sp-note', note);
+}
+
+// ── MILESTONES ────────────────────────────────────────
+
+function checkMilestones(){
+  if(S.pp>=10 && !S.panels.auto){ S.panels.auto=true; reveal('panel-auto'); log('New panel unlocked: Automation.'); }
+  if(S.pp>=50 && !S.panels.res){ S.panels.res=true; reveal('panel-res'); log('New panel unlocked: Research Queue.'); }
+  if(S.pp>=100 && !S.game && !S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
+  if(S.game && !S.panels.port){ S.panels.port=true; reveal('panel-port'); }
+  if(S.game && !S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('New panel: PM Focus Sliders. Every sprint is a choice.'); }
+}
+
+function reveal(id){
+  const e=$(id);
+  if(e){ e.classList.remove('hidden'); e.classList.add('fade-in'); }
+}
+
+// ── UI ────────────────────────────────────────────────
+
+function updateUI(){
+  set('r-pp', fmt(S.pp));
+  set('r-pps', fmt(ppps())+'pp/s');
+  set('r-rev', $m(S.revenue));
+  set('r-revs', S.game ? $m(revps())+'/s' : '$0/s');
+  set('r-debt', $m(S.debt));
+  set('r-dflav', debtFlavor());
+  set('r-resp', S.respect);
+  set('r-morale', moraleEmoji());
+  set('pcount', 'Prototypes attempted: '+S.clicks);
+
+  // debt pulse
+  const ri = $('ri-debt');
+  if(ri) ri.classList.toggle('pulsing', S.debt>0);
+
+  // morale dots
+  const md = $('mdots');
+  if(md) md.innerHTML=[1,2,3,4,5].map(i=>{
+    let c='md';
+    if(i<=S.morale) c+= S.morale<=2?' r': S.morale<=3?' y':' g';
+    return `<div class="${c}"></div>`;
+  }).join('');
+
+  // sprint timer + slider labels
+  set('sp-timer', S.spTimer+'s');
+  const n = normSl();
+  set('l-mon', Math.round(n.mon*100)+'%');
+  set('l-ret', Math.round(n.ret*100)+'%');
+  set('l-ua',  Math.round(n.ua*100)+'%');
+  set('l-feat',Math.round(n.feat*100)+'%');
+
+  // p1 sub text
+  if(S.clicks>0&&S.clicks<10) set('p1s','Keep going. Someone has to.');
+  else if(S.pp>=50&&!S.game) set('p1s','Almost. The breakthrough is close. Probably.');
+  else if(S.game) set('p1s','Your game is live. Don\'t ignore it.');
+
+  buildAutoList();
+  buildResList();
+  buildGameCards();
+
+  // affordability
+  document.querySelectorAll('.bbuy[data-cost]').forEach(b=>{
+    const cost=+b.dataset.cost, cur=b.dataset.cur||'pp';
+    const have = cur==='pp'?S.pp : cur==='rev'?S.revenue : S.respect;
+    b.disabled = have<cost;
+    b.classList.toggle('aff', have>=cost);
+  });
+}
+
+function buildAutoList(){
+  const c=$('auto-list'); if(!c) return;
+  c.innerHTML = AUTOS.map(a=>{
+    const owned=S.autos[a.id]||0;
+    const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+    return `<div class="ai">
+      <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
+      <div class="air">
+        <div class="aio">${owned}×</div>
+        <div class="airt">+${a.rate*(owned+1)}pp/s next</div>
+        <button class="bbuy" data-cost="${cost}" data-cur="pp" onclick="buyAuto('${a.id}')">${fmt(cost)} PP</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildResList(){
+  const c=$('res-list'); if(!c) return;
+  c.innerHTML = RTREE.map(r=>{
+    const done=S.research.includes(r.id);
+    const costStr = r.cur==='pp' ? fmt(r.cost)+' PP' : r.cur==='rev' ? $m(r.cost) : r.cost+' Respect';
+    return `<div class="ri">
+      <div class="rin">${r.name}</div>
+      <div class="rid">${r.desc}</div>
+      ${done
+        ? '<div class="ridone">✓ Researched</div>'
+        : `<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
+            <span class="ric">${costStr}</span>
+            <button class="bbuy" data-cost="${r.cost}" data-cur="${r.cur}" onclick="buyRes('${r.id}')">Research</button>
+           </div>`
+      }
+    </div>`;
+  }).join('');
+}
+
+function buildGameCards(){
+  const c=$('gcards'); if(!c||!S.game) return;
+  const g=S.game, dau=Math.floor(g.dau);
+  const showChurn = S.research.includes('analytics');
+  const churnDisplay = showChurn ? g.churn.toFixed(1)+'%' : health(g.churn);
+  const fl = GENRE_FLAVOR[g.genre]?.[g.audience] || '';
+
+  c.innerHTML=`<div class="gcard">
+    <div class="gch">
+      <div class="gcn">${g.name}</div>
+      <div class="gctags"><span class="gctag">${g.genre}</span><span class="gctag">${g.audience}</span></div>
+    </div>
+    ${fl?`<div style="font-size:.68rem;color:var(--t3);margin-bottom:.7rem;font-style:italic">${fl}</div>`:''}
+    <div class="gcstats">
+      <div>
+        <div class="gcsl">DAU</div>
+        <div class="gcsv">${fmt(dau)}</div>
+        <div class="daubar"><div class="daufill" style="width:${Math.min(100,dau/500*10)}%"></div></div>
+      </div>
+      <div>
+        <div class="gcsl">Revenue/s</div>
+        <div class="gcsv">${$m(revps())}</div>
+      </div>
+      <div>
+        <div class="gcsl">${showChurn?'Churn/day':'Health'}</div>
+        <div class="gcsv">${churnDisplay}</div>
+      </div>
+      <div>
+        <div class="gcsl">Days Live</div>
+        <div class="gcsv">${g.daysLive||0}</div>
+      </div>
+    </div>
+    <div class="gcactions">
+      <div class="idrop">
+        <button class="bact pri" onclick="toggleInv()">Invest ▾</button>
+        <div class="imenu" id="imenu">
+          ${INV.map(t=>`<div class="iopt${S.revenue<t.cost?' idis':''}" onclick="invest('${t.id}')">
+            <div class="ion">${t.name} — ${$m(t.cost)}</div>
+            <div class="iom">+${fmt(t.dau)} DAU · ${t.roas}x ROAS</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <button class="bact${S.research.includes('push')?'':' '}" ${S.research.includes('push')?'':'disabled title="Research Push Notifications first"'} onclick="doPush()">📣 Push</button>
+      ${S.research.includes('pivot') ? `<button class="bact" onclick="doPivot()">🔄 Pivot</button>` : ''}
+      <button class="bact dan" onclick="confirmSunset()">Sunset</button>
+    </div>
+    <div style="margin-top:.65rem;font-size:.65rem;color:var(--t3)">Peak DAU: ${fmt(S.peakDAU)} · Total rev: ${$m(S.totalRev)}</div>
+  </div>`;
+}
+
+// ── ACTIONS ───────────────────────────────────────────
+
+function clickProto(){
+  S.pp += S.pppc;
+  S.clicks++;
+  S.lastClick = Date.now();
+  if(S.clicks<=5 || S.clicks%3===0){
+    log('#'+S.clicks+' — '+REJECTIONS[S.clicks % REJECTIONS.length]);
+  }
+  const b=$('btn-proto');
+  if(b){b.style.transform='scale(.96)';setTimeout(()=>b.style.transform='',90)}
+}
+
+function log(msg){
+  const r=$('rlog'); if(!r) return;
+  const e=document.createElement('div');
+  e.className='le';
+  e.innerHTML=`<span class="let">${new Date().toTimeString().slice(0,5)}</span>${msg}`;
+  r.insertBefore(e, r.firstChild);
+  while(r.children.length>35) r.removeChild(r.lastChild);
+}
+
+function buyAuto(id){
+  const a=AUTOS.find(x=>x.id===id); if(!a) return;
+  const owned=S.autos[id]||0;
+  const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+  if(S.pp<cost) return;
+  S.pp-=cost; S.autos[id]=owned+1;
+  log(`Hired: ${a.name}. "${a.flavor}"`);
+}
+
+function buyRes(id){
+  const r=RTREE.find(x=>x.id===id); if(!r||S.research.includes(id)) return;
+  const have = r.cur==='pp'?S.pp : r.cur==='rev'?S.revenue : S.respect;
+  if(have<r.cost) return;
+  if(r.cur==='pp') S.pp-=r.cost;
+  else if(r.cur==='rev') S.revenue-=r.cost;
+  else S.respect-=r.cost;
+  S.research.push(id);
+  if(id==='agile'){ S.pppc*=2; log('Agile Methodology researched. PP per click doubled.'); }
+  else log(`Researched: ${r.name}.`);
+}
+
+let invOpen=false;
+function toggleInv(){
+  invOpen=!invOpen;
+  const m=$('imenu'); if(m) m.classList.toggle('open',invOpen);
+}
+document.addEventListener('click',e=>{
+  if(invOpen && !e.target.closest('.idrop')){ invOpen=false; const m=$('imenu'); if(m)m.classList.remove('open'); }
+});
+
+function invest(tid){
+  const t=INV.find(x=>x.id===tid); if(!t||!S.game) return;
+  if(S.revenue<t.cost){ log('Not enough revenue.'); return; }
+  S.revenue-=t.cost; S.debt+=t.cost; S.game.dau+=t.dau;
+  log(`Invested ${$m(t.cost)} (${t.name}). +${fmt(t.dau)} DAU. Debt: ${$m(S.debt)}.`);
+  invOpen=false; const m=$('imenu'); if(m) m.classList.remove('open');
+}
+
+function doPush(){
+  if(!S.game||!S.research.includes('push')) return;
+  S.game.dau+=200;
+  log('Push sent. +200 DAU.');
+}
+
+function doPivot(){
+  if(!S.game||!S.research.includes('pivot')) return;
+  const g=GENRES[Math.floor(Math.random()*GENRES.length)];
+  const a=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
+  const prev=S.game.genre;
+  S.game.genre=g; S.game.audience=a; S.game.dau*=0.25;
+  log(`Pivoted from ${prev} to ${g}/${a}. DAU reset to 25%.`);
+}
+
+function confirmSunset(){
+  if(!S.game) return;
+  showPop({
+    title:`${S.game.name} is being sunset.`,
+    body:`You're retiring it. DAU is ${fmt(Math.floor(S.game.dau))}, mostly loyal players who will be disappointed.\n\nYou write the announcement. It starts: "After careful consideration."\n\nThe comment section has one reply within 4 minutes: "I knew it."\n\nYou earn Industry Experience.`,
+    choices:[
+      {text:'Reflect.', flav:'The log notes your choice.', fx:()=>doSunset('reflect')},
+      {text:'Start the next one.', flav:'Same effect. Different disposition.', fx:()=>doSunset('next')},
+    ]
+  });
+}
+
+function doSunset(how){
+  const ix = Math.floor(S.peakDAU/1000)+Math.floor((S.game.daysLive||0)/10)+2;
+  S.ix = (S.ix||0)+ix; S.gSunset++;
+  log(`${S.game.name} sunsetted. +${ix} Industry Experience. Everything taught you something.`);
+  if(how==='next') log('You started thinking about the next one before the announcement published.');
+  S.game=null; S.debt=0;
+  S.roasDone=false; S.compDone=false; S.bugDone=false; S.namedPopDone=false;
+  S.featDebt=0; S.dayTimer=60;
+  S.panels.port=false; S.panels.sprint=false;
+  $('panel-port').classList.add('hidden');
+  $('panel-sprint').classList.add('hidden');
+  set('p1s',"The next one will be different. (It won't be.)");
+}
+
+function onSl(k,v){
+  S.sl[k]=+v;
+}
+
+// ── POPUP SYSTEM ──────────────────────────────────────
+
+let popOpen=false, popChoices=[];
+
+const EVENTS = {
+  roas:{
+    title:"The debt clock hits zero.",
+    body:"Revenue crossed debt for the first time. You are technically profitable on this title for the first time in your career.\n\nYou allow yourself a small internal celebration that lasts approximately 4 seconds before you notice churn is up 2%.",
+    choices:[{text:"Continue",flav:"There is no other option. The joke is that.",fx:()=>{}}]
+  },
+  '10k':{
+    title:"10,000 real humans are playing your game right now.",
+    body:"Some of them are in waiting rooms. Some are on the bus. One is definitely in a meeting.\n\nYou built something people chose to spend time on.\n\nA review comes in: ★★★★★ \"This is literally the only thing getting me through my divorce.\"",
+    choices:[
+      {text:"Appreciate this moment.",flav:"Respect +1.",fx:()=>S.respect++},
+      {text:"Feel weird about it.",flav:"Same effect. Funnier choice.",fx:()=>S.respect++},
+    ]
+  },
+  comp:{
+    title:"Merge Kitchen Warriors just launched.",
+    body:"It's your concept. Different studio. Better art. $0.60 CPI vs your $1.40.\n\nThey have 50K installs in 48 hours.",
+    choices:[
+      {text:"Double down on retention.",flav:"Churn −2%. Morale +1.",fx:()=>{if(S.game)S.game.churn=Math.max(2,S.game.churn-2);S.morale=Math.min(5,S.morale+1)}},
+      {text:"Match their spend immediately.",flav:"Blitz triggered. Debt +$75K.",fx:()=>{S.debt+=75000;if(S.game)S.game.dau+=12000}},
+      {text:"Write a Slack message about first-mover advantage.",flav:"Gets 3 emoji reactions.",fx:()=>log("Your message: 3 emoji reactions. 🎉👍🙏")},
+      {text:"Pivot the genre.",flav:"DAU reset to 20%.",fx:()=>{if(S.game){S.game.dau*=0.2;const g=GENRES[Math.floor(Math.random()*GENRES.length)];S.game.genre=g;log(`${S.game.name} is now a ${g} game.`)}}},
+    ]
+  },
+  bug:{
+    title:"Something is broken in production.",
+    body:"Players are getting 10,000× their normal currency. Your economy is on fire.\n\nA Discord mod pinned: \"FREE GEMS BUG — STACK NOW BEFORE PATCH.\"\n\nYou have options.",
+    choices:[
+      {text:"Emergency patch. Rollback immediately.",flav:"Churn +1%.",fx:()=>{if(S.game)S.game.churn=Math.min(20,S.game.churn+1)}},
+      {text:"Let it run. Goodwill event, basically.",flav:"DAU +20%. Economy in ruins.",fx:()=>{if(S.game){S.game.dau*=1.2;S.game.churn=Math.min(25,S.game.churn+3)}}},
+      {text:"Send push: 'Update incoming.'",flav:"Buys time.",fx:()=>log("Players: 'Finally some communication.'")},
+      {text:"Call it a limited time event.",flav:"40% it works. 60%: gaming press.",fx:()=>{if(Math.random()>.6){S.revenue+=5000;log("Got away with it somehow.")}else{S.morale=Math.max(1,S.morale-1);log("Kotaku: 'Studio calls exploit a feature.'")}}}
+    ]
+  },
+  firstLaunch:{
+    title:"The build is live.",
+    body:"9:47 PM. You pushed the soft launch yourself because engineering was at a concert.\n\nYou are watching the install count on a spreadsheet you made in 2019. It's at 12.\n\nYour phone buzzes. It's your CEO.\n\n\"Saw you launched. How's it looking?\"",
+    choices:[
+      {text:"Early signs are positive. Monitoring closely.",flav:"Honest enough.",fx:()=>{}},
+      {text:"We're seeing strong organic traction.",flav:"You are not. Morale −1.",fx:()=>S.morale=Math.max(1,S.morale-1)},
+      {text:"12 installs, 3 of which are me.",flav:"CEO laughs. Respect +1.",fx:()=>S.respect++},
+    ]
+  },
+  featDebt:{
+    title:"Is [GAME_NAME] dead?",
+    body:"Your players haven't seen new content in 18 days.\n\nA Reddit thread: \"Is [GAME_NAME] dead?\" — 847 upvotes.\n\nChurn is spiking.",
+    choices:[
+      {text:"Divert everything to Feature Dev.",flav:"Churn stabilizes.",fx:()=>{S.sl.feat=60;if(S.game)S.game.churn=Math.max(3,S.game.churn-3);log("Feature sprint started.")}},
+      {text:"Post a vague roadmap teaser.",flav:"Buys a week.",fx:()=>{if(S.game)S.game.churn=Math.max(5,S.game.churn-1);log("Players: 'Soon™'")}},
+    ]
+  },
+};
+
+function qEv(id){
+  if(S.fired.includes(id)||S.popQ.includes(id)) return;
+  S.popQ.push(id);
+}
+
+function fireNextPop(){
+  if(!S.popQ.length||popOpen) return;
+  const id=S.popQ.shift();
+  S.fired.push(id);
+  let ev=EVENTS[id]; if(!ev) return;
+  // substitute game name
+  if(S.game){
+    ev={...ev,
+      title:ev.title.replace(/\[GAME_NAME\]/g, S.game.name),
+      body:ev.body.replace(/\[GAME_NAME\]/g, S.game.name)
+    };
+  }
+  showPop(ev);
+}
+
+function showPop(ev){
+  popOpen=true; popChoices=ev.choices;
+  set('p-title',ev.title);
+  set('p-body',ev.body);
+  $('p-choices').innerHTML=ev.choices.map((c,i)=>`
+    <button class="pchoice" onclick="pickChoice(${i})">
+      ${c.text}${c.flav?`<span class="pflav">${c.flav}</span>`:''}
+    </button>`).join('');
+  $('poverlay').classList.remove('hidden');
+}
+
+function pickChoice(i){
+  const c=popChoices[i]; if(c&&c.fx) c.fx();
+  closePop();
+}
+
+function closePop(){
+  popOpen=false;
+  $('poverlay').classList.add('hidden');
+  S.lastClick=Date.now();
+}
+
+// naming popup
+function showNamingPopup(){
+  const genre=GENRES[Math.floor(Math.random()*GENRES.length)];
+  const aud=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
+  popOpen=true;
+  set('p-title','Your first game survived internal review.');
+  set('p-body',`After ${S.clicks} rejected prototypes, one made it through.\n\nThe concept: a ${genre} game for ${aud} players. You did not come up with the ${genre} angle. That was Karen from Brand.\n\nYour game needs a name.`);
+  $('p-choices').innerHTML=`
+    <input type="text" class="pinput" id="gname-in" value="Merge Kitchen Saga" placeholder="Game name..." maxlength="40">
+    <button class="pchoice" onclick="launchGame('${genre}','${aud}')">Launch it →</button>
+    <div style="font-size:.67rem;color:var(--t3);text-align:center;margin-top:.25rem;font-style:italic">"Karen has already emailed the team about naming rights."</div>`;
+  $('poverlay').classList.remove('hidden');
+  setTimeout(()=>{ const i=$('gname-in'); if(i)i.focus(); },100);
+}
+
+function launchGame(genre,aud){
+  const nameEl=$('gname-in');
+  const name=(nameEl?nameEl.value.trim():'')||'Untitled Game';
+  S.game={name,genre,audience:aud,dau:12,churn:8,daysLive:0};
+  S.gLaunched++; S.dayTimer=60;
+  closePop();
+  log(`🚀 ${name} is live. 12 installs. 3 of them are you.`);
+  setTimeout(()=>qEv('firstLaunch'),3000);
+}
+
+// ── INIT ──────────────────────────────────────────────
+
+load();
+
+// restore panels
+if(S.panels.auto) reveal('panel-auto');
+if(S.panels.res)  reveal('panel-res');
+if(S.panels.port) reveal('panel-port');
+if(S.panels.sprint) reveal('panel-sprint');
+
+// restore sliders
+['mon','ret','ua','feat'].forEach(k=>{
+  const e=$('sl-'+k); if(e) e.value=S.sl[k]||25;
+});
+
+if(S.clicks===0) log('Welcome. The button is all you have.');
+else log(`Welcome back. ${S.gLaunched} game(s) launched. ${fmt(S.peakDAU)} peak DAU.`);
+
+setInterval(tick, 1000);
+updateUI();
+</script>
+</body>
+</html>
