@@ -3661,6 +3661,9 @@ const GUIDE_IMAGES=[
   'https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=480&q=80', // strategy / chess
   'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=480&q=80', // growth / UA economics
   'https://images.unsplash.com/photo-1574278051900-e5b73e82d1a5?w=480&q=80', // notifications / mobile
+  'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=480&q=80', // paywall / conversion
+  'https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=480&q=80', // gacha / probability
+  'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=480&q=80', // AI workflow
 ];
 
 const guides=[
@@ -3690,6 +3693,12 @@ const guides=[
    body:`<h3>ROAS Fundamentals</h3><p>ROAS = Revenue ÷ Ad Spend. A ROAS of 100% at D30 means you've recovered your acquisition cost by day 30. Most mobile games target D180-D365 payback.</p><h3>The ROAS Curve</h3><p>Plot cumulative ARPU against CPI over time. The day ARPU crosses CPI is your payback day. Beyond that, every dollar spent on UA is margin-positive. The curve shape tells you how to scale.</p><h3>Scaling Signals</h3><ul><li>D7 ROAS &gt; 30%: Strong early signal, scale cautiously.</li><li>D30 ROAS &gt; 60%: Healthy — scale with confidence.</li><li>D30 ROAS &lt; 30%: Improve LTV or reduce CPI before scaling.</li></ul><h3>CPI Decomposition</h3><p>CPI = CPM ÷ (CTR × CVR × 1000). Each lever is separately optimizable: creatives affect CTR, store page affects CVR, targeting affects CPM.</p>`},
   {icon:'🔔',cat:'Engagement',title:'Push & Notification Strategy',desc:'Retention-boosting notification strategy without burning your opt-in rate.',
    body:`<h3>The Permission Economy</h3><p>iOS opt-in rates average 45%. Android skips the ask. Every notification sent to a disinterested user degrades future engagement. Treat the opt-in list as your most valuable CRM asset.</p><h3>Segmentation First</h3><ul><li>Never send the same message to all users.</li><li>Minimum segments: Active / At-risk (48h lapse) / Churned (7d+ lapse).</li><li>Event-triggered &gt; scheduled — "You left during a boss fight" beats "Come back!"</li></ul><h3>Content Framework</h3><ul><li><strong>Value:</strong> "Your daily reward is waiting." Concrete, immediate.</li><li><strong>Social:</strong> "Arturo's guild just passed yours." Competitive.</li><li><strong>Urgency:</strong> "Limited event ends in 4 hours." Time-pressure.</li></ul><h3>Frequency Caps</h3><p>1-2 per day maximum for active users. 1 per 48h for at-risk. 1 re-engagement attempt for churned — after no response, stop.</p>`},
+  {icon:'💳',cat:'Monetization',title:'Stop Calling It a Paywall',desc:'How high-converting games design offer systems that feel like services, not barriers.',
+   body:`<h3>The Reframe That Changes Everything</h3><p>The distinction between thinking of monetization as barriers versus services fundamentally changes outcomes. The wrong question: "How do we get players to spend money?" The right question: "What does this player need right now, and can we provide it at a price that feels fair?" The latter produces better conversion through relevance rather than friction.</p><h3>What High-Converting Games Actually Do</h3><ul><li><strong>Moment-matched offers:</strong> Timing offers to actual player moments — immediately after level failures when the desire to continue is highest — outperforms generic bundles delivered on studio schedules. Present specific solutions to immediate needs.</li><li><strong>3-second value clarity:</strong> Successful bundles communicate their worth within three seconds without requiring mental math. Psychological framing — labeling items as "free" within a bundle — improves perception despite identical actual value.</li><li><strong>Segmented pricing:</strong> Different player spending patterns require tailored offers at different price points. Flat pricing structures leave money on the table from both low spenders and high spenders.</li></ul><h3>The Actual Problem with Most Paywalls</h3><p>The core issue: teams design economies first and monetization second, creating gates rather than natural spending moments. When offer systems are integrated alongside economy design — not bolted on afterward — spending opportunities feel relevant and organic rather than extractive.</p><h3>One-Sentence Version</h3><p>Good offers provide spending opportunities at moments of genuine player need, not artificial barriers between the player and content they've already earned the right to see.</p><h3>Further Reading</h3><p><a href="https://medium.com/@arturoruizvaldes/stop-calling-it-a-paywall-heres-what-high-converting-games-actually-do-differently-51ca2274e0d3" target="_blank" rel="noopener" style="color:var(--ind)">Read the full article on Medium →</a></p>`},
+  {icon:'🎰',cat:'Monetization',title:'Why Most Gacha Systems Fail',desc:'The real reason gacha economies collapse — and what sustainable systems do differently.',
+   body:`<h3>The Real Problem Isn\'t the Rates</h3><p>Conventional wisdom blames low pull rates or weak units. The actual failure mode runs deeper: most gacha systems were designed for whales and merely tolerated by everyone else. That asymmetry is the root cause of nearly every gacha collapse.</p><h3>The Whale Dependency Trap</h3><p>The problematic model: release powerful limited units on aggressive schedules with extremely low featured rates (often 0.25% or below). The predictable consequence:</p><ul><li>Competitive F2P players burn out by month four</li><li>Dolphins (mid-tier spenders) lose trust when they can\'t reliably obtain featured units</li><li>Whales exhaust content and disengage</li><li>Revenue crashes around month six</li></ul><h3>What Sustainable Systems Do Differently</h3><ul><li><strong>F2P as core infrastructure:</strong> Winning games treat free players as essential, not afterthoughts. This population drives community engagement and social proof that encourages spending.</li><li><strong>Multiple spender segments:</strong> Rather than targeting only whales, sustainable models create genuine entry points for non-payers, low spenders ($5–15/month via subscriptions and battle passes), mid spenders ($30–80/month), and whales ($100+/month with aspirational content).</li><li><strong>Transparent mathematics:</strong> Players now have sophisticated gacha literacy. Hiding rates or pity mechanics destroys trust. Transparent systems build long-term reputation.</li><li><strong>Offers supplement, don\'t replace:</strong> Monetization packages cannot rescue flawed core design. Solid engagement must precede monetization efforts.</li></ul><h3>The Long-Game Pattern</h3><p>Games that run 5+ years share consistent characteristics: rewarding F2P pathways, tiered spend offerings, transparent rates, strategic banner scheduling, and consideration of the full player population — not just the top 1% of spenders.</p><h3>Further Reading</h3><p><a href="https://medium.com/@arturoruizvaldes/the-reason-most-gacha-systems-fail-isnt-what-you-think-0220b1a1e7c9" target="_blank" rel="noopener" style="color:var(--ind)">Read the full article on Medium →</a></p>`},
+  {icon:'🤖',cat:'Productivity',title:'The AI Workflow for PMs',desc:'How to build a compound AI system with purpose-built prompts, context docs, and memory.',
+   body:`<h3>The Problem with How Most PMs Use AI</h3><p>Most product managers treat AI like a search engine — ask a question, get a generic answer, start fresh the next day. This produces disconnected outputs that ignore crucial context about your specific product, players, team structure, and business philosophy. The result is something you completely rewrite rather than something actionable.</p><h3>The Shift: From Question to System</h3><p>Effective AI usage requires three components working together:</p><ul><li><strong>Purpose-built prompts:</strong> Rather than generic requests, create prompts tailored to your recurring tasks — A/B testing analysis, PRD drafting, prioritization sessions — that reference your actual situation and strategic priorities.</li><li><strong>Context documents:</strong> Attach a single-page reference document containing your product\'s core mechanics, target audience, economy structure, and constraints. This transforms generic input into relevant, actionable guidance. One page is enough; more creates noise.</li><li><strong>Memory as asset:</strong> Claude\'s memory feature enables the model to understand your working preferences and communication style over time, reducing the need to re-explain context every session.</li></ul><h3>What the Workflow Looks Like in Practice</h3><p>Example: designing an offer system. Attach your game\'s context document to a structured prompt. Editing time drops from 30 minutes to approximately five minutes because the output arrives pre-calibrated to your constraints — not to some hypothetical average product.</p><h3>How to Build This for Your Own Work</h3><ol><li>Identify your three most frequent PM tasks</li><li>Write domain-specific prompts for each, referencing your actual product context</li><li>Create one-page context documents for each task domain</li><li>Refine iteratively — the system compounds as your prompts improve</li></ol><h3>The Compounding Effect</h3><p>PMs who built this infrastructure six months ago outperform those using daily fresh ChatGPT conversations — not through greater talent, but through systematic advantage that widens with every iteration.</p><h3>Further Reading</h3><p><a href="https://medium.com/@arturoruizvaldes/ditch-chatgpt-for-this-the-ai-workflow-thats-changed-how-i-run-product-6baaed9912de" target="_blank" rel="noopener" style="color:var(--ind)">Read the full article on Medium →</a></p>`},
 ];
 
 // ── Focus Rail state ─────────────────────────────
@@ -3775,32 +3784,43 @@ function updateRailDots(){
 }
 
 // ── Guide TOC ──────────────────────────────────
-let _tocBuilt = false;
+function buildToc(filterQ=''){
+  const toc = document.getElementById('guide-toc');
+  if(!toc) return;
+  const q = filterQ.toLowerCase().trim();
+  const cats = {};
+  guides.forEach((g, i) => {
+    if(q && !g.title.toLowerCase().includes(q) && !g.cat.toLowerCase().includes(q) && !g.desc.toLowerCase().includes(q)) return;
+    if(!cats[g.cat]) cats[g.cat] = [];
+    cats[g.cat].push({g, i});
+  });
+  const keys = Object.keys(cats);
+  let html = `<div style="padding:4px 6px 2px"><input type="text" id="toc-filter" placeholder="Filter guides…" value="${filterQ.replace(/"/g,'&quot;')}" style="width:100%;padding:5px 8px;font-size:0.76rem;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--t1);font-family:var(--sans)" oninput="buildToc(this.value)" onclick="event.stopPropagation()"></div>`;
+  if(keys.length === 0){
+    html += `<div style="color:var(--t3);padding:0.75rem 0.5rem;font-size:0.78rem;text-align:center">No guides match</div>`;
+  } else {
+    for(const cat of keys){
+      html += `<div class="guide-toc-cat-header">${cat}</div>`;
+      html += cats[cat].map(({g, i}) =>
+        `<button class="guide-toc-item" onclick="openGuide(${i});closeToc()">${g.title}</button>`
+      ).join('');
+    }
+  }
+  toc.innerHTML = html;
+  // Re-focus filter input
+  const fi = document.getElementById('toc-filter');
+  if(fi && filterQ){ fi.focus(); fi.setSelectionRange(fi.value.length, fi.value.length); }
+}
+
 function toggleGuideToc(){
   const toc = document.getElementById('guide-toc');
   const btn = document.getElementById('guide-toc-btn');
   if(!toc) return;
   const isOpen = toc.style.display !== 'none';
   if(isOpen){ toc.style.display = 'none'; return; }
-  // Build once
-  if(!_tocBuilt){
-    // Group guides by category
-    const cats = {};
-    guides.forEach((g, i) => {
-      if(!cats[g.cat]) cats[g.cat] = [];
-      cats[g.cat].push({g, i});
-    });
-    let html = '';
-    for(const cat of Object.keys(cats)){
-      html += `<div class="guide-toc-cat-header">${cat}</div>`;
-      html += cats[cat].map(({g, i}) =>
-        `<button class="guide-toc-item" onclick="openGuide(${i});closeToc()">${g.title}</button>`
-      ).join('');
-    }
-    toc.innerHTML = html;
-    _tocBuilt = true;
-  }
+  buildToc();
   toc.style.display = 'block';
+  setTimeout(() => { const fi = document.getElementById('toc-filter'); if(fi) fi.focus(); }, 50);
   // Close on outside click
   setTimeout(() => document.addEventListener('click', _tocOutside, {once:true}), 0);
 }
@@ -3821,7 +3841,15 @@ function openCurrentGuide(){
 }
 
 function openGuide(i){
-  showGuidePanel(guides[i]);
+  // Clear search and return to rail mode
+  const searchEl = document.getElementById('guide-search');
+  if(searchEl && searchEl.value !== ''){
+    searchEl.value = '';
+    filterGuideRail();
+  }
+  railList = guides;
+  railGoTo(i);
+  showGuidePanel(guides[i], true);
 }
 
 function showGuidePanel(g, scrollTo=true){
