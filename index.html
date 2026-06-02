@@ -703,6 +703,30 @@ body:not(.light) .th-sun{opacity:0;transform:scale(0.3) rotate(-45deg)}
 body.light .th-moon{opacity:0;transform:scale(0.4) rotate(90deg)}
 body:not(.light) .th-moon{opacity:1;transform:scale(1) rotate(0deg)}
 
+/* ═══ GUIDE LIST PAGE ═══ */
+.guide-list-grid{display:flex;flex-direction:column}
+.guide-list-row{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s}
+.guide-list-row:last-child{border-bottom:none}
+.guide-list-row:hover{background:rgba(255,255,255,0.04)}
+.guide-list-left{flex:1;min-width:0}
+.guide-list-cat{font-size:0.67rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:99px;background:var(--ind-bg);color:var(--ind2);display:inline-block;margin-bottom:0.35rem}
+.guide-list-title{font-size:0.94rem;font-weight:600;color:var(--t1);line-height:1.45;display:block;margin-bottom:0.2rem}
+.guide-list-row:hover .guide-list-title{color:var(--ind2)}
+.guide-list-desc{font-size:0.8rem;color:var(--t3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.guide-list-arrow{flex-shrink:0;color:var(--t3);transition:color 0.12s}
+.guide-list-row:hover .guide-list-arrow{color:var(--ind2)}
+.guide-reader{display:none;position:absolute;inset:0;background:var(--bg);z-index:10;overflow-y:auto;padding:2rem}
+.guide-reader.open{display:block}
+.guide-reader-inner{max-width:680px;margin:0 auto}
+.guide-reader-cat{font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ind2);margin-bottom:0.75rem}
+.guide-reader-title{font-family:var(--display);font-size:1.6rem;font-weight:800;color:var(--t1);line-height:1.2;letter-spacing:-0.02em;margin-bottom:1.5rem}
+.guide-reader-body{font-size:0.92rem;color:var(--t2);line-height:1.85}
+.guide-reader-body h3{font-family:var(--display);font-size:1rem;color:var(--t1);margin:1.5rem 0 0.5rem;font-weight:700}
+.guide-reader-body p{margin-bottom:0.9rem}
+.guide-reader-body ul,.guide-reader-body ol{margin:0.5rem 0 0.9rem 1.4rem}
+.guide-reader-body li{margin-bottom:0.5rem}
+.guide-reader-body code{font-family:'JetBrains Mono',monospace;font-size:0.82rem;background:var(--bg3);padding:2px 6px;border-radius:4px}
+.guide-reader-body a{color:var(--ind2)}
 /* ═══ GAMING NEWS PAGE ═══ */
 .news-grid{display:flex;flex-direction:column}
 .news-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);text-decoration:none;cursor:pointer}
@@ -2118,14 +2142,12 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <div class="page-header-left" style="position:relative">
       <div class="page-title">PM Playbook</div>
       <div class="page-sub">Frameworks, guides, and mental models for every stage of product work</div>
-      <button id="guide-toc-btn" onclick="toggleGuideToc()" style="margin-top:0.55rem;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;font-size:0.78rem;color:var(--t2);cursor:pointer;font-family:var(--sans);transition:color 0.15s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t2)'">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="width:12px;height:12px"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
-        All guides
-      </button>
-      <div id="guide-toc" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:0.4rem;min-width:260px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.55)"></div>
     </div>
     <div class="page-actions">
-      <input type="text" id="guide-search" placeholder="Search guides..." style="width:220px;padding:5px 10px;font-size:0.78rem" oninput="filterGuideRail()">
+      <button onclick="switchPage('guide-list')" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;padding:6px 14px;font-size:0.82rem;font-weight:600;color:var(--t1);cursor:pointer;font-family:var(--sans);transition:all 0.15s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="width:12px;height:12px"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
+        Full Guide List
+      </button>
     </div>
   </div>
 
@@ -2684,6 +2706,7 @@ function switchPage(name){
   if(name==='northstar') { setTimeout(()=>{parseNSCSV();renderNS();},50); }
   if(name==='about') { /* about page is static */ }
   if(name==='news') { loadGamingNews(); }
+  if(name==='guide-list') { buildGuideList(); }
   // Count tool interactions for newsletter trigger
   if(['stats','growth','samplesize','vw','northstar','rice'].includes(name)) trackToolUse();
 }
@@ -3664,6 +3687,10 @@ const GUIDE_IMAGES=[
   'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=480&q=80', // paywall / conversion
   'https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=480&q=80', // gacha / probability
   'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=480&q=80', // AI workflow
+  'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=480&q=80', // ad monetization / display
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=480&q=80', // social features / community
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&q=80', // becoming a PM / career
+  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=480&q=80', // GTM strategy / launch
 ];
 
 const guides=[
@@ -3699,6 +3726,14 @@ const guides=[
    body:`<h3>The Real Problem Isn\'t the Rates</h3><p>Conventional wisdom blames low pull rates or weak units. The actual failure mode runs deeper: most gacha systems were designed for whales and merely tolerated by everyone else. That asymmetry is the root cause of nearly every gacha collapse.</p><h3>The Whale Dependency Trap</h3><p>The problematic model: release powerful limited units on aggressive schedules with extremely low featured rates (often 0.25% or below). The predictable consequence:</p><ul><li>Competitive F2P players burn out by month four</li><li>Dolphins (mid-tier spenders) lose trust when they can\'t reliably obtain featured units</li><li>Whales exhaust content and disengage</li><li>Revenue crashes around month six</li></ul><h3>What Sustainable Systems Do Differently</h3><ul><li><strong>F2P as core infrastructure:</strong> Winning games treat free players as essential, not afterthoughts. This population drives community engagement and social proof that encourages spending.</li><li><strong>Multiple spender segments:</strong> Rather than targeting only whales, sustainable models create genuine entry points for non-payers, low spenders ($5–15/month via subscriptions and battle passes), mid spenders ($30–80/month), and whales ($100+/month with aspirational content).</li><li><strong>Transparent mathematics:</strong> Players now have sophisticated gacha literacy. Hiding rates or pity mechanics destroys trust. Transparent systems build long-term reputation.</li><li><strong>Offers supplement, don\'t replace:</strong> Monetization packages cannot rescue flawed core design. Solid engagement must precede monetization efforts.</li></ul><h3>The Long-Game Pattern</h3><p>Games that run 5+ years share consistent characteristics: rewarding F2P pathways, tiered spend offerings, transparent rates, strategic banner scheduling, and consideration of the full player population — not just the top 1% of spenders.</p><h3>Further Reading</h3><p><a href="https://medium.com/@arturoruizvaldes/the-reason-most-gacha-systems-fail-isnt-what-you-think-0220b1a1e7c9" target="_blank" rel="noopener" style="color:var(--ind)">Read the full article on Medium →</a></p>`},
   {icon:'🤖',cat:'Productivity',title:'The AI Workflow for PMs',desc:'How to build a compound AI system with purpose-built prompts, context docs, and memory.',
    body:`<h3>The Problem with How Most PMs Use AI</h3><p>Most product managers treat AI like a search engine — ask a question, get a generic answer, start fresh the next day. This produces disconnected outputs that ignore crucial context about your specific product, players, team structure, and business philosophy. The result is something you completely rewrite rather than something actionable.</p><h3>The Shift: From Question to System</h3><p>Effective AI usage requires three components working together:</p><ul><li><strong>Purpose-built prompts:</strong> Rather than generic requests, create prompts tailored to your recurring tasks — A/B testing analysis, PRD drafting, prioritization sessions — that reference your actual situation and strategic priorities.</li><li><strong>Context documents:</strong> Attach a single-page reference document containing your product\'s core mechanics, target audience, economy structure, and constraints. This transforms generic input into relevant, actionable guidance. One page is enough; more creates noise.</li><li><strong>Memory as asset:</strong> Claude\'s memory feature enables the model to understand your working preferences and communication style over time, reducing the need to re-explain context every session.</li></ul><h3>What the Workflow Looks Like in Practice</h3><p>Example: designing an offer system. Attach your game\'s context document to a structured prompt. Editing time drops from 30 minutes to approximately five minutes because the output arrives pre-calibrated to your constraints — not to some hypothetical average product.</p><h3>How to Build This for Your Own Work</h3><ol><li>Identify your three most frequent PM tasks</li><li>Write domain-specific prompts for each, referencing your actual product context</li><li>Create one-page context documents for each task domain</li><li>Refine iteratively — the system compounds as your prompts improve</li></ol><h3>The Compounding Effect</h3><p>PMs who built this infrastructure six months ago outperform those using daily fresh ChatGPT conversations — not through greater talent, but through systematic advantage that widens with every iteration.</p><h3>Further Reading</h3><p><a href="https://medium.com/@arturoruizvaldes/ditch-chatgpt-for-this-the-ai-workflow-thats-changed-how-i-run-product-6baaed9912de" target="_blank" rel="noopener" style="color:var(--ind)">Read the full article on Medium →</a></p>`},
+  {icon:'📺',cat:'Monetization',title:'Mobile Ad Monetization for PMs',desc:'The five metrics that actually matter for ad revenue — and what to do when they break.',
+   body:`<h3>Ads Are a Product Decision</h3><p>Most PMs treat ad monetization as someone else's job. That's a mistake. How often ads show, where they show, and what format they take directly affects retention, session length, and IAP conversion. If you don't understand the numbers, you can't make good calls on any of it.</p><h3>The Five Numbers You Need to Know</h3><ul><li><strong>eCPM (Effective Cost Per Mille):</strong> What a network pays per 1,000 impressions. It varies by format, geography, and user quality. Never average eCPM across ad unit types — calculate it separately for rewarded video, interstitials, and banners.</li><li><strong>Fill Rate:</strong> The % of ad requests that actually get served an ad. The formula that matters: <em>eCPM × Fill Rate = Actual Revenue</em>. A $20 eCPM at 60% fill beats a $25 eCPM at 40% fill. High eCPM with low fill is a trap.</li><li><strong>Ad ARPDAU:</strong> Ad revenue per daily active user. Your most important topline ad metric — it normalizes against your user base so it moves independently of UA fluctuations. Monitor daily. If it drops without a DAU drop, something broke.</li><li><strong>Ad Viewer Rate:</strong> % of DAU engaging with a specific format each day. Benchmarks: rewarded video above 45%, interstitials above 70%, banners 80–90%. Below these thresholds, the problem is placement or reward value — fix the product decision, not the ad.</li><li><strong>Impressions Per DAU (ImpDAU):</strong> How many ads each user sees daily. ImpDAU tells you supply; Ad ARPDAU tells you revenue. If ImpDAU is up but Ad ARPDAU is flat, your eCPM or fill rate dropped. If both are down, engagement dropped.</li></ul><h3>What Drives eCPM</h3><p>Networks calculate eCPM based on click-through rate, install rate of ads shown, user geo, user quality, and how competitive your inventory is. One thing most PMs miss: the first ad impression of the day pays the most. Value drops as users get retargeted throughout the day. Session structure matters.</p><h3>The Most Common PM Mistake</h3><p>Optimizing for eCPM while ignoring fill rate — or pushing ImpDAU up until retention drops without understanding why. Ad monetization is a balance problem. The ceiling isn't "show as many ads as possible." It's "show as many ads as users will tolerate before they churn." That number is lower than most PMs think. Rewarded ads (user-initiated) almost never hurt retention. Interstitials and banners require careful calibration.</p><h3>The PM Takeaway</h3><p>Build engagement first. The best ad systems are invisible to happy players. Players who are engaged, progressing, and having fun barely notice the ads. Players who are frustrated or bored see every single one.</p>`},
+  {icon:'👥',cat:'Retention',title:'Why Social Features Are Non-Negotiable',desc:'Social mechanics are retention infrastructure. How to build them in the right order.',
+   body:`<h3>The Era of Solo Mobile Play Is Over</h3><p>Two-thirds of the top 50 mobile games now have at least one social feature. Players who feel part of a community are 2.7x more likely to keep playing. If your game doesn't give players a reason to show up for each other, you're competing on content volume alone — and content is expensive.</p><h3>What Counts as a Social Feature</h3><ul><li><strong>High lift, high impact:</strong> Guilds and alliances, co-op modes, PvP with real-time matchmaking, in-game chat systems</li><li><strong>Medium lift, solid impact:</strong> Leaderboards (global and friends-only), shareable achievements and replays, follow/friends activity feeds, social currency tied to group play</li><li><strong>Lower lift, still meaningful:</strong> Social media login, referral mechanics, spectator mode, hangout rooms</li></ul><p>The mistake is treating social features as a checkbox. "We have a leaderboard" is not a social system. Leaderboards without friends or stakes generate FOMO for the top 1% and indifference from everyone else.</p><h3>Five Reasons Social Features Work</h3><ul><li><strong>Competitiveness:</strong> Beating a stranger is satisfying. Beating a friend is a story. Social features turn abstract progress into personal stakes.</li><li><strong>Obligation retention:</strong> Guild mechanics create soft commitment — if I miss a day, I let my team down. Players choose the guild; the guild creates the pull. Disney Heroes: Battle Mode ran entire content seasons around guild events. Retention during those windows was measurably higher.</li><li><strong>Shared experience:</strong> 38% of new US gamers prefer chatting while playing vs. 29% of existing gamers. New players skew social. If they don't find community in the first two weeks, they churn.</li><li><strong>Organic UA:</strong> Every player who recruits a friend is a UA channel you didn't pay for. Referred players tend to have higher loyalty than paid acquisition.</li><li><strong>Conversion lift:</strong> Socially embedded players spend more — not because social features push spending, but because community gives players more reasons to invest in their in-game identity.</li></ul><h3>What to Prioritize If Starting from Zero</h3><p>Start with guilds if your genre supports it. If not, start with friends leaderboards. Either way: build the social layer around something players are already doing. Don't create a social feature and then ask players to change behavior to use it.</p><h3>The PM Takeaway</h3><p>Social features are not a nice-to-have. They are retention infrastructure. Build them before launch — bolted-on social systems fail because players have already formed habits that don't include each other. The players who stick around for years aren't the ones who love your content cadence. They're the ones who love their guild.</p>`},
+  {icon:'🎓',cat:'Career',title:'What a PM Actually Does',desc:'The honest job description — especially in mobile games where live ops never stop.',
+   body:`<h3>The Clearest Definition</h3><p>A PM is a communications hub, organizer, and enabler. You sit between engineering, design, data, marketing, and stakeholders. You help everyone else do their best work. You clear roadblocks, connect dots, and carry context across teams. You have no direct authority over engineers or designers — you earn everything through clarity, trust, and judgment.</p><h3>PM vs. Project Management</h3><p>This trips people up constantly. A project manager has a defined set of requirements and a deadline — their job is execution. A PM has a goal, not a requirement. Your job is to figure out how to reach that goal through research, testing, and iteration. The deliverable is not fixed. Success is impact, not completion.</p><h3>What a Gaming PM Does Specifically</h3><p>Mobile games add a layer most software products don't: live operations. A gaming PM isn't just building features — they're running a living product where metrics change daily, the content pipeline never stops, and players have loud opinions about everything. On Disney Heroes: Battle Mode, a single bad event week could spike churn. A single strong content drop could reverse a two-month revenue slide. The feedback loops are fast and unforgiving.</p><p>In games, the PM role often overlaps with live ops: offer design, event cadence, economy balancing, player lifecycle management. If you're coming from traditional tech, this is the steepest learning curve.</p><h3>The Skills That Actually Matter</h3><ul><li><strong>Prioritization:</strong> The backlog is always longer than the sprint. Making good decisions about what gets built first, and communicating why, is the most important PM skill. Frameworks help. Judgment is what's hard to teach.</li><li><strong>Written communication:</strong> PMs write constantly. If your writing is unclear, your product will be unclear.</li><li><strong>Data literacy:</strong> You don't need to write SQL. You need to know which metrics matter, how to read a funnel, and how to spot when a number is real versus noise.</li><li><strong>Listening:</strong> To users, engineers, designers, and customer support tickets. The best product ideas usually come from someone else.</li><li><strong>Knowing what you don't know:</strong> Bad PMs pretend to be experts in everything. Good PMs know their blind spots and plug them with the right people.</li></ul><h3>How to Break In</h3><p>There is no one path. The PM role values diverse backgrounds — a lawyer understands how language creates agreements, a teacher understands how people learn, a data analyst questions numbers before acting. Your background is not a liability; it's context. The fastest paths in: associate PM programs, adjacent roles (data analyst, UX researcher, QA), or building something. Nothing demonstrates PM thinking like a shipped product.</p><p>In gaming specifically: play games analytically. Understand why you spend money, why you keep coming back, why you quit. Treat every game as a product you'd have to defend in a review meeting.</p><h3>The PM Takeaway</h3><p>Product management is one of the most intellectually interesting jobs in tech. You're at the intersection of business, technology, and human behavior. In games, the feedback is visceral — real players, real reactions, real revenue. The best PMs are genuinely curious. The credentials are just the cover letter.</p>`},
+  {icon:'🚀',cat:'Strategy',title:"The PM's Guide to Go-to-Market",desc:'Six questions every GTM strategy must answer — with a mobile game launch framework.',
+   body:`<h3>GTM Is a Product Discipline</h3><p>A go-to-market strategy is how you take a product from "done" to "in the hands of the right people." It's not a marketing plan or a launch checklist. It's a strategic framework connecting your product, audience, pricing, and distribution into a coherent story with an execution plan behind it. In mobile games, bad GTM kills good games.</p><h3>Six Questions Every GTM Must Answer</h3><ul><li><strong>Who is this for?</strong> A specific person — their context, habits, and alternatives. Not "everyone who plays mobile games." Disney Heroes: Battle Mode is for players who grew up on Disney, now 25–40, with disposable income and nostalgia for those characters. That clarity shapes every downstream decision.</li><li><strong>What craving does it fulfill?</strong> In games, the word "problem" doesn't quite fit. The better frame: what fantasy does this fulfill? What does the player want to feel? This needs a one-sentence answer.</li><li><strong>How is it different?</strong> Positioning is not about being better — it's about being different in a way that matters to your specific audience.</li><li><strong>How will people find it?</strong> Distribution strategy: app store optimization, paid UA, social content, creator partnerships, word of mouth. You need at least one primary channel you understand deeply, not five you're guessing at.</li><li><strong>How will you price it?</strong> Pricing signals value and shapes who converts. Pricing wrong attracts the wrong users and repels the right ones.</li><li><strong>How will you know if it's working?</strong> Define your north star metric and supporting metrics before you launch. For mobile games in soft launch: D1, D7, D30 retention, ARPU, and CPI. Define success before launch, not after.</li></ul><h3>The Mobile Game GTM Timeline</h3><ul><li><strong>Pre-soft launch:</strong> Nail your store page before you nail the game. Your icon, screenshots, and short description determine whether players give you a chance. Run A/B tests on your store page in soft launch — most teams do this too late.</li><li><strong>Soft launch:</strong> 2–4 markets chosen deliberately. Australia/Canada for English iOS data. Nordics for premium Android. Southeast Asia for scale at low CPI. Soft launch is structured data collection — define what you need to learn and what retention thresholds you need to hit before global.</li><li><strong>Global launch:</strong> Do not go global until D30 retention supports profitable UA. Launching with weak retention into paid UA is expensive destruction.</li><li><strong>Post-launch:</strong> Find the player segments who love your product, double down on the channels that brought them, and build community to create the organic flywheel.</li></ul><h3>The Two GTM Models</h3><p><strong>Inbound:</strong> Content, community, organic search. Slower to build, lower cost, higher-quality users, more durable. <strong>UA-driven:</strong> Paid channels — Meta, Google UAC, influencer deals. Faster, controllable, expensive, dependent on ROAS math. Most successful games use both: paid UA to find the audience fast, community and content to retain them and reduce paid dependence over time. Paid UA is renting an audience. Community is owning one.</p><h3>The PM Takeaway</h3><p>Know your player. Know your positioning. Build your store page like it's part of the product — because it is. Don't go global until your retention supports it. The best product in the wrong market at the wrong time with the wrong store page is a failed product. GTM is how you make sure the product gets the chance it deserves.</p>`},
 ];
 
 // ── Focus Rail state ─────────────────────────────
@@ -3939,6 +3974,48 @@ document.addEventListener('keydown', e => {
     if(Math.abs(dx) > 50) railNav(dx < 0 ? 1 : -1);
   }, {passive:true});
 })();
+
+// ── Guide List Page ──────────────────────────
+function buildGuideList(q=''){
+  const grid = document.getElementById('guide-list-grid');
+  if(!grid) return;
+  closeGuideReader();
+  const term = q.toLowerCase().trim();
+  const filtered = term
+    ? guides.filter(g => g.title.toLowerCase().includes(term) || g.cat.toLowerCase().includes(term) || g.desc.toLowerCase().includes(term))
+    : guides;
+  if(filtered.length === 0){
+    grid.innerHTML = `<div style="padding:2.5rem;color:var(--t3);text-align:center;font-size:0.88rem">No guides match "${q}"</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(g => {
+    const i = guides.indexOf(g);
+    return `<div class="guide-list-row" onclick="openGuideReader(${i})">
+      <div class="guide-list-left">
+        <span class="guide-list-cat">${g.cat}</span>
+        <span class="guide-list-title">${g.title}</span>
+        <span class="guide-list-desc">${g.desc}</span>
+      </div>
+      <svg class="guide-list-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>`;
+  }).join('');
+}
+function filterGuideList(){
+  buildGuideList(document.getElementById('guide-list-search')?.value || '');
+}
+function openGuideReader(i){
+  const g = guides[i];
+  const reader = document.getElementById('guide-reader');
+  document.getElementById('reader-cat').textContent = g.cat;
+  document.getElementById('reader-title').textContent = g.title;
+  document.getElementById('reader-body').innerHTML = g.body;
+  reader.classList.add('open');
+  reader.scrollTop = 0;
+}
+function closeGuideReader(){
+  const reader = document.getElementById('guide-reader');
+  if(reader) reader.classList.remove('open');
+}
 
 buildRail();
 
@@ -5767,6 +5844,42 @@ function renderNews(items){
       <a href="https://www.eurogamer.net/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Eurogamer ↗</a>
     </div>
   </div>
+</div>
+
+<!-- ═══ GUIDE LIST PAGE ═══ -->
+<div class="page" id="page-guide-list" style="position:relative">
+
+  <!-- Full-article reader (slides over the list) -->
+  <div class="guide-reader" id="guide-reader">
+    <div class="guide-reader-inner">
+      <button onclick="closeGuideReader()" style="display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--t3);font-size:0.82rem;font-family:var(--sans);cursor:pointer;margin-bottom:1.5rem;padding:0;transition:color 0.12s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to all guides
+      </button>
+      <div class="guide-reader-cat" id="reader-cat"></div>
+      <div class="guide-reader-title" id="reader-title"></div>
+      <div class="guide-reader-body" id="reader-body"></div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <button onclick="switchPage('guides')" style="display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--t3);font-size:0.8rem;font-family:var(--sans);cursor:pointer;margin-bottom:0.4rem;padding:0;transition:color 0.12s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Playbook
+      </button>
+      <div class="page-title">📚 All Guides</div>
+      <div class="page-sub">The full PM Dispatch library — click any guide to read it</div>
+    </div>
+    <div class="page-actions">
+      <input type="text" id="guide-list-search" placeholder="Search guides..." style="width:220px;padding:5px 10px;font-size:0.78rem" oninput="filterGuideList()">
+    </div>
+  </div>
+
+  <div class="card" style="overflow:hidden">
+    <div id="guide-list-grid" class="guide-list-grid"></div>
+  </div>
+
 </div>
 
 </body>
