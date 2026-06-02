@@ -88,6 +88,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .air{text-align:right;flex-shrink:0;margin-left:.5rem}
 .aio{font-family:var(--mono);font-size:.82rem;color:var(--ind2);font-weight:600}
 .airt{font-size:.72rem;color:var(--t2);font-family:var(--mono)}
+.airt.active-team{color:var(--green)}
 .bbuy{
   margin-top:4px;padding:4px 11px;font-size:.78rem;font-weight:600;
   background:var(--bg3);border:1px solid var(--border2);border-radius:5px;
@@ -317,10 +318,10 @@ const AUTOS = [
   {id:'intern',   name:'Intern',             cost:15,   rate:1,   flavor:'Does it for the experience.'},
   {id:'junior',   name:'Junior PM',           cost:80,   rate:5,   flavor:'Writes tickets nobody reads.'},
   {id:'senior',   name:'Senior PM',           cost:400,  rate:22,  flavor:'Delegates the clicking.'},
-  {id:'designer', name:'Designer',            cost:600,  rate:30,  flavor:'Makes things 40% better. Takes 2 weeks of feedback to confirm.'},
-  {id:'engineer', name:'Engineer',            cost:1200, rate:60,  flavor:'Implements what you spec. Sometimes other things too.'},
+  {id:'designer', name:'Designer',            cost:600,  rate:0,   flavor:'Ships prototypes automatically with the build team.'},
+  {id:'engineer', name:'Engineer',            cost:1200, rate:0,   flavor:'Ships prototypes automatically with the build team.'},
   {id:'ai',       name:'AI Brainstorm Tool',  cost:2000, rate:80,  flavor:'Wrong 40% of the time, every time.'},
-  {id:'qa',       name:'QA Engineer',         cost:3000, rate:120, flavor:'Finds all the bugs before launch. This turns out to be bad news.'},
+  {id:'qa',       name:'QA Engineer',         cost:3000, rate:0,   flavor:'Ships prototypes automatically with the build team.'},
 ];
 
 // Research Queue — PP cost, unlocks progressively
@@ -408,7 +409,7 @@ function mkState(){
     research:[],
     game:null,
     sl:{mon:25,ret:25,ua:25,feat:25},
-    spTimer:30, featDebt:0,
+    spTimer:30, featDebt:0, autoProtoTimer:0, autoProtoReady:false,
     panels:{auto:false,res:false,advRes:false,upgrades:false,port:false,sprint:false},
     popQ:[], fired:[],
     lastClick:Date.now(), lastSave:Date.now(),
@@ -462,6 +463,16 @@ function resetGame(){
 function ppps(){
   const {intern,junior,senior,ai} = S.autos;
   return intern*1 + junior*5 + senior*22 + ai*80;
+}
+
+// Returns seconds between auto-shipped prototypes (0 = team not yet assembled)
+function autoShipRate(){
+  const d = S.autos.designer || 0;
+  const e = S.autos.engineer || 0;
+  const q = S.autos.qa || 0;
+  const balanced = Math.min(d, e, q); // slowest team member limits throughput
+  if(balanced < 1) return 0;          // needs at least 1 of each role
+  return Math.max(20, Math.floor(120 / balanced)); // 120s with 1 each, 60s with 2, 40s with 3...
 }
 
 function normSl(){
@@ -561,6 +572,18 @@ function tick(){
     if(!S.bugDone && S.game.dau>800 && Math.random()<0.0004){ S.bugDone=true; qEv('bug'); }
   }
 
+  // Auto-prototype: Designer + Engineer + QA build team
+  const shipRate = autoShipRate();
+  if(shipRate > 0){
+    S.autoProtoTimer = Math.max(0, (S.autoProtoTimer || shipRate) - 1);
+    if(S.autoProtoTimer === 0){
+      S.autoProtoTimer = shipRate;
+      S.autoProtoReady = true;
+      const d=S.autos.designer||0, e=S.autos.engineer||0, q=S.autos.qa||0;
+      log(`🔧 Build team shipped a prototype. (${d} Designer${d!==1?'s':''}, ${e} Engineer${e!==1?'s':''}, ${q} QA)`);
+    }
+  }
+
   // sprint
   const spLen = S.research.includes('sprint_pl') ? 20 : 30;
   S.spTimer = (S.spTimer||spLen)-1;
@@ -602,8 +625,10 @@ function checkMilestones(){
   const t1done = RESEARCH.filter(r=>r.tier===1 && S.research.includes(r.id)).length;
   if(t1done>=4 && !S.panels.advRes){ S.panels.advRes=true; reveal('panel-adv-res'); log('Advanced Research unlocked. Deeper systems available.'); }
 
-  // Soft Launch: fires automatically at 100 PP
-  if(S.pp>=100 && !S.game && !S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
+  // Soft Launch: fires at 100 manual prototype clicks
+  if(S.clicks>=100 && !S.game && !S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
+  // Auto-prototype ready: build team shipped one while no game is active
+  if(S.autoProtoReady && !S.game && !popOpen){ S.autoProtoReady=false; showNamingPopup(); }
 
   if(S.game && !S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.game && !S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked. Every sprint is a choice.'); }
@@ -649,9 +674,13 @@ function updateUI(){
   set('l-feat',Math.round(n.feat*100)+'%');
 
   // p1 sub text
-  if(S.clicks>0&&S.clicks<10) set('p1s','Keep going. Someone has to.');
-  else if(S.pp>=50&&S.pp<100&&!S.game) set('p1s','Almost. The breakthrough is close. Probably.');
-  else if(S.game) set('p1s','Your game is live. Don\'t ignore it.');
+  if(!S.game){
+    if(S.clicks===0) set('p1s','Nobody said it would be easy.');
+    else if(S.clicks<10) set('p1s','Keep going. Someone has to.');
+    else if(S.clicks<100) set('p1s',`${S.clicks}/100 prototypes. Keep shipping.`);
+  } else {
+    set('p1s','Your game is live. Don\'t ignore it.');
+  }
 
   buildAutoList();
   buildResList();
@@ -667,16 +696,26 @@ function updateUI(){
   });
 }
 
+const BUILD_TEAM = new Set(['designer','engineer','qa']);
+
 function buildAutoList(){
   const c=$('auto-list'); if(!c) return;
+  const rate = autoShipRate();
+  const d=S.autos.designer||0, e=S.autos.engineer||0, q=S.autos.qa||0;
+  const teamStatus = rate>0
+    ? `ships prototype every ${rate}s`
+    : `needs ${[d<1?'Designer':'',e<1?'Engineer':'',q<1?'QA':''].filter(Boolean).join(' + ')||'more staff'}`;
+
   c.innerHTML = AUTOS.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+    const isBuild = BUILD_TEAM.has(a.id);
+    const rateStr = isBuild ? teamStatus : `+${a.rate*(owned+1)}pp/s next`;
     return `<div class="ai">
       <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
       <div class="air">
         <div class="aio">${owned}×</div>
-        <div class="airt">+${a.rate*(owned+1)}pp/s next</div>
+        <div class="airt${isBuild&&rate>0?' active-team':''}">${rateStr}</div>
         <button class="bbuy" data-cost="${cost}" data-cur="pp" onclick="buyAuto('${a.id}')">${fmt(cost)} PP</button>
       </div>
     </div>`;
