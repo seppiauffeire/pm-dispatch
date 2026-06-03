@@ -138,6 +138,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .pinput{width:100%;padding:.6rem .85rem;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--t1);font-size:.88rem;font-family:var(--sans);margin-bottom:.85rem;outline:none;transition:border-color .15s}
 .pinput:focus{border-color:var(--ind)}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+/* Ops Board */
+.ops-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.ops-ready{font-size:.82rem;font-weight:700;color:var(--green)}
+.ops-cd{font-size:.82rem;font-weight:700;color:var(--ind2)}
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.ops-btn{padding:.75rem .9rem;border-radius:9px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);text-align:left;transition:all .15s;font-family:var(--sans);width:100%}
+.ops-btn:hover:not(:disabled){background:var(--bg4);border-color:var(--t2)}
+.ops-btn:disabled{opacity:.4;cursor:not-allowed}
+.ops-btn-name{font-size:.82rem;font-weight:700;color:var(--t1);margin-bottom:4px}
+.ops-btn-effect{font-size:.68rem;color:var(--t2);line-height:1.5}
+.ops-btn-effect .pos{color:var(--green)}
+.ops-result{font-size:.75rem;color:var(--t2);text-align:center;margin-top:.6rem;min-height:1em;font-style:italic}
 /* Achievement toast */
 #ach-toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--green);border-radius:11px;padding:.75rem 1rem;max-width:280px;z-index:500;transform:translateX(320px);transition:transform .35s ease;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 #ach-toast.show{transform:translateX(0)}
@@ -263,6 +275,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       </div>
       <div id="sp-note" style="margin-top:.6rem;font-size:.78rem;color:var(--t2);text-align:center;min-height:1em"></div>
     </div>
+    <div class="panel hidden" id="panel-ops">
+      <div class="ops-hdr">
+        <div class="sptitle">📋 Ops Board</div>
+        <div id="ops-timer" class="ops-ready">● Ready</div>
+      </div>
+      <div class="ops-grid" id="ops-buttons"></div>
+      <div class="ops-result" id="ops-result"></div>
+    </div>
+
   </div>
 
   <div class="col-side">
@@ -585,7 +606,8 @@ function mkState(){
     sl:{mon:25,ret:25,ua:25,feat:25},
     spTimer:30, featDebt:0, pmStepTimer:0,
     influencerCooldown:0, platformCooldown:0, pushCooldown:0,
-    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false},
+    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false},
+    opsBoardCooldown:0,
     popQ:[], fired:[],
     usedNames:[],
     lastClick:Date.now(), lastSave:Date.now(),
@@ -677,7 +699,7 @@ function revpsG(g){
   if(!g||g.dau<=0) return 0;
   const n=normSl();
   const iap=S.research.includes('prem_iap')?1.3:1;
-  return g.dau*0.018*(1+n.mon*0.6)*iap;
+  return g.dau*0.018*(1+n.mon*0.6)*iap*(1+(g.permRevBoost||0));
 }
 
 function totalRevps(){ return S.games.reduce((sum,g)=>sum+revpsG(g),0); }
@@ -727,6 +749,78 @@ function fmt(n){
 const $m=n=>'$'+fmt(n);
 const $=id=>document.getElementById(id);
 const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+
+// ── OPS BOARD ─────────────────────────────────────────
+
+function pmPower(){
+  const j=S.autos.junior||0, s=S.autos.senior||0, a=S.autos.ai||0;
+  return 1 + (j*0.5 + s*1.5 + a*3) * 0.25;
+}
+
+function opsCD(){
+  const totalPMs=(S.autos.junior||0)+(S.autos.senior||0)+(S.autos.ai||0);
+  return Math.max(30, 90 - totalPMs*5);
+}
+
+function buildOpsBoard(){
+  const btns=$('ops-buttons'); if(!btns) return;
+  const g=S.games[0];
+  const timer=$('ops-timer');
+  const cd=S.opsBoardCooldown||0;
+  if(timer){
+    if(cd>0){ timer.className='ops-cd'; timer.textContent=cd+'s'; }
+    else { timer.className='ops-ready'; timer.textContent='● Ready'; }
+  }
+  const n=normSl(), pmp=pmPower(), ready=cd===0&&!!g;
+  const actions=[
+    {id:'liveops', name:'🎉 Ship Live Ops Event',
+      effects:g?[`+${fmt(Math.round(200*(1+n.ua*3)*pmp))} DAU`,`−${(0.8*n.ret*pmp).toFixed(2)}% churn`]:['needs a live game']},
+    {id:'offer', name:'💰 Ship New Offer',
+      effects:g?[`+${(0.015*(1+n.mon*2)*pmp*100).toFixed(2)}% rev/s`,`+${fmt(Math.round(50*n.mon*pmp))} DAU`]:['needs a live game']},
+    {id:'polish_events', name:'✨ Polish Events',
+      effects:g?[`−${(0.4*(1+n.ret*2)*pmp).toFixed(2)}% churn`,`+${fmt(Math.round(30*n.ret*pmp))} DAU`]:['needs a live game']},
+    {id:'polish_offers', name:'📦 Polish Offers',
+      effects:g?[`+${(0.025*(1+n.mon*1.5)*pmp*100).toFixed(2)}% rev/s`,`−${(0.2*n.ret*pmp).toFixed(2)}% churn`]:['needs a live game']},
+  ];
+  btns.innerHTML=actions.map(a=>`
+    <button class="ops-btn" onclick="fireOpsAction('${a.id}')" ${ready?'':'disabled'}>
+      <div class="ops-btn-name">${a.name}</div>
+      <div class="ops-btn-effect">${a.effects.map(e=>`<span class="pos">${e}</span>`).join(' · ')}</div>
+    </button>`).join('');
+}
+
+function fireOpsAction(id){
+  const g=S.games[0]; if(!g||S.opsBoardCooldown>0) return;
+  const n=normSl(), pmp=pmPower();
+  let msg='';
+  if(id==='liveops'){
+    const dau=Math.round(200*(1+n.ua*3)*pmp);
+    const ch=parseFloat((0.8*n.ret*pmp).toFixed(2));
+    g.dau+=dau; g.churn=Math.max(0.5,g.churn-ch);
+    msg=`Live ops shipped. +${fmt(dau)} DAU · −${ch}% churn.`;
+    log(`📅 ${g.name}: Live Ops Event. +${fmt(dau)} DAU, −${ch}% churn.`);
+  } else if(id==='offer'){
+    const rev=parseFloat((0.015*(1+n.mon*2)*pmp).toFixed(4));
+    const dau=Math.round(50*n.mon*pmp);
+    g.permRevBoost=(g.permRevBoost||0)+rev; g.dau+=dau;
+    msg=`New offer live. +${(rev*100).toFixed(2)}% rev · +${fmt(dau)} DAU.`;
+    log(`💰 ${g.name}: New Offer. Revenue +${(rev*100).toFixed(2)}% permanently.`);
+  } else if(id==='polish_events'){
+    const ch=parseFloat((0.4*(1+n.ret*2)*pmp).toFixed(2));
+    const dau=Math.round(30*n.ret*pmp);
+    g.churn=Math.max(0.3,g.churn-ch); g.dau+=dau;
+    msg=`Events polished. −${ch}% churn · +${fmt(dau)} DAU.`;
+    log(`✨ ${g.name}: Events Polished. Churn −${ch}% permanently.`);
+  } else if(id==='polish_offers'){
+    const rev=parseFloat((0.025*(1+n.mon*1.5)*pmp).toFixed(4));
+    const ch=parseFloat((0.2*n.ret*pmp).toFixed(2));
+    g.permRevBoost=(g.permRevBoost||0)+rev; g.churn=Math.max(0.3,g.churn-ch);
+    msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.`;
+    log(`📦 ${g.name}: Offers Polished. Revenue +${(rev*100).toFixed(2)}% permanently.`);
+  }
+  S.opsBoardCooldown=opsCD();
+  set('ops-result',msg);
+}
 
 // ── ACHIEVEMENTS ──────────────────────────────────────
 
@@ -881,6 +975,7 @@ function tick(){
   if(!S.vcOfferDone&&S.totalRev>500000){ S.vcOfferDone=true; qEv('vcOffer'); }
 
   // Cooldowns
+  if(S.opsBoardCooldown>0) S.opsBoardCooldown--;
   if(S.influencerCooldown>0) S.influencerCooldown--;
   if(S.platformCooldown>0) S.platformCooldown--;
   if(S.pushCooldown>0) S.pushCooldown--;
@@ -962,6 +1057,7 @@ function checkMilestones(){
 
   if(S.games.length>0&&!S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.games.length>0&&!S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked.'); }
+  if(S.games.length>0&&!S.panels.ops){ S.panels.ops=true; reveal('panel-ops'); log('Ops Board unlocked. Ship events and offers to scale revenue.'); }
   if(S.games.length>0&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked.'); }
 
   if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked.'); }
@@ -1067,6 +1163,7 @@ function updateUI(){
   buildUpgradesList();
   buildPremiumList();
   buildGameCards();
+  buildOpsBoard();
   buildAchievementsPanel();
 
   document.querySelectorAll('.bbuy[data-cost]').forEach(b=>{
@@ -1456,7 +1553,7 @@ function launchGame(genre,aud){
   const name=(nameEl?nameEl.value.trim():'')||randGameName();
   S.usedNames.push(name);
   const startChurn=S.research.includes('user_res')?6:8;
-  S.games.push({name,genre,audience:aud,dau:12,churn:startChurn,daysLive:0});
+  S.games.push({name,genre,audience:aud,dau:12,churn:startChurn,daysLive:0,permRevBoost:0});
   S.gLaunched++; S.dayTimer=60; S.prdProgress=0;
   closePop();
   log(`🚀 ${name} is live. 12 installs. 3 of them are you.`);
@@ -1492,6 +1589,7 @@ if(S.panels.upgrades) reveal('panel-upgrades');
 if(S.panels.premium) reveal('panel-premium');
 if(S.panels.port) reveal('panel-port');
 if(S.panels.sprint) reveal('panel-sprint');
+if(S.panels.ops) reveal('panel-ops');
 
 ['mon','ret','ua','feat'].forEach(k=>{ const e=$('sl-'+k); if(e) e.value=S.sl[k]||25; });
 
