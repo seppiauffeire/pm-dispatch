@@ -24,7 +24,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .gnav-back:hover{color:var(--t1)}
 .gnav-title{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.04em}
 .gnav-right{display:flex;gap:0.75rem;align-items:center}
-.gnav-save{font-size:0.78rem;color:var(--t3);font-family:var(--mono)}
+.gnav-save{font-size:0.78rem;color:var(--t3)}
 .btn-reset{font-size:0.78rem;color:var(--t3);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:2px 6px;border-radius:4px;transition:color .12s}
 .btn-reset:hover{color:var(--red)}
 .res-bar{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto}
@@ -32,18 +32,16 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .res-item:last-child{border-right:none}
 .res-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t2);margin-bottom:3px}
 .res-val{font-family:var(--mono);font-size:1.1rem;font-weight:600;color:var(--t1);line-height:1}
-.res-sub{font-size:0.78rem;color:var(--t2);margin-top:2px;font-family:var(--mono)}
+.res-sub{font-size:0.78rem;color:var(--t2);margin-top:2px}
 #ri-debt .res-val{color:var(--red)}
 #ri-debt.pulsing .res-val{animation:pred 1.2s ease-in-out infinite}
 @keyframes pred{0%,100%{opacity:1}50%{opacity:.45}}
 .gwrap{max-width:1200px;margin:0 auto;padding:1.25rem;display:grid;grid-template-columns:240px 1fr 280px;gap:1.25rem;align-items:start}
 @media(max-width:1000px){.gwrap{grid-template-columns:1fr 270px}}
 @media(max-width:660px){.gwrap{grid-template-columns:1fr}}
-.col-left{display:flex;flex-direction:column;gap:1rem}
-.col-main{display:flex;flex-direction:column;gap:1rem}
-.col-side{display:flex;flex-direction:column;gap:1rem}
+.col-left,.col-main,.col-side{display:flex;flex-direction:column;gap:1rem}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem}
-.ptitle{font-family:var(--display);font-size:0.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
+.ptitle{font-size:0.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
 .ptitle:after{content:'▾';font-size:.65rem;color:var(--t3)}
 .panel.collapsed .ptitle:after{content:'▸'}
 .panel.collapsed .panel-body{display:none}
@@ -52,36 +50,39 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .fade-in{animation:fi .55s ease forwards}
 @keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 #p1{text-align:center;padding:2rem 1rem 1.5rem}
-.p1h{font-family:var(--display);font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.35rem}
+.p1h{font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.35rem}
 .p1s{font-size:.9rem;color:var(--t2);margin-bottom:1.75rem;min-height:1.2em}
 #btn-proto{
   width:100%;max-width:300px;padding:1rem 1.75rem;
-  font-family:var(--display);font-size:.95rem;font-weight:800;letter-spacing:.04em;
+  font-size:.95rem;font-weight:800;letter-spacing:.04em;
   background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff;
   border:none;border-radius:11px;cursor:pointer;
-  box-shadow:0 4px 22px rgba(124,58,237,.4);transition:all .14s;user-select:none
+  box-shadow:0 4px 22px rgba(124,58,237,.4);transition:background .2s,box-shadow .2s,transform .14s;user-select:none
 }
-#btn-proto:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.6)}
+#btn-proto:hover{transform:translateY(-2px)}
 #btn-proto:active{transform:scale(.97)}
 .prd-bar-wrap{width:100%;max-width:300px;margin:.65rem auto 0;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
 .prd-bar-fill{height:100%;background:linear-gradient(90deg,var(--ind),var(--ind2));border-radius:3px;transition:width .2s}
 .prd-label{font-size:.72rem;color:var(--t3);margin-top:.35rem;text-align:center}
-.pcount{font-family:var(--mono);font-size:.85rem;color:var(--t2);margin-top:.85rem}
+.pcount{font-size:.85rem;color:var(--t2);margin-top:.85rem}
 #panel-log{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.log-head{padding:.65rem .9rem;border-bottom:1px solid var(--border);font-family:var(--display);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+.log-head{padding:.65rem .9rem;border-bottom:1px solid var(--border);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
 #rlog{height:220px;overflow-y:auto}
 .le{padding:.55rem .9rem;border-bottom:1px solid var(--border);font-size:.88rem;color:var(--t1);line-height:1.55;animation:le .3s ease}
 .le:last-child{border-bottom:none}
-.let{font-family:var(--mono);font-size:.72rem;color:var(--t3);margin-right:6px}
+.let{font-size:.72rem;color:var(--t3);margin-right:6px}
 @keyframes le{from{opacity:0}to{opacity:1}}
+/* Automation - two sections */
+.auto-section-hdr{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin:.6rem 0 .3rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+.auto-section-hdr:first-child{margin-top:0}
 .ai{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border)}
 .ai:last-child{border-bottom:none}
 .ain{font-size:.95rem;font-weight:600;color:var(--t1)}
 .aif{font-size:.78rem;color:var(--t2);margin-top:2px;font-style:italic}
 .air{text-align:right;flex-shrink:0;margin-left:.5rem}
-.aio{font-family:var(--mono);font-size:.82rem;color:var(--ind2);font-weight:600}
-.airt{font-size:.72rem;color:var(--t2);font-family:var(--mono)}
-.airt.active-team{color:var(--green)}
+.aio{font-size:.82rem;color:var(--ind2);font-weight:600}
+.airt{font-size:.72rem;color:var(--t2)}
+.airt.active{color:var(--green)}
 .bbuy{margin-top:4px;padding:4px 11px;font-size:.78rem;font-weight:600;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--t2);cursor:pointer;font-family:var(--sans);transition:all .12s;white-space:nowrap}
 .bbuy:hover:not(:disabled){background:var(--bg4);color:var(--t1);border-color:var(--t3)}
 .bbuy:disabled{opacity:.3;cursor:not-allowed}
@@ -90,36 +91,35 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .ri:last-child{border-bottom:none}
 .rin{font-size:.92rem;font-weight:600;color:var(--t1);margin-bottom:2px}
 .rid{font-size:.8rem;color:var(--t2);line-height:1.5;margin-bottom:5px}
-.ric{font-family:var(--mono);font-size:.78rem;color:var(--ind2)}
+.ric{font-size:.78rem;color:var(--ind2)}
 .ridone{font-size:.78rem;color:var(--green);font-weight:700}
 .gcard{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:1rem;margin-bottom:.75rem}
 .gcard:last-child{margin-bottom:0}
 .gch{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap}
-.gcn{font-family:var(--display);font-size:.98rem;font-weight:800;letter-spacing:-.015em}
+.gcn{font-size:.98rem;font-weight:800;letter-spacing:-.015em}
 .gctags{display:flex;gap:4px;flex-shrink:0}
 .gctag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:rgba(167,139,250,.15);color:var(--ind2)}
 .gcstats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.65rem;margin-bottom:.8rem}
 @media(max-width:500px){.gcstats{grid-template-columns:1fr 1fr}}
 .gcsl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:3px;font-weight:700}
-.gcsv{font-family:var(--mono);font-size:1rem;font-weight:600;color:var(--t1)}
+.gcsv{font-size:1rem;font-weight:600;color:var(--t1)}
 .daubar{height:3px;background:var(--bg4);border-radius:2px;margin-top:3px;overflow:hidden}
 .daufill{height:100%;background:linear-gradient(90deg,var(--ind),var(--ind2));border-radius:2px;transition:width .6s}
 .gcactions{display:flex;gap:.4rem;flex-wrap:wrap}
 .bact{padding:6px 14px;font-size:.84rem;font-weight:600;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all .12s;border:1px solid var(--border2);background:var(--bg4);color:var(--t1)}
-.bact:hover{background:var(--bg2);color:var(--t1);border-color:var(--t3)}
+.bact:hover{background:var(--bg2);border-color:var(--t3)}
 .bact.pri{background:rgba(124,58,237,.15);color:var(--ind2);border-color:var(--ind)}
 .bact.pri:hover{background:rgba(124,58,237,.25)}
 .bact.dan{color:var(--red);border-color:#7f1d1d}
 .bact.dan:hover{background:rgba(248,113,113,.08)}
 .bact:disabled{opacity:.35;cursor:not-allowed}
 .sphead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
-.sptitle{font-family:var(--display);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
-#sp-timer{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--ind2)}
-.slitem{margin-bottom:.75rem}
-.slitem:last-child{margin-bottom:0}
+.sptitle{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+#sp-timer{font-size:.95rem;font-weight:700;color:var(--ind2)}
+.slitem{margin-bottom:.75rem}.slitem:last-child{margin-bottom:0}
 .slrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .slname{font-size:.88rem;font-weight:600;color:var(--t1)}
-.slpct{font-family:var(--mono);font-size:.84rem;color:var(--ind2);font-weight:600}
+.slpct{font-size:.84rem;color:var(--ind2);font-weight:600}
 input[type=range]{width:100%;height:4px;border-radius:2px;-webkit-appearance:none;appearance:none;background:var(--border2);outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ind);cursor:pointer;box-shadow:0 0 6px rgba(167,139,250,.5)}
 .mdots{display:flex;gap:3px;margin-top:3px}
@@ -129,11 +129,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 #poverlay.hidden{display:none}
 .pbox{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;max-width:480px;width:100%;padding:1.75rem;box-shadow:0 40px 80px rgba(0,0,0,.7);animation:pin .22s ease;max-height:90vh;overflow-y:auto}
 @keyframes pin{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
-.ptit{font-family:var(--display);font-size:1.2rem;font-weight:800;color:var(--t1);margin-bottom:.85rem;letter-spacing:-.02em;line-height:1.3}
+.ptit{font-size:1.2rem;font-weight:800;color:var(--t1);margin-bottom:.85rem;letter-spacing:-.02em;line-height:1.3}
 .pbdy{font-size:.95rem;color:var(--t1);line-height:1.85;margin-bottom:1.1rem;white-space:pre-wrap}
 .pchoices{display:flex;flex-direction:column;gap:.4rem}
 .pchoice{padding:.75rem 1rem;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;cursor:pointer;text-align:left;color:var(--t1);font-size:.9rem;font-family:var(--sans);transition:all .12s;line-height:1.5}
-.pchoice:hover{background:var(--bg4);color:var(--t1);border-color:var(--t2)}
+.pchoice:hover{background:var(--bg4);border-color:var(--t2)}
 .pflav{font-size:.76rem;color:var(--t2);margin-top:4px;display:block;font-style:italic}
 .pinput{width:100%;padding:.6rem .85rem;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--t1);font-size:.88rem;font-family:var(--sans);margin-bottom:.85rem;outline:none;transition:border-color .15s}
 .pinput:focus{border-color:var(--ind)}
@@ -156,9 +156,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 
 <div class="res-bar">
   <div class="res-item">
-    <div class="res-label">Prototype Points</div>
+    <div class="res-label">Software Built</div>
     <div class="res-val" id="r-pp">0</div>
-    <div class="res-sub" id="r-pps">0 pp/s</div>
+    <div class="res-sub" id="r-pps">0 sb/s</div>
   </div>
   <div class="res-item">
     <div class="res-label">Revenue</div>
@@ -197,6 +197,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="ptitle" onclick="togglePanel('panel-upgrades')">🏗 Studio Upgrades</div>
       <div class="panel-body" id="upgrades-list"></div>
     </div>
+    <div class="panel hidden" id="panel-premium">
+      <div class="ptitle" onclick="togglePanel('panel-premium')">💎 Premium Upgrades</div>
+      <div class="panel-body" id="premium-list"></div>
+    </div>
   </div>
 
   <div class="col-main">
@@ -204,16 +208,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div id="p1">
         <div class="p1h">You are a mobile games PM.</div>
         <div class="p1s" id="p1s">Nobody said it would be easy.</div>
-        <button id="btn-proto" onclick="clickProto()">WRITE PRD</button>
+        <button id="btn-proto" onclick="clickProto()">COMPETITOR RESEARCH</button>
         <div class="prd-bar-wrap" id="prd-bar-wrap">
           <div class="prd-bar-fill" id="prd-bar" style="width:0%"></div>
         </div>
-        <div class="prd-label" id="prd-label">PRD: 0 / 10</div>
+        <div class="prd-label" id="prd-label">Step 1 of 8</div>
         <div class="pcount" id="pcount">Prototypes shipped: 0</div>
       </div>
     </div>
     <div class="panel hidden" id="panel-port">
-      <div class="ptitle" style="cursor:default">📱 Active Portfolio</div>
+      <div class="ptitle" style="cursor:default;pointer-events:none">📱 Active Portfolio</div>
       <div class="panel-body" id="gcards"></div>
     </div>
     <div class="panel hidden" id="panel-sprint">
@@ -247,7 +251,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div id="rlog"></div>
     </div>
     <div class="panel hidden" id="panel-auto">
-      <div class="ptitle" style="cursor:default">🤖 Automation</div>
+      <div class="ptitle" style="cursor:default;pointer-events:none">🤖 Automation</div>
       <div class="panel-body" id="auto-list"></div>
     </div>
   </div>
@@ -265,44 +269,55 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 <script>
 // ── CONSTANTS ─────────────────────────────────────────
 
+// sbRate = Software Built per second generated
+// pmRate = PRD steps per minute automated (consumes SB)
+// sbCost = SB consumed per auto-step
 const AUTOS = [
-  {id:'intern',   name:'Intern',            cost:15,   rate:1,   payroll:50,   flavor:'Does it for the experience.'},
-  {id:'junior',   name:'Junior PM',          cost:80,   rate:5,   payroll:200,  flavor:'Writes tickets nobody reads.'},
-  {id:'senior',   name:'Senior PM',          cost:400,  rate:22,  payroll:800,  flavor:'Delegates the clicking.'},
-  {id:'designer', name:'Designer',           cost:600,  rate:0,   payroll:900,  flavor:'Ships prototypes with the build team.'},
-  {id:'engineer', name:'Engineer',           cost:1200, rate:0,   payroll:1500, flavor:'Ships prototypes with the build team.'},
-  {id:'ai',       name:'AI Brainstorm Tool', cost:2000, rate:80,  payroll:300,  flavor:'Wrong 40% of the time, every time.'},
-  {id:'qa',       name:'QA',                 cost:3000, rate:0,   payroll:1000, flavor:'Ships prototypes with the build team.'},
+  // Build team — generates Software Built
+  {id:'intern',   name:'Intern',      cost:15,   sbRate:1,  pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
+  {id:'designer', name:'Designer',    cost:600,  sbRate:15, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
+  {id:'artist',   name:'Artist',      cost:800,  sbRate:20, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
+  {id:'engineer', name:'Engineer',    cost:1200, sbRate:30, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
+  {id:'qa',       name:'QA',          cost:3000, sbRate:40, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
+  // PM team — auto-advances PRD steps, consumes SB
+  {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:100, payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
+  {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:250, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
+  {id:'ai',       name:'AI PM Tool',  cost:2000, sbRate:0,  pmRate:8, sbCost:500, payroll:300,  flavor:'Rapid automation. Wrong 40% of the time, every time.'},
 ];
 
-const PAYROLL_IDS = new Set(['designer','engineer','qa']); // build team: no PP, just auto-ships
-
 const RESEARCH = [
-  // Basic (tier 1)
-  {id:'market',    tier:1, name:'Market Sizing',         cost:20,  desc:'Reveals Genre × Audience fit when launching games.'},
-  {id:'comp',      tier:1, name:'Competitive Analysis',  cost:35,  desc:'Shows competitor activity in the log.'},
-  {id:'agile',     tier:1, name:'Agile Methodology',     cost:60,  desc:'Doubles PP per click.'},
-  {id:'lean',      tier:1, name:'Lean Canvas',           cost:80,  desc:'Next game needs 20% fewer prototype clicks to launch.'},
-  {id:'okrs',      tier:1, name:'OKRs',                  cost:100, desc:'Aligns the team on success. Improves sprint efficiency.'},
-  {id:'analytics', tier:1, name:'Analytics SDK',         cost:150, desc:'Shows exact churn % instead of health emoji.'},
-  {id:'user_res',  tier:1, name:'User Research',         cost:200, desc:'New games start with 2% lower churn.'},
-  {id:'sprint_pl', tier:1, name:'Sprint Planning',       cost:250, desc:'Sprint cycle: 30s → 20s.'},
-  // Advanced (tier 2 — unlocks when all 8 basic done)
-  {id:'ml_ret',    tier:2, name:'ML Retention Modeling', cost:500, desc:'All live games: churn −3%.'},
-  {id:'growth_l',  tier:2, name:'Growth Loop Design',    cost:600, desc:'Organic DAU growth +50%.'},
-  {id:'exp_cult',  tier:2, name:'Experimentation Culture',cost:700,desc:'Sprint UA bursts +50% stronger.'},
-  {id:'psych',     tier:2, name:'Player Psychology',     cost:800, desc:'Reveals causes in pop-up events. Unlocks hidden story beats.'},
-  {id:'second_team',tier:2,name:'Second Dev Team',       cost:1000,desc:'Unlocks a second game slot. Build team auto-ships into it.'},
+  {id:'market',    tier:1, name:'Market Sizing',          cost:20,  desc:'Reveals Genre × Audience fit when launching games.'},
+  {id:'comp',      tier:1, name:'Competitive Analysis',   cost:35,  desc:'Shows competitor activity in the log.'},
+  {id:'agile',     tier:1, name:'Agile Methodology',      cost:60,  desc:'Doubles Software Built per manual click.'},
+  {id:'lean',      tier:1, name:'Lean Canvas',            cost:80,  desc:'Reduces prototype ship threshold by 2 (min 5).'},
+  {id:'okrs',      tier:1, name:'OKRs',                   cost:100, desc:'Aligns the team on success. Improves sprint efficiency.'},
+  {id:'analytics', tier:1, name:'Analytics SDK',          cost:150, desc:'Shows exact churn % instead of health emoji.'},
+  {id:'user_res',  tier:1, name:'User Research',          cost:200, desc:'New games start with 2% lower churn.'},
+  {id:'sprint_pl', tier:1, name:'Sprint Planning',        cost:250, desc:'Sprint cycle: 30s → 20s.'},
+  // Advanced (unlocks when all 8 basic done)
+  {id:'ml_ret',    tier:2, name:'ML Retention Modeling',  cost:500, desc:'All live games: churn −3%.'},
+  {id:'growth_l',  tier:2, name:'Growth Loop Design',     cost:600, desc:'Organic DAU growth +50%.'},
+  {id:'exp_cult',  tier:2, name:'Experimentation Culture',cost:700, desc:'Sprint UA bursts +50% stronger.'},
+  {id:'psych',     tier:2, name:'Player Psychology',      cost:800, desc:'Reveals causes in pop-up events.'},
+  {id:'second_team',tier:2,name:'Second Dev Team',        cost:1000,desc:'Unlocks second game slot. PM team can auto-fill it.'},
 ];
 
 const UPGRADES = [
-  {id:'abt',       name:'A/B Testing',         cost:5000,  desc:'Sprint events can run two variants; best result applies.'},
-  {id:'push',      name:'Push Notifications',  cost:8000,  desc:'Unlocks Push button on game card. +200 DAU, 24h cooldown.'},
-  {id:'pivot',     name:'The Pivot',           cost:12000, desc:'Unlocks Pivot: reroll genre + audience on any live game.'},
-  {id:'influencer',name:'Influencer Program',  cost:15000, desc:'Unlocks Influencer event: +3K DAU burst. $10K cost, 3-day cooldown.'},
+  {id:'abt',       name:'A/B Testing',         cost:5000,  desc:'Sprint events run two variants; best result applies.'},
+  {id:'push',      name:'Push Notifications',  cost:8000,  desc:'Unlocks Push button. +200 DAU, 5-min cooldown.'},
+  {id:'pivot',     name:'The Pivot',           cost:12000, desc:'Unlocks Pivot: reroll genre + audience.'},
+  {id:'influencer',name:'Influencer Program',  cost:15000, desc:'Unlocks Influencer: +3K DAU. $10K cost, 3-day cooldown.'},
   {id:'prem_iap',  name:'Premium IAP Design',  cost:20000, desc:'Revenue per DAU permanently +30%.'},
-  {id:'sub_model', name:'Subscription Model',  cost:30000, desc:'Churn −3% on all live games permanently.'},
-  {id:'platform',  name:'Platform Partnership',cost:50000, desc:'Unlocks App Store Featuring: +10K DAU. $40K cost, 14-day cooldown.'},
+  {id:'sub_model', name:'Subscription Model',  cost:30000, desc:'Churn −3% on all live games.'},
+  {id:'platform',  name:'Platform Partnership',cost:50000, desc:'Unlocks App Store Featuring: +10K DAU. $40K, 14-day cooldown.'},
+];
+
+const PREMIUM_UPGRADES = [
+  {id:'analytics_plus',name:'Game Analytics Platform',  cost:100000,desc:'Shows DAU trend graph on game cards.'},
+  {id:'live_events',   name:'Live Events Engine',       cost:150000,desc:'Auto-triggers Push on each live game every 5 min.'},
+  {id:'ua_multi',      name:'Multi-Market UA',          cost:200000,desc:'UA spend gives 50% more DAU per invest tier.'},
+  {id:'exec_dash',     name:'Executive Dashboard',      cost:300000,desc:'Team payroll reduced 10% permanently.'},
+  {id:'franchise',     name:'Franchise License',        cost:500000,desc:'Unlocks third game slot.'},
 ];
 
 const INV = [
@@ -314,15 +329,19 @@ const INV = [
 
 const GENRES   = ['Merge','RPG/Gacha','Puzzle','Hyper-casual','4X Strategy','Battle Royale'];
 const AUDIENCES = ['Casual','Mid-core','Hardcore'];
-
 const GENRE_FLAVOR = {
-  'Merge':         {Casual:'Low CPI, low ARPU. Scales well.',       'Mid-core':'High variance. Strange fit.',       Hardcore:'Nobody wants this.'},
-  'RPG/Gacha':     {Casual:'High churn. Wrong crowd.',               'Mid-core':'High ARPU, long tail.',             Hardcore:'Whales exist here.'},
-  'Puzzle':        {Casual:'Best D1 retention you\'ll ever see.',    'Mid-core':'Solid all-around.',                 Hardcore:'Gets bored fast.'},
-  'Hyper-casual':  {Casual:'Viral, low LTV. Volume game.',           'Mid-core':'Audience confused.',                Hardcore:'Wrong genre.'},
-  '4X Strategy':   {Casual:'Too complex. Catastrophic.',             'Mid-core':'Niche. Surprisingly loyal.',        Hardcore:'Discord community forms.'},
-  'Battle Royale': {Casual:'Can\'t execute on budget.',              'Mid-core':'High hype, high crash.',            Hardcore:'Streamers exist.'},
+  'Merge':         {Casual:'Low CPI, low ARPU. Scales well.','Mid-core':'High variance.',Hardcore:'Nobody wants this.'},
+  'RPG/Gacha':     {Casual:'High churn. Wrong crowd.','Mid-core':'High ARPU, long tail.',Hardcore:'Whales exist here.'},
+  'Puzzle':        {Casual:'Best D1 retention you\'ll ever see.','Mid-core':'Solid all-around.',Hardcore:'Gets bored fast.'},
+  'Hyper-casual':  {Casual:'Viral, low LTV.','Mid-core':'Audience confused.',Hardcore:'Wrong genre.'},
+  '4X Strategy':   {Casual:'Too complex. Catastrophic.','Mid-core':'Niche. Surprisingly loyal.',Hardcore:'Discord community forms.'},
+  'Battle Royale': {Casual:'Can\'t execute on budget.','Mid-core':'High hype, high crash.',Hardcore:'Streamers exist.'},
 };
+
+const PRD_STEPS = [
+  'COMPETITOR RESEARCH','CRAFT FEATURE LIST','CREATE ROADMAP',
+  'WRITE PRD','MONETIZATION PLAN','LIVE OPS DESIGN','ANALYZE DATA','SHIP PROTOTYPE',
+];
 
 const GAME_NAMES = [
   'Merge Kitchen Saga','Idle Dungeon Tycoon','Tap Witch Academy',
@@ -335,17 +354,6 @@ const GAME_NAMES = [
   'Slot Machine Safari','Noodle Empire Rising','Alien Merge Academy',
   'Tap Tamagotchi Tactics','Pirate IAP Rampage','Merge Astrology Plus',
   'Idle HR Department','Crunch Time: The Game','Sprint Review Royale',
-];
-
-const PRD_STEPS = [
-  'COMPETITOR RESEARCH',
-  'CRAFT FEATURE LIST',
-  'CREATE ROADMAP',
-  'WRITE PRD',
-  'MONETIZATION PLAN',
-  'LIVE OPS DESIGN',
-  'ANALYZE DATA',
-  'SHIP PROTOTYPE',
 ];
 
 const REJECTIONS = [
@@ -369,7 +377,7 @@ const REJECTIONS = [
   "Monetization strategy was 'figure it out post-launch.'",
   "47-slide pitch deck. 15-minute slot. You 'moved quickly.'",
   "Killed by a competitor who shipped it while you were in review.",
-  "Pilot tested well with 10 users — all of whom were colleagues.",
+  "Pilot tested well with 10 users — all colleagues.",
   "Roadmap presented. CEO asked why there's no social layer.",
   "Shipped the feature. Users asked for the old version back.",
   "App store description required 3 rounds of legal review.",
@@ -378,97 +386,97 @@ const REJECTIONS = [
 const EVENTS = {
   firstLaunch:{
     title:"The build is live.",
-    body:"9:47 PM. You pushed the soft launch yourself because engineering was at a concert.\n\nYou are watching the install count on a spreadsheet you made in 2019. It's at 12.\n\nYour phone buzzes. It's your CEO.\n\n\"Saw you launched. How's it looking?\"",
+    body:"9:47 PM. You pushed the soft launch yourself because engineering was at a concert.\n\nYou're watching the install count on a spreadsheet from 2019. It's at 12.\n\nYour phone buzzes. It's your CEO.\n\n\"Saw you launched. How's it looking?\"",
     choices:[
-      {text:"Early signs are positive. Monitoring closely.",flav:"Conservative. Honest enough. No effect.",fx:()=>{}},
-      {text:"We're seeing strong organic traction.",flav:"Risky. You're not. 50% chance morale +1 from confidence. 50% morale -1 when they follow up.",fx:()=>{ if(Math.random()>.5)S.morale=Math.min(5,S.morale+1); else S.morale=Math.max(1,S.morale-1); }},
-      {text:"12 installs, 3 of which are me.",flav:"Bad choice. Great outcome. CEO laughs. Respect +1.",fx:()=>S.respect++},
+      {text:"Early signs are positive. Monitoring closely.",flav:"Conservative. Honest enough.",fx:()=>{}},
+      {text:"We're seeing strong organic traction.",flav:"Risky. You're not. 50/50 on morale.",fx:()=>{ if(Math.random()>.5)S.morale=Math.min(5,S.morale+1);else S.morale=Math.max(1,S.morale-1); }},
+      {text:"12 installs, 3 of which are me.",flav:"Bad choice. Great outcome. Respect +1.",fx:()=>S.respect++},
     ]
   },
   roas:{
     title:"The debt clock hits zero.",
-    body:"Revenue crossed debt for the first time. You are technically profitable for the first time in your career.\n\nYou allow yourself a small internal celebration that lasts approximately 4 seconds before you notice churn is up 2%.",
+    body:"Revenue crossed debt for the first time. You are technically profitable for the first time in your career.\n\nYou allow yourself 4 seconds of internal celebration before you notice churn is up 2%.",
     choices:[{text:"Continue.",flav:"There is no other option. The joke is that.",fx:()=>{}}]
   },
   '10k':{
     title:"10,000 real humans are playing your game right now.",
-    body:"Some of them are in waiting rooms. Some are on the bus. One is definitely in a meeting.\n\nA review comes in: ★★★★★ \"This is literally the only thing getting me through my divorce.\"",
+    body:"Some in waiting rooms. Some on the bus. One is definitely in a meeting.\n\nA review: ★★★★★ \"This is literally the only thing getting me through my divorce.\"",
     choices:[
       {text:"Appreciate this moment.",flav:"Conservative. Respect +1.",fx:()=>S.respect++},
-      {text:"Double the UA spend immediately.",flav:"Risky. 60% chance DAU +5K. 40% debt spike +$50K.",fx:()=>{ if(Math.random()>.4){if(S.games[0])S.games[0].dau+=5000;log('Paid off. DAU surging.');}else{S.debt+=50000;log('CPIs were higher than expected. Debt +$50K.');} }},
+      {text:"Double the UA spend immediately.",flav:"Risky. 60%: DAU +5K. 40%: debt +$50K.",fx:()=>{ if(Math.random()>.4){if(S.games[0])S.games[0].dau+=5000;}else{S.debt+=50000;log('CPIs were higher than expected.')} }},
       {text:"Feel weird about it.",flav:"Bad choice. Same as appreciating it. Funnier.",fx:()=>S.respect++},
     ]
   },
   comp:{
     title:"Merge Kitchen Warriors just launched.",
-    body:"It's your concept. Different studio. Better art. $0.60 CPI vs your $1.40.\n\nThey have 50K installs in 48 hours.",
+    body:"Your concept. Different studio. Better art. $0.60 CPI vs your $1.40.\n\nThey have 50K installs in 48 hours.",
     choices:[
       {text:"Double down on retention.",flav:"Conservative. Churn −2%. Morale +1.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.max(2,S.games[0].churn-2); S.morale=Math.min(5,S.morale+1); }},
-      {text:"Match their spend immediately.",flav:"Risky. Debt +$75K. DAU +12K if it works — 50/50.",fx:()=>{ if(Math.random()>.5){S.debt+=75000;if(S.games[0])S.games[0].dau+=12000;log('Bet paid off. DAU surge.');}else{S.debt+=75000;log('Spend matched. DAU didn\'t follow. Debt stays.')} }},
-      {text:"Write a Slack message about first-mover advantage.",flav:"Bad choice. Gets 3 emoji reactions. Nothing else happens.",fx:()=>log("Your message got 3 emoji reactions. 🎉👍🙏")},
+      {text:"Match their spend immediately.",flav:"Risky. Debt +$75K. 50/50 on DAU spike.",fx:()=>{ if(Math.random()>.5){S.debt+=75000;if(S.games[0])S.games[0].dau+=12000;}else{S.debt+=75000;log('Spend matched. DAU didn\'t follow.')} }},
+      {text:"Write a Slack message about first-mover advantage.",flav:"Bad choice. Gets 3 emoji reactions.",fx:()=>log("3 emoji reactions. 🎉👍🙏")},
     ]
   },
   bug:{
     title:"Something is broken in production.",
-    body:"Players are getting 10,000× their normal currency. Your economy is on fire.\n\nA Discord mod pinned: \"FREE GEMS BUG — STACK NOW BEFORE PATCH.\"",
+    body:"Players are getting 10,000× their normal currency. Economy on fire.\n\nDiscord: \"FREE GEMS BUG — STACK NOW BEFORE PATCH.\"",
     choices:[
-      {text:"Emergency patch. Rollback immediately.",flav:"Conservative. Churn +1%. Some players angry but respected.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.min(20,S.games[0].churn+1); }},
-      {text:"Let it run. Goodwill event, basically.",flav:"Risky. DAU +20%. Economy broken for 3 days. Churn +4%.",fx:()=>{ if(S.games[0]){S.games[0].dau*=1.2;S.games[0].churn=Math.min(25,S.games[0].churn+4);} }},
-      {text:"Call it a limited time event.",flav:"Bad choice. 30% it works. 70%: gaming press covers it.",fx:()=>{ if(Math.random()>.7){S.revenue+=5000;log("Got away with it.");}else{S.morale=Math.max(1,S.morale-1);log("Kotaku: 'Studio calls exploit a feature. Players furious.'")} }},
+      {text:"Emergency patch. Rollback immediately.",flav:"Conservative. Churn +1%.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.min(20,S.games[0].churn+1); }},
+      {text:"Let it run. Goodwill event, basically.",flav:"Risky. DAU +20%. Churn +4%.",fx:()=>{ if(S.games[0]){S.games[0].dau*=1.2;S.games[0].churn=Math.min(25,S.games[0].churn+4);} }},
+      {text:"Call it a limited time event.",flav:"Bad choice. 30% works. 70%: gaming press.",fx:()=>{ if(Math.random()>.7){S.revenue+=5000;}else{S.morale=Math.max(1,S.morale-1);log("Kotaku: 'Studio calls exploit a feature.'")} }},
     ]
   },
   featDebt:{
     title:"Is [GAME_NAME] dead?",
-    body:"Your players haven't seen new content in 18 days.\n\nA Reddit thread: \"Is [GAME_NAME] dead?\" — 847 upvotes.\n\nChurn is spiking.",
+    body:"Your players haven't seen new content in 18 days.\n\nReddit: \"Is [GAME_NAME] dead?\" — 847 upvotes.\n\nChurn is spiking.",
     choices:[
-      {text:"Divert everything to Feature Dev.",flav:"Conservative. Churn stabilizes. Other metrics dip.",fx:()=>{ S.sl.feat=60; if(S.games[0])S.games[0].churn=Math.max(3,S.games[0].churn-3); log("Feature sprint started."); }},
-      {text:"Ship a monetization event instead.",flav:"Risky. Revenue +30% short term. Churn continues.",fx:()=>{ S.revenue*=1.3; log("Revenue event live. Players noticed it wasn't content."); }},
-      {text:"Post a vague roadmap teaser.",flav:"Bad choice. Buys 3 days. Players not fooled.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.max(5,S.games[0].churn-0.5); log("Players: 'Soon™'"); }},
+      {text:"Divert everything to Feature Dev.",flav:"Conservative. Churn stabilizes.",fx:()=>{ S.sl.feat=60;if(S.games[0])S.games[0].churn=Math.max(3,S.games[0].churn-3);log("Feature sprint started."); }},
+      {text:"Ship a monetization event instead.",flav:"Risky. Revenue +30% short term. Churn continues.",fx:()=>{ S.revenue*=1.3;log("Players noticed it wasn't content."); }},
+      {text:"Post a vague roadmap teaser.",flav:"Bad choice. Buys 3 days.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.max(5,S.games[0].churn-0.5);log("Players: 'Soon™'"); }},
     ]
   },
   highDebt:{
     title:"The CFO wants a meeting.",
-    body:"Your debt crossed $100,000. Finance has prepared slides.\n\nThe meeting is tomorrow. You have tonight to decide how to walk in.",
+    body:"Your debt just crossed a threshold finance considers 'a conversation topic.'\n\nThe meeting is tomorrow. You have tonight to decide how to walk in.",
     choices:[
-      {text:"Present a clear recovery plan.",flav:"Conservative. Morale +1. Buys credibility.",fx:()=>{ S.morale=Math.min(5,S.morale+1); log("Board satisfied. For now."); }},
-      {text:"Promise 40% revenue growth next quarter.",flav:"Risky. 50% chance morale +2 if you deliver. 50%: debt +$20K when you don't.",fx:()=>{ if(Math.random()>.5){S.morale=Math.min(5,S.morale+2);log("Board bought it. You'd better deliver.");}else{S.debt+=20000;S.morale=Math.max(1,S.morale-1);log("Q forecast missed. Board remembers.")} }},
-      {text:"Reschedule the meeting.",flav:"Bad choice. Debt accumulates interest +$5K. Morale -1.",fx:()=>{ S.debt+=5000; S.morale=Math.max(1,S.morale-1); log("CFO rescheduled for next week. Debt +$5K."); }},
+      {text:"Present a clear recovery plan.",flav:"Conservative. Morale +1. Buys credibility.",fx:()=>{ S.morale=Math.min(5,S.morale+1);log("Board satisfied. For now."); }},
+      {text:"Promise 40% revenue growth next quarter.",flav:"Risky. 50/50: morale +2 or debt +$20K.",fx:()=>{ if(Math.random()>.5){S.morale=Math.min(5,S.morale+2);}else{S.debt+=20000;S.morale=Math.max(1,S.morale-1);log("Q forecast missed.")} }},
+      {text:"Reschedule the meeting.",flav:"Bad choice. Debt +$5K interest. Morale -1.",fx:()=>{ S.debt+=5000;S.morale=Math.max(1,S.morale-1);log("Meeting rescheduled. Problem remains."); }},
     ]
   },
   moraleCollapse:{
     title:"Your lead designer handed in their notice.",
-    body:"Morale has been at the floor for too long. They found something else.\n\n\"It's not you,\" they said. It was a little bit you.",
+    body:"Morale has been at the floor too long. They found something else.\n\n\"It's not you,\" they said. It was a little bit you.",
     choices:[
-      {text:"Counter-offer. 20% raise.",flav:"Conservative. Costs $800/day payroll increase. They stay. Morale +2.",fx:()=>{ S.morale=Math.min(5,S.morale+2); log("They stayed. Payroll went up."); }},
-      {text:"Let them go. The backlog will survive.",flav:"Risky. 50% team rallies (+1 morale). 50% two more people start looking.",fx:()=>{ if(Math.random()>.5){S.morale=Math.min(5,S.morale+1);log("Team rallied. Surprising.");}else{S.morale=Math.max(1,S.morale-1);log("Two more people updated their LinkedIn.")} }},
-      {text:"Send a company-wide 'we're a family here' email.",flav:"Bad choice. Morale stays at 1. Log fills with sarcasm.",fx:()=>{ log("Reply-all: 'Does this family have health benefits though?'"); }},
+      {text:"Counter-offer. 20% raise.",flav:"Conservative. They stay. Morale +2.",fx:()=>{ S.morale=Math.min(5,S.morale+2);log("They stayed. Payroll went up."); }},
+      {text:"Let them go. The backlog will survive.",flav:"Risky. 50/50: team rallies or two more leave.",fx:()=>{ if(Math.random()>.5){S.morale=Math.min(5,S.morale+1);}else{S.morale=Math.max(1,S.morale-1);log("Two more updated their LinkedIn.")} }},
+      {text:"Send a 'we're a family here' company email.",flav:"Bad choice. Morale stays at floor.",fx:()=>{ log("Reply-all: 'Does this family have health benefits though?'"); }},
     ]
   },
   reviewBomb:{
-    title:"You have 847 one-star reviews. All from the same day.",
-    body:"Something you patched two weeks ago broke something else. Players noticed. App store rating: 2.1 → 1.4.\n\nYour install rate just dropped 40%.",
+    title:"847 one-star reviews. All from the same day.",
+    body:"Something you patched two weeks ago broke something else. Players noticed.\n\nApp store rating: 2.1 → 1.4. Install rate down 40%.",
     choices:[
-      {text:"Respond personally to every review.",flav:"Conservative. Churn −1%. Morale +1. Slow.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.max(2,S.games[0].churn-1); S.morale=Math.min(5,S.morale+1); }},
-      {text:"Run a 'we hear you' emergency event.",flav:"Risky. 50%: churn −3%, DAU +10%. 50%: players call it fake.",fx:()=>{ if(Math.random()>.5){if(S.games[0]){S.games[0].churn=Math.max(2,S.games[0].churn-3);S.games[0].dau*=1.1;}log("Players responded well. Rare.");}else{log("Players: 'Nice try. Fix the actual bug.'")} }},
-      {text:"Report the reviews as fake.",flav:"Bad choice. App store ignores you. Churn +2%.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.min(25,S.games[0].churn+2); log("App store: report rejected. Reviews remain."); }},
+      {text:"Respond personally to every review.",flav:"Conservative. Churn −1%. Morale +1.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.max(2,S.games[0].churn-1);S.morale=Math.min(5,S.morale+1); }},
+      {text:"Run a 'we hear you' emergency event.",flav:"Risky. 50%: churn −3%, DAU +10%. 50%: players call it fake.",fx:()=>{ if(Math.random()>.5){if(S.games[0]){S.games[0].churn=Math.max(2,S.games[0].churn-3);S.games[0].dau*=1.1;}}else{log("Players: 'Nice try. Fix the actual bug.'")} }},
+      {text:"Report the reviews as fake.",flav:"Bad choice. App store ignores you. Churn +2%.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.min(25,S.games[0].churn+2);log("App store: report rejected."); }},
     ]
   },
   vcOffer:{
     title:"A VC firm wants to talk.",
-    body:"They've been watching your portfolio. $2M+ in total revenue. They're offering a term sheet: $5M Series A at a $25M valuation.\n\nYou would own 80% of a company worth $25M on paper.\n\nThe fine print: they want a board seat and quarterly growth targets.",
+    body:"They've been watching your portfolio. $2M+ in total revenue.\n\nThey're offering $5M Series A at a $25M valuation. Board seat. Quarterly growth targets.",
     choices:[
-      {text:"Pass. Stay independent.",flav:"Conservative. Respect +2. Your call.",fx:()=>{ S.respect+=2; log("You passed on the VC. Felt surprisingly good."); }},
-      {text:"Take the meeting. See the terms.",flav:"Risky. 50%: great deal, revenue +50% boost. 50%: terms are bad, morale -1 when team finds out.",fx:()=>{ if(Math.random()>.5){S.revenue*=1.5;S.respect++;log("Deal closed. $5M in the bank. Quarterly targets start now.");}else{S.morale=Math.max(1,S.morale-1);log("Terms were not what they described in the deck.")} }},
-      {text:"Post about it on LinkedIn before signing anything.",flav:"Bad choice. VC walks. Competitor sees the post. Morale -1.",fx:()=>{ S.morale=Math.max(1,S.morale-1); log("VC pulled out. 'Discretion is part of the deal.' You knew that."); }},
+      {text:"Pass. Stay independent.",flav:"Conservative. Respect +2.",fx:()=>{ S.respect+=2;log("You passed. Felt surprisingly good."); }},
+      {text:"Take the meeting. See the terms.",flav:"Risky. 50%: revenue +50%. 50%: terms are bad, morale -1.",fx:()=>{ if(Math.random()>.5){S.revenue*=1.5;S.respect++;log("Deal closed.");}else{S.morale=Math.max(1,S.morale-1);log("Terms were not what they described.")} }},
+      {text:"Post about it on LinkedIn before signing.",flav:"Bad choice. VC walks. Morale -1.",fx:()=>{ S.morale=Math.max(1,S.morale-1);log("VC pulled out. 'Discretion is part of the deal.'"); }},
     ]
   },
   cpiSpike:{
     title:"CPIs spiked 40% across the industry.",
-    body:"Your UA math just broke. The ROAS curves you modeled last month are meaningless now.\n\nDebt is still accruing. Revenue is the same. Margin is contracting.",
+    body:"Your UA math just broke. The ROAS curves you modeled last month are meaningless.\n\nDebt is still accruing. Revenue is the same. Margin is contracting.",
     choices:[
-      {text:"Pause UA spend. Wait it out.",flav:"Conservative. Debt stops growing. DAU plateau for 14 days.",fx:()=>{ log("UA spend paused. Waiting for CPIs to normalize."); }},
-      {text:"Keep spending. First-mover when CPIs normalize.",flav:"Risky. Debt +$30K. 60% chance pays off in 2 game-weeks.",fx:()=>{ S.debt+=30000; if(Math.random()>.4){setTimeout(()=>{if(S.games[0])S.games[0].dau*=1.4;log("CPIs normalized. Your spend paid off.");},30000);}else{log("CPIs stayed high. Debt compounded.")} }},
-      {text:"Blame the algorithm in a blog post.",flav:"Bad choice. Gets shared. Morale +1 (team solidarity). Two competitors respond. Distracts the team for a week.",fx:()=>{ S.morale=Math.min(5,S.morale+1); log("3 LinkedIn articles now quote your post. One disagrees. One agrees. One uses it as a 'what not to do.'"); }},
+      {text:"Pause UA spend. Wait it out.",flav:"Conservative. Debt stops growing.",fx:()=>{ log("UA spend paused. Waiting for CPIs to normalize."); }},
+      {text:"Keep spending. First-mover when CPIs normalize.",flav:"Risky. Debt +$30K. 60% pays off.",fx:()=>{ S.debt+=30000;if(Math.random()>.4){setTimeout(()=>{if(S.games[0])S.games[0].dau*=1.4;log("CPIs normalized. Paid off.");},30000);}else{log("CPIs stayed high.")} }},
+      {text:"Blame the algorithm in a blog post.",flav:"Bad choice. Morale +1 (solidarity). Distracts everyone.",fx:()=>{ S.morale=Math.min(5,S.morale+1);log("3 LinkedIn articles now reference your post."); }},
     ]
   },
 };
@@ -479,13 +487,13 @@ function mkState(){
   return {
     pp:0, pppc:1, clicks:0, prdProgress:0,
     revenue:0, debt:0, respect:0, morale:5,
-    autos:{intern:0,junior:0,senior:0,designer:0,engineer:0,ai:0,qa:0},
+    autos:{intern:0,junior:0,senior:0,designer:0,artist:0,engineer:0,qa:0,ai:0},
     research:[],
     games:[], maxGames:1,
     sl:{mon:25,ret:25,ua:25,feat:25},
-    spTimer:30, featDebt:0, autoProtoTimer:0, autoProtoReady:false,
+    spTimer:30, featDebt:0, pmStepTimer:0,
     influencerCooldown:0, platformCooldown:0, pushCooldown:0,
-    panels:{auto:false,res:false,advRes:false,upgrades:false,port:false,sprint:false},
+    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false},
     popQ:[], fired:[],
     usedNames:[],
     lastClick:Date.now(), lastSave:Date.now(),
@@ -493,8 +501,8 @@ function mkState(){
     dayTimer:60,
     roasDone:false, compDone:false, bugDone:false,
     namedPopDone:false,
-    highDebtDone:false, moraleCollapseDone:false, reviewBombDone:false,
-    vcOfferDone:false, cpiSpikeDone:false,
+    highDebtDone:false, moraleCollapseDone:false,
+    reviewBombDone:false, vcOfferDone:false, cpiSpikeDone:false,
     hiddenAt:null,
   };
 }
@@ -504,7 +512,7 @@ let S = mkState();
 // ── SAVE / LOAD ────────────────────────────────────────
 
 function applyOfflineProgress(dt){
-  S.pp += ppps() * dt * 0.5;
+  S.pp += sbps() * dt * 0.5;
   if(S.games.length > 0){
     const rev = S.games.reduce((sum,g)=>sum+revpsG(g),0) * dt * 0.5;
     S.revenue += rev; S.totalRev += rev;
@@ -514,20 +522,20 @@ function applyOfflineProgress(dt){
 
 function save(){
   S.lastSave = Date.now();
-  localStorage.setItem('shipIt3', JSON.stringify(S));
+  localStorage.setItem('shipIt4', JSON.stringify(S));
   const el=$('save-ind');
   if(el){el.textContent='● saved';setTimeout(()=>el.textContent='● autosave on',1000)}
 }
 
 function load(){
-  const raw = localStorage.getItem('shipIt3') || localStorage.getItem('shipIt2');
+  const raw = localStorage.getItem('shipIt4') || localStorage.getItem('shipIt3') || localStorage.getItem('shipIt2');
   if(!raw) return;
   try{
     const sv = JSON.parse(raw);
     S = Object.assign(mkState(), sv);
-    // migrate old S.game → S.games
-    if(sv.game && (!sv.games || sv.games.length===0)) S.games=[sv.game];
+    if(sv.game && (!sv.games||sv.games.length===0)) S.games=[sv.game];
     if(!S.games) S.games=[];
+    if(!S.autos.artist) S.autos.artist=0;
     const dt = Math.min(7200, (Date.now()-S.lastSave)/1000);
     if(dt>10) applyOfflineProgress(dt);
     S.lastSave=Date.now(); S.lastClick=Date.now();
@@ -536,26 +544,34 @@ function load(){
 
 function resetGame(){
   if(!confirm('Reset all progress? Cannot be undone.')) return;
-  localStorage.removeItem('shipIt3'); localStorage.removeItem('shipIt2');
+  ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
   location.reload();
 }
 
 // ── MATH ──────────────────────────────────────────────
 
-function ppps(){
-  const {intern,junior,senior,ai}=S.autos;
-  return intern*1 + junior*5 + senior*22 + ai*80;
+function sbps(){
+  return AUTOS.reduce((sum,a)=>sum+(a.sbRate||0)*(S.autos[a.id]||0)*S.pppc,0);
+  // Note: pppc doubles manual SB generation; also scales automation slightly
+}
+
+function pmClickRate(){
+  return AUTOS.reduce((sum,a)=>sum+(a.pmRate||0)*(S.autos[a.id]||0),0);
+}
+
+function pmStepCost(){
+  // Weighted average SB cost based on PM team composition
+  let totalRate=0, totalCost=0;
+  AUTOS.filter(a=>a.pmRate>0).forEach(a=>{
+    const n=S.autos[a.id]||0;
+    if(n>0){ totalRate+=a.pmRate*n; totalCost+=a.sbCost*a.pmRate*n; }
+  });
+  return totalRate>0 ? Math.ceil(totalCost/totalRate) : 100;
 }
 
 function calcDailyPayroll(){
-  return AUTOS.reduce((sum,a)=>sum+(a.payroll||0)*(S.autos[a.id]||0),0);
-}
-
-function autoShipRate(){
-  const d=S.autos.designer||0, e=S.autos.engineer||0, q=S.autos.qa||0;
-  const min=Math.min(d,e,q);
-  if(min<1) return 0;
-  return Math.max(20,Math.floor(120/min));
+  const disc = S.research.includes('exec_dash') ? 0.9 : 1.0;
+  return AUTOS.reduce((sum,a)=>sum+(a.payroll||0)*(S.autos[a.id]||0),0) * disc;
 }
 
 function normSl(){
@@ -587,6 +603,8 @@ function growthPerSecG(g){
   return (0.08+n.ua*3.5)*loop;
 }
 
+function invDauMultiplier(){ return S.research.includes('ua_multi')?1.5:1; }
+
 function debtFlavor(){
   if(S.debt<=0) return 'debt-free. enjoy it.';
   if(S.debt<5000) return 'manageable.';
@@ -602,6 +620,8 @@ function moraleEmoji(){
 function health(c){
   if(c<3) return '🟢'; if(c<6) return '🟡'; if(c<10) return '🟠'; return '🔴';
 }
+
+function protoThreshold(){ return Math.max(5, 11 - (S.research.includes('lean')?2:0)); }
 
 function fmt(n){
   if(!n||isNaN(n)) return '0';
@@ -619,60 +639,79 @@ const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
 let ticks=0;
 function tick(){
   ticks++;
-  S.pp += ppps();
+  S.pp += sbps();
+
+  const payroll = calcDailyPayroll();
 
   // Games loop
-  const payrollCostToday = calcDailyPayroll();
-  S.games.forEach((g,i)=>{
+  S.games.forEach(g=>{
     const rev=revpsG(g);
     S.revenue+=rev; S.totalRev+=rev;
     if(S.debt>0) S.debt=Math.max(0,S.debt-rev);
     g.dau+=growthPerSecG(g);
     if(g.dau>S.peakDAU) S.peakDAU=g.dau;
 
-    S.dayTimer=(S.dayTimer||60)-1;
-    if(S.dayTimer<=0){
-      S.dayTimer=60;
+    // Live Events Engine: auto-push every 300s
+    if(S.research.includes('live_events')){
+      g._liveEventTimer=(g._liveEventTimer||300)-1;
+      if(g._liveEventTimer<=0){ g._liveEventTimer=300; g.dau+=200; }
+    }
+  });
+
+  // Day timer (shared — all games tick together)
+  S.dayTimer=(S.dayTimer||60)-1;
+  if(S.dayTimer<=0){
+    S.dayTimer=60;
+    S.games.forEach(g=>{
       g.daysLive=(g.daysLive||0)+1;
       const lost=g.dau*(churnPerDayG(g)/100);
       g.dau=Math.max(0,g.dau-lost);
-      // payroll drain per day
-      S.revenue=Math.max(0,S.revenue-(payrollCostToday/S.games.length));
-      // feature debt
-      const n=normSl();
-      if(n.feat<0.05){ S.featDebt=(S.featDebt||0)+1; if(S.featDebt>=3) qEv('featDebt'); }
-      else S.featDebt=Math.max(0,(S.featDebt||0)-1);
-    }
+    });
+    // Payroll drain split across games (or just once if no games)
+    const drain = S.games.length>0 ? payroll : payroll*0.1;
+    S.revenue=Math.max(0,S.revenue-drain);
 
-    // Per-game event triggers
-    if(!S.roasDone && S.debt<=0 && S.totalRev>600){ S.roasDone=true; qEv('roas'); }
-    if(!S.fired.includes('10k') && g.dau>=10000) qEv('10k');
-    if(!S.compDone && (g.daysLive||0)>=5){ S.compDone=true; qEv('comp'); }
-    if(!S.bugDone && g.dau>800 && Math.random()<0.0004){ S.bugDone=true; qEv('bug'); }
-    if(!S.fired.includes('reviewBomb') && g.churn>12) qEv('reviewBomb');
-    if(!S.cpiSpikeDone && (g.daysLive||0)>=10 && Math.random()<0.001){ S.cpiSpikeDone=true; qEv('cpiSpike'); }
-  });
+    // Feature debt
+    const n=normSl();
+    if(n.feat<0.05){ S.featDebt=(S.featDebt||0)+1; if(S.featDebt>=3) qEv('featDebt'); }
+    else S.featDebt=Math.max(0,(S.featDebt||0)-1);
+  }
 
-  // Cross-portfolio triggers
-  const debtThreshold = S.games.length>1 ? 50000 : 100000;
-  if(!S.highDebtDone && S.debt>debtThreshold){ S.highDebtDone=true; qEv('highDebt'); }
-  if(!S.fired.includes('moraleCollapse') && S.morale<=1) qEv('moraleCollapse');
-  if(!S.vcOfferDone && S.totalRev>500000){ S.vcOfferDone=true; qEv('vcOffer'); }
+  // Event triggers
+  if(S.games.length>0){
+    const g=S.games[0];
+    if(!S.roasDone&&S.debt<=0&&S.totalRev>600){ S.roasDone=true; qEv('roas'); }
+    if(!S.fired.includes('10k')&&g.dau>=10000) qEv('10k');
+    if(!S.compDone&&(g.daysLive||0)>=5){ S.compDone=true; qEv('comp'); }
+    if(!S.bugDone&&g.dau>800&&Math.random()<0.0004){ S.bugDone=true; qEv('bug'); }
+    if(!S.fired.includes('reviewBomb')&&g.churn>12) qEv('reviewBomb');
+    if(!S.cpiSpikeDone&&(g.daysLive||0)>=10&&Math.random()<0.001){ S.cpiSpikeDone=true; qEv('cpiSpike'); }
+  }
+
+  const debtThreshold=S.games.length>1?50000:100000;
+  if(!S.highDebtDone&&S.debt>debtThreshold){ S.highDebtDone=true; qEv('highDebt'); }
+  if(!S.fired.includes('moraleCollapse')&&S.morale<=1) qEv('moraleCollapse');
+  if(!S.vcOfferDone&&S.totalRev>500000){ S.vcOfferDone=true; qEv('vcOffer'); }
 
   // Cooldowns
   if(S.influencerCooldown>0) S.influencerCooldown--;
   if(S.platformCooldown>0) S.platformCooldown--;
   if(S.pushCooldown>0) S.pushCooldown--;
 
-  // Auto-prototype: Designer + Engineer + QA
-  const shipRate=autoShipRate();
-  if(shipRate>0){
-    S.autoProtoTimer=Math.max(0,(S.autoProtoTimer||shipRate)-1);
-    if(S.autoProtoTimer===0){
-      S.autoProtoTimer=shipRate;
-      S.autoProtoReady=true;
-      const d=S.autos.designer||0,e=S.autos.engineer||0,q=S.autos.qa||0;
-      log(`🔧 Build team completed a prototype. (${d}D / ${e}E / ${q}Q)`);
+  // PM team auto-advances PRD steps
+  const pmRate=pmClickRate();
+  if(pmRate>0){
+    const interval=Math.max(3,Math.floor(60/pmRate));
+    S.pmStepTimer=Math.max(0,(S.pmStepTimer||interval)-1);
+    if(S.pmStepTimer===0){
+      S.pmStepTimer=interval;
+      const cost=pmStepCost();
+      if(S.pp>=cost){
+        S.pp-=cost;
+        autoAdvancePRDStep();
+      } else {
+        set('sp-note','⏸ PM team waiting for Software Built…');
+      }
     }
   }
 
@@ -682,10 +721,29 @@ function tick(){
   if(S.spTimer<=0){ S.spTimer=spLen; sprintEffect(); }
 
   checkMilestones();
-
   if(S.popQ.length>0&&!popOpen&&Date.now()-S.lastClick>1500) fireNextPop();
   if(ticks%30===0) save();
   updateUI();
+}
+
+function autoAdvancePRDStep(){
+  const isShip=S.prdProgress===PRD_STEPS.length-1;
+  if(!isShip){
+    S.prdProgress++;
+  } else {
+    S.prdProgress=0;
+    S.clicks++;
+    if(S.clicks%3===0) log(`#${S.clicks} — PM team auto-shipped a prototype.`);
+    // Check if first game should launch
+    if(S.clicks>=protoThreshold()&&S.games.length===0&&!S.namedPopDone){
+      S.namedPopDone=true;
+      // Queue popup slightly delayed so current tick finishes
+      setTimeout(showNamingPopup,500);
+    } else if(S.games.length<S.maxGames&&S.gLaunched>0){
+      setTimeout(showNamingPopup,500);
+    }
+  }
+  updateProtoUI();
 }
 
 function sprintEffect(){
@@ -693,7 +751,7 @@ function sprintEffect(){
   const n=normSl();
   const cult=S.research.includes('exp_cult')?1.5:1;
   const uaBurst=n.ua*45*cult;
-  S.games.forEach(g=>{ if(uaBurst>3) g.dau+=uaBurst; if(n.ret>0.3) g.churn=Math.max(1.5,g.churn-n.ret*0.3); });
+  S.games.forEach(g=>{ if(uaBurst>3)g.dau+=uaBurst; if(n.ret>0.3)g.churn=Math.max(1.5,g.churn-n.ret*0.3); });
   if(uaBurst>5) set('sp-note',`+${Math.round(uaBurst)} DAU from UA push`);
 }
 
@@ -703,106 +761,86 @@ function checkMilestones(){
   if(S.pp>=10&&!S.panels.auto){ S.panels.auto=true; reveal('panel-auto'); log('Automation panel unlocked.'); }
   if(S.pp>=50&&!S.panels.res){ S.panels.res=true; reveal('panel-res'); log('Basic Research unlocked.'); }
 
-  // Advanced Research: all 8 tier-1 done
   const t1total=RESEARCH.filter(r=>r.tier===1).length;
   const t1done=RESEARCH.filter(r=>r.tier===1&&S.research.includes(r.id)).length;
-  if(t1done>=t1total&&!S.panels.advRes){ S.panels.advRes=true; reveal('panel-adv-res'); log('Advanced Research unlocked. All basic research complete.'); }
+  if(t1done>=t1total&&!S.panels.advRes){ S.panels.advRes=true; reveal('panel-adv-res'); log('Advanced Research unlocked.'); }
 
-  // Soft launch: 100 prototype clicks
-  if(S.clicks>=11&&S.games.length===0&&!S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
-
-  // Auto-proto ready
-  if(S.autoProtoReady&&!popOpen){
-    S.autoProtoReady=false;
-    if(S.games.length<S.maxGames){ showNamingPopup(); }
-    else { log('🔧 Build team prototype ready. Research Second Dev Team or sunset a game to launch it.'); }
-  }
+  // Soft launch: manual clicks threshold
+  if(S.clicks>=protoThreshold()&&S.games.length===0&&!S.namedPopDone){ S.namedPopDone=true; showNamingPopup(); }
 
   if(S.games.length>0&&!S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.games.length>0&&!S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked.'); }
   if(S.games.length>0&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked.'); }
 
-  // Unlock second game slot
-  if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked. Build team can now auto-ship into it.'); }
+  if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked.'); }
+  if(S.research.includes('franchise')&&S.maxGames<3){ S.maxGames=3; log('Third game slot unlocked.'); }
 
-  // Collapse completed panels
+  // Premium upgrades: adv research all done + ≥4 studio upgrades
+  const advDone=RESEARCH.filter(r=>r.tier===2&&S.research.includes(r.id)).length>=RESEARCH.filter(r=>r.tier===2).length;
+  const studioHalf=UPGRADES.filter(u=>S.research.includes(u.id)).length>=Math.ceil(UPGRADES.length/2);
+  if(advDone&&studioHalf&&!S.panels.premium){ S.panels.premium=true; reveal('panel-premium'); log('💎 Premium Upgrades unlocked. You\'ve come a long way.'); }
+
   checkPanelCollapse();
 }
 
 function checkPanelCollapse(){
-  const t1done=RESEARCH.filter(r=>r.tier===1&&S.research.includes(r.id)).length;
-  const t1total=RESEARCH.filter(r=>r.tier===1).length;
-  const t2done=RESEARCH.filter(r=>r.tier===2&&S.research.includes(r.id)).length;
-  const t2total=RESEARCH.filter(r=>r.tier===2).length;
-  const upgDone=UPGRADES.filter(u=>S.research.includes(u.id)).length;
-  markComplete('panel-res', t1done>=t1total);
-  markComplete('panel-adv-res', t2done>=t2total);
-  markComplete('panel-upgrades', upgDone>=UPGRADES.length);
+  const t1d=RESEARCH.filter(r=>r.tier===1&&S.research.includes(r.id)).length;
+  const t1t=RESEARCH.filter(r=>r.tier===1).length;
+  const t2d=RESEARCH.filter(r=>r.tier===2&&S.research.includes(r.id)).length;
+  const t2t=RESEARCH.filter(r=>r.tier===2).length;
+  const ud=UPGRADES.filter(u=>S.research.includes(u.id)).length;
+  const pd=PREMIUM_UPGRADES.filter(u=>S.research.includes(u.id)).length;
+  markComplete('panel-res', t1d>=t1t);
+  markComplete('panel-adv-res', t2d>=t2t);
+  markComplete('panel-upgrades', ud>=UPGRADES.length);
+  markComplete('panel-premium', pd>=PREMIUM_UPGRADES.length);
 }
 
-function markComplete(panelId, done){
-  const panel=$(panelId); if(!panel) return;
-  let badge=panel.querySelector('.panel-complete-badge');
-  if(done&&!badge){
-    badge=document.createElement('div');
-    badge.className='panel-complete-badge';
-    badge.textContent='✓ All complete';
-    panel.appendChild(badge);
-    panel.classList.add('collapsed');
-  } else if(!done&&badge){
-    badge.remove();
-    panel.classList.remove('collapsed');
-  }
-}
-
-function reveal(id){
-  const e=$(id);
-  if(e){ e.classList.remove('hidden'); e.classList.add('fade-in'); }
-}
-
-function togglePanel(id){
+function markComplete(id,done){
   const p=$(id); if(!p) return;
-  p.classList.toggle('collapsed');
+  let b=p.querySelector('.panel-complete-badge');
+  if(done&&!b){
+    b=document.createElement('div');b.className='panel-complete-badge';b.textContent='✓ All complete';
+    p.appendChild(b); p.classList.add('collapsed');
+  } else if(!done&&b){ b.remove(); p.classList.remove('collapsed'); }
 }
+
+function reveal(id){ const e=$(id); if(e){e.classList.remove('hidden');e.classList.add('fade-in');} }
+function togglePanel(id){ const p=$(id); if(p) p.classList.toggle('collapsed'); }
 
 // ── UI ────────────────────────────────────────────────
 
 function updateProtoUI(){
-  const step = Math.min(S.prdProgress, PRD_STEPS.length - 1);
-  const isShip = step === PRD_STEPS.length - 1;
-  const btn = $('btn-proto');
+  const step=Math.min(S.prdProgress, PRD_STEPS.length-1);
+  const isShip=step===PRD_STEPS.length-1;
+  const btn=$('btn-proto');
   if(btn){
-    btn.textContent = PRD_STEPS[step];
-    btn.style.background = isShip
-      ? 'linear-gradient(135deg,#16a34a,#22c55e)'
-      : 'linear-gradient(135deg,#7c3aed,#5b6ef5)';
-    btn.style.boxShadow = isShip
-      ? '0 4px 22px rgba(34,197,94,.5)'
-      : '0 4px 22px rgba(124,58,237,.4)';
+    btn.textContent=PRD_STEPS[step];
+    btn.style.background=isShip?'linear-gradient(135deg,#16a34a,#22c55e)':'linear-gradient(135deg,#7c3aed,#5b6ef5)';
+    btn.style.boxShadow=isShip?'0 4px 22px rgba(34,197,94,.5)':'0 4px 22px rgba(124,58,237,.4)';
   }
-  const bar = $('prd-bar');
-  if(bar) bar.style.width = Math.round(step / (PRD_STEPS.length - 1) * 100) + '%';
-  set('prd-label', `Step ${step + 1} of ${PRD_STEPS.length}`);
+  const bar=$('prd-bar');
+  if(bar) bar.style.width=Math.round(step/(PRD_STEPS.length-1)*100)+'%';
+  set('prd-label',`Step ${step+1} of ${PRD_STEPS.length}`);
 }
 
 function updateUI(){
   set('r-pp', fmt(S.pp));
-  set('r-pps', fmt(ppps())+'pp/s');
+  set('r-pps', fmt(sbps())+'sb/s');
   set('r-rev', $m(S.revenue));
   const burn=calcDailyPayroll();
-  set('r-revs', (S.games.length>0?$m(totalRevps())+'/s · ':'$0/s · ')+'burn '+$m(burn)+'/day');
-  set('r-debt', $m(S.debt));
-  set('r-dflav', debtFlavor());
-  set('r-resp', S.respect);
-  set('r-morale', moraleEmoji());
+  set('r-revs',(S.games.length>0?$m(totalRevps())+'/s · ':'$0/s · ')+'burn '+$m(burn)+'/day');
+  set('r-debt',$m(S.debt));
+  set('r-dflav',debtFlavor());
+  set('r-resp',S.respect);
+  set('r-morale',moraleEmoji());
 
   const ri=$('ri-debt');
   if(ri) ri.classList.toggle('pulsing',S.debt>0);
 
   const md=$('mdots');
   if(md) md.innerHTML=[1,2,3,4,5].map(i=>{
-    let c='md';
-    if(i<=S.morale) c+=S.morale<=2?' r':S.morale<=3?' y':' g';
+    let c='md'; if(i<=S.morale) c+=S.morale<=2?' r':S.morale<=3?' y':' g';
     return `<div class="${c}"></div>`;
   }).join('');
 
@@ -812,54 +850,78 @@ function updateUI(){
   set('l-ua',Math.round(n.ua*100)+'%');   set('l-feat',Math.round(n.feat*100)+'%');
   set('pcount','Prototypes shipped: '+S.clicks);
 
-  updateProtoUI();
-
   // p1 sub
+  const thresh=protoThreshold();
   if(S.games.length===0){
     if(S.clicks===0) set('p1s','Nobody said it would be easy.');
-    else if(S.clicks<10) set('p1s','Keep going. Someone has to.');
-    else if(S.clicks<100) set('p1s',`${S.clicks}/100 prototypes. Keep shipping.`);
+    else if(S.clicks<5) set('p1s','Keep going. Someone has to.');
+    else if(S.clicks<thresh) set('p1s',`${S.clicks}/${thresh} prototypes. Keep shipping.`);
   } else {
     set('p1s','Your game is live. Don\'t ignore it.');
   }
 
+  // PM status in sprint note (if PM team but no SB pressure)
+  const pmRate=pmClickRate();
+  if(pmRate>0){
+    const cost=pmStepCost();
+    const interval=Math.max(3,Math.floor(60/pmRate));
+    if(S.pp>=cost) set('sp-note',`PM team: auto-step every ${interval}s · costs ${fmt(cost)} SB`);
+    // (waiting message set in tick)
+  }
+
+  updateProtoUI();
   buildAutoList();
   buildResList();
   buildUpgradesList();
+  buildPremiumList();
   buildGameCards();
 
   document.querySelectorAll('.bbuy[data-cost]').forEach(b=>{
-    const cost=+b.dataset.cost,cur=b.dataset.cur||'pp';
-    const have=cur==='pp'?S.pp:cur==='rev'?S.revenue:S.respect;
+    const cost=+b.dataset.cost,cur=b.dataset.cur||'sb';
+    const have=cur==='sb'?S.pp:cur==='rev'?S.revenue:S.respect;
     b.disabled=have<cost;
     b.classList.toggle('aff',have>=cost);
   });
 }
 
-const BUILD_TEAM=new Set(['designer','engineer','qa']);
-
 function buildAutoList(){
   const c=$('auto-list'); if(!c) return;
-  const rate=autoShipRate();
-  const d=S.autos.designer||0,e=S.autos.engineer||0,q=S.autos.qa||0;
-  const teamStatus=rate>0
-    ?`ships every ${rate}s`
-    :`needs ${[d<1?'Designer':'',e<1?'Engineer':'',q<1?'QA':''].filter(Boolean).join('+')||'more'}`;
+  const pmRate=pmClickRate();
+  const stepCost=pmStepCost();
+  const buildTeam=AUTOS.filter(a=>a.sbRate>0);
+  const pmTeam=AUTOS.filter(a=>a.pmRate>0);
 
-  c.innerHTML=AUTOS.map(a=>{
+  let html='<div class="auto-section-hdr">🏗 Build Team — generates Software Built</div>';
+  html+=buildTeam.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.15,owned));
-    const isBuild=BUILD_TEAM.has(a.id);
-    const rateStr=isBuild?teamStatus:`+${a.rate*(owned+1)}pp/s next`;
+    const nextSB=(owned+1)*a.sbRate;
     return `<div class="ai">
       <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
       <div class="air">
         <div class="aio">${owned}×</div>
-        <div class="airt${isBuild&&rate>0?' active-team':''}">${rateStr}</div>
-        <button class="bbuy" data-cost="${cost}" data-cur="pp" onclick="buyAuto('${a.id}')">${fmt(cost)} PP</button>
+        <div class="airt${owned>0?' active':''}">+${nextSB}sb/s next</div>
+        <button class="bbuy" data-cost="${cost}" data-cur="sb" onclick="buyAuto('${a.id}')">${fmt(cost)} SB</button>
       </div>
     </div>`;
   }).join('');
+
+  html+='<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — auto-advances PRD steps</div>';
+  html+=pmTeam.map(a=>{
+    const owned=S.autos[a.id]||0;
+    const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+    const rateStr=owned>0?`${a.pmRate*owned}spm · ${a.sbCost}SB/step`:`${a.pmRate}spm/hire`;
+    return `<div class="ai">
+      <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
+      <div class="air">
+        <div class="aio">${owned}×</div>
+        <div class="airt${owned>0?' active':''}">${rateStr}</div>
+        <button class="bbuy" data-cost="${cost}" data-cur="sb" onclick="buyAuto('${a.id}')">${fmt(cost)} SB</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  c.innerHTML=html;
 }
 
 function renderResItems(items){
@@ -870,8 +932,8 @@ function renderResItems(items){
       <div class="rid">${r.desc}</div>
       ${done?'<div class="ridone">✓ Researched</div>'
         :`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
-            <span class="ric">${fmt(r.cost)} PP</span>
-            <button class="bbuy" data-cost="${r.cost}" data-cur="pp" onclick="buyRes('${r.id}')">Research</button>
+            <span class="ric">${fmt(r.cost)} SB</span>
+            <button class="bbuy" data-cost="${r.cost}" data-cur="sb" onclick="buyRes('${r.id}')">Research</button>
           </div>`}
     </div>`;
   }).join('');
@@ -880,8 +942,7 @@ function renderResItems(items){
 function buildResList(){
   const c=$('res-list'); if(!c) return;
   c.innerHTML=renderResItems(RESEARCH.filter(r=>r.tier===1));
-  const adv=$('adv-res-list'); if(!adv) return;
-  adv.innerHTML=renderResItems(RESEARCH.filter(r=>r.tier===2));
+  const adv=$('adv-res-list'); if(adv) adv.innerHTML=renderResItems(RESEARCH.filter(r=>r.tier===2));
 }
 
 function buildUpgradesList(){
@@ -900,6 +961,22 @@ function buildUpgradesList(){
   }).join('');
 }
 
+function buildPremiumList(){
+  const c=$('premium-list'); if(!c) return;
+  c.innerHTML=PREMIUM_UPGRADES.map(u=>{
+    const done=S.research.includes(u.id);
+    return `<div class="ri">
+      <div class="rin">${u.name}</div>
+      <div class="rid">${u.desc}</div>
+      ${done?'<div class="ridone">✓ Purchased</div>'
+        :`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
+            <span class="ric">${$m(u.cost)}</span>
+            <button class="bbuy" data-cost="${u.cost}" data-cur="rev" onclick="buyPremium('${u.id}')">Purchase</button>
+          </div>`}
+    </div>`;
+  }).join('');
+}
+
 function buildGameCards(){
   const c=$('gcards'); if(!c) return;
   if(S.games.length===0){ c.innerHTML=''; return; }
@@ -912,6 +989,8 @@ function buildCard(g,i){
   const churnDisplay=showChurn?g.churn.toFixed(1)+'%':health(g.churn);
   const fl=GENRE_FLAVOR[g.genre]?.[g.audience]||'';
   const infCD=S.influencerCooldown, platCD=S.platformCooldown, pushCD=S.pushCooldown;
+  const teamShare=$m(calcDailyPayroll()/S.games.length);
+  const uaMult=invDauMultiplier();
   return `<div class="gcard">
     <div class="gch">
       <div class="gcn">${g.name}</div>
@@ -927,17 +1006,19 @@ function buildCard(g,i){
     </div>
     <div class="gcactions">
       <button class="bact pri" onclick="showUAPopup(${i})">💸 Spend in UA</button>
-      <button class="bact" ${S.research.includes('push')?(pushCD>0?`disabled title="${pushCD}s cooldown"`:''):' disabled title="Purchase Push Notifications first"'} onclick="doPush(${i})">
+      <button class="bact" ${S.research.includes('push')?(pushCD>0?`disabled`:''):' disabled title="Purchase Push Notifications first"'} onclick="doPush(${i})">
         📣 Push${pushCD>0?' ('+pushCD+'s)':''}
       </button>
       ${S.research.includes('pivot')?`<button class="bact" onclick="doPivot(${i})">🔄 Pivot</button>`:''}
       ${S.research.includes('influencer')
-        ?`<button class="bact" ${infCD>0?`disabled title="${infCD}s cooldown"`:''}  onclick="doInfluencer(${i})">🌟 Influencer${infCD>0?' ('+Math.ceil(infCD/60)+'d)':''}</button>`:''}
+        ?`<button class="bact"${infCD>0?' disabled':''} onclick="doInfluencer(${i})">🌟 Influencer${infCD>0?' ('+Math.ceil(infCD/60)+'d)':''}</button>`:''}
       ${S.research.includes('platform')
-        ?`<button class="bact pri" ${platCD>0?`disabled title="${platCD}s cooldown"`:''}  onclick="doPlatform(${i})">🏆 Featuring${platCD>0?' ('+Math.ceil(platCD/60)+'d)':''}</button>`:''}
+        ?`<button class="bact pri"${platCD>0?' disabled':''} onclick="doPlatform(${i})">🏆 Featuring${platCD>0?' ('+Math.ceil(platCD/60)+'d)':''}</button>`:''}
       <button class="bact dan" onclick="confirmSunset(${i})">Sunset</button>
     </div>
-    <div style="margin-top:.65rem;font-size:.72rem;color:var(--t2)">Peak DAU: ${fmt(S.peakDAU)} · Total rev: ${$m(S.totalRev)}</div>
+    <div style="margin-top:.65rem;font-size:.72rem;color:var(--t2)">
+      Peak DAU: ${fmt(S.peakDAU)} · Total rev: ${$m(S.totalRev)} · Team cost: ${teamShare}/day
+    </div>
   </div>`;
 }
 
@@ -947,20 +1028,15 @@ function clickProto(){
   S.lastClick=Date.now();
   const btn=$('btn-proto');
   if(btn){btn.style.transform='scale(.96)';setTimeout(()=>btn.style.transform='',90);}
-
-  const isShipStep = S.prdProgress === PRD_STEPS.length - 1;
-  if(!isShipStep){
+  const isShip=S.prdProgress===PRD_STEPS.length-1;
+  if(!isShip){
     S.prdProgress++;
-    S.pp+=S.pppc; // each PM action step still generates PP
+    S.pp+=S.pppc;
   } else {
-    // Ship the prototype
     S.prdProgress=0;
     S.clicks++;
-    if(S.clicks<=5||S.clicks%3===0){
-      log('#'+S.clicks+' — '+REJECTIONS[S.clicks%REJECTIONS.length]);
-    }
+    if(S.clicks<=5||S.clicks%3===0) log('#'+S.clicks+' — '+REJECTIONS[S.clicks%REJECTIONS.length]);
   }
-  // Update button label + bar immediately — no waiting for next tick
   updateProtoUI();
 }
 
@@ -996,25 +1072,35 @@ function buyUpgrade(id){
   log(`Purchased: ${u.name}.`);
 }
 
+function buyPremium(id){
+  const u=PREMIUM_UPGRADES.find(x=>x.id===id); if(!u||S.research.includes(id)) return;
+  if(S.revenue<u.cost) return;
+  S.revenue-=u.cost; S.research.push(id); applyResearch(id);
+  log(`Purchased premium upgrade: ${u.name}.`);
+}
+
 function applyResearch(id){
   if(id==='agile') S.pppc*=2;
-  if(id==='sprint_pl'){ S.spTimer=20; log('Sprint cycle: 20s.'); }
+  if(id==='sprint_pl'){ S.spTimer=20; }
   if(id==='user_res') S.games.forEach(g=>{g.churn=Math.max(1,g.churn-2);});
   if(id==='ml_ret') S.games.forEach(g=>{g.churn=Math.max(1,g.churn-3);});
   if(id==='sub_model') S.games.forEach(g=>{g.churn=Math.max(1,g.churn-3);});
-  if(id==='prem_iap') log('Premium IAP active: revenue/DAU +30%.');
-  if(id==='growth_l') log('Growth Loops active: organic DAU +50%.');
+  if(id==='prem_iap') log('Premium IAP: revenue/DAU +30%.');
+  if(id==='growth_l') log('Growth Loops: organic DAU +50%.');
   if(id==='exp_cult') log('Experimentation Culture: sprint UA +50%.');
+  if(id==='exec_dash') log('Executive Dashboard: payroll −10%.');
+  if(id==='franchise') { S.maxGames=3; log('Third game slot unlocked.'); }
 }
 
 function showUAPopup(gIdx=0){
   const g=S.games[gIdx]; if(!g) return;
+  const mult=invDauMultiplier();
   showPop({
     title:'Spend in User Acquisition',
-    body:`Game: ${g.name}\nRevenue available: ${$m(S.revenue)}\nCurrent debt: ${$m(S.debt)}\n\nChoose a UA tier. Spend adds to debt; DAU follows.`,
+    body:`Game: ${g.name}\nRevenue: ${$m(S.revenue)}\nDebt: ${$m(S.debt)}${mult>1?' · UA +50% active':''}`,
     choices: INV.map(t=>({
       text:`${t.name} — ${$m(t.cost)}`,
-      flav:`+${fmt(t.dau)} DAU · ${t.roas}x ROAS${S.revenue<t.cost?' · ⚠ need more revenue':''}`,
+      flav:`+${fmt(Math.round(t.dau*mult))} DAU · ${t.roas}x ROAS${S.revenue<t.cost?' · ⚠ need more revenue':''}`,
       fx:()=>doUA(t.id,gIdx)
     }))
   });
@@ -1023,33 +1109,31 @@ function showUAPopup(gIdx=0){
 function doUA(tid,gIdx=0){
   const t=INV.find(x=>x.id===tid); const g=S.games[gIdx];
   if(!t||!g) return;
-  if(S.revenue<t.cost){ log('Not enough revenue for this tier.'); return; }
-  S.revenue-=t.cost; S.debt+=t.cost; g.dau+=t.dau;
-  log(`UA: ${t.name} on ${g.name}. +${fmt(t.dau)} DAU. Debt: ${$m(S.debt)}.`);
+  if(S.revenue<t.cost){ log('Not enough revenue.'); return; }
+  const dau=Math.round(t.dau*invDauMultiplier());
+  S.revenue-=t.cost; S.debt+=t.cost; g.dau+=dau;
+  log(`UA: ${t.name} on ${g.name}. +${fmt(dau)} DAU. Debt: ${$m(S.debt)}.`);
 }
 
 function doPush(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('push')) return;
-  if(S.pushCooldown>0){ log(`Push on cooldown (${S.pushCooldown}s).`); return; }
-  g.dau+=200; S.pushCooldown=86400; // 24h in real seconds would be too long; use 300s (5 min)
-  S.pushCooldown=300;
+  if(S.pushCooldown>0) return;
+  g.dau+=200; S.pushCooldown=300;
   log(`Push sent to ${g.name}. +200 DAU.`);
 }
 
 function doInfluencer(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('influencer')) return;
-  if(S.influencerCooldown>0){ log(`Influencer on cooldown.`); return; }
-  if(S.revenue<10000){ log('Influencer campaign costs $10K.'); return; }
+  if(S.influencerCooldown>0||S.revenue<10000) return;
   S.revenue-=10000; g.dau+=3000; S.influencerCooldown=180;
-  log(`Influencer campaign live on ${g.name}. +3,000 DAU. Cooldown: 3 days.`);
+  log(`Influencer on ${g.name}. +3,000 DAU. $10K spent.`);
 }
 
 function doPlatform(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('platform')) return;
-  if(S.platformCooldown>0){ log(`App Store Featuring on cooldown.`); return; }
-  if(S.revenue<40000){ log('App Store Featuring costs $40K.'); return; }
+  if(S.platformCooldown>0||S.revenue<40000) return;
   S.revenue-=40000; g.dau+=10000; S.platformCooldown=840;
-  log(`App Store Featuring secured for ${g.name}. +10,000 DAU. Cooldown: 14 days.`);
+  log(`App Store Featuring on ${g.name}. +10,000 DAU. $40K spent.`);
 }
 
 function doPivot(gIdx=0){
@@ -1058,14 +1142,14 @@ function doPivot(gIdx=0){
   g.genre=GENRES[Math.floor(Math.random()*GENRES.length)];
   g.audience=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
   g.dau*=0.25;
-  log(`Pivoted ${g.name} from ${og} to ${g.genre}/${g.audience}. DAU reset to 25%.`);
+  log(`Pivoted ${g.name}: ${og} → ${g.genre}/${g.audience}. DAU reset to 25%.`);
 }
 
 function confirmSunset(gIdx=0){
   const g=S.games[gIdx]; if(!g) return;
   showPop({
     title:`${g.name} is being sunset.`,
-    body:`You're retiring it. DAU is ${fmt(Math.floor(g.dau))}, mostly loyal players who will be disappointed.\n\nYou write the announcement. It starts: "After careful consideration."\n\nThe comment section has one reply within 4 minutes: "I knew it."\n\nYou earn Industry Experience.`,
+    body:`DAU: ${fmt(Math.floor(g.dau))}. Days live: ${g.daysLive||0}.\n\nYou write the announcement. It starts: "After careful consideration."\n\nThe first comment: "I knew it."`,
     choices:[
       {text:'Reflect.',flav:'The log notes your choice.',fx:()=>doSunset('reflect',gIdx)},
       {text:'Start the next one.',flav:'Same effect. Different disposition.',fx:()=>doSunset('next',gIdx)},
@@ -1078,7 +1162,7 @@ function doSunset(how,gIdx=0){
   const ix=Math.floor(S.peakDAU/1000)+Math.floor((g.daysLive||0)/10)+2;
   S.ix=(S.ix||0)+ix; S.gSunset++;
   log(`${g.name} sunsetted. +${ix} Industry Experience.`);
-  if(how==='next') log('You were thinking about the next one before the announcement was published.');
+  if(how==='next') log('You were thinking about the next one before the post went live.');
   S.games.splice(gIdx,1);
   if(S.games.length===0){
     S.debt=0; S.roasDone=false; S.compDone=false; S.bugDone=false;
@@ -1138,21 +1222,22 @@ function closePop(){
 // ── NAMING POPUP ──────────────────────────────────────
 
 function randGameName(){
-  const available=GAME_NAMES.filter(n=>!S.usedNames.includes(n));
-  const pool=available.length>0?available:GAME_NAMES;
+  const avail=GAME_NAMES.filter(n=>!S.usedNames.includes(n));
+  const pool=avail.length>0?avail:GAME_NAMES;
   return pool[Math.floor(Math.random()*pool.length)];
 }
 
 function showNamingPopup(){
+  if(popOpen) return; // don't interrupt existing popup
   const genre=GENRES[Math.floor(Math.random()*GENRES.length)];
   const aud=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
   const suggested=randGameName();
   const isFirst=S.gLaunched===0;
   popOpen=true;
-  set('p-title',isFirst?'Your first game survived internal review.':'The build team shipped a prototype.');
+  set('p-title',isFirst?'Your first game survived internal review.':'The PM team shipped another prototype.');
   set('p-body',isFirst
-    ?`After ${S.clicks} rejected prototypes, one made it through.\n\nThe concept: a ${genre} game for ${aud} players. You did not come up with the ${genre} angle. That was Karen from Brand.\n\nYour game needs a name.`
-    :`Your build team completed another prototype: a ${genre} game for ${aud} players.\n\nYour game needs a name.`
+    ?`After ${S.clicks} shipped prototypes, one made it through.\n\nThe concept: a ${genre} game for ${aud} players. You did not come up with the ${genre} angle. That was Karen from Brand.\n\nYour game needs a name.`
+    :`Your team completed another prototype: a ${genre} game for ${aud} players.\n\nYour game needs a name.`
   );
   $('p-choices').innerHTML=`
     <input type="text" class="pinput" id="gname-in" value="${suggested}" placeholder="Game name..." maxlength="40">
@@ -1168,8 +1253,7 @@ function launchGame(genre,aud){
   S.usedNames.push(name);
   const startChurn=S.research.includes('user_res')?6:8;
   S.games.push({name,genre,audience:aud,dau:12,churn:startChurn,daysLive:0});
-  S.gLaunched++;
-  S.dayTimer=60; S.prdProgress=0;
+  S.gLaunched++; S.dayTimer=60; S.prdProgress=0;
   closePop();
   log(`🚀 ${name} is live. 12 installs. 3 of them are you.`);
   setTimeout(()=>qEv('firstLaunch'),3000);
@@ -1182,10 +1266,8 @@ function startTick(){ tickInterval=setInterval(tick,1000); }
 function stopTick(){ clearInterval(tickInterval); }
 
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){
-    S.hiddenAt=Date.now();
-    stopTick();
-  } else {
+  if(document.hidden){ S.hiddenAt=Date.now(); stopTick(); }
+  else {
     if(S.hiddenAt){
       const dt=Math.min(7200,(Date.now()-S.hiddenAt)/1000);
       if(dt>5) applyOfflineProgress(dt);
@@ -1203,14 +1285,16 @@ if(S.panels.auto) reveal('panel-auto');
 if(S.panels.res)  reveal('panel-res');
 if(S.panels.advRes) reveal('panel-adv-res');
 if(S.panels.upgrades) reveal('panel-upgrades');
+if(S.panels.premium) reveal('panel-premium');
 if(S.panels.port) reveal('panel-port');
 if(S.panels.sprint) reveal('panel-sprint');
 
 ['mon','ret','ua','feat'].forEach(k=>{ const e=$('sl-'+k); if(e) e.value=S.sl[k]||25; });
 
-if(S.clicks===0&&S.games.length===0) log('Welcome. The button is all you have.');
-else log(`Welcome back. ${S.gLaunched} game(s) launched. ${fmt(S.peakDAU)} peak DAU.`);
+if(S.clicks===0&&S.games.length===0) log('Welcome. The button is all you have. For now.');
+else log(`Welcome back. ${S.gLaunched} game(s). ${fmt(S.peakDAU)} peak DAU.`);
 
+updateProtoUI();
 startTick();
 updateUI();
 </script>
