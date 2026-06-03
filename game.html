@@ -277,7 +277,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     </div>
     <div class="panel hidden" id="panel-ops">
       <div class="ops-hdr">
-        <div class="sptitle">📋 Ops Board</div>
+        <div class="sptitle">📋 Live Ops</div>
         <div id="ops-timer" class="ops-ready">● Ready</div>
       </div>
       <div class="ops-grid" id="ops-buttons"></div>
@@ -351,7 +351,8 @@ const RESEARCH = [
   {id:'okrs',      tier:1, name:'OKRs',                   cost:100, desc:'Aligns the team on success. Improves sprint efficiency.'},
   {id:'analytics', tier:1, name:'Analytics SDK',          cost:150, desc:'Shows exact churn % instead of health emoji.'},
   {id:'user_res',  tier:1, name:'User Research',          cost:200, desc:'New games start with 2% lower churn.'},
-  {id:'sprint_pl', tier:1, name:'Sprint Planning',        cost:250, desc:'Sprint cycle: 30s → 20s.'},
+  {id:'sprint_pl',       tier:1, name:'Sprint Planning',   cost:250, desc:'Sprint cycle: 30s → 20s.'},
+  {id:'liveops_training',tier:1, name:'LiveOps Training', cost:500, desc:'Unlocks the Live Ops board. Ship events and offers to scale revenue.'},
   // Advanced (unlocks when all 8 basic done)
   {id:'ml_ret',    tier:2, name:'ML Retention Modeling',  cost:500, desc:'All live games: churn −3%.'},
   {id:'growth_l',  tier:2, name:'Growth Loop Design',     cost:600, desc:'Organic DAU growth +50%.'},
@@ -1057,8 +1058,8 @@ function checkMilestones(){
 
   if(S.games.length>0&&!S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.games.length>0&&!S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked.'); }
-  if(S.games.length>0&&!S.panels.ops){ S.panels.ops=true; reveal('panel-ops'); log('Ops Board unlocked. Ship events and offers to scale revenue.'); }
-  if(S.games.length>0&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked.'); }
+  if(S.games.length>0&&S.research.includes('liveops_training')&&!S.panels.ops){ S.panels.ops=true; reveal('panel-ops'); log('Live Ops board unlocked. Ship events and offers to scale revenue.'); }
+  if(S.games.length>0&&S.totalRev>=10000&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked. You\'ve earned your first $10K.'); }
 
   if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked.'); }
   if(S.research.includes('franchise')&&S.maxGames<3){ S.maxGames=3; log('Third game slot unlocked.'); }
@@ -1201,16 +1202,21 @@ function buildAutoList(){
   const pmSummary=totalPMs===0
     ?'no PMs hired yet'
     :`${totalPMs} PM${totalPMs!==1?'s':''} · auto-step every ${interval}s · ${fmt(pmStepCost())} SB/step`;
-  html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — auto-advances PM work to ship prototypes<span style="float:right;font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};font-size:.65rem">${pmSummary}</span></div>`;
+  html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — ships prototypes<br><span style="font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};">${pmSummary}</span></div>`;
   html+=pmTeam.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.15,owned));
-    const rateStr=owned>0?`${a.pmRate*owned}spm · ${a.sbCost}SB/step`:`${a.pmRate}spm/hire`;
-    return `<div class="ai">
-      <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
-      <div class="air">
+    const rateLabel=owned>0?`${a.pmRate*owned} steps/min`:`${a.pmRate} steps/min`;
+    const costLabel=`${fmt(a.sbCost)} SB/step`;
+    return `<div class="ai" style="align-items:flex-start;gap:.5rem">
+      <div style="flex:1;min-width:0">
+        <div class="ain">${a.name}</div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:2px">
+          <span class="airt${owned>0?' active':''}">${rateLabel}</span>
+          <span class="airt" style="color:var(--t3)">· ${costLabel}</span>
+        </div>
+      </div>
         <div class="aio">${owned}×</div>
-        <div class="airt${owned>0?' active':''}">${rateStr}</div>
         <button class="bbuy" data-cost="${cost}" data-cur="sb" onclick="buyAuto('${a.id}')">${fmt(cost)} SB</button>
       </div>
     </div>`;
