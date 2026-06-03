@@ -138,6 +138,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .pinput{width:100%;padding:.6rem .85rem;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--t1);font-size:.88rem;font-family:var(--sans);margin-bottom:.85rem;outline:none;transition:border-color .15s}
 .pinput:focus{border-color:var(--ind)}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+/* Achievement toast */
+#ach-toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--green);border-radius:11px;padding:.75rem 1rem;max-width:280px;z-index:500;transform:translateX(320px);transition:transform .35s ease;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#ach-toast.show{transform:translateX(0)}
+.ach-toast-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem}
+.ach-toast-icon{font-size:1.1rem}
+.ach-toast-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green)}
+.ach-toast-name{font-size:.9rem;font-weight:700;color:var(--t1)}
+.ach-toast-desc{font-size:.75rem;color:var(--t2);margin-top:2px}
+/* Achievements panel */
+.ach-grid{display:flex;flex-direction:column;gap:.4rem}
+.ach-item{display:flex;align-items:flex-start;gap:.5rem;padding:.4rem .5rem;border-radius:7px;transition:background .12s}
+.ach-item.unlocked{background:rgba(74,222,128,.06)}
+.ach-item.locked{opacity:.4}
+.ach-icon{font-size:1rem;flex-shrink:0;line-height:1.4}
+.ach-info{}
+.ach-name{font-size:.82rem;font-weight:600;color:var(--t1);line-height:1.3}
+.ach-desc{font-size:.7rem;color:var(--t2);line-height:1.4}
+.ach-cat-hdr{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin:.6rem 0 .2rem;padding-bottom:.2rem;border-bottom:1px solid var(--border)}
+.ach-cat-hdr:first-child{margin-top:0}
+.ach-count{font-size:.68rem;color:var(--t3);text-align:right;margin-bottom:.5rem}
 </style>
 </head>
 <body>
@@ -254,8 +274,25 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="ptitle" style="cursor:default;pointer-events:none">🤖 Automation</div>
       <div class="panel-body" id="auto-list"></div>
     </div>
+    <div class="panel" id="panel-goals">
+      <div class="ptitle" onclick="togglePanel('panel-goals')">🏆 Career Goals</div>
+      <div class="panel-body">
+        <div class="ach-count" id="ach-count">0 / 0 unlocked</div>
+        <div class="ach-grid" id="ach-list"></div>
+      </div>
+    </div>
   </div>
 
+</div>
+
+<!-- Achievement toast -->
+<div id="ach-toast">
+  <div class="ach-toast-top">
+    <span class="ach-toast-icon" id="ach-toast-icon">🏆</span>
+    <span class="ach-toast-label">Achievement Unlocked</span>
+  </div>
+  <div class="ach-toast-name" id="ach-toast-name"></div>
+  <div class="ach-toast-desc" id="ach-toast-desc"></div>
 </div>
 
 <div id="poverlay" class="hidden">
@@ -481,6 +518,61 @@ const EVENTS = {
   },
 };
 
+// ── ACHIEVEMENTS ──────────────────────────────────────
+
+const ACHIEVEMENTS = [
+  // Revenue
+  {id:'first_rev',   cat:'Revenue',   icon:'💵', name:'First Dollar',          desc:'Earn your first dollar in revenue.'},
+  {id:'ten_k',       cat:'Revenue',   icon:'☕', name:'Coffee Money',           desc:'Earn $10,000 in total revenue.'},
+  {id:'fifty_k',     cat:'Revenue',   icon:'🍜', name:'Ramen Profitable',       desc:'Earn $50,000 in total revenue.'},
+  {id:'hundred_k',   cat:'Revenue',   icon:'💰', name:'Six Figures',            desc:'Earn $100,000 in total revenue.'},
+  {id:'million',     cat:'Revenue',   icon:'🦄', name:'Unicorn Dreams',         desc:'Earn $1,000,000 in total revenue.'},
+  // Growth
+  {id:'dau_100',     cat:'Growth',    icon:'👥', name:'First Fans',             desc:'Reach 100 DAU on any game.'},
+  {id:'dau_1k',      cat:'Growth',    icon:'📈', name:'Gaining Traction',       desc:'Reach 1,000 DAU on any game.'},
+  {id:'dau_10k',     cat:'Growth',    icon:'🚀', name:"Something's Working",    desc:'Reach 10,000 DAU on any game.'},
+  {id:'dau_50k',     cat:'Growth',    icon:'🌟', name:'Going Viral',            desc:'Reach 50,000 DAU on any game.'},
+  {id:'dau_100k',    cat:'Growth',    icon:'👑', name:'Top Charts',             desc:'Reach 100,000 DAU on any game.'},
+  // Shipping
+  {id:'first_proto', cat:'Shipping',  icon:'📦', name:'First Ship',             desc:'Ship your first prototype.'},
+  {id:'five_protos', cat:'Shipping',  icon:'🔁', name:'Fail Faster',            desc:'Ship 5 prototypes.'},
+  {id:'proto_25',    cat:'Shipping',  icon:'🏭', name:'Prototype Machine',      desc:'Ship 25 prototypes total.'},
+  {id:'proto_50',    cat:'Shipping',  icon:'⚡', name:'Volume Play',            desc:'Ship 50 prototypes total.'},
+  {id:'pm_auto',     cat:'Shipping',  icon:'🤖', name:'Hands Off',              desc:'Have the PM team auto-ship a prototype.'},
+  // Team
+  {id:'first_hire',  cat:'Team',      icon:'👋', name:'First Hire',             desc:'Hire your first team member.'},
+  {id:'five_hires',  cat:'Team',      icon:'🧑‍🤝‍🧑', name:'Small Team',       desc:'Have 5 people on the team.'},
+  {id:'ten_hires',   cat:'Team',      icon:'🏢', name:"It's a Studio",          desc:'Have 10 people on the team.'},
+  {id:'full_build',  cat:'Team',      icon:'🏗', name:'Build Team Complete',    desc:'Hire at least one of every build role.'},
+  {id:'full_pm',     cat:'Team',      icon:'💼', name:'PM Dream Team',          desc:'Hire at least one of every PM role.'},
+  // Games
+  {id:'first_game',  cat:'Portfolio', icon:'🎮', name:'Soft Launch',            desc:'Launch your first game.'},
+  {id:'two_games',   cat:'Portfolio', icon:'📱', name:'Two-Front War',          desc:'Have 2 games live simultaneously.'},
+  {id:'sunset_one',  cat:'Portfolio', icon:'🌅', name:'Hard Choices',           desc:'Sunset your first game.'},
+  {id:'three_launched',cat:'Portfolio',icon:'🎲',name:'Portfolio PM',           desc:'Launch 3 games in total.'},
+  // Research
+  {id:'first_res',   cat:'Research',  icon:'🔬', name:'Curious Mind',           desc:'Complete your first research item.'},
+  {id:'basic_done',  cat:'Research',  icon:'🎓', name:'PM Fundamentals',        desc:'Complete all Basic Research.'},
+  {id:'adv_done',    cat:'Research',  icon:'🧠', name:'Big Brain',              desc:'Complete all Advanced Research.'},
+  {id:'studio_half', cat:'Research',  icon:'🏗', name:'Studio Power',           desc:'Purchase 4 or more Studio Upgrades.'},
+  // Marketing
+  {id:'first_ua',    cat:'Marketing', icon:'📣', name:'First Campaign',         desc:'Make your first UA investment.'},
+  {id:'blitz',       cat:'Marketing', icon:'💣', name:'Blitz Mode',             desc:'Spend $75,000 in a single UA push.'},
+  {id:'influencer_a',cat:'Marketing', icon:'🌟', name:'Influencer Era',         desc:'Run your first Influencer campaign.'},
+  {id:'ua_100k',     cat:'Marketing', icon:'📊', name:'Marketing Machine',      desc:'Spend $100,000 total on UA.'},
+  {id:'ua_500k',     cat:'Marketing', icon:'🏆', name:'Growth at All Costs',    desc:'Spend $500,000 total on UA.'},
+  // Risk
+  {id:'debt_100k',   cat:'Risk',      icon:'😰', name:"CFO's Nightmare",        desc:'Carry $100,000 or more in debt.'},
+  {id:'debt_paid',   cat:'Risk',      icon:'😅', name:'Comeback Kid',           desc:'Pay off $100,000+ in debt completely.'},
+  {id:'pivot_used',  cat:'Risk',      icon:'🔄', name:'Pivot Master',           desc:'Use the Pivot feature on a live game.'},
+  // Story
+  {id:'reddit_drama',cat:'Story',     icon:'😤', name:'Reddit Drama',           desc:'Trigger the "Is your game dead?" event.'},
+  {id:'respect_5',   cat:'Story',     icon:'🤝', name:'Respected Voice',        desc:'Earn 5 or more Respect.'},
+  {id:'bad_choice',  cat:'Story',     icon:'🤦', name:'What Were You Thinking', desc:'Make a clearly bad decision in a story event.'},
+  {id:'vc_pass',     cat:'Story',     icon:'🦅', name:'Independent',            desc:'Pass on a VC offer.'},
+  {id:'morale_max',  cat:'Story',     icon:'😄', name:'Happy Team',             desc:'Have maximum team morale with a live game.'},
+];
+
 // ── STATE ─────────────────────────────────────────────
 
 function mkState(){
@@ -504,6 +596,8 @@ function mkState(){
     highDebtDone:false, moraleCollapseDone:false,
     reviewBombDone:false, vcOfferDone:false, cpiSpikeDone:false,
     hiddenAt:null,
+    achievements:[], totalUASpend:0, maxDebt:0, badChoicesMade:0,
+    influencerUsed:false, pivotUsed:false, pmAutoShipped:false,
   };
 }
 
@@ -634,6 +728,99 @@ const $m=n=>'$'+fmt(n);
 const $=id=>document.getElementById(id);
 const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
 
+// ── ACHIEVEMENTS ──────────────────────────────────────
+
+function totalHires(){
+  return Object.values(S.autos).reduce((s,n)=>s+n,0);
+}
+
+let toastTimer=null;
+function showAchievementToast(a){
+  $('ach-toast-icon').textContent=a.icon;
+  $('ach-toast-name').textContent=a.name;
+  $('ach-toast-desc').textContent=a.desc;
+  const t=$('ach-toast');
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),4500);
+}
+
+function checkAchievements(){
+  if(!S.achievements) S.achievements=[];
+  const peak=S.peakDAU;
+  const checks={
+    first_rev:    ()=>S.totalRev>=1,
+    ten_k:        ()=>S.totalRev>=10000,
+    fifty_k:      ()=>S.totalRev>=50000,
+    hundred_k:    ()=>S.totalRev>=100000,
+    million:      ()=>S.totalRev>=1000000,
+    dau_100:      ()=>peak>=100,
+    dau_1k:       ()=>peak>=1000,
+    dau_10k:      ()=>peak>=10000,
+    dau_50k:      ()=>peak>=50000,
+    dau_100k:     ()=>peak>=100000,
+    first_proto:  ()=>S.clicks>=1,
+    five_protos:  ()=>S.clicks>=5,
+    proto_25:     ()=>S.clicks>=25,
+    proto_50:     ()=>S.clicks>=50,
+    pm_auto:      ()=>!!S.pmAutoShipped,
+    first_hire:   ()=>totalHires()>=1,
+    five_hires:   ()=>totalHires()>=5,
+    ten_hires:    ()=>totalHires()>=10,
+    full_build:   ()=>['intern','engineer','qa','designer','artist'].every(id=>(S.autos[id]||0)>=1),
+    full_pm:      ()=>['junior','senior','ai'].every(id=>(S.autos[id]||0)>=1),
+    first_game:   ()=>S.gLaunched>=1,
+    two_games:    ()=>S.games.length>=2,
+    sunset_one:   ()=>S.gSunset>=1,
+    three_launched:()=>S.gLaunched>=3,
+    first_res:    ()=>S.research.length>=1,
+    basic_done:   ()=>RESEARCH.filter(r=>r.tier===1).every(r=>S.research.includes(r.id)),
+    adv_done:     ()=>RESEARCH.filter(r=>r.tier===2).every(r=>S.research.includes(r.id)),
+    studio_half:  ()=>UPGRADES.filter(u=>S.research.includes(u.id)).length>=4,
+    first_ua:     ()=>(S.totalUASpend||0)>=500,
+    blitz:        ()=>(S.totalUASpend||0)>=75000,
+    influencer_a: ()=>!!S.influencerUsed,
+    ua_100k:      ()=>(S.totalUASpend||0)>=100000,
+    ua_500k:      ()=>(S.totalUASpend||0)>=500000,
+    debt_100k:    ()=>(S.maxDebt||0)>=100000,
+    debt_paid:    ()=>(S.maxDebt||0)>=100000&&S.debt<1000,
+    pivot_used:   ()=>!!S.pivotUsed,
+    reddit_drama: ()=>S.fired.includes('featDebt'),
+    respect_5:    ()=>S.respect>=5,
+    bad_choice:   ()=>(S.badChoicesMade||0)>=1,
+    vc_pass:      ()=>S.fired.includes('vcOffer'),
+    morale_max:   ()=>S.morale>=5&&S.games.length>0,
+  };
+  ACHIEVEMENTS.forEach(a=>{
+    if(!S.achievements.includes(a.id)&&checks[a.id]&&checks[a.id]()){
+      S.achievements.push(a.id);
+      showAchievementToast(a);
+    }
+  });
+}
+
+function buildAchievementsPanel(){
+  const list=$('ach-list'); const counter=$('ach-count');
+  if(!list) return;
+  const unlocked=S.achievements||[];
+  if(counter) counter.textContent=`${unlocked.length} / ${ACHIEVEMENTS.length} unlocked`;
+  const cats=[...new Set(ACHIEVEMENTS.map(a=>a.cat))];
+  list.innerHTML=cats.map(cat=>{
+    const items=ACHIEVEMENTS.filter(a=>a.cat===cat);
+    return `<div class="ach-cat-hdr">${cat}</div>`+
+      items.map(a=>{
+        const done=unlocked.includes(a.id);
+        return `<div class="ach-item ${done?'unlocked':'locked'}">
+          <div class="ach-icon">${a.icon}</div>
+          <div class="ach-info">
+            <div class="ach-name">${a.name}</div>
+            <div class="ach-desc">${done?a.desc:'???'}</div>
+          </div>
+        </div>`;
+      }).join('');
+  }).join('');
+}
+
 // ── TICK ──────────────────────────────────────────────
 
 let ticks=0;
@@ -722,7 +909,11 @@ function tick(){
 
   checkMilestones();
   if(S.popQ.length>0&&!popOpen&&Date.now()-S.lastClick>1500) fireNextPop();
+  // Track peak debt
+  if(S.debt > (S.maxDebt||0)) S.maxDebt=S.debt;
+
   if(ticks%30===0) save();
+  checkAchievements();
   updateUI();
 }
 
@@ -734,6 +925,7 @@ function autoAdvancePRDStep(){
     S.prdProgress=0;
     S.clicks++;
     if(S.clicks%3===0) log(`#${S.clicks} — PM team auto-shipped a prototype.`);
+    S.pmAutoShipped=true;
     // Check if first game should launch
     if(S.clicks>=protoThreshold()&&S.games.length===0&&!S.namedPopDone){
       S.namedPopDone=true;
@@ -875,6 +1067,7 @@ function updateUI(){
   buildUpgradesList();
   buildPremiumList();
   buildGameCards();
+  buildAchievementsPanel();
 
   document.querySelectorAll('.bbuy[data-cost]').forEach(b=>{
     const cost=+b.dataset.cost,cur=b.dataset.cur||'sb';
@@ -1117,6 +1310,7 @@ function doUA(tid,gIdx=0){
   if(S.revenue<t.cost){ log('Not enough revenue.'); return; }
   const dau=Math.round(t.dau*invDauMultiplier());
   S.revenue-=t.cost; S.debt+=t.cost; g.dau+=dau;
+  S.totalUASpend=(S.totalUASpend||0)+t.cost;
   log(`UA: ${t.name} on ${g.name}. +${fmt(dau)} DAU. Debt: ${$m(S.debt)}.`);
 }
 
@@ -1131,6 +1325,7 @@ function doInfluencer(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('influencer')) return;
   if(S.influencerCooldown>0||S.revenue<10000) return;
   S.revenue-=10000; g.dau+=3000; S.influencerCooldown=180;
+  S.influencerUsed=true; S.totalUASpend=(S.totalUASpend||0)+10000;
   log(`Influencer on ${g.name}. +3,000 DAU. $10K spent.`);
 }
 
@@ -1146,7 +1341,7 @@ function doPivot(gIdx=0){
   const og=g.genre;
   g.genre=GENRES[Math.floor(Math.random()*GENRES.length)];
   g.audience=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
-  g.dau*=0.25;
+  g.dau*=0.25; S.pivotUsed=true;
   log(`Pivoted ${g.name}: ${og} → ${g.genre}/${g.audience}. DAU reset to 25%.`);
 }
 
@@ -1217,6 +1412,10 @@ function showPop(ev){
 
 function pickChoice(i){
   const c=popChoices[i]; if(c&&c.fx) c.fx();
+  // Track bad choices (last option by convention = the bad choice, when 3 options)
+  if(i===popChoices.length-1&&popChoices.length>=3){
+    S.badChoicesMade=(S.badChoicesMade||0)+1;
+  }
   closePop();
 }
 
