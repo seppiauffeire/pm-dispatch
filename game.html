@@ -337,6 +337,17 @@ const GAME_NAMES = [
   'Idle HR Department','Crunch Time: The Game','Sprint Review Royale',
 ];
 
+const PRD_STEPS = [
+  'COMPETITOR RESEARCH',
+  'CRAFT FEATURE LIST',
+  'CREATE ROADMAP',
+  'WRITE PRD',
+  'MONETIZATION PLAN',
+  'LIVE OPS DESIGN',
+  'ANALYZE DATA',
+  'SHIP PROTOTYPE',
+];
+
 const REJECTIONS = [
   "Tested at 0.2/5. Focus group thought it was a banking app.",
   "Engineering said '14 sprints.' You nodded like you understood.",
@@ -756,6 +767,24 @@ function togglePanel(id){
 
 // ── UI ────────────────────────────────────────────────
 
+function updateProtoUI(){
+  const step = Math.min(S.prdProgress, PRD_STEPS.length - 1);
+  const isShip = step === PRD_STEPS.length - 1;
+  const btn = $('btn-proto');
+  if(btn){
+    btn.textContent = PRD_STEPS[step];
+    btn.style.background = isShip
+      ? 'linear-gradient(135deg,#16a34a,#22c55e)'
+      : 'linear-gradient(135deg,#7c3aed,#5b6ef5)';
+    btn.style.boxShadow = isShip
+      ? '0 4px 22px rgba(34,197,94,.5)'
+      : '0 4px 22px rgba(124,58,237,.4)';
+  }
+  const bar = $('prd-bar');
+  if(bar) bar.style.width = Math.round(step / (PRD_STEPS.length - 1) * 100) + '%';
+  set('prd-label', `Step ${step + 1} of ${PRD_STEPS.length}`);
+}
+
 function updateUI(){
   set('r-pp', fmt(S.pp));
   set('r-pps', fmt(ppps())+'pp/s');
@@ -783,16 +812,7 @@ function updateUI(){
   set('l-ua',Math.round(n.ua*100)+'%');   set('l-feat',Math.round(n.feat*100)+'%');
   set('pcount','Prototypes shipped: '+S.clicks);
 
-  // PRD progress bar
-  const prdNeeded=10+S.gLaunched*5;
-  const inPRD=S.prdProgress<prdNeeded;
-  const btn=$('btn-proto');
-  if(btn) btn.textContent=inPRD?'WRITE PRD':'SHIP PROTOTYPE';
-  const bar=$('prd-bar');
-  if(bar) bar.style.width=Math.round(S.prdProgress/prdNeeded*100)+'%';
-  const barWrap=$('prd-bar-wrap');
-  if(barWrap) barWrap.style.display=inPRD?'block':'none';
-  set('prd-label',inPRD?`PRD: ${S.prdProgress} / ${prdNeeded}`:'Ready to ship →');
+  updateProtoUI();
 
   // p1 sub
   if(S.games.length===0){
@@ -924,14 +944,14 @@ function buildCard(g,i){
 // ── ACTIONS ───────────────────────────────────────────
 
 function clickProto(){
-  const prdNeeded=10+S.gLaunched*5;
   S.lastClick=Date.now();
   const btn=$('btn-proto');
   if(btn){btn.style.transform='scale(.96)';setTimeout(()=>btn.style.transform='',90);}
 
-  if(S.prdProgress<prdNeeded){
+  const isShipStep = S.prdProgress === PRD_STEPS.length - 1;
+  if(!isShipStep){
     S.prdProgress++;
-    S.pp+=S.pppc; // PRD phase still generates PP
+    S.pp+=S.pppc; // each PM action step still generates PP
   } else {
     // Ship the prototype
     S.prdProgress=0;
@@ -940,6 +960,8 @@ function clickProto(){
       log('#'+S.clicks+' — '+REJECTIONS[S.clicks%REJECTIONS.length]);
     }
   }
+  // Update button label + bar immediately — no waiting for next tick
+  updateProtoUI();
 }
 
 function log(msg){
