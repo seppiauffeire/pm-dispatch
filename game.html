@@ -275,10 +275,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 const AUTOS = [
   // Build team — generates Software Built
   {id:'intern',   name:'Intern',      cost:15,   sbRate:1,  pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
-  {id:'designer', name:'Designer',    cost:600,  sbRate:15, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
-  {id:'artist',   name:'Artist',      cost:800,  sbRate:20, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
-  {id:'engineer', name:'Engineer',    cost:1200, sbRate:30, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
-  {id:'qa',       name:'QA',          cost:3000, sbRate:40, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
+  {id:'engineer', name:'Engineer',    cost:200,  sbRate:20, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
+  {id:'qa',       name:'QA',          cost:600,  sbRate:35, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
+  {id:'designer', name:'Designer',    cost:1200, sbRate:50, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
+  {id:'artist',   name:'Artist',      cost:3000, sbRate:80, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
   // PM team — auto-advances PRD steps, consumes SB
   {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:100, payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
   {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:250, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
@@ -906,7 +906,12 @@ function buildAutoList(){
     </div>`;
   }).join('');
 
-  html+='<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — auto-advances PRD steps</div>';
+  const totalPMs=pmTeam.reduce((s,a)=>s+(S.autos[a.id]||0),0);
+  const interval=pmRate>0?Math.max(3,Math.floor(60/pmRate)):null;
+  const pmSummary=totalPMs===0
+    ?'no PMs hired yet'
+    :`${totalPMs} PM${totalPMs!==1?'s':''} · auto-step every ${interval}s · ${fmt(pmStepCost())} SB/step`;
+  html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — auto-advances PM work to ship prototypes<span style="float:right;font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};font-size:.65rem">${pmSummary}</span></div>`;
   html+=pmTeam.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.15,owned));
