@@ -5590,16 +5590,16 @@ const NEWS_SOURCES = [
     rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.deconstructoroffun.com%2Fblog%3Fformat%3Drss&count=10'
   },
   {
-    key: 'mobilegamer',
-    label: 'Mobile Dev Memo',
-    url: 'https://mobiledevmemo.com/',
-    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fmobiledevmemo.com%2Ffeed%2F&count=10'
+    key: 'naavik',
+    label: 'Naavik',
+    url: 'https://naavik.co/',
+    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fnaavik.co%2Ffeed%2F&count=10'
   },
   {
-    key: 'pocketgamer',
-    label: 'Pocket Gamer Biz',
-    url: 'https://www.pocketgamer.biz/',
-    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.pocketgamer.biz%2Frss%2Fnews.asp&count=10'
+    key: 'gameanalytics',
+    label: 'GameAnalytics',
+    url: 'https://gameanalytics.com/blog/',
+    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fgameanalytics.com%2Fblog%2Ffeed%2F&count=10'
   }
 ];
 
@@ -5650,6 +5650,13 @@ async function loadGamingNews(force=false){
   const results=await Promise.all(NEWS_SOURCES.map(fetchSource));
   let all=[];
   results.forEach(items=>all=all.concat(items));
+
+  // Inject static AppMagic research entries (no RSS available)
+  const appmagicStatic = [
+    { title:'Love and Deepspace Monetization — AppMagic Research', link:'https://appmagic.rocks/research/love-and-deepspace-monetization', date: new Date(Date.now()-2*86400000).toISOString(), snippet:'Deep-dive into Love and Deepspace\'s IAP and monetization structure from AppMagic.', source:'appmagic', sourceLabel:'AppMagic Research' },
+    { title:'AppMagic Research Hub — Mobile Game Market Intelligence', link:'https://appmagic.rocks/research', date: new Date(Date.now()-7*86400000).toISOString(), snippet:'Market intelligence, revenue estimates, and download data for mobile games from AppMagic.', source:'appmagic', sourceLabel:'AppMagic Research' },
+  ];
+  all = all.concat(appmagicStatic);
 
   // Sort newest first, take top 30 (filter will narrow to 10)
   all.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -5821,8 +5828,9 @@ function renderNews(items){
     <button class="news-filter-btn" data-src="gamesindustry" onclick="filterNews('gamesindustry')">GamesIndustry</button>
     <button class="news-filter-btn" data-src="gamedeveloper" onclick="filterNews('gamedeveloper')">Game Developer</button>
     <button class="news-filter-btn" data-src="deconstructoroffun" onclick="filterNews('deconstructoroffun')">Deconstructor of Fun</button>
-    <button class="news-filter-btn" data-src="mobilegamer" onclick="filterNews('mobilegamer')">Mobile Dev Memo</button>
-    <button class="news-filter-btn" data-src="pocketgamer" onclick="filterNews('pocketgamer')">Pocket Gamer Biz</button>
+    <button class="news-filter-btn" data-src="naavik" onclick="filterNews('naavik')">Naavik</button>
+    <button class="news-filter-btn" data-src="gameanalytics" onclick="filterNews('gameanalytics')">GameAnalytics</button>
+    <button class="news-filter-btn" data-src="appmagic" onclick="filterNews('appmagic')">AppMagic</button>
   </div>
 
   <div class="card" style="overflow:hidden">
@@ -5846,7 +5854,8 @@ function renderNews(items){
       <a href="https://www.gamesindustry.biz/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">GamesIndustry.biz ↗</a>
       <a href="https://www.gamedeveloper.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Game Developer ↗</a>
       <a href="https://www.deconstructoroffun.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Deconstructor of Fun ↗</a>
-      <a href="https://mobiledevmemo.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Mobile Dev Memo ↗</a>
+      <a href="https://naavik.co/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Naavik ↗</a>
+      <a href="https://appmagic.rocks/research" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">AppMagic ↗</a>
     </div>
   </div>
 </div>
