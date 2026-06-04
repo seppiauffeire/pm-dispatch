@@ -741,10 +741,18 @@ function load(){
 }
 
 function resetGame(){
-  if(!confirm('Reset all progress? Cannot be undone.')) return;
-  stopTick(); // prevent autosave firing between clear and reload
-  ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
-  location.reload();
+  showPop({
+    title:'Reset all progress?',
+    body:'Your games, team, research, and achievements will be permanently deleted.\n\nThis cannot be undone.',
+    choices:[
+      {text:'Yes, wipe everything.',flav:'Cannot be undone.',fx:()=>{
+        stopTick();
+        ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
+        setTimeout(()=>location.reload(),50);
+      }},
+      {text:'Cancel — keep my progress.',flav:'',fx:()=>{}},
+    ]
+  });
 }
 
 // ── MATH ──────────────────────────────────────────────
