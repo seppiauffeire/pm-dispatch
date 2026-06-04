@@ -193,9 +193,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="res-sub" id="r-pps">0 sb/day</div>
   </div>
   <div class="res-item">
-    <div class="res-label">Revenue</div>
+    <div class="res-label">Operating Income</div>
     <div class="res-val" id="r-rev">$0</div>
-    <div class="res-sub" id="r-revs">$0/day · burn $0/day</div>
+    <div class="res-sub" id="r-revs">net $0/day</div>
   </div>
   <div class="res-item" id="ri-debt">
     <div class="res-label">Debt</div>
@@ -258,7 +258,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     </div>
     <div class="panel hidden" id="panel-sprint">
       <div class="sphead">
-        <div class="sptitle">⚡ PM Focus — Sprint</div>
+        <div class="sptitle">⚡ PM Focus — Sprint<br><span style="font-size:.6rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--t3)">Affects all live games proportionally</span></div>
         <div id="sp-timer">30s</div>
       </div>
       <div class="slitem">
@@ -367,11 +367,11 @@ const RESEARCH = [
   {id:'sprint_pl',       tier:1, name:'Sprint Planning',   cost:250, desc:'Sprint cycle: 30s → 20s.'},
   {id:'liveops_training',tier:1, name:'LiveOps Training', cost:500, desc:'Unlocks the Live Ops board. Ship events and offers to scale revenue.'},
   // Advanced (unlocks when all 8 basic done)
-  {id:'ml_ret',    tier:2, name:'ML Retention Modeling',  cost:500, desc:'All live games: churn −3%.'},
-  {id:'growth_l',  tier:2, name:'Growth Loop Design',     cost:600, desc:'Organic DAU growth +50%.'},
-  {id:'exp_cult',  tier:2, name:'Experimentation Culture',cost:700, desc:'Sprint UA bursts +50% stronger.'},
-  {id:'psych',     tier:2, name:'Player Psychology',      cost:800, desc:'Reveals causes in pop-up events.'},
-  {id:'second_team',tier:2,name:'Second Dev Team',        cost:1000,desc:'Unlocks second game slot. PM team can auto-fill it.'},
+  {id:'ml_ret',    tier:2, name:'ML Retention Modeling',  cost:2500,  desc:'All live games: churn −3%.'},
+  {id:'growth_l',  tier:2, name:'Growth Loop Design',     cost:3000,  desc:'Organic DAU growth +50%.'},
+  {id:'exp_cult',  tier:2, name:'Experimentation Culture',cost:3500,  desc:'Sprint UA bursts +50% stronger.'},
+  {id:'psych',     tier:2, name:'Player Psychology',      cost:4000,  desc:'Reveals causes in pop-up events.'},
+  {id:'second_team',tier:2,name:'Second Dev Team',        cost:10000, desc:'Unlocks second game slot. Requires: 4 Engineers, 2 QA, 2 Designers, 2 Artists.'},
 ];
 
 const UPGRADES = [
@@ -560,6 +560,21 @@ const EVENTS = {
       {text:"Post about it on LinkedIn before signing.",flav:"Bad choice. VC walks. Morale -1.",fx:()=>{ S.morale=Math.max(1,S.morale-1);log("VC pulled out. 'Discretion is part of the deal.'"); }},
     ]
   },
+  blockchainOffer:{
+    title:"A Web3 studio wants to partner with [GAME_NAME].",
+    body:"$2 million upfront. You keep 40% equity. The catch: NFT integration required.\n\nYour community manager has already posted 'we would never do this' on Twitter three times.",
+    choices:[
+      {text:"Decline. You know what happened to the others.",flav:"Conservative. Respect +2.",fx:()=>{ S.respect+=2;log("You made the right call. Your community manager is visibly relieved."); }},
+      {text:"Take a meeting. $2M is $2M.",flav:"Risky. 50%: they lowball. 50%: $2M but LinkedIn goes wild.",fx:()=>{
+        if(Math.random()>.5){ S.revenue+=800000;S.morale=Math.max(1,S.morale-1);log("They came in at $800K. Still bad. You said no. Morale -1."); }
+        else { S.revenue+=2000000;log("$2M closed. Your LinkedIn replies are a disaster. Worth it?"); }
+      }},
+      {text:"Accept. The $2M will solve the burn problem.",flav:"Bad choice. +$2M now. Game dies in 14 days.",fx:()=>{
+        const g=S.games.find(g=>!g.blockchainOffered);
+        if(g){ S.revenue+=2000000; g.nftDecline=14; log(`${g.name}: NFT integration live. +$2M. Players are... not pleased.`); }
+      }},
+    ]
+  },
   cpiSpike:{
     title:"CPIs spiked 40% across the industry.",
     body:"Your UA math just broke. The ROAS curves you modeled last month are meaningless.\n\nDebt is still accruing. Revenue is the same. Margin is contracting.",
@@ -684,7 +699,7 @@ function mkState(){
     spTimer:30, featDebt:0, pmStepTimer:0,
     influencerCooldown:0, platformCooldown:0, pushCooldown:0,
     panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false,respect:false},
-    opsBoardCooldown:0,
+    // opsBoardCooldown moved to per-game state
     popQ:[], fired:[],
     usedNames:[],
     lastClick:Date.now(), lastSave:Date.now(),
@@ -695,7 +710,7 @@ function mkState(){
     highDebtDone:false, moraleCollapseDone:false,
     reviewBombDone:false, vcOfferDone:false, cpiSpikeDone:false,
     featuresManuallyShipped:0, conferenceEventFired:false,
-    recognitionExpiry:0, totalDays:0,
+    recognitionExpiry:0, recognitionCooldown:0, totalDays:0,
     raiseDayNext:0, raisePayrollMult:1,
     freeResearch:false, highDebtThreshold:100000,
     ipLicensed:null, pendingIPLaunch:null,
@@ -877,40 +892,45 @@ function pmPower(){
   return 1 + (j*0.5 + s*1.5 + a*3) * 0.25;
 }
 
+function gamePayrollShare(g){
+  const total=S.games.reduce((s,gx)=>s+revpsG(gx),0);
+  if(total===0||S.games.length<=1) return calcDailyPayroll()/Math.max(1,S.games.length);
+  return Math.round(calcDailyPayroll()*(revpsG(g)/total));
+}
+
 function opsCD(){
   const totalPMs=(S.autos.junior||0)+(S.autos.senior||0)+(S.autos.ai||0);
   return Math.max(30, 90 - totalPMs*5);
 }
 
-function buildOpsBoard(){
-  const btns=$('ops-buttons'); if(!btns) return;
-  const g=S.games[0];
-  const timer=$('ops-timer');
-  const cd=S.opsBoardCooldown||0;
-  if(timer){
-    if(cd>0){ timer.className='ops-cd'; timer.textContent=cd+'s'; }
-    else { timer.className='ops-ready'; timer.textContent=S.morale===5?'● Ready 🔥':'● Ready'; }
-  }
-  const n=normSl(), pmp=pmPower(), ready=cd===0&&!!g;
+function buildOpsBoard(){ /* no-op: Live Ops now rendered inline per game card */ }
+
+function buildInlineOps(g,i){
+  if(!S.research.includes('liveops_training')) return '';
+  const cd=g.opsBoardCooldown||0;
+  const n=normSl(), pmp=pmPower(), ob=opsBonus(), ready=cd===0;
+  const cdStr=cd>0?`${cd}s`:(S.morale===5?'● Ready 🔥':'● Ready');
+  const cdClass=cd>0?'ops-cd':'ops-ready';
   const actions=[
-    {id:'liveops', name:'🎉 Ship Live Ops Event',
-      effects:g?[`+${fmt(Math.round(200*(1+n.ua*3)*pmp))} DAU`,`−${(0.8*n.ret*pmp).toFixed(2)}% churn`]:['needs a live game']},
-    {id:'offer', name:'💰 Ship New Offer',
-      effects:g?[`+${(0.015*(1+n.mon*2)*pmp*100).toFixed(2)}% rev/s`,`+${fmt(Math.round(50*n.mon*pmp))} DAU`]:['needs a live game']},
-    {id:'polish_events', name:'✨ Polish Events',
-      effects:g?[`−${(0.4*(1+n.ret*2)*pmp).toFixed(2)}% churn`,`+${fmt(Math.round(30*n.ret*pmp))} DAU`]:['needs a live game']},
-    {id:'polish_offers', name:'📦 Polish Offers',
-      effects:g?[`+${(0.025*(1+n.mon*1.5)*pmp*100).toFixed(2)}% rev/s`,`−${(0.2*n.ret*pmp).toFixed(2)}% churn`]:['needs a live game']},
+    {id:'liveops', name:'🎉 Live Ops Event', effects:[`+${fmt(Math.round(200*(1+n.ua*3)*pmp*ob))} DAU`,`−${(0.8*n.ret*pmp*ob).toFixed(2)}% churn`]},
+    {id:'offer',   name:'💰 New Offer',      effects:[`+${(0.015*(1+n.mon*2)*pmp*ob*100).toFixed(2)}% rev`,`+${fmt(Math.round(50*n.mon*pmp*ob))} DAU`]},
+    {id:'polish_events',name:'✨ Polish Events',effects:[`−${(0.4*(1+n.ret*2)*pmp*ob).toFixed(2)}% churn`,`+${fmt(Math.round(30*n.ret*pmp*ob))} DAU`]},
+    {id:'polish_offers', name:'📦 Polish Offers', effects:[`+${(0.025*(1+n.mon*1.5)*pmp*ob*100).toFixed(2)}% rev`,`−${(0.2*n.ret*pmp*ob).toFixed(2)}% churn`]},
   ];
-  btns.innerHTML=actions.map(a=>`
-    <button class="ops-btn" onclick="fireOpsAction('${a.id}')" ${ready?'':'disabled'}>
-      <div class="ops-btn-name">${a.name}</div>
-      <div class="ops-btn-effect">${a.effects.map(e=>`<span class="pos">${e}</span>`).join(' · ')}</div>
-    </button>`).join('');
+  return `<div style="margin-top:.7rem;border-top:1px solid var(--border);padding-top:.6rem">
+    <div class="ops-hdr"><div class="sptitle" style="font-size:.7rem">📋 Live Ops</div><div class="${cdClass}" style="font-size:.72rem">${cdStr}</div></div>
+    <div class="ops-grid" style="margin-top:.4rem">
+      ${actions.map(a=>`<button class="ops-btn" onclick="fireOpsAction('${a.id}',${i})" ${ready?'':'disabled'}>
+        <div class="ops-btn-name" style="font-size:.75rem">${a.name}</div>
+        <div class="ops-btn-effect">${a.effects.map(e=>`<span class="pos">${e}</span>`).join(' · ')}</div>
+      </button>`).join('')}
+    </div>
+    ${g.opsLastResult?`<div class="ops-result" style="font-size:.72rem;color:var(--t2);margin-top:.35rem;text-align:center">${g.opsLastResult}</div>`:''}
+  </div>`;
 }
 
-function fireOpsAction(id){
-  const g=S.games[0]; if(!g||S.opsBoardCooldown>0) return;
+function fireOpsAction(id, gIdx=0){
+  const g=S.games[gIdx]; if(!g||(g.opsBoardCooldown||0)>0) return;
   const n=normSl(), pmp=pmPower(), ob=opsBonus();
   let msg='';
   if(id==='liveops'){
@@ -938,8 +958,8 @@ function fireOpsAction(id){
     msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.${ob>1?' 🔥':''}`;
     log(`📦 ${g.name}: Offers Polished. Revenue +${(rev*100).toFixed(2)}% permanently.`);
   }
-  S.opsBoardCooldown=opsCD();
-  set('ops-result',msg);
+  g.opsBoardCooldown=opsCD();
+  g.opsLastResult=msg;
 }
 
 // ── ACHIEVEMENTS ──────────────────────────────────────
@@ -1009,8 +1029,11 @@ function checkAchievements(){
     if(!S.achievements.includes(a.id)&&checks[a.id]&&checks[a.id]()){
       S.achievements.push(a.id);
       showAchievementToast(a);
-      // Trigger recognition banner if not already pending
-      if(!S.recognitionExpiry||ticks>S.recognitionExpiry) S.recognitionExpiry=ticks+48;
+      // Only trigger recognition for high-value milestones with cooldown
+      const HIGH_VALUE=new Set(['first_game','dau_10k','dau_50k','dau_100k','ten_k','hundred_k','million','two_games','basic_done','adv_done']);
+      if(HIGH_VALUE.has(a.id) && (ticks-(S.recognitionCooldown||0))>300){
+        S.recognitionExpiry=ticks+48; S.recognitionCooldown=ticks;
+      }
     }
   });
 }
@@ -1054,6 +1077,28 @@ function tick(){
     if(S.debt>0) S.debt=Math.max(0,S.debt-rev);
     g.dau+=growthPerSecG(g);
     if(g.dau>S.peakDAU) S.peakDAU=g.dau;
+
+    // Per-game ops cooldown
+    if((g.opsBoardCooldown||0)>0) g.opsBoardCooldown--;
+
+    // NFT death spiral
+    if((g.nftDecline||0)>0){
+      g.dau=Math.round(g.dau*0.985); // ~1.5%/tick DAU decay
+      g.nftDecline--;
+      if(g.nftDecline===7*24) log(`${g.name}: Discord is 80% bot activity. The remaining players are angry.`);
+      if(g.nftDecline<=0){
+        log(`☠️ ${g.name} has been sunset by the community. They left when you went blockchain.`);
+        const gIdx=S.games.indexOf(g);
+        if(gIdx>=0){ S.gSunset++; S.games.splice(gIdx,1); }
+      }
+    }
+
+    // Blockchain offer trigger
+    if(!g.blockchainOffered && (g.lifetimeRev||0)>=500000){
+      g.blockchainOffered=true;
+      S._bcGameName=g.name;
+      qEv('blockchainOffer');
+    }
 
     // Feature shipping timer
     g.featureDueIn=Math.max(0,(g.featureDueIn||48)-1);
@@ -1339,7 +1384,9 @@ function updateUI(){
   set('r-pps', fmt(Math.round(sbps()*24))+' sb/day'+moraleTag);
   set('r-rev', $m(S.revenue));
   const burn=calcDailyPayroll();
-  set('r-revs',(S.games.length>0?$m(Math.round(totalRevps()*24))+'/day · ':'$0/day · ')+'burn '+$m(burn)+'/day');
+  const netDay=Math.round(totalRevps()*24-burn);
+  const netStr=netDay>=0?'+'+$m(netDay)+'/day':'-'+$m(Math.abs(netDay))+'/day';
+  set('r-revs',S.games.length>0?`net ${netStr}`:'no active games');
   set('r-debt',$m(S.debt));
   set('r-dflav',debtFlavor());
   set('r-resp',S.respect);
@@ -1385,7 +1432,6 @@ function updateUI(){
   buildUpgradesList();
   buildPremiumList();
   buildGameCards();
-  buildOpsBoard();
   buildRespectActions();
   buildAchievementsPanel();
   // Recognition banner
@@ -1410,7 +1456,7 @@ function buildAutoList(){
   let html='<div class="auto-section-hdr">🏗 Build Team — generates Software Built</div>';
   html+=buildTeam.map(a=>{
     const owned=S.autos[a.id]||0;
-    const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+    const cost=Math.floor(a.cost*Math.pow(1.35,owned));
     const nextSB=(owned+1)*a.sbRate;
     return `<div class="ai">
       <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
@@ -1430,7 +1476,7 @@ function buildAutoList(){
   html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — ships prototypes<br><span style="font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};">${pmSummary}</span></div>`;
   html+=pmTeam.map(a=>{
     const owned=S.autos[a.id]||0;
-    const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+    const cost=Math.floor(a.cost*Math.pow(1.35,owned));
     const rateLabel=owned>0?`${a.pmRate*owned} steps/min`:`${a.pmRate} steps/min`;
     const costLabel=`${fmt(a.sbCost)} SB/step`;
     return `<div class="ai" style="align-items:flex-start;gap:.5rem">
@@ -1470,13 +1516,18 @@ function buildAutoList(){
 function renderResItems(items){
   return items.map(r=>{
     const done=S.research.includes(r.id);
+    const reqMet=r.id!=='second_team'||(
+      (S.autos.engineer||0)>=4&&(S.autos.qa||0)>=2&&(S.autos.designer||0)>=2&&(S.autos.artist||0)>=2);
+    const reqNote=r.id==='second_team'&&!done&&!reqMet
+      ?`<div style="font-size:.68rem;color:var(--red);margin-top:3px">⚠ Need: 4 Eng · 2 QA · 2 Des · 2 Art (have: ${S.autos.engineer||0}·${S.autos.qa||0}·${S.autos.designer||0}·${S.autos.artist||0})</div>`:'';
     return `<div class="ri">
       <div class="rin">${r.name}</div>
       <div class="rid">${r.desc}</div>
+      ${reqNote}
       ${done?'<div class="ridone">✓ Researched</div>'
         :`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
             <span class="ric">${fmt(r.cost)} SB</span>
-            <button class="bbuy" data-cost="${r.cost}" data-cur="sb" onclick="buyRes('${r.id}')">Research</button>
+            <button class="bbuy" data-cost="${r.cost}" data-cur="sb" ${reqMet?'':`disabled title="Team req not met"`} onclick="buyRes('${r.id}')">Research</button>
           </div>`}
     </div>`;
   }).join('');
@@ -1557,8 +1608,7 @@ function buildCard(g,i){
   const churnDisplay=showChurn?g.churn.toFixed(1)+'%':health(g.churn);
   const fl=GENRE_FLAVOR[g.genre]?.[g.audience]||'';
   const infCD=S.influencerCooldown, platCD=S.platformCooldown, pushCD=S.pushCooldown;
-  const numGames=Math.max(1,S.games.length);
-  const teamShare=$m(Math.round(calcDailyPayroll()/numGames));
+  const teamShare=$m(gamePayrollShare(g));
   const uaMult=invDauMultiplier();
   return `<div class="gcard">
     <div class="gch">
@@ -1596,6 +1646,7 @@ function buildCard(g,i){
     <div style="margin-top:.65rem;font-size:.72rem;color:var(--t2)">
       Peak DAU: ${fmt(S.peakDAU)} · Lifetime: ${$m(g.lifetimeRev||0)} · Team cost: ${teamShare}/day
     </div>
+    ${buildInlineOps(g,i)}
   </div>`;
 }
 
@@ -1629,7 +1680,7 @@ function log(msg){
 function buyAuto(id){
   const a=AUTOS.find(x=>x.id===id); if(!a) return;
   const owned=S.autos[id]||0;
-  const cost=Math.floor(a.cost*Math.pow(1.15,owned));
+  const cost=Math.floor(a.cost*Math.pow(1.35,owned));
   if(S.pp<cost) return;
   S.pp-=cost; S.autos[id]=owned+1;
   log(`Hired: ${a.name}.`);
@@ -1694,7 +1745,11 @@ function doUA(tid,gIdx=0){
   log(`UA: ${t.name} on ${g.name}. +${fmt(dau)} DAU. Debt: ${$m(S.debt)}.`);
 }
 
-function featureShipCost(g){ return Math.max(500, Math.round(g.dau*0.5+(g.daysLive||0)*50)); }
+function featureShipCost(g){
+  const base=Math.max(500,Math.round(g.dau*0.5+(g.daysLive||0)*50));
+  const maturity=1+(g.permRevBoost||0)*2; // grows as ops actions stack
+  return Math.round(base*maturity);
+}
 
 function shipFeatures(gIdx=0){
   const g=S.games[gIdx]; if(!g) return;
@@ -1808,8 +1863,8 @@ function fireNextPop(){
   let ev=EVENTS[id]; if(!ev) return;
   if(S.games[0]){
     ev={...ev,
-      title:ev.title.replace(/\[GAME_NAME\]/g,S.games[0].name),
-      body:ev.body.replace(/\[GAME_NAME\]/g,S.games[0].name)
+      title:ev.title.replace(/\[GAME_NAME\]/g,S._bcGameName||S.games[0].name),
+      body:ev.body.replace(/\[GAME_NAME\]/g,S._bcGameName||S.games[0].name)
     };
   }
   showPop(ev);
@@ -1877,6 +1932,8 @@ function launchGame(genre,aud){
   const launchChurn = Math.max(0.5, startChurn + (ip ? ip.churnBonus : 0));
   S.games.push({name,genre,audience:aud,dau:launchDAU,churn:launchChurn,daysLive:0,permRevBoost:0,
     lifetimeRev:0, featureDueIn:48, featureOverdueFor:0, acquisitionOffered:false,
+    opsBoardCooldown:0, opsLastResult:'',
+    blockchainOffered:false, nftDecline:0,
     ipId: ip ? ip.id : null, ipName: ip ? ip.name : null});
   if(ip){ S.ipLicensed=ip; S.pendingIPLaunch=null; log(`🎬 ${ip.name} IP game launching. ${fmt(launchDAU)} launch DAU. Royalty: ${$m(ip.royaltyPerDay)}/day.`); }
   S.gLaunched++; S.dayTimer=24; S.prdProgress=0;
