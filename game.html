@@ -190,12 +190,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="res-item">
     <div class="res-label">Software Built</div>
     <div class="res-val" id="r-pp">0</div>
-    <div class="res-sub" id="r-pps">0 sb/s</div>
+    <div class="res-sub" id="r-pps">0 sb/day</div>
   </div>
   <div class="res-item">
     <div class="res-label">Revenue</div>
     <div class="res-val" id="r-rev">$0</div>
-    <div class="res-sub" id="r-revs">$0/s · burn $0/day</div>
+    <div class="res-sub" id="r-revs">$0/day · burn $0/day</div>
   </div>
   <div class="res-item" id="ri-debt">
     <div class="res-label">Debt</div>
@@ -333,10 +333,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 const AUTOS = [
   // Build team — generates Software Built
   {id:'intern',   name:'Intern',      cost:15,   sbRate:1,  pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
-  {id:'engineer', name:'Engineer',    cost:200,  sbRate:20, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
-  {id:'qa',       name:'QA',          cost:600,  sbRate:35, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
-  {id:'designer', name:'Designer',    cost:1200, sbRate:50, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
-  {id:'artist',   name:'Artist',      cost:3000, sbRate:80, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
+  {id:'engineer', name:'Engineer',    cost:200,  sbRate:15, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
+  {id:'qa',       name:'QA',          cost:600,  sbRate:20, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
+  {id:'designer', name:'Designer',    cost:1200, sbRate:30, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
+  {id:'artist',   name:'Artist',      cost:3000, sbRate:50, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
   // PM team — auto-advances PRD steps, consumes SB
   {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:100, payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
   {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:250, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
@@ -678,7 +678,7 @@ function mkState(){
     usedNames:[],
     lastClick:Date.now(), lastSave:Date.now(),
     totalRev:0, peakDAU:0, gLaunched:0, gSunset:0,
-    dayTimer:60,
+    dayTimer:24,
     roasDone:false, compDone:false, bugDone:false,
     namedPopDone:false,
     highDebtDone:false, moraleCollapseDone:false,
@@ -1002,10 +1002,10 @@ function tick(){
     if(g.dau>S.peakDAU) S.peakDAU=g.dau;
 
     // Feature shipping timer
-    g.featureDueIn=Math.max(0,(g.featureDueIn||90)-1);
+    g.featureDueIn=Math.max(0,(g.featureDueIn||48)-1);
     if(g.featureDueIn<=0){
       g.featureOverdueFor=(g.featureOverdueFor||0)+1;
-      if(g.featureOverdueFor===181){ // grace period expired
+      if(g.featureOverdueFor===97){ // 4-day grace period expired
         g.churn=Math.min(25,g.churn+1);
         log(`⚠ ${g.name}: no new features shipped. Players are noticing. Churn +1%.`);
       }
@@ -1013,7 +1013,7 @@ function tick(){
       if((S.autos.director||0)>0 && S.pp>=featureShipCost(g)){
         S.pp-=featureShipCost(g);
         g.dau=Math.round(g.dau*1.05); g.permRevBoost=(g.permRevBoost||0)+0.01;
-        g.featureDueIn=90; g.featureOverdueFor=0;
+        g.featureDueIn=48; g.featureOverdueFor=0;
         log(`🤖 Director of Product auto-shipped features for ${g.name}. DAU +5%.`);
       }
     }
@@ -1040,9 +1040,9 @@ function tick(){
   });
 
   // Day timer (shared — all games tick together)
-  S.dayTimer=(S.dayTimer||60)-1;
+  S.dayTimer=(S.dayTimer||24)-1;
   if(S.dayTimer<=0){
-    S.dayTimer=60;
+    S.dayTimer=24;
     S.games.forEach(g=>{
       g.daysLive=(g.daysLive||0)+1;
       const lost=g.dau*(churnPerDayG(g)/100);
@@ -1217,10 +1217,10 @@ function updateProtoUI(){
 
 function updateUI(){
   set('r-pp', fmt(S.pp));
-  set('r-pps', fmt(sbps())+'sb/s');
+  set('r-pps', fmt(Math.round(sbps()*24))+' sb/day');
   set('r-rev', $m(S.revenue));
   const burn=calcDailyPayroll();
-  set('r-revs',(S.games.length>0?$m(totalRevps())+'/s · ':'$0/s · ')+'burn '+$m(burn)+'/day');
+  set('r-revs',(S.games.length>0?$m(Math.round(totalRevps()*24))+'/day · ':'$0/day · ')+'burn '+$m(burn)+'/day');
   set('r-debt',$m(S.debt));
   set('r-dflav',debtFlavor());
   set('r-resp',S.respect);
@@ -1417,7 +1417,8 @@ function buildCard(g,i){
   const churnDisplay=showChurn?g.churn.toFixed(1)+'%':health(g.churn);
   const fl=GENRE_FLAVOR[g.genre]?.[g.audience]||'';
   const infCD=S.influencerCooldown, platCD=S.platformCooldown, pushCD=S.pushCooldown;
-  const teamShare=$m(calcDailyPayroll()/S.games.length);
+  const numGames=Math.max(1,S.games.length);
+  const teamShare=$m(Math.round(calcDailyPayroll()/numGames));
   const uaMult=invDauMultiplier();
   return `<div class="gcard">
     <div class="gch">
@@ -1590,14 +1591,14 @@ function showIPPopup(){
 function doPush(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('push')) return;
   if(S.pushCooldown>0) return;
-  g.dau+=200; S.pushCooldown=300;
+  g.dau+=200; S.pushCooldown=24;
   log(`Push sent to ${g.name}. +200 DAU.`);
 }
 
 function doInfluencer(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('influencer')) return;
   if(S.influencerCooldown>0||S.revenue<10000) return;
-  S.revenue-=10000; g.dau+=3000; S.influencerCooldown=180;
+  S.revenue-=10000; g.dau+=3000; S.influencerCooldown=72;
   S.influencerUsed=true; S.totalUASpend=(S.totalUASpend||0)+10000;
   log(`Influencer on ${g.name}. +3,000 DAU. $10K spent.`);
 }
@@ -1605,7 +1606,7 @@ function doInfluencer(gIdx=0){
 function doPlatform(gIdx=0){
   const g=S.games[gIdx]; if(!g||!S.research.includes('platform')) return;
   if(S.platformCooldown>0||S.revenue<40000) return;
-  S.revenue-=40000; g.dau+=10000; S.platformCooldown=840;
+  S.revenue-=40000; g.dau+=10000; S.platformCooldown=336;
   log(`App Store Featuring on ${g.name}. +10,000 DAU. $40K spent.`);
 }
 
@@ -1639,7 +1640,7 @@ function doSunset(how,gIdx=0){
   S.games.splice(gIdx,1);
   if(S.games.length===0){
     S.debt=0; S.roasDone=false; S.compDone=false; S.bugDone=false;
-    S.namedPopDone=false; S.featDebt=0; S.dayTimer=60;
+    S.namedPopDone=false; S.featDebt=0; S.dayTimer=24;
     S.panels.port=false; S.panels.sprint=false; S.panels.upgrades=false;
     $('panel-port').classList.add('hidden');
     $('panel-sprint').classList.add('hidden');
@@ -1734,10 +1735,10 @@ function launchGame(genre,aud){
   const launchDAU = ip ? ip.launchDAU : 12;
   const launchChurn = Math.max(0.5, startChurn + (ip ? ip.churnBonus : 0));
   S.games.push({name,genre,audience:aud,dau:launchDAU,churn:launchChurn,daysLive:0,permRevBoost:0,
-    lifetimeRev:0, featureDueIn:90, featureOverdueFor:0, acquisitionOffered:false,
+    lifetimeRev:0, featureDueIn:48, featureOverdueFor:0, acquisitionOffered:false,
     ipId: ip ? ip.id : null, ipName: ip ? ip.name : null});
   if(ip){ S.ipLicensed=ip; S.pendingIPLaunch=null; log(`🎬 ${ip.name} IP game launching. ${fmt(launchDAU)} launch DAU. Royalty: ${$m(ip.royaltyPerDay)}/day.`); }
-  S.gLaunched++; S.dayTimer=60; S.prdProgress=0;
+  S.gLaunched++; S.dayTimer=24; S.prdProgress=0;
   closePop();
   log(`🚀 ${name} is live. 12 installs. 3 of them are you.`);
   setTimeout(()=>qEv('firstLaunch'),3000);
