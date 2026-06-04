@@ -236,6 +236,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 
   <div class="col-main">
+    <div id="banner-recognition" class="hidden" style="background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:9px;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem">
+      <span style="font-size:.85rem;color:var(--t1)">🎉 Team nailed a milestone.</span>
+      <button onclick="recognizeWin()" style="padding:4px 12px;font-size:.78rem;font-weight:700;background:var(--green);color:#0a0a0a;border:none;border-radius:6px;cursor:pointer;font-family:var(--sans)">Recognize it → +1 Morale</button>
+    </div>
     <div class="panel" id="panel-p1">
       <div id="p1">
         <div class="p1h">You are a mobile games PM.</div>
@@ -294,6 +298,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="panel hidden" id="panel-auto">
       <div class="ptitle" style="cursor:default;pointer-events:none">🤖 Automation</div>
       <div class="panel-body" id="auto-list"></div>
+    </div>
+    <div class="panel hidden" id="panel-respect-actions">
+      <div class="ptitle" onclick="togglePanel('panel-respect-actions')">⭐ Use Respect</div>
+      <div class="panel-body">
+        <div style="font-size:.72rem;color:var(--t3);margin-bottom:.5rem" id="respect-avail"></div>
+        <div id="respect-list"></div>
+      </div>
     </div>
     <div class="panel" id="panel-goals">
       <div class="ptitle" onclick="togglePanel('panel-goals')">🏆 Career Goals</div>
@@ -672,7 +683,7 @@ function mkState(){
     sl:{mon:25,ret:25,ua:25,feat:25},
     spTimer:30, featDebt:0, pmStepTimer:0,
     influencerCooldown:0, platformCooldown:0, pushCooldown:0,
-    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false},
+    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false,respect:false},
     opsBoardCooldown:0,
     popQ:[], fired:[],
     usedNames:[],
@@ -684,6 +695,9 @@ function mkState(){
     highDebtDone:false, moraleCollapseDone:false,
     reviewBombDone:false, vcOfferDone:false, cpiSpikeDone:false,
     featuresManuallyShipped:0, conferenceEventFired:false,
+    recognitionExpiry:0, totalDays:0,
+    raiseDayNext:0, raisePayrollMult:1,
+    freeResearch:false, highDebtThreshold:100000,
     ipLicensed:null, pendingIPLaunch:null,
     hiddenAt:null,
     achievements:[], totalUASpend:0, maxDebt:0, badChoicesMade:0,
@@ -735,8 +749,8 @@ function resetGame(){
 // ── MATH ──────────────────────────────────────────────
 
 function sbps(){
-  return AUTOS.reduce((sum,a)=>sum+(a.sbRate||0)*(S.autos[a.id]||0)*S.pppc,0);
-  // Note: pppc doubles manual SB generation; also scales automation slightly
+  const base=AUTOS.reduce((sum,a)=>sum+(a.sbRate||0)*(S.autos[a.id]||0)*S.pppc,0);
+  return base * moraleMultiplier();
 }
 
 function pmClickRate(){
@@ -755,7 +769,8 @@ function pmStepCost(){
 
 function calcDailyPayroll(){
   const disc = S.research.includes('exec_dash') ? 0.9 : 1.0;
-  return AUTOS.reduce((sum,a)=>sum+(a.payroll||0)*(S.autos[a.id]||0),0) * disc;
+  const raise = S.raisePayrollMult || 1;
+  return AUTOS.reduce((sum,a)=>sum+(a.payroll||0)*(S.autos[a.id]||0),0) * disc * raise;
 }
 
 function normSl(){
@@ -818,6 +833,32 @@ const $m=n=>'$'+fmt(n);
 const $=id=>document.getElementById(id);
 const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
 
+// ── MORALE MECHANICS ──────────────────────────────────
+
+function moraleMultiplier(){
+  // 1:0.70× | 2:0.85× | 3:1.00× | 4:1.15× | 5:1.30×
+  return 0.7 + (S.morale - 1) * 0.15;
+}
+
+function opsBonus(){
+  return S.morale === 5 ? 1.25 : 1.0;
+}
+
+// ── RESPECT ACTIONS ───────────────────────────────────
+
+const RESPECT_ACTIONS = [
+  {id:'exec_net',    cost:3, name:'Exec Networking',    icon:'🤝', desc:'Clear all active cooldowns.',
+   fx:()=>{ S.influencerCooldown=0;S.platformCooldown=0;S.pushCooldown=0;S.opsBoardCooldown=0;log('All cooldowns cleared. Your network does the work.'); }},
+  {id:'mentor',      cost:2, name:'Mentor a PM',         icon:'🎓', desc:'Morale +1.',
+   fx:()=>{ S.morale=Math.min(5,S.morale+1);log('You gave real feedback for once. The team noticed.'); }},
+  {id:'thought_lead',cost:3, name:'Thought Leadership',  icon:'📝', desc:'Next research costs 0 SB.',
+   fx:()=>{ S.freeResearch=true;log('"PM thought leader" is now on your LinkedIn. Next research is free.'); }},
+  {id:'angel',       cost:5, name:'Angel Round',          icon:'💸', desc:'+$250K immediate cash.',
+   fx:()=>{ S.revenue+=250000;log('Invested in yourself. 100% ROI. Zero dilution.'); }},
+  {id:'boardcap',    cost:6, name:'Board Room Capital',   icon:'🏛', desc:'Next debt event triggers at $200K.',
+   fx:()=>{ S.highDebtThreshold=200000;log('Board credibility deployed. CFO meeting delayed to $200K debt.'); }},
+];
+
 // ── OPS BOARD ─────────────────────────────────────────
 
 function pmPower(){
@@ -837,7 +878,7 @@ function buildOpsBoard(){
   const cd=S.opsBoardCooldown||0;
   if(timer){
     if(cd>0){ timer.className='ops-cd'; timer.textContent=cd+'s'; }
-    else { timer.className='ops-ready'; timer.textContent='● Ready'; }
+    else { timer.className='ops-ready'; timer.textContent=S.morale===5?'● Ready 🔥':'● Ready'; }
   }
   const n=normSl(), pmp=pmPower(), ready=cd===0&&!!g;
   const actions=[
@@ -859,31 +900,31 @@ function buildOpsBoard(){
 
 function fireOpsAction(id){
   const g=S.games[0]; if(!g||S.opsBoardCooldown>0) return;
-  const n=normSl(), pmp=pmPower();
+  const n=normSl(), pmp=pmPower(), ob=opsBonus();
   let msg='';
   if(id==='liveops'){
-    const dau=Math.round(200*(1+n.ua*3)*pmp);
-    const ch=parseFloat((0.8*n.ret*pmp).toFixed(2));
+    const dau=Math.round(200*(1+n.ua*3)*pmp*ob);
+    const ch=parseFloat((0.8*n.ret*pmp*ob).toFixed(2));
     g.dau+=dau; g.churn=Math.max(0.5,g.churn-ch);
-    msg=`Live ops shipped. +${fmt(dau)} DAU · −${ch}% churn.`;
+    msg=`Live ops shipped. +${fmt(dau)} DAU · −${ch}% churn.${ob>1?' 🔥':''}`;
     log(`📅 ${g.name}: Live Ops Event. +${fmt(dau)} DAU, −${ch}% churn.`);
   } else if(id==='offer'){
-    const rev=parseFloat((0.015*(1+n.mon*2)*pmp).toFixed(4));
-    const dau=Math.round(50*n.mon*pmp);
+    const rev=parseFloat((0.015*(1+n.mon*2)*pmp*ob).toFixed(4));
+    const dau=Math.round(50*n.mon*pmp*ob);
     g.permRevBoost=(g.permRevBoost||0)+rev; g.dau+=dau;
-    msg=`New offer live. +${(rev*100).toFixed(2)}% rev · +${fmt(dau)} DAU.`;
+    msg=`New offer live. +${(rev*100).toFixed(2)}% rev · +${fmt(dau)} DAU.${ob>1?' 🔥':''}`;
     log(`💰 ${g.name}: New Offer. Revenue +${(rev*100).toFixed(2)}% permanently.`);
   } else if(id==='polish_events'){
-    const ch=parseFloat((0.4*(1+n.ret*2)*pmp).toFixed(2));
-    const dau=Math.round(30*n.ret*pmp);
+    const ch=parseFloat((0.4*(1+n.ret*2)*pmp*ob).toFixed(2));
+    const dau=Math.round(30*n.ret*pmp*ob);
     g.churn=Math.max(0.3,g.churn-ch); g.dau+=dau;
-    msg=`Events polished. −${ch}% churn · +${fmt(dau)} DAU.`;
+    msg=`Events polished. −${ch}% churn · +${fmt(dau)} DAU.${ob>1?' 🔥':''}`;
     log(`✨ ${g.name}: Events Polished. Churn −${ch}% permanently.`);
   } else if(id==='polish_offers'){
-    const rev=parseFloat((0.025*(1+n.mon*1.5)*pmp).toFixed(4));
-    const ch=parseFloat((0.2*n.ret*pmp).toFixed(2));
+    const rev=parseFloat((0.025*(1+n.mon*1.5)*pmp*ob).toFixed(4));
+    const ch=parseFloat((0.2*n.ret*pmp*ob).toFixed(2));
     g.permRevBoost=(g.permRevBoost||0)+rev; g.churn=Math.max(0.3,g.churn-ch);
-    msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.`;
+    msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.${ob>1?' 🔥':''}`;
     log(`📦 ${g.name}: Offers Polished. Revenue +${(rev*100).toFixed(2)}% permanently.`);
   }
   S.opsBoardCooldown=opsCD();
@@ -957,6 +998,8 @@ function checkAchievements(){
     if(!S.achievements.includes(a.id)&&checks[a.id]&&checks[a.id]()){
       S.achievements.push(a.id);
       showAchievementToast(a);
+      // Trigger recognition banner if not already pending
+      if(!S.recognitionExpiry||ticks>S.recognitionExpiry) S.recognitionExpiry=ticks+48;
     }
   });
 }
@@ -1043,6 +1086,7 @@ function tick(){
   S.dayTimer=(S.dayTimer||24)-1;
   if(S.dayTimer<=0){
     S.dayTimer=24;
+    S.totalDays=(S.totalDays||0)+1;
     S.games.forEach(g=>{
       g.daysLive=(g.daysLive||0)+1;
       const lost=g.dau*(churnPerDayG(g)/100);
@@ -1069,7 +1113,7 @@ function tick(){
     if(!S.cpiSpikeDone&&(g.daysLive||0)>=10&&Math.random()<0.001){ S.cpiSpikeDone=true; qEv('cpiSpike'); }
   }
 
-  const debtThreshold=S.games.length>1?50000:100000;
+  const debtThreshold=S.games.length>1?50000:(S.highDebtThreshold||100000);
   if(!S.highDebtDone&&S.debt>debtThreshold){ S.highDebtDone=true; qEv('highDebt'); }
   if(!S.fired.includes('moraleCollapse')&&S.morale<=1) qEv('moraleCollapse');
   if(!S.vcOfferDone&&S.totalRev>500000){ S.vcOfferDone=true; qEv('vcOffer'); }
@@ -1086,7 +1130,8 @@ function tick(){
   // PM team auto-advances PRD steps
   const pmRate=pmClickRate();
   if(pmRate>0){
-    const interval=Math.max(3,Math.floor(60/pmRate));
+    const moraleSpeed=1.3-(S.morale-1)*0.15; // 1:1.15× slower | 5:0.70× faster
+    const interval=Math.max(3,Math.floor(60/pmRate*moraleSpeed));
     S.pmStepTimer=Math.max(0,(S.pmStepTimer||interval)-1);
     if(S.pmStepTimer===0){
       S.pmStepTimer=interval;
@@ -1171,6 +1216,8 @@ function checkMilestones(){
   const studioHalf=UPGRADES.filter(u=>S.research.includes(u.id)).length>=Math.ceil(UPGRADES.length/2);
   if(advDone&&studioHalf&&!S.panels.premium){ S.panels.premium=true; reveal('panel-premium'); log('💎 Premium Upgrades unlocked. You\'ve come a long way.'); }
 
+  if(S.respect>=2&&!S.panels.respect){ S.panels.respect=true; reveal('panel-respect-actions'); log('⭐ Respect actions unlocked. You can now spend Respect on strategic advantages.'); }
+
   checkPanelCollapse();
 }
 
@@ -1199,6 +1246,44 @@ function markComplete(id,done){
 function reveal(id){ const e=$(id); if(e){e.classList.remove('hidden');e.classList.add('fade-in');} }
 function togglePanel(id){ const p=$(id); if(p) p.classList.toggle('collapsed'); }
 
+function recognizeWin(){
+  S.morale=Math.min(5,S.morale+1);
+  S.recognitionExpiry=0;
+  $('banner-recognition').classList.add('hidden');
+  log('You recognized the team\'s work. Morale +1. It cost nothing and worked immediately.');
+}
+
+function giveRaise(){
+  const newBurn=Math.round(calcDailyPayroll()*1.1);
+  if(!confirm(`Give the team a 10% raise?\n\nNew payroll: ${$m(newBurn)}/day\nMorale: +2\n\nThis cannot be undone.`)) return;
+  S.raisePayrollMult=(S.raisePayrollMult||1)*1.1;
+  S.morale=Math.min(5,S.morale+2);
+  S.raiseDayNext=(S.totalDays||0)+90;
+  log(`💰 Team raise given (+10% payroll). Morale +2. Next raise available in 90 days.`);
+}
+
+function useRespect(id){
+  const a=RESPECT_ACTIONS.find(x=>x.id===id); if(!a) return;
+  if(S.respect<a.cost){ log(`Need ${a.cost} Respect for ${a.name}.`); return; }
+  S.respect-=a.cost;
+  a.fx();
+}
+
+function buildRespectActions(){
+  const list=$('respect-list'); if(!list) return;
+  set('respect-avail',`${S.respect} Respect available`);
+  list.innerHTML=RESPECT_ACTIONS.map(a=>{
+    const canAfford=S.respect>=a.cost;
+    return `<div class="ai">
+      <div><div class="ain">${a.icon} ${a.name}</div><div class="aif">${a.desc}</div></div>
+      <div class="air">
+        <div class="aio" style="color:${canAfford?'var(--ind2)':'var(--t3)'}">${a.cost}⭐</div>
+        <button class="bbuy${canAfford?' aff':''}" ${canAfford?'':'disabled'} onclick="useRespect('${a.id}')">Use</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 // ── UI ────────────────────────────────────────────────
 
 function updateProtoUI(){
@@ -1217,7 +1302,9 @@ function updateProtoUI(){
 
 function updateUI(){
   set('r-pp', fmt(S.pp));
-  set('r-pps', fmt(Math.round(sbps()*24))+' sb/day');
+  const moralePct=Math.round((moraleMultiplier()-1)*100);
+  const moraleTag=moralePct>0?` (+${moralePct}% morale)`:moralePct<0?` (${moralePct}% morale)`:'';
+  set('r-pps', fmt(Math.round(sbps()*24))+' sb/day'+moraleTag);
   set('r-rev', $m(S.revenue));
   const burn=calcDailyPayroll();
   set('r-revs',(S.games.length>0?$m(Math.round(totalRevps()*24))+'/day · ':'$0/day · ')+'burn '+$m(burn)+'/day');
@@ -1267,7 +1354,11 @@ function updateUI(){
   buildPremiumList();
   buildGameCards();
   buildOpsBoard();
+  buildRespectActions();
   buildAchievementsPanel();
+  // Recognition banner
+  const bannerEl=$('banner-recognition');
+  if(bannerEl) bannerEl.classList.toggle('hidden', !S.recognitionExpiry||ticks>S.recognitionExpiry);
 
   document.querySelectorAll('.bbuy[data-cost]').forEach(b=>{
     const cost=+b.dataset.cost,cur=b.dataset.cur||'sb';
@@ -1323,6 +1414,23 @@ function buildAutoList(){
       </div>
     </div>`;
   }).join('');
+
+  // Team Raise (available every 90 in-game days, after first game)
+  if(S.games.length>0){
+    const raiseReady=(S.totalDays||0)>=(S.raiseDayNext||0);
+    const daysUntil=Math.max(0,(S.raiseDayNext||0)-(S.totalDays||0));
+    const newBurn=Math.round(calcDailyPayroll()*1.1);
+    html+=`<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)">
+      <div class="ain">💰 Give Team a Raise</div>
+      <div class="aif">+2 Morale · Payroll +10% · new burn: ${$m(newBurn)}/day</div>
+      <div style="margin-top:4px">
+        ${raiseReady
+          ?`<button class="bbuy aff" onclick="giveRaise()">Available now</button>`
+          :`<span style="font-size:.72rem;color:var(--t3)">Available in ${daysUntil} days</span>`
+        }
+      </div>
+    </div>`;
+  }
 
   c.innerHTML=html;
 }
@@ -1497,8 +1605,9 @@ function buyAuto(id){
 
 function buyRes(id){
   const r=RESEARCH.find(x=>x.id===id); if(!r||S.research.includes(id)) return;
-  if(S.pp<r.cost) return;
-  S.pp-=r.cost; S.research.push(id); applyResearch(id);
+  if(S.freeResearch){ S.freeResearch=false; log(`Free research applied: ${r.name}.`); }
+  else { if(S.pp<r.cost) return; S.pp-=r.cost; }
+  S.research.push(id); applyResearch(id);
   log(`Researched: ${r.name}.`);
 }
 
@@ -1771,6 +1880,7 @@ if(S.panels.res)  reveal('panel-res');
 if(S.panels.advRes) reveal('panel-adv-res');
 if(S.panels.upgrades) reveal('panel-upgrades');
 if(S.panels.premium) reveal('panel-premium');
+if(S.panels.respect) reveal('panel-respect-actions');
 if(S.panels.port) reveal('panel-port');
 if(S.panels.sprint) reveal('panel-sprint');
 if(S.panels.ops) reveal('panel-ops');
