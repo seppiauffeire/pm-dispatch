@@ -742,6 +742,7 @@ function load(){
 
 function resetGame(){
   if(!confirm('Reset all progress? Cannot be undone.')) return;
+  stopTick(); // prevent autosave firing between clear and reload
   ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
   location.reload();
 }
