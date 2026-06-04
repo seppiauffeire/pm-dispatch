@@ -607,7 +607,7 @@ const EVENTS = {
   },
   conferenceSpeaking:{
     title:"You've been invited to speak at a games industry conference.",
-    body:"GDC. 1,500 practitioners in the room.\n\nTopic: monetization without alienating your players.\n\nYour team has a proven track record of 'handling things' in your absence.",
+    body:"PMDC. 1,500 practitioners in the room.\n\nTopic: monetization without alienating your players.\n\nYour team has a proven track record of 'handling things' in your absence.",
     choices:[
       {text:"Send a written piece instead.",flav:"Conservative. Respect +1. Team stays focused.",fx:()=>{ S.respect++; log("Article published. 847 views. 3 replies."); }},
       {text:"Accept. The community matters.",flav:"Risky. Respect +2. Your highest-DAU game loses 15% DAU while you're away.",fx:()=>{
@@ -905,21 +905,44 @@ function opsCD(){
 
 function buildOpsBoard(){ /* no-op: Live Ops now rendered inline per game card */ }
 
+function liveOpsMult(g){
+  const uses=g.liveOpsCount||0;
+  const next=g.liveOpsNextBreakthrough||12;
+  const decay=Math.max(0.12, 1-(uses*0.018)); // decays to ~12% floor
+  if(uses>0 && uses>=next){
+    // Breakthrough: set next one 10-20 uses away
+    g.liveOpsNextBreakthrough=uses+10+Math.floor(Math.random()*11);
+    return {mult:decay*3.5, breakthrough:true}; // 3.5× this use
+  }
+  return {mult:decay, breakthrough:false};
+}
+
 function buildInlineOps(g,i){
   if(!S.research.includes('liveops_training')) return '';
   const cd=g.opsBoardCooldown||0;
   const n=normSl(), pmp=pmPower(), ob=opsBonus(), ready=cd===0;
   const cdStr=cd>0?`${cd}s`:(S.morale===5?'● Ready 🔥':'● Ready');
   const cdClass=cd>0?'ops-cd':'ops-ready';
+  // Preview decay for next use
+  const uses=g.liveOpsCount||0;
+  const next=g.liveOpsNextBreakthrough||12;
+  const previewDecay=Math.max(0.12,1-((uses)*0.018));
+  const isBt=uses>=next;
+  const dm=isBt?previewDecay*3.5:previewDecay;
+  const effLabel=isBt?`🌟 BREAKTHROUGH (${Math.round(dm*100)}% eff.)`:uses>0?`${Math.round(dm*100)}% eff. · next 🌟 in ${next-uses} uses`:'Full effect';
   const actions=[
-    {id:'liveops', name:'🎉 Live Ops Event', effects:[`+${fmt(Math.round(200*(1+n.ua*3)*pmp*ob))} DAU`,`−${(0.8*n.ret*pmp*ob).toFixed(2)}% churn`]},
-    {id:'offer',   name:'💰 New Offer',      effects:[`+${(0.015*(1+n.mon*2)*pmp*ob*100).toFixed(2)}% rev`,`+${fmt(Math.round(50*n.mon*pmp*ob))} DAU`]},
-    {id:'polish_events',name:'✨ Polish Events',effects:[`−${(0.4*(1+n.ret*2)*pmp*ob).toFixed(2)}% churn`,`+${fmt(Math.round(30*n.ret*pmp*ob))} DAU`]},
-    {id:'polish_offers', name:'📦 Polish Offers', effects:[`+${(0.025*(1+n.mon*1.5)*pmp*ob*100).toFixed(2)}% rev`,`−${(0.2*n.ret*pmp*ob).toFixed(2)}% churn`]},
+    {id:'liveops', name:'🎉 Live Ops Event', effects:[`+${fmt(Math.round(200*(1+n.ua*3)*pmp*ob*dm))} DAU`,`−${(0.8*n.ret*pmp*ob*dm).toFixed(2)}% churn`]},
+    {id:'offer',   name:'💰 New Offer',      effects:[`+${(0.015*(1+n.mon*2)*pmp*ob*dm*100).toFixed(2)}% rev`,`+${fmt(Math.round(50*n.mon*pmp*ob*dm))} DAU`]},
+    {id:'polish_events',name:'✨ Polish Events',effects:[`−${(0.4*(1+n.ret*2)*pmp*ob*dm).toFixed(2)}% churn`,`+${fmt(Math.round(30*n.ret*pmp*ob*dm))} DAU`]},
+    {id:'polish_offers', name:'📦 Polish Offers', effects:[`+${(0.025*(1+n.mon*1.5)*pmp*ob*dm*100).toFixed(2)}% rev`,`−${(0.2*n.ret*pmp*ob*dm).toFixed(2)}% churn`]},
   ];
   return `<div style="margin-top:.7rem;border-top:1px solid var(--border);padding-top:.6rem">
-    <div class="ops-hdr"><div class="sptitle" style="font-size:.7rem">📋 Live Ops</div><div class="${cdClass}" style="font-size:.72rem">${cdStr}</div></div>
-    <div class="ops-grid" style="margin-top:.4rem">
+    <div class="ops-hdr">
+      <div class="sptitle" style="font-size:.7rem">📋 Live Ops</div>
+      <div class="${cdClass}" style="font-size:.72rem">${cdStr}</div>
+    </div>
+    <div style="font-size:.65rem;color:${isBt?'var(--yellow)':uses>4?'var(--t3)':'var(--t2)'};margin:.2rem 0 .35rem;text-align:center">${effLabel}</div>
+    <div class="ops-grid" style="margin-top:.0rem">
       ${actions.map(a=>`<button class="ops-btn" onclick="fireOpsAction('${a.id}',${i})" ${ready?'':'disabled'}>
         <div class="ops-btn-name" style="font-size:.75rem">${a.name}</div>
         <div class="ops-btn-effect">${a.effects.map(e=>`<span class="pos">${e}</span>`).join(' · ')}</div>
@@ -932,31 +955,36 @@ function buildInlineOps(g,i){
 function fireOpsAction(id, gIdx=0){
   const g=S.games[gIdx]; if(!g||(g.opsBoardCooldown||0)>0) return;
   const n=normSl(), pmp=pmPower(), ob=opsBonus();
+  const {mult:dm, breakthrough:bt}=liveOpsMult(g);
+  g.liveOpsCount=(g.liveOpsCount||0)+1;
   let msg='';
+  const btTag=bt?' 🌟 BREAKTHROUGH':'';
+  const decayPct=Math.round(dm*100);
+  const decayTag=!bt&&decayPct<100?` (${decayPct}% eff.)`:'';
   if(id==='liveops'){
-    const dau=Math.round(200*(1+n.ua*3)*pmp*ob);
-    const ch=parseFloat((0.8*n.ret*pmp*ob).toFixed(2));
+    const dau=Math.round(200*(1+n.ua*3)*pmp*ob*dm);
+    const ch=parseFloat((0.8*n.ret*pmp*ob*dm).toFixed(2));
     g.dau+=dau; g.churn=Math.max(0.5,g.churn-ch);
-    msg=`Live ops shipped. +${fmt(dau)} DAU · −${ch}% churn.${ob>1?' 🔥':''}`;
-    log(`📅 ${g.name}: Live Ops Event. +${fmt(dau)} DAU, −${ch}% churn.`);
+    msg=`Live ops shipped. +${fmt(dau)} DAU · −${ch}% churn.${ob>1?' 🔥':''}${btTag}${decayTag}`;
+    log(`📅 ${g.name}: Live Ops Event. +${fmt(dau)} DAU, −${ch}% churn.${btTag}`);
   } else if(id==='offer'){
-    const rev=parseFloat((0.015*(1+n.mon*2)*pmp*ob).toFixed(4));
-    const dau=Math.round(50*n.mon*pmp*ob);
+    const rev=parseFloat((0.015*(1+n.mon*2)*pmp*ob*dm).toFixed(4));
+    const dau=Math.round(50*n.mon*pmp*ob*dm);
     g.permRevBoost=(g.permRevBoost||0)+rev; g.dau+=dau;
-    msg=`New offer live. +${(rev*100).toFixed(2)}% rev · +${fmt(dau)} DAU.${ob>1?' 🔥':''}`;
-    log(`💰 ${g.name}: New Offer. Revenue +${(rev*100).toFixed(2)}% permanently.`);
+    msg=`New offer live. +${(rev*100).toFixed(2)}% rev · +${fmt(dau)} DAU.${ob>1?' 🔥':''}${btTag}${decayTag}`;
+    log(`💰 ${g.name}: New Offer. Revenue +${(rev*100).toFixed(2)}% permanently.${btTag}`);
   } else if(id==='polish_events'){
-    const ch=parseFloat((0.4*(1+n.ret*2)*pmp*ob).toFixed(2));
-    const dau=Math.round(30*n.ret*pmp*ob);
+    const ch=parseFloat((0.4*(1+n.ret*2)*pmp*ob*dm).toFixed(2));
+    const dau=Math.round(30*n.ret*pmp*ob*dm);
     g.churn=Math.max(0.3,g.churn-ch); g.dau+=dau;
-    msg=`Events polished. −${ch}% churn · +${fmt(dau)} DAU.${ob>1?' 🔥':''}`;
-    log(`✨ ${g.name}: Events Polished. Churn −${ch}% permanently.`);
+    msg=`Events polished. −${ch}% churn · +${fmt(dau)} DAU.${ob>1?' 🔥':''}${btTag}${decayTag}`;
+    log(`✨ ${g.name}: Events Polished. Churn −${ch}% permanently.${btTag}`);
   } else if(id==='polish_offers'){
-    const rev=parseFloat((0.025*(1+n.mon*1.5)*pmp*ob).toFixed(4));
-    const ch=parseFloat((0.2*n.ret*pmp*ob).toFixed(2));
+    const rev=parseFloat((0.025*(1+n.mon*1.5)*pmp*ob*dm).toFixed(4));
+    const ch=parseFloat((0.2*n.ret*pmp*ob*dm).toFixed(2));
     g.permRevBoost=(g.permRevBoost||0)+rev; g.churn=Math.max(0.3,g.churn-ch);
-    msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.${ob>1?' 🔥':''}`;
-    log(`📦 ${g.name}: Offers Polished. Revenue +${(rev*100).toFixed(2)}% permanently.`);
+    msg=`Offers rebalanced. +${(rev*100).toFixed(2)}% rev · −${ch}% churn.${ob>1?' 🔥':''}${btTag}${decayTag}`;
+    log(`📦 ${g.name}: Offers Polished. Revenue +${(rev*100).toFixed(2)}% permanently.${btTag}`);
   }
   g.opsBoardCooldown=opsCD();
   g.opsLastResult=msg;
@@ -1129,12 +1157,31 @@ function tick(){
           }
         }
       }
-      // Director of Product auto-ships
-      if((S.autos.director||0)>0 && S.pp>=featureShipCost(g)){
-        S.pp-=featureShipCost(g);
+      // Director of Product auto-ships (fires when overdue and SB available)
+      if((S.autos.director||0)>0){
+        const dCost=featureShipCost(g);
+        if(S.pp>=dCost){
+          S.pp-=dCost;
+          g.dau=Math.round(g.dau*1.05); g.permRevBoost=(g.permRevBoost||0)+0.01;
+          g.featureDueIn=48; g.featureOverdueFor=0;
+          log(`🤖 Director auto-shipped features for ${g.name}. (${fmt(dCost)} SB) DAU +5%.`);
+        } else {
+          // Director wants to ship but blocked by insufficient SB
+          g._directorBlocked=true;
+        }
+      }
+    }
+
+    // Director proactive check: also ship BEFORE overdue (when featureDueIn < 12)
+    if((S.autos.director||0)>0 && (g.featureDueIn||48)<12 && g.featureOverdueFor===0){
+      const dCost=featureShipCost(g);
+      if(S.pp>=dCost){
+        S.pp-=dCost;
         g.dau=Math.round(g.dau*1.05); g.permRevBoost=(g.permRevBoost||0)+0.01;
         g.featureDueIn=48; g.featureOverdueFor=0;
-        log(`🤖 Director of Product auto-shipped features for ${g.name}. DAU +5%.`);
+        g._directorBlocked=false;
+      } else {
+        g._directorBlocked=true;
       }
     }
 
@@ -1417,13 +1464,25 @@ function updateUI(){
     set('p1s','Your game is live. Don\'t ignore it.');
   }
 
-  // PM status in sprint note (if PM team but no SB pressure)
+  // PRD automation indicator
   const pmRate=pmClickRate();
+  const moraleSpeed=1.3-(S.morale-1)*0.15;
   if(pmRate>0){
     const cost=pmStepCost();
-    const interval=Math.max(3,Math.floor(60/pmRate));
-    if(S.pp>=cost) set('sp-note',`PM team: auto-step every ${interval}s · costs ${fmt(cost)} SB`);
+    const interval=Math.max(3,Math.floor(60/pmRate*moraleSpeed));
+    const stepsPerMin=Math.round(60/interval);
+    if(S.pp>=cost){
+      set('sp-note',`🤖 PM team auto-stepping · 1 step every ${interval}s (${stepsPerMin}/min) · ${fmt(cost)} SB/step`);
+      // Also update prd label to show automation active
+      const prdLabelEl=$('prd-label');
+      if(prdLabelEl&&S.prdProgress>0) prdLabelEl.textContent=`Step ${Math.min(S.prdProgress,PRD_STEPS.length-1)+1} of ${PRD_STEPS.length} · 🤖 auto`;
+    }
     // (waiting message set in tick)
+  } else {
+    // Manual mode — show what they need to hire
+    if(S.games.length>0&&(S.autos.junior||0)===0&&(S.autos.senior||0)===0&&(S.autos.ai||0)===0){
+      set('sp-note','Hire a PM to automate prototype shipping →');
+    }
   }
 
   updateProtoUI();
@@ -1637,6 +1696,15 @@ function buildCard(g,i){
         const fCost=featureShipCost(g);
         const due=g.featureDueIn||0;
         const overdue=(g.featureOverdueFor||0)>0;
+        const hasDirector=(S.autos.director||0)>0;
+        const dirBlocked=g._directorBlocked;
+        if(hasDirector){
+          const nextShipIn=due;
+          const status=dirBlocked
+            ?`<button class="bact" style="color:var(--yellow);border-color:#78350f;cursor:default" disabled>⚠ Director waiting for SB (${fmt(fCost)} needed)</button>`
+            :`<button class="bact" style="color:var(--green);border-color:var(--green);cursor:default" disabled>🤖 Director managing features · next in ${nextShipIn}s</button>`;
+          return status;
+        }
         const btnStyle=overdue?'color:var(--red);border-color:#7f1d1d':due<30?'color:var(--yellow);border-color:#78350f':'';
         const label=overdue?`🔴 Ship Features! (${fmt(fCost)} SB)`:due<30?`⚠ Ship Features (${fmt(fCost)} SB)`:`🚀 Ship Features (${fmt(fCost)} SB)`;
         return `<button class="bact" style="${btnStyle}" onclick="shipFeatures(${i})">${label}</button>`;
@@ -1932,6 +2000,7 @@ function launchGame(genre,aud){
   const launchChurn = Math.max(0.5, startChurn + (ip ? ip.churnBonus : 0));
   S.games.push({name,genre,audience:aud,dau:launchDAU,churn:launchChurn,daysLive:0,permRevBoost:0,
     lifetimeRev:0, featureDueIn:48, featureOverdueFor:0, acquisitionOffered:false,
+    liveOpsCount:0, liveOpsNextBreakthrough:Math.floor(10+Math.random()*8), _directorBlocked:false,
     opsBoardCooldown:0, opsLastResult:'',
     blockchainOffered:false, nftDecline:0,
     ipId: ip ? ip.id : null, ipName: ip ? ip.name : null});
