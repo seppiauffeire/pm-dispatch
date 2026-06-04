@@ -746,9 +746,11 @@ function resetGame(){
     body:'Your games, team, research, and achievements will be permanently deleted.\n\nThis cannot be undone.',
     choices:[
       {text:'Yes, wipe everything.',flav:'Cannot be undone.',fx:()=>{
+        window._resetting=true; // block visibilitychange from re-saving
         stopTick();
+        S=mkState(); // wipe in-memory state so even if save fires it saves empty
         ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
-        setTimeout(()=>location.reload(),50);
+        location.reload();
       }},
       {text:'Cancel — keep my progress.',flav:'',fx:()=>{}},
     ]
@@ -1893,7 +1895,7 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden){
     S.hiddenAt=Date.now();
     stopTick();
-    save(); // save state on hide so nothing is lost
+    if(!window._resetting) save(); // save state on hide (but not during a reset)
   } else {
     // No offline progress — game only runs when tab is open
     if(S.hiddenAt){
