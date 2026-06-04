@@ -1025,7 +1025,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   <h2>Mobile Gaming News for Product Managers</h2>
   <p>Curated mobile gaming industry news relevant to product managers, including monetization trends, game launches, and market analysis.</p>
   <h2>PM Dispatch Newsletter</h2>
-  <p>Free weekly newsletter on product management strategy, mobile game monetization, growth tactics, and PM career development. Subscribe at pmdispatch.com.</p>
+  <p>Free weekly newsletter on mobile game monetization, live ops strategy, and growth tactics for games PMs. Subscribe at pmdispatch.com.</p>
 </section>
 
 <!-- ═══ TOP NAV ═══ -->
@@ -1098,8 +1098,8 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
     <!-- Left -->
     <div class="home-left">
       <div class="home-badge"><span class="home-badge-dot"></span>Built by a CPO · Always free</div>
-      <h1 class="home-headline">The <em style="-webkit-text-fill-color:inherit;font-style:italic">PM Toolkit</em><br>Built for<br><span>Shipping.</span></h1>
-      <p class="home-sub">Prioritization frameworks, A/B statistics, growth models, sample size calculators, gaming industry news, and more — all in one place, no login required.</p>
+      <h1 class="home-headline">The live ops toolkit<br>built by a <em style="-webkit-text-fill-color:inherit;font-style:italic">games PM,</em><br><span>for games PMs.</span></h1>
+      <p class="home-sub">Monetization calculators, A/B test stats, ROAS models, retention tools, and live ops frameworks — built by a CPO who's shipped them in production.</p>
       <div class="home-actions">
         <button class="btn btn-primary btn-hero" onclick="switchPage('rice')">Start prioritizing →</button>
         <button class="btn btn-ghost btn-hero" onclick="switchPage('challenge')">Check Out the PM Challenge</button>
@@ -2358,7 +2358,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         </div>
         <h3 style="font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--t1);margin-bottom:0.5rem;letter-spacing:-0.01em">The PM Dispatch Newsletter</h3>
         <p style="font-size:0.86rem;color:var(--t2);max-width:440px;margin:0 auto 1.5rem;line-height:1.75">
-          A newsletter about <strong style="color:var(--t1)">product management, game design, and monetization</strong>. Frameworks, case studies, and tools that actually ship better products.
+          A newsletter about <strong style="color:var(--t1)">live ops, mobile game monetization, and growth</strong>. Frameworks and case studies from a CPO who's shipped them in production.
         </p>
         <div style="display:flex;gap:0.65rem;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center">
           <input type="email" id="about-email" placeholder="your@email.com" style="flex:1;min-width:210px;text-align:left;font-size:0.95rem;padding:0.75rem 1rem;border-radius:10px">
@@ -5584,22 +5584,22 @@ const NEWS_SOURCES = [
     rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.gamedeveloper.com%2Frss.xml&count=10'
   },
   {
-    key: 'eurogamer',
-    label: 'Eurogamer',
-    url: 'https://www.eurogamer.net/',
-    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.eurogamer.net%2F%3Fformat%3Drss&count=10'
+    key: 'deconstructoroffun',
+    label: 'Deconstructor of Fun',
+    url: 'https://www.deconstructoroffun.com/',
+    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.deconstructoroffun.com%2Fblog%3Fformat%3Drss&count=10'
   },
   {
-    key: 'polygon',
-    label: 'Polygon',
-    url: 'https://www.polygon.com/',
-    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.polygon.com%2Frss%2Findex.xml&count=10'
+    key: 'mobilegamer',
+    label: 'Mobile Dev Memo',
+    url: 'https://mobiledevmemo.com/',
+    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fmobiledevmemo.com%2Ffeed%2F&count=10'
   },
   {
-    key: 'kotaku',
-    label: 'Kotaku',
-    url: 'https://kotaku.com/',
-    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fkotaku.com%2Frss&count=10'
+    key: 'pocketgamer',
+    label: 'Pocket Gamer Biz',
+    url: 'https://www.pocketgamer.biz/',
+    rss: 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.pocketgamer.biz%2Frss%2Fnews.asp&count=10'
   }
 ];
 
@@ -5820,9 +5820,9 @@ function renderNews(items){
     <button class="news-filter-btn active" data-src="all" onclick="filterNews('all')">All sources</button>
     <button class="news-filter-btn" data-src="gamesindustry" onclick="filterNews('gamesindustry')">GamesIndustry</button>
     <button class="news-filter-btn" data-src="gamedeveloper" onclick="filterNews('gamedeveloper')">Game Developer</button>
-    <button class="news-filter-btn" data-src="eurogamer" onclick="filterNews('eurogamer')">Eurogamer</button>
-    <button class="news-filter-btn" data-src="polygon" onclick="filterNews('polygon')">Polygon</button>
-    <button class="news-filter-btn" data-src="kotaku" onclick="filterNews('kotaku')">Kotaku</button>
+    <button class="news-filter-btn" data-src="deconstructoroffun" onclick="filterNews('deconstructoroffun')">Deconstructor of Fun</button>
+    <button class="news-filter-btn" data-src="mobilegamer" onclick="filterNews('mobilegamer')">Mobile Dev Memo</button>
+    <button class="news-filter-btn" data-src="pocketgamer" onclick="filterNews('pocketgamer')">Pocket Gamer Biz</button>
   </div>
 
   <div class="card" style="overflow:hidden">
@@ -5845,7 +5845,8 @@ function renderNews(items){
     <div style="display:flex;gap:1rem">
       <a href="https://www.gamesindustry.biz/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">GamesIndustry.biz ↗</a>
       <a href="https://www.gamedeveloper.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Game Developer ↗</a>
-      <a href="https://www.eurogamer.net/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Eurogamer ↗</a>
+      <a href="https://www.deconstructoroffun.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Deconstructor of Fun ↗</a>
+      <a href="https://mobiledevmemo.com/" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--t3);text-decoration:none">Mobile Dev Memo ↗</a>
     </div>
   </div>
 </div>
