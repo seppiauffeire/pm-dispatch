@@ -734,8 +734,8 @@ function load(){
     if(sv.game && (!sv.games||sv.games.length===0)) S.games=[sv.game];
     if(!S.games) S.games=[];
     if(!S.autos.artist) S.autos.artist=0;
-    const dt = Math.min(7200, (Date.now()-S.lastSave)/1000);
-    if(dt>10) applyOfflineProgress(dt);
+    // No offline progress — game pauses when closed
+    // (small grace: max 30s to cover autosave lag on same session)
     S.lastSave=Date.now(); S.lastClick=Date.now();
   }catch(e){console.warn('load failed',e)}
 }
@@ -1047,10 +1047,31 @@ function tick(){
     // Feature shipping timer
     g.featureDueIn=Math.max(0,(g.featureDueIn||48)-1);
     if(g.featureDueIn<=0){
-      g.featureOverdueFor=(g.featureOverdueFor||0)+1;
-      if(g.featureOverdueFor===97){ // 4-day grace period expired
-        g.churn=Math.min(25,g.churn+1);
-        log(`⚠ ${g.name}: no new features shipped. Players are noticing. Churn +1%.`);
+      const ov=(g.featureOverdueFor||0)+1;
+      g.featureOverdueFor=ov;
+      // Escalating penalties
+      if(ov===48){  // 2 days overdue
+        g.churn=Math.min(25,g.churn+2);
+        log(`⚠ ${g.name}: 2 days without features. Churn +2%.`);
+      } else if(ov===96){ // 4 days overdue
+        g.churn=Math.min(25,g.churn+5); S.morale=Math.max(1,S.morale-1);
+        log(`🔴 ${g.name}: 4 days without features. Churn +5%. Team morale -1.`);
+      } else if(ov===144){ // 6 days overdue
+        g.churn=Math.min(25,g.churn+5); g.dau=Math.round(g.dau*0.8);
+        log(`💀 ${g.name}: 6 days without features. Churn +5%, DAU -20%. Players leaving fast.`);
+      } else if(ov>=300){ // 5 real minutes ignored — game dies
+        log(`☠️ ${g.name} is dead. No features shipped for 5 minutes. Players left. All of them.`);
+        const gIdx=S.games.indexOf(g);
+        S.morale=Math.max(1,S.morale-2);
+        if(gIdx>=0){
+          S.gSunset++;
+          S.games.splice(gIdx,1);
+          if(S.games.length===0){
+            S.debt=Math.min(S.debt+50000,S.debt); // add debt as penalty
+            S.debt+=50000; // emergency costs
+            log('The post-mortem is 100% avoidable. You just had to ship the features.');
+          }
+        }
       }
       // Director of Product auto-ships
       if((S.autos.director||0)>0 && S.pp>=featureShipCost(g)){
@@ -1662,7 +1683,7 @@ function doUA(tid,gIdx=0){
   log(`UA: ${t.name} on ${g.name}. +${fmt(dau)} DAU. Debt: ${$m(S.debt)}.`);
 }
 
-function featureShipCost(g){ return Math.max(500, Math.round(g.dau*0.3+(g.daysLive||0)*20)); }
+function featureShipCost(g){ return Math.max(500, Math.round(g.dau*0.5+(g.daysLive||0)*50)); }
 
 function shipFeatures(gIdx=0){
   const g=S.games[gIdx]; if(!g) return;
@@ -1860,12 +1881,17 @@ function startTick(){ tickInterval=setInterval(tick,1000); }
 function stopTick(){ clearInterval(tickInterval); }
 
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){ S.hiddenAt=Date.now(); stopTick(); }
-  else {
+  if(document.hidden){
+    S.hiddenAt=Date.now();
+    stopTick();
+    save(); // save state on hide so nothing is lost
+  } else {
+    // No offline progress — game only runs when tab is open
     if(S.hiddenAt){
-      const dt=Math.min(7200,(Date.now()-S.hiddenAt)/1000);
-      if(dt>5) applyOfflineProgress(dt);
+      const pausedSec=Math.round((Date.now()-S.hiddenAt)/1000);
+      S.lastSave=Date.now(); // reset save time so load() doesn't apply offline progress
       S.hiddenAt=null;
+      if(pausedSec>3) log(`⏸ Game paused for ${pausedSec}s. Nothing accumulated while you were away.`);
     }
     startTick();
   }
