@@ -2741,6 +2741,22 @@ function switchSub(page, subId){
 }
 
 // ═══════════════════════════════════════════════
+// INPUT FOCUS HELPERS — prevent focus loss on re-render
+// ═══════════════════════════════════════════════
+function saveFocus(){
+  const el=document.activeElement;
+  if(!el||!el.dataset.rid)return null;
+  return{rid:el.dataset.rid,field:el.dataset.field,selStart:el.selectionStart,selEnd:el.selectionEnd};
+}
+function restoreFocus(s){
+  if(!s)return;
+  const el=document.querySelector(`[data-rid="${s.rid}"][data-field="${s.field}"]`);
+  if(!el)return;
+  el.focus();
+  try{el.setSelectionRange(s.selStart,s.selEnd);}catch(e){}
+}
+
+// ═══════════════════════════════════════════════
 // RICE
 // ═══════════════════════════════════════════════
 const confMap = {'50%':0.5,'75%':0.75,'90%':0.9};
@@ -2756,20 +2772,20 @@ function addRiceRow(data){
 }
 function renderRiceTable(){
   const tbody = document.getElementById('rice-body');
+  const fs=saveFocus();
   tbody.innerHTML = '';
-  const sorted = [...riceRows].sort((a,b)=>riceScore(b)-riceScore(a));
   riceRows.forEach(row => {
     const score = riceScore(row);
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input class="name-input" value="${row.name}" oninput="updateRice(${row.id},'name',this.value)"></td>
-      <td><input class="rice-input" type="number" value="${row.reach}" min="0" max="100" oninput="updateRice(${row.id},'reach',+this.value)"></td>
-      <td><input class="rice-input" type="number" value="${row.impact}" min="1" max="5" step="0.5" oninput="updateRice(${row.id},'impact',+this.value)"></td>
-      <td><select style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'conf',this.value)">
+      <td><input class="name-input" data-rid="r${row.id}" data-field="name" value="${row.name}" onfocus="this.select()" oninput="updateRice(${row.id},'name',this.value)"></td>
+      <td><input class="rice-input" data-rid="r${row.id}" data-field="reach" type="number" value="${row.reach}" min="0" max="100" onfocus="this.select()" oninput="updateRice(${row.id},'reach',+this.value)"></td>
+      <td><input class="rice-input" data-rid="r${row.id}" data-field="impact" type="number" value="${row.impact}" min="1" max="5" step="0.5" onfocus="this.select()" oninput="updateRice(${row.id},'impact',+this.value)"></td>
+      <td><select data-rid="r${row.id}" data-field="conf" style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'conf',this.value)">
         ${['50%','75%','90%'].map(c=>`<option ${row.conf===c?'selected':''}>${c}</option>`).join('')}
       </select></td>
-      <td><input class="rice-input" type="number" value="${row.effort}" min="1" max="5" step="0.5" oninput="updateRice(${row.id},'effort',+this.value)"></td>
-      <td><select style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'tshirt',this.value)">
+      <td><input class="rice-input" data-rid="r${row.id}" data-field="effort" type="number" value="${row.effort}" min="1" max="5" step="0.5" onfocus="this.select()" oninput="updateRice(${row.id},'effort',+this.value)"></td>
+      <td><select data-rid="r${row.id}" data-field="tshirt" style="background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:0.72rem;padding:3px;border-radius:4px" onchange="updateRice(${row.id},'tshirt',this.value)">
         ${['XS','S','M','L','XL'].map(t=>`<option ${row.tshirt===t?'selected':''}>${t}</option>`).join('')}
       </select></td>
       <td><span class="score-badge" style="${scoreBadgeStyle(score)}">${score.toFixed(2)}</span></td>
@@ -2777,6 +2793,7 @@ function renderRiceTable(){
     `;
     tbody.appendChild(tr);
   });
+  restoreFocus(fs);
   renderRiceRanking();
 }
 function riceScore(row){
@@ -2834,20 +2851,22 @@ function addIceRow(data){
 function iceScore(r){return r.impact*r.confidence*r.ease;}
 function renderIceTable(){
   const tbody=document.getElementById('ice-body');
+  const fs=saveFocus();
   tbody.innerHTML='';
   iceRows.forEach(row=>{
     const score=iceScore(row)/100;
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><input class="name-input" value="${row.name}" oninput="updateIce(${row.id},'name',this.value)"></td>
-      <td><input class="rice-input" type="number" value="${row.impact}" min="1" max="10" oninput="updateIce(${row.id},'impact',+this.value)"></td>
-      <td><input class="rice-input" type="number" value="${row.confidence}" min="1" max="10" oninput="updateIce(${row.id},'confidence',+this.value)"></td>
-      <td><input class="rice-input" type="number" value="${row.ease}" min="1" max="10" oninput="updateIce(${row.id},'ease',+this.value)"></td>
+      <td><input class="name-input" data-rid="i${row.id}" data-field="name" value="${row.name}" onfocus="this.select()" oninput="updateIce(${row.id},'name',this.value)"></td>
+      <td><input class="rice-input" data-rid="i${row.id}" data-field="impact" type="number" value="${row.impact}" min="1" max="10" onfocus="this.select()" oninput="updateIce(${row.id},'impact',+this.value)"></td>
+      <td><input class="rice-input" data-rid="i${row.id}" data-field="confidence" type="number" value="${row.confidence}" min="1" max="10" onfocus="this.select()" oninput="updateIce(${row.id},'confidence',+this.value)"></td>
+      <td><input class="rice-input" data-rid="i${row.id}" data-field="ease" type="number" value="${row.ease}" min="1" max="10" onfocus="this.select()" oninput="updateIce(${row.id},'ease',+this.value)"></td>
       <td><span class="score-badge" style="${scoreBadgeStyle(score)}">${score.toFixed(1)}</span></td>
       <td><button style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem" onclick="removeIce(${row.id})">×</button></td>
     `;
     tbody.appendChild(tr);
   });
+  restoreFocus(fs);
   const sorted=[...iceRows].sort((a,b)=>iceScore(b)-iceScore(a));
   const el=document.getElementById('ice-ranking');
   el.innerHTML=sorted.map((r,i)=>`
@@ -2871,12 +2890,13 @@ let wsRows=[]; let wsId=0;
 function addWsCrit(){wsCrit.push({label:'New Criterion',weight:0});renderWS();}
 function addWsRow(data){const id=wsId++;const scores=wsCrit.map(()=>5);wsRows.push({id,name:data?.name||'New Feature',scores});renderWS();}
 function renderWS(){
+  const fs=saveFocus();
   // weights viz
   const el=document.getElementById('ws-weight-viz');
-  el.innerHTML=wsCrit.map(c=>`
+  el.innerHTML=wsCrit.map((c,i)=>`
     <div style="margin-bottom:0.6rem">
       <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--t2);margin-bottom:3px">
-        <span><input class="name-input" value="${c.label}" oninput="updateWsCrit('${c.label}','label',this.value)" style="max-width:160px"></span>
+        <span><input class="name-input" data-rid="wc${i}" data-field="label" value="${c.label}" onfocus="this.select()" oninput="wsCrit[${i}].label=this.value;renderWS()" style="max-width:160px"></span>
         <span style="font-family:var(--mono)">${c.weight}%</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${c.weight}%"></div></div>
@@ -2886,8 +2906,8 @@ function renderWS(){
   const cel=document.getElementById('ws-criteria');
   cel.innerHTML=wsCrit.map((c,i)=>`
     <div style="display:grid;grid-template-columns:1fr 80px 24px;gap:0.4rem;margin-bottom:0.4rem;align-items:center">
-      <input type="text" value="${c.label}" oninput="wsCrit[${i}].label=this.value;renderWS()">
-      <input type="number" value="${c.weight}" min="0" max="100" oninput="wsCrit[${i}].weight=+this.value;renderWS()">
+      <input type="text" data-rid="wc${i}" data-field="clabel" value="${c.label}" onfocus="this.select()" oninput="wsCrit[${i}].label=this.value;renderWS()">
+      <input type="number" data-rid="wc${i}" data-field="weight" value="${c.weight}" min="0" max="100" onfocus="this.select()" oninput="wsCrit[${i}].weight=+this.value;renderWS()">
       <button style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem" onclick="wsCrit.splice(${i},1);renderWS()">×</button>
     </div>
   `).join('');
@@ -2900,12 +2920,13 @@ function renderWS(){
     while(row.scores.length<wsCrit.length) row.scores.push(5);
     const total=wsCrit.reduce((s,c,i)=>s+c.weight*row.scores[i]/100,0).toFixed(1);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td><input class="name-input" value="${row.name}" oninput="updateWsRow(${row.id},'name',this.value)"></td>`+
-      wsCrit.map((c,i)=>`<td><input class="rice-input" type="number" value="${row.scores[i]}" min="0" max="10" oninput="updateWsScore(${row.id},${i},+this.value)"></td>`).join('')+
+    tr.innerHTML=`<td><input class="name-input" data-rid="w${row.id}" data-field="name" value="${row.name}" onfocus="this.select()" oninput="updateWsRow(${row.id},'name',this.value)"></td>`+
+      wsCrit.map((c,i)=>`<td><input class="rice-input" data-rid="w${row.id}" data-field="s${i}" type="number" value="${row.scores[i]}" min="0" max="10" onfocus="this.select()" oninput="updateWsScore(${row.id},${i},+this.value)"></td>`).join('')+
       `<td><span class="score-badge" style="${scoreBadgeStyle(total/10)}">${total}</span></td>`+
       `<td><button style="background:none;border:none;color:var(--t3);cursor:pointer" onclick="wsRows=wsRows.filter(r=>r.id!==${row.id});renderWS()">×</button></td>`;
     tbody.appendChild(tr);
   });
+  restoreFocus(fs);
 }
 function updateWsCrit(label,field,val){const c=wsCrit.find(c=>c.label===label);if(c)c[field]=val;renderWS();}
 function updateWsRow(id,f,v){const r=wsRows.find(r=>r.id===id);if(r)r[f]=v;renderWS();}
@@ -2940,18 +2961,20 @@ function addKanoRow(){
   renderKano();
 }
 function renderKano(){
+  const fs=saveFocus();
   const list=document.getElementById('kano-list');
   list.innerHTML=kanoRows.map((r,i)=>`
     <div style="margin-bottom:0.6rem;padding:0.6rem;background:var(--bg3);border-radius:6px;border-left:3px solid ${kanoColors[i%kanoColors.length]}">
-      <input class="name-input" value="${r.name}" oninput="kanoRows[${i}].name=this.value;renderKano()" style="margin-bottom:0.4rem;width:100%">
+      <input class="name-input" data-rid="k${r.id}" data-field="name" value="${r.name}" onfocus="this.select()" oninput="kanoRows[${i}].name=this.value;renderKano()" style="margin-bottom:0.4rem;width:100%">
       <div class="row2">
         <div><div style="font-size:0.62rem;color:var(--t3);margin-bottom:2px">Functional (present) 1-10</div>
-          <input type="number" value="${r.functional}" min="1" max="10" oninput="kanoRows[${i}].functional=+this.value;renderKano()" style="width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:3px 6px;border-radius:4px;font-family:var(--mono);text-align:right"></div>
+          <input type="number" data-rid="k${r.id}" data-field="functional" value="${r.functional}" min="1" max="10" onfocus="this.select()" oninput="kanoRows[${i}].functional=+this.value;renderKano()" style="width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:3px 6px;border-radius:4px;font-family:var(--mono);text-align:right"></div>
         <div><div style="font-size:0.62rem;color:var(--t3);margin-bottom:2px">Dysfunctional (absent) 1-10</div>
-          <input type="number" value="${r.dysfunctional}" min="1" max="10" oninput="kanoRows[${i}].dysfunctional=+this.value;renderKano()" style="width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:3px 6px;border-radius:4px;font-family:var(--mono);text-align:right"></div>
+          <input type="number" data-rid="k${r.id}" data-field="dysfunctional" value="${r.dysfunctional}" min="1" max="10" onfocus="this.select()" oninput="kanoRows[${i}].dysfunctional=+this.value;renderKano()" style="width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:3px 6px;border-radius:4px;font-family:var(--mono);text-align:right"></div>
       </div>
     </div>
   `).join('');
+  restoreFocus(fs);
   // dots
   const dots=document.getElementById('kano-dots');
   dots.innerHTML=kanoRows.map((r,i)=>{
