@@ -19,7 +19,8 @@
   --display:'Figtree',system-ui,sans-serif;
 }
 html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:16px}
-.gnav{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.gnav{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg)}
+#sticky-header{background:var(--bg)}
 .gnav-back{display:flex;align-items:center;gap:5px;color:var(--t2);font-size:0.88rem;text-decoration:none;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--sans)}
 .gnav-back:hover{color:var(--t1)}
 .gnav-title{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.04em}
@@ -170,11 +171,33 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .ach-cat-hdr{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin:.6rem 0 .2rem;padding-bottom:.2rem;border-bottom:1px solid var(--border)}
 .ach-cat-hdr:first-child{margin-top:0}
 .ach-count{font-size:.68rem;color:var(--t3);text-align:right;margin-bottom:.5rem}
+/* Tech Debt bar in resource bar */
+#ri-techdebt .res-val { transition: color .3s; }
+/* Office panel tier indicator */
+.office-tier-active { color: var(--green); font-weight: 700; }
+.office-tier-locked { color: var(--t3); }
+/* Software tools panel */
+.tool-section-hdr {
+  font-size: .62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--t3);
+  margin: .6rem 0 .3rem; padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+/* Engine / Analytics tier rows */
+.tier-row { display: flex; align-items: center; justify-content: space-between; padding: .4rem 0; border-bottom: 1px solid var(--border); }
+.tier-row:last-child { border-bottom: none; }
+.tier-row-done { color: var(--green); font-size: .75rem; font-weight: 700; }
+.tier-row-next { color: var(--ind2); }
+/* Prestige button in nav */
+#btn-prestige { font-weight: 700; border: 1px solid var(--ind); border-radius: 5px; }
+/* Training active indicator */
+.training-active { color: var(--yellow); font-size: .7rem; }
 </style>
 </head>
 <body>
 
-<nav class="gnav">
+<div id="sticky-header" style="position:sticky;top:0;z-index:100">
+<nav class="gnav" style="position:static">
   <a href="/" class="gnav-back">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     PM Dispatch
@@ -182,6 +205,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="gnav-title">SHIP IT — PM IDLE</div>
   <div class="gnav-right">
     <div class="gnav-save" id="save-ind">● autosave on</div>
+    <button class="btn-reset" id="btn-prestige" onclick="triggerPrestige()" style="display:none;color:var(--ind2)">✦ New Studio</button>
     <button class="btn-reset" onclick="resetGame()">reset</button>
   </div>
 </nav>
@@ -202,6 +226,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="res-val" id="r-debt">$0</div>
     <div class="res-sub" id="r-dflav">—</div>
   </div>
+  <div class="res-item" id="ri-techdebt">
+    <div class="res-label">Tech Debt</div>
+    <div class="res-val" id="r-techdebt">0</div>
+    <div class="res-sub" id="r-techdebt-sub">clean build</div>
+  </div>
   <div class="res-item">
     <div class="res-label">Respect</div>
     <div class="res-val" id="r-resp">0</div>
@@ -210,9 +239,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="res-item">
     <div class="res-label">Team Morale</div>
     <div class="res-val" id="r-morale">😐</div>
+    <div class="res-sub" id="r-team-size">0 on team</div>
     <div class="mdots" id="mdots"></div>
   </div>
 </div>
+</div><!-- /sticky-header -->
 
 <div class="gwrap">
 
@@ -232,6 +263,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="panel hidden" id="panel-premium">
       <div class="ptitle" onclick="togglePanel('panel-premium')">💎 Premium Upgrades</div>
       <div class="panel-body" id="premium-list"></div>
+    </div>
+    <div class="panel hidden" id="panel-engine">
+      <div class="ptitle" onclick="togglePanel('panel-engine')">🔧 Engine Investment</div>
+      <div class="panel-body" id="engine-list"></div>
+    </div>
+    <div class="panel hidden" id="panel-software">
+      <div class="ptitle" onclick="togglePanel('panel-software')">🛠 Dev Tools</div>
+      <div class="panel-body" id="software-list"></div>
+    </div>
+    <div class="panel hidden" id="panel-studio-maturity">
+      <div class="ptitle" onclick="togglePanel('panel-studio-maturity')">🏛 Studio Maturity</div>
+      <div class="panel-body" id="studio-maturity-list"></div>
     </div>
   </div>
 
@@ -305,6 +348,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
         <div style="font-size:.72rem;color:var(--t3);margin-bottom:.5rem" id="respect-avail"></div>
         <div id="respect-list"></div>
       </div>
+    </div>
+    <div class="panel" id="panel-office">
+      <div class="ptitle" onclick="togglePanel('panel-office')">🏢 Office</div>
+      <div class="panel-body" id="office-body"></div>
     </div>
     <div class="panel" id="panel-goals">
       <div class="ptitle" onclick="togglePanel('panel-goals')">🏆 Career Goals</div>
@@ -382,6 +429,7 @@ const UPGRADES = [
   {id:'prem_iap',  name:'Premium IAP Design',  cost:20000, desc:'Revenue per DAU permanently +30%.'},
   {id:'sub_model', name:'Subscription Model',  cost:30000, desc:'Churn −3% on all live games.'},
   {id:'platform',  name:'Platform Partnership',cost:50000, desc:'Unlocks App Store Featuring: +10K DAU. $40K, 14-day cooldown.'},
+  {id:'genre_picker',name:'Genre Strategy',   cost:25000, desc:'Unlocks genre selection when launching new games. Stop leaving it to chance.'},
 ];
 
 const PREMIUM_UPGRADES = [
@@ -622,6 +670,440 @@ const EVENTS = {
       }},
     ]
   },
+  internBrokeProd:{
+    title:"Someone pushed to main.",
+    body:"It's your first intern's third day.\n\nAt 11:47 AM, production went down. The deploy log shows their username. The Slack message they sent immediately after reads: 'hey quick question did i just break something'\n\nYou have a 1:1 with them in four minutes.",
+    choices:[
+      {text:"Cover for them. Blame a deployment script.",flav:"Conservative. They stay. Tech Debt +5.",fx:()=>{
+        S.techDebt=Math.min(100,S.techDebt+5);
+        log("You told the team it was a flaky deploy script. The intern knows. You both know.");
+      }},
+      {text:"Document it as a learning moment.",flav:"Good outcome. Morale +1. Respect +1.",fx:()=>{
+        S.morale=Math.min(5,S.morale+1); S.respect++;
+        log("You wrote the post-mortem together. 'How We Broke Prod on Day 3 and What We Learned.' It got 3 internal shares.");
+      }},
+      {text:"Let them go.",flav:"Bad choice. Morale -2. Tech Debt +8. The team saw everything.",fx:()=>{
+        S.morale=Math.max(1,S.morale-2); S.techDebt=Math.min(100,S.techDebt+8);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("You let them go on day three. The team did not miss the all-hands where you announced it.");
+      }},
+    ]
+  },
+  playerPropose:{
+    title:"Someone got engaged in your game.",
+    body:"A review appeared this morning. Five stars.\n\n\"My boyfriend proposed to me using a gem bundle event in [GAME_NAME]. He spelled out 'marry me' with in-app purchase notifications. I said yes. Please never shut this game down.\"\n\nIt has 847 upvotes on the app store.",
+    choices:[
+      {text:"Congratulate them publicly.",flav:"Respect +1. A good thing happened.",fx:()=>{
+        S.respect++;
+        log("You replied to the review. It became your most-upvoted store response. You felt fine about it.");
+      }},
+    ]
+  },
+  thinkPiece:{
+    title:"A journalist wants a quote.",
+    body:"A staff writer at a games industry publication is writing a piece: \"Is mobile monetization predatory, or just misunderstood?\"\n\nThey want 200 words from a PM with live games. Your name came up.\n\nDeadline is tonight.",
+    choices:[
+      {text:"Decline. No comment.",flav:"Conservative. Respect +1.",fx:()=>{
+        S.respect++;
+        log("You declined. The article ran without you. You were referenced as 'a studio that declined to comment.' Three people asked if you were okay.");
+      }},
+      {text:"Comment. It's an important conversation.",flav:"Risky. 50/50: Respect +2 and +500 DAU, or Respect -1 and morale -1.",fx:()=>{
+        if(Math.random()>0.5){ S.respect+=2; const g=S.games[0]; if(g)g.dau+=500; log("The quote landed well. You are now 'an industry voice on ethical monetization.' DAU +500."); }
+        else { S.respect=Math.max(0,S.respect-1); S.morale=Math.max(1,S.morale-1); log("The quote was taken out of context. Your community is unhappy. Engineering is quietly amused."); }
+      }},
+      {text:"Make something up. It'll be fine.",flav:"Bad choice. 70% chance: found out. Morale -1.",fx:()=>{
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        if(Math.random()>0.3){ S.morale=Math.max(1,S.morale-1); log("The journalist fact-checked. The correction ran the next day. You are now 'a studio PM who cited a non-existent study.'"); }
+        else { const g=S.games[0]; if(g)g.dau+=500; log("Nobody checked. DAU +500. You feel fine about this. You should not feel fine about this."); }
+      }},
+    ]
+  },
+  streamerFound:{
+    title:"A streamer is playing [GAME_NAME].",
+    body:"MidnightGrind_TV. 280K followers. They found your game organically and they're two hours in.\n\nChat is going wild. You're watching the install count move in real time.",
+    choices:[
+      {text:"Reach out. Offer gems and a content partnership.",flav:"Conservative. +2,000 DAU. Churn +1% (new audience isn't your core).",fx:()=>{
+        const g=S.games.find(x=>x.dau>=8000)||S.games[0];
+        if(g){ g.dau+=2000; g.churn=Math.min(25,g.churn+1); }
+        log("You DM'd them a gem bundle and an offer. They accepted. New audience onboarding is... rough.");
+      }},
+      {text:"Let it happen organically.",flav:"Risky. 60%: +4,000 DAU. 40%: stream ends early, +800 DAU.",fx:()=>{
+        const g=S.games.find(x=>x.dau>=8000)||S.games[0];
+        if(Math.random()>0.4){ if(g)g.dau+=4000; log("MidnightGrind_TV played for 4 hours. The VOD has 180K views. +4,000 DAU."); }
+        else { if(g)g.dau+=800; log("Stream ended at 90 minutes. 'Good game, but I need to eat.' +800 DAU from the VOD."); }
+      }},
+      {text:"DM them a pitch deck.",flav:"Bad choice. They read it on stream. Chat goes wild. -1 Morale.",fx:()=>{
+        S.morale=Math.max(1,S.morale-1); S.badChoicesMade=(S.badChoicesMade||0)+1;
+        const g=S.games.find(x=>x.dau>=8000)||S.games[0];
+        if(g)g.dau+=200;
+        log("MidnightGrind_TV read the pitch deck aloud. Slide 4 was titled 'Monetization Upside.' The clip has 40K views.");
+      }},
+    ]
+  },
+  algorithmChanged:{
+    title:"Google Play changed the algorithm.",
+    body:"Effective today, organic discovery weights have shifted. Your UA math from last quarter is now aspirational.\n\nCPIs are up. Organic install rates are down. The announcement was three paragraphs buried in a developer newsletter from Thursday.",
+    choices:[
+      {text:"Adapt. Pause paid UA, focus on retention.",flav:"Conservative. UA debuff persists but managed. Churn -1%.",fx:()=>{
+        S.algorithmDebuff=72*24;
+        S.games.forEach(g=>{g.churn=Math.max(0.5,g.churn-1);});
+        log("UA paused. Retention focus active. Churn -1% on all games. CPIs are still terrible.");
+      }},
+      {text:"Appeal to the platform. File a developer support ticket.",flav:"Risky. 20%: featured as partner. 80%: auto-reply.",fx:()=>{
+        S.algorithmDebuff=48*24;
+        if(Math.random()>0.8){ const g=S.games[0]; if(g)g.dau+=5000; S.respect++; log("Platform featured you as a developer partner. DAU +5,000. Respect +1. This never happens."); }
+        else { log("Support ticket auto-response: 'Thank you for your feedback. We are committed to developer success.' Algorithm unchanged."); }
+      }},
+      {text:"Find organic channels. Launch a social presence.",flav:"Risky. 50%: +1,000 DAU/day organic. 50%: posts get 12 impressions.",fx:()=>{
+        S.algorithmDebuff=96*24;
+        if(Math.random()>0.5){ S.games.forEach(g=>{g.dau+=1000;}); log("The posts connected. +1,000 DAU across games. The social manager you don't have is you."); }
+        else { log("12 impressions. Two were your own. Algorithm still changed."); }
+      }},
+    ]
+  },
+  engineerNotice:{
+    title:"Your lead engineer is leaving.",
+    body:"They scheduled the 1:1 themselves. That's how you knew.\n\n\"I've been here since the first build. I respect what we've made. But I need to see what else is out there.\"\n\nThey've been here through three feature crunches and two pivots. They have not had a raise.",
+    choices:[
+      {text:"Counter-offer: 25% raise and title bump.",flav:"Expensive. Morale +1. They stay. Payroll +25% for this role.",fx:()=>{
+        S.raisePayrollMult=(S.raisePayrollMult||1)*1.25;
+        S.morale=Math.min(5,S.morale+1);
+        S.raiseDayNext=(S.totalDays||0)+90;
+        log("They stayed. Payroll increased 25%. They updated their LinkedIn title. That's how you found out about the title bump.");
+      }},
+      {text:"Wish them well. The team will rally.",flav:"Risky. 50%: team covers. 50%: feature debt spikes.",fx:()=>{
+        if((S.autos.engineer||0)>0) S.autos.engineer=Math.max(0,S.autos.engineer-1);
+        if(Math.random()>0.5){ S.morale=Math.min(5,S.morale+1); log("They left on good terms. The team stepped up. Feature velocity held. One engineer down."); }
+        else { S.techDebt=Math.min(100,S.techDebt+15); S.morale=Math.max(1,S.morale-1); log("They left. Two features slipped. Tech Debt +15. One engineer down."); }
+      }},
+      {text:"Tell them they're overreacting.",flav:"Bad choice. They leave + one more quits by end of week. Morale -2.",fx:()=>{
+        if((S.autos.engineer||0)>0) S.autos.engineer=Math.max(0,S.autos.engineer-1);
+        S.morale=Math.max(1,S.morale-2); S.techDebt=Math.min(100,S.techDebt+20);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("They left. A second engineer updated their LinkedIn by Friday. Tech Debt +20. Morale -2.");
+      }},
+    ]
+  },
+  formerInternStudio:{
+    title:"Your old intern launched a studio.",
+    body:"Six months ago they were filing your tickets.\n\nToday: 'Excited to announce [studio name] — building the mobile games we always wanted to make.'\n\nYou recognize the genre. You recognize the core loop. You recognize the feature list from a PRD you wrote in 2023.",
+    choices:[
+      {text:"Mentor them. Send a supportive message.",flav:"Respect +1. Good karma. No competitive hit.",fx:()=>{
+        S.respect++;
+        log("You DM'd them. 'Proud of you. Let me know if you need anything.' They replied with a thank you and a question about ad networks. Industry is small.");
+      }},
+      {text:"Ignore it. The market is big enough.",flav:"Risky. Triggers a competitive DAU event in 5 days.",fx:()=>{
+        S.internCompetitorScheduled=true; S.internCompetitorDay=(S.totalDays||0)+5;
+        log("You said nothing. Their soft launch is in five days. You've been watching their App Store page.");
+      }},
+      {text:"Poach them back. Offer a Designer role.",flav:"Conservative. They join as Designer. Churn -1% on top game.",fx:()=>{
+        S.autos.designer=(S.autos.designer||0)+1;
+        const topGame=S.games.reduce((best,g)=>(!best||g.dau>best.dau)?g:best,null);
+        if(topGame) topGame.churn=Math.max(0.5,topGame.churn-1);
+        log("They came back as a Designer. The studio announcement was quietly deleted. Churn -1% on your top game.");
+      }},
+    ]
+  },
+  formerInternCompetitor:{
+    title:"Their soft launch is live.",
+    body:"[studio name] just launched in Canada. 5,000 installs in 48 hours.\n\nYour DAU is moving. Downward.",
+    choices:[
+      {text:"Noted.",flav:"DAU -10% on top game. The market spoke.",fx:()=>{
+        const topGame=S.games.reduce((best,g)=>(!best||g.dau>best.dau)?g:best,null);
+        if(topGame){ topGame.dau=Math.round(topGame.dau*0.9); }
+        log("Their launch pulled from your audience. DAU -10% on your top game.");
+      }},
+    ]
+  },
+  senateTestimony:{
+    title:"The Senate wants you to testify.",
+    body:"Subcommittee on Commerce, Science, and Transportation.\n\nTopic: \"Monetization practices in mobile gaming and their effect on minors.\"\n\nYou are not prepared for this. Famously.",
+    choices:[
+      {text:"Prepare thoroughly. Hire a comms consultant.",flav:"$30K consultant fee. Your talking points are described as 'technically accurate but vibes-free.'",fx:()=>{
+        S.revenue=Math.max(0,S.revenue-30000); S.respect++;
+        log("$30K for a consultant. Your opening statement had three bullet points and zero eye contact. Respect +1 for showing up.");
+      }},
+      {text:"Wing it. You know your product.",flav:"Morale -1. The clip goes on YouTube.",fx:()=>{
+        S.morale=Math.max(1,S.morale-1); S.respect++;
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("Senator: 'Do you know what a loot box is?' You: 'It depends on your definition of loot.' The clip has 2M views.");
+      }},
+      {text:"Send legal instead.",flav:"Worst choice. $75K legal fees. Legal uses 'robust player protections' 14 times.",fx:()=>{
+        S.revenue=Math.max(0,S.revenue-75000); S.morale=Math.max(1,S.morale-1);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("Legal sent in your place. The phrase 'robust player protections' appears 14 times. A senator asked if anyone at the company actually plays the games.");
+      }},
+    ]
+  },
+  boardAIStrategy:{
+    title:"The board wants to know your AI strategy.",
+    body:"Q3 board meeting. Slide 12 was supposed to be about UA spend.\n\nSomeone added a slide titled: \"Our AI Roadmap.\"\n\nYou did not add this slide. You are now presenting it.",
+    choices:[
+      {text:"\"We already have one.\"",flav:"True. You have an AI PM Tool. Respect +1. Board satisfied.",fx:()=>{
+        S.respect++;
+        log("You pointed at the AI PM Tool. 'It auto-ships prototypes. 40% error rate. It's fine.' The board nodded. They don't know what that means either.");
+      }},
+      {text:"\"We're evaluating options.\"",flav:"Diplomatic. No effect. The meeting ends on time.",fx:()=>{
+        log("'We're evaluating options.' The board wrote it down. You will be asked again in 90 days. You will say the same thing.");
+      }},
+      {text:"\"I'll have a deck ready by Thursday.\"",flav:"Bad choice. SB generation -20% for 72 hours while you make the deck.",fx:()=>{
+        S.deckPrepActive=true; S.deckPrepTimer=72*24;
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("You said Thursday. It's Monday. You have been in Figma since 8pm. SB generation -20% for 72 hours.");
+      }},
+    ]
+  },
+  // ── ACQUISITION EVENTS ──────────────────────────────
+  earlyAcquisition:{
+    title:"Nexus Play wants to talk about [GAME_NAME].",
+    body:"Mid-tier publisher. 12 games in their portfolio, 3 of which you've heard of.\n\nThey've been watching your retention curves.\n\nOffer: $4.5M outright acquisition. They keep the game live, rebrand the studio as \"Nexus Mobile — [Your Studio].\" You get a VP title, a 2-year earnout, and a quarterly all-hands you'll need to attend in Scottsdale.",
+    choices:[
+      {text:"Accept. $4.5M and a VP title.",flav:"Conservative. +$4.5M. Game sunsets from your portfolio. Respect +2.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._acqGameName)||S.games[0];
+        S.revenue+=4500000; S.respect+=2;
+        if(g){ S.gSunset++; S.games.splice(S.games.indexOf(g),1); }
+        log("Nexus Play acquisition closed. $4.5M in the bank. The VP title is on your LinkedIn. The Scottsdale all-hands is in your calendar.");
+        set('p1s',"You sold a game. The money is real. What's next?");
+      }},
+      {text:"Counter at $6M.",flav:"Risky. 40%: they agree. 60%: they walk.",fx:()=>{
+        if(Math.random()<0.4){
+          const g=S.games.find(x=>x.name===S._acqGameName)||S.games[0];
+          S.revenue+=6000000; S.respect+=2;
+          if(g){ S.gSunset++; S.games.splice(S.games.indexOf(g),1); }
+          log("Counter accepted. $6M. They said yes faster than you expected. You wonder if you should have asked for more.");
+        } else {
+          log("Nexus Play walked. 'We had a number and it wasn't $6M.' The offer doesn't come back.");
+        }
+      }},
+      {text:"Decline.",flav:"Respect +1. You're not done building.",fx:()=>{
+        S.respect++;
+        log("You passed on the Nexus Play offer. They'll be watching. You'll be shipping.");
+      }},
+    ]
+  },
+  dauAcquisition:{
+    title:"A data platform wants your users.",
+    body:"PixelGraph. They don't make games. They make data infrastructure for game studios — the kind that knows what ads to show you before you know you want to see them.\n\n[GAME_NAME] has 200,000 daily active users. That's a dataset they want.\n\nOffer: $12M. The game keeps running under your brand. They get full analytics access and a data-sharing agreement.\n\nThe contract uses the phrase \"value exchange\" four times.",
+    choices:[
+      {text:"Accept. $12M and the game stays live.",flav:"Conservative. +$12M. Churn +1.5% — data harvesting degrades UX. Respect −1.",fx:()=>{
+        S.revenue+=12000000; S.respect=Math.max(0,S.respect-1);
+        const g=S.games.find(x=>x.name===S._acqGameName)||S.games[0];
+        if(g) g.churn=Math.min(25,g.churn+1.5);
+        log("PixelGraph deal closed. $12M. The data pipeline goes live in 30 days. Your players don't know yet. They'll notice eventually.");
+      }},
+      {text:"Decline, but offer a data licensing deal.",flav:"$2K/day passive income. No game changes. Respect neutral.",fx:()=>{
+        S._pixelGraphLicense=true;
+        log("PixelGraph data licensing deal signed. $2K/day. You kept control of the product. You're not sure if that was idealism or just negotiation.");
+      }},
+      {text:"Decline entirely.",flav:"Respect +2. You chose players over the deal.",fx:()=>{
+        S.respect+=2;
+        log("You declined. PixelGraph sent a follow-up. You didn't reply. Respect +2.");
+      }},
+    ]
+  },
+  // ── AT-RISK EVENTS ───────────────────────────────────
+  chargebackWave:{
+    title:"Your payment processor has a question.",
+    body:"[GAME_NAME].\n\nYour payment processor has flagged an unusual spike in disputed purchases. 12% of last month's IAP revenue is under review.\n\nThey need a decision by end of day.\n\nIt's 4:47 PM.",
+    choices:[
+      {text:"Accept and refund all disputed charges.",flav:"Conservative. Revenue −8%. Morale +1. The team feels good about it.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        S.revenue=Math.max(0,S.revenue*0.92); S.morale=Math.min(5,S.morale+1);
+        log(`${g?.name||'Your game'}: Chargeback wave resolved. 12% revenue impact absorbed. The team voted to do the right thing. It wasn't even close.`);
+      }},
+      {text:"Contest every chargeback.",flav:"Risky. 60%: recover 80% of disputed amount. 40%: processor threatens suspension, churn +3%.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(Math.random()<0.6){
+          S.revenue=Math.max(0,S.revenue*0.978);
+          log(`${g?.name||'Your game'}: Chargebacks contested. Won 80% of disputes. Net impact: −2.2%. The processor sends a note about 'sustainable practices.'`);
+        } else {
+          if(g) g.churn=Math.min(25,g.churn+3);
+          log(`${g?.name||'Your game'}: Processor threatened suspension. You backed down. Churn +3% from player uncertainty.`);
+        }
+      }},
+      {text:"Quietly absorb it and 'improve fraud detection.'",flav:"Bad choice. Revenue −12%. Tech Debt +10 (rushed fraud fix).",fx:()=>{
+        S.revenue=Math.max(0,S.revenue*0.88); S.techDebt=Math.min(100,S.techDebt+10);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("Chargebacks absorbed. The fraud detection system was built in a weekend. It works. Mostly. Tech Debt +10.");
+      }},
+    ]
+  },
+  platformComplianceWarning:{
+    title:"AppVault Compliance: Action Required.",
+    body:"[GAME_NAME] has been flagged.\n\nNew AppVault policy — the store whose 30% cut you've accepted as a fact of life — requires loot box odds to be disclosed in app store listings. You have 7 days.\n\nYour current disclosure is... creative.\n\nThe compliance email is 847 words long. You read 200 of them.",
+    choices:[
+      {text:"Update immediately. Be fully transparent.",flav:"Conservative. 2,000 SB to redeploy. Churn −0.5% (players notice the honesty).",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(S.pp>=2000){ S.pp-=2000; } else { S.pp=0; }
+        if(g) g.churn=Math.max(0.5,g.churn-0.5);
+        log(`${g?.name||'Your game'}: Loot box odds disclosed. Fully. Players responded with: 'huh, okay.' Churn −0.5%.`);
+      }},
+      {text:"Disclose odds in a FAQ link.",flav:"Risky. 70%: accepted. 30%: re-flagged, DAU −15% during delisting period.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(Math.random()<0.7){
+          log(`AppVault accepted the FAQ disclosure. Technically compliant. Spiritually ambiguous.`);
+        } else {
+          if(g) g.dau=Math.round(g.dau*0.85);
+          log(`Re-flagged. 15-hour delisting during review. DAU −15%. AppVault's enforcement is inconsistent. That doesn't help you.`);
+        }
+      }},
+      {text:"Ignore it.",flav:"Bad choice. 14 days later: forced update + DAU −20%, morale −1, Respect −1.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        setTimeout(()=>{
+          if(g) g.dau=Math.round(g.dau*0.8);
+          S.morale=Math.max(1,S.morale-1); S.respect=Math.max(0,S.respect-1);
+          log(`AppVault forced the update. 14-day delay. DAU −20%. The compliance email said 'Action Required' for a reason.`);
+        }, 14000);
+        log("Compliance warning dismissed. It will not stay dismissed.");
+      }},
+    ]
+  },
+  whaleTurnedCritic:{
+    title:"A power user just posted a thread.",
+    body:"@SpendingMachine99. 47K followers.\n\nTheir thread: \"I've spent $3,400 on [GAME_NAME] and here's what they don't want you to know.\"\n\nIt's accurate. 12K retweets. Gaming journalists are quoting it. Your community manager has sent you seven messages in the last hour. The first one starts 'so.'",
+    choices:[
+      {text:"Reach out privately. Offer a full refund and VIP status.",flav:"Conservative. Respect +1. Churn −1% (community respects the response).",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        S.respect++; if(g) g.churn=Math.max(0.5,g.churn-1);
+        log(`You DM'd @SpendingMachine99. Offered a refund and an early-access tier. They accepted. The follow-up tweet: 'They did right by me. Thread doesn't represent them anymore.' Churn −1%.`);
+      }},
+      {text:"Ignore it. Players will move on.",flav:"Risky. 50%: thread fades. 50%: journalist picks it up, DAU −8%.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(Math.random()<0.5){
+          log("Thread faded after 48 hours. The news cycle moved on. @SpendingMachine99 is now posting about a different game.");
+        } else {
+          if(g) g.dau=Math.round(g.dau*0.92);
+          log("A journalist ran the story. 'Mobile Game Studio Silent on Player Spending Concerns.' DAU −8%. The silence cost more than the statement would have.");
+        }
+      }},
+      {text:"Post a defensive statement.",flav:"Bad choice. Morale −1. Churn +2%. Respect −1. The ratio is bad.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        S.morale=Math.max(1,S.morale-1); S.respect=Math.max(0,S.respect-1);
+        if(g) g.churn=Math.min(25,g.churn+2);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log("You posted a statement. It used the phrase 'out of context' twice. The ratio was 1:47. Morale −1. Churn +2%.");
+      }},
+    ]
+  },
+  saveDataBug:{
+    title:"Save data is corrupted for some users.",
+    body:"Build 3.1.4 shipped cleanly.\n\nThen the reports started.\n\n8% of [GAME_NAME] players logged in this morning to an empty account. Three years of progress. Gone.\n\nThe forum thread is 14 pages. Discord is moving faster. Your QA engineer has not responded to your message. It's been 6 minutes.",
+    choices:[
+      {text:"Emergency rollback + restore from backup.",flav:"Conservative. Costs 5,000 SB. Saves most affected players. Churn +1%.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        const sbCost=5000; S.pp=Math.max(0,S.pp-sbCost);
+        if(g) g.churn=Math.min(25,g.churn+1);
+        log(`Emergency rollback deployed. 70% of affected accounts restored. Churn +1% from the 30% who weren't. The post-mortem is 12 pages. Engineering read all of it.`);
+      }},
+      {text:"Patch forward and compensate with free currency.",flav:"Risky. 60%: players accept it. 40%: reviews tank to 2.1 stars, DAU −12%.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(Math.random()<0.6){
+          log("Patch shipped with a 500-gem apology bundle. Most players accepted it. A vocal minority did not. Their reviews remain.");
+        } else {
+          if(g) g.dau=Math.round(g.dau*0.88);
+          const r=Math.floor(Math.random()*3)+1; // star rating
+          log(`App store rating dropped to 2.${r} stars. 'They gave me fake gems for deleting my account.' DAU −12%.`);
+        }
+      }},
+      {text:"Acknowledge it. Promise a fix 'soon.'",flav:"Bad choice. Tech Debt +15. Churn +4%. A meme emerges.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        S.techDebt=Math.min(100,S.techDebt+15);
+        if(g) g.churn=Math.min(25,g.churn+4);
+        S.badChoicesMade=(S.badChoicesMade||0)+1;
+        log(`'Soon' became a meme in your community. Users post 'soon™' on every update. Churn +4%. Tech Debt +15. The fix is still not shipped.`);
+      }},
+    ]
+  },
+  competitorClone:{
+    title:"A funded studio just launched your game.",
+    body:"Same genre. Same core loop. Same onboarding flow. Better art.\n\n$8M Series A. 50K installs in 72 hours. AppVault is featuring them.\n\nThey named it \"[GAME_NAME] but good\" in their internal docs. The internal docs leaked.",
+    choices:[
+      {text:"Accelerate the feature roadmap.",flav:"Conservative. Churn −2% — loyal players double down. Feature ship costs temporarily 2×.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(g){ g.churn=Math.max(0.5,g.churn-2); g._cloneRushCost=true; }
+        log(`Feature sprint activated. The team knows what's at stake. Churn −2% as loyal players feel the investment. Shipping costs 2× for 7 days.`);
+        setTimeout(()=>{ if(g) g._cloneRushCost=false; }, 7000);
+      }},
+      {text:"Lean into your data advantage.",flav:"Risky. 50%: personalization launches, DAU +20%. 50%: rushed implementation, Tech Debt +20.",fx:()=>{
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(Math.random()<0.5){
+          if(g) g.dau=Math.round(g.dau*1.2);
+          log("Personalization system live. Your 18 months of behavioral data is doing what the clone can't replicate. DAU +20%.");
+        } else {
+          S.techDebt=Math.min(100,S.techDebt+20);
+          log("Rushed personalization shipped with 3 open TODOs. Players notice weird recommendations. Tech Debt +20. The clone is still growing.");
+        }
+      }},
+      {text:"File a trade dress complaint.",flav:"Bad choice. Respect −1. $20K legal fees. DAU +5% from press coverage. Morale −1.",fx:()=>{
+        S.respect=Math.max(0,S.respect-1); S.revenue=Math.max(0,S.revenue-20000);
+        S.morale=Math.max(1,S.morale-1); S.badChoicesMade=(S.badChoicesMade||0)+1;
+        const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
+        if(g) g.dau=Math.round(g.dau*1.05);
+        log("Legal filed the complaint. Gaming press covered it. 'Studio Sues Competitor Over Game No One Remembered.' DAU +5% from notoriety. Everything else: worse.");
+      }},
+    ]
+  },
+  // ── PM LLM ARC ───────────────────────────────────────
+  pmLLMOffer:{
+    title:"Someone is selling PM LLM.",
+    body:"You get the cold outreach at 6:47 AM.\n\n\"We built PM LLM 14 months ago. 340K monthly actives. $180K MRR. Subscription-only. Two ex-SearchCorp PMs and two engineers. We're profitable. We're also burnt out.\n\nWe're not looking for a rebrand. We're looking for someone who understands product and won't destroy what we built.\"\n\nAsking price: $10M.\n\nPM LLM is not a game. It's an AI assistant for product managers — spec writer, PRD generator, sprint planner. Users describe it as \"the PM that never sleeps and doesn't go to your 9am.\"\n\nThe product is real. The question is whether you are a games studio or a product company.",
+    choices:[
+      {text:"Acquire PM LLM for $10M.",flav:"It's a bet on yourself. +$6K/day passive. Respect +2.",fx:()=>{
+        if(S.revenue<10000000){ log("Not enough operating income for this acquisition."); return; }
+        S.revenue-=10000000; S.pmLLMOwned=true; S.respect+=2;
+        log("PM LLM acquired. The team is 4 people. They ship daily. Your games team is watching.");
+        log("PM LLM: $6,000/day revenue stream starts immediately. 340K MAU. Zero churn so far this month.");
+      }},
+      {text:"Pass. You make games.",flav:"Focus is a competitive advantage. Respect +1.",fx:()=>{
+        S.respect++;
+        log("You passed on PM LLM. The product ships without you. You'll see their growth charts in your feed occasionally.");
+      }},
+      {text:"Counter at $7M.",flav:"Risky. 50%: accepted. 50%: they walk — 'the offer reflected the product's value.'",fx:()=>{
+        if(Math.random()<0.5){
+          if(S.revenue<7000000){ log("Not enough operating income."); return; }
+          S.revenue-=7000000; S.pmLLMOwned=true; S.respect+=2;
+          log("Counter accepted at $7M. They said yes in 4 minutes. PM LLM is yours.");
+          log("PM LLM: $6,000/day revenue stream starts immediately.");
+        } else {
+          log("They declined. 'The offer reflected the product's value. We'll find someone who agrees.' The outreach doesn't come again.");
+        }
+      }},
+    ]
+  },
+  pmLLMChallenge:{
+    title:"PM LLM wants to pivot.",
+    body:"The PM LLM team came with a deck.\n\nThey want to build a \"game design co-pilot\" — AI that generates first-draft PRDs for game studios. Feature spec, monetization model, live ops calendar. They think your portfolio is the distribution.\n\nThey need $500K and 3 months.\n\n\"We can build it. We just need you to say yes.\"\n\nSlide 7 is a TAM slide. The number is very large. You've seen large TAM slides before.",
+    choices:[
+      {text:"Fund it. $500K.",flav:"SB generation +10% permanently. The co-pilot bleeds into your studio.",fx:()=>{
+        if(S.revenue<500000){ log("Not enough revenue to fund PM LLM co-pilot."); return; }
+        S.revenue-=500000; S.pmLLMSBBoost=true;
+        log("PM LLM co-pilot funded. The feature ships in 90 days. Your engineers are using it to write their own tickets. You're not sure how you feel about that.");
+        log("SB generation +10% permanently. The tools you funded are now tools you depend on.");
+      }},
+      {text:"Let them try without extra funding.",flav:"Risky. 50%: ships anyway (+10% SB). 50%: feature gets cut.",fx:()=>{
+        if(Math.random()<0.5){
+          S.pmLLMSBBoost=true;
+          log("PM LLM co-pilot shipped on constraints. Took 5 months, not 3. The result is the same. SB generation +10%.");
+        } else {
+          log("The co-pilot feature was cut in Q2 planning. 'Not enough runway.' The core product is still good. The ambition is deferred.");
+        }
+      }},
+      {text:"Redirect them. Protect the core product.",flav:"Respect +1 from the team. No cost, no risk, no bonus.",fx:()=>{
+        S.respect++;
+        log("You told them to focus on the core. 'Build the best PRD assistant, not the most ambitious one.' The team appreciated it. Slide 7 was quietly deleted.");
+      }},
+    ]
+  },
+  goodJob:{
+    title:"For about 15 minutes this afternoon, everything was working.",
+    body:"Both games were healthy. No fires in the queue. No Slack messages requiring a response.\n\nSomeone made coffee. It was good coffee.",
+    choices:[
+      {text:"Acknowledge.",flav:"",fx:()=>{
+        log("You acknowledged it. Then someone filed a P1 bug. But for 15 minutes: everything was working.");
+      }},
+    ]
+  },
 };
 
 // ── ACHIEVEMENTS ──────────────────────────────────────
@@ -633,12 +1115,16 @@ const ACHIEVEMENTS = [
   {id:'fifty_k',     cat:'Revenue',   icon:'🍜', name:'Ramen Profitable',       desc:'Earn $50,000 in total revenue.'},
   {id:'hundred_k',   cat:'Revenue',   icon:'💰', name:'Six Figures',            desc:'Earn $100,000 in total revenue.'},
   {id:'million',     cat:'Revenue',   icon:'🦄', name:'Unicorn Dreams',         desc:'Earn $1,000,000 in total revenue.'},
+  {id:'game_5m',     cat:'Revenue',   icon:'💎', name:'Diamond Tier',           desc:'Earn $5M lifetime revenue from a single game.'},
+  {id:'game_20m',    cat:'Revenue',   icon:'🏆', name:'Cash Machine',           desc:'Earn $20M lifetime revenue from a single game.'},
   // Growth
   {id:'dau_100',     cat:'Growth',    icon:'👥', name:'First Fans',             desc:'Reach 100 DAU on any game.'},
   {id:'dau_1k',      cat:'Growth',    icon:'📈', name:'Gaining Traction',       desc:'Reach 1,000 DAU on any game.'},
   {id:'dau_10k',     cat:'Growth',    icon:'🚀', name:"Something's Working",    desc:'Reach 10,000 DAU on any game.'},
   {id:'dau_50k',     cat:'Growth',    icon:'🌟', name:'Going Viral',            desc:'Reach 50,000 DAU on any game.'},
   {id:'dau_100k',    cat:'Growth',    icon:'👑', name:'Top Charts',             desc:'Reach 100,000 DAU on any game.'},
+  {id:'dau_500k',    cat:'Growth',    icon:'🌍', name:'Mainstream Hit',         desc:'Reach 500,000 DAU on any game.'},
+  {id:'dau_total_1m',cat:'Growth',    icon:'🌐', name:'Combined Dominance',     desc:'Reach 1,000,000 combined DAU across all live games.'},
   // Shipping
   {id:'first_proto', cat:'Shipping',  icon:'📦', name:'First Ship',             desc:'Ship your first prototype.'},
   {id:'five_protos', cat:'Shipping',  icon:'🔁', name:'Fail Faster',            desc:'Ship 5 prototypes.'},
@@ -649,6 +1135,10 @@ const ACHIEVEMENTS = [
   {id:'first_hire',  cat:'Team',      icon:'👋', name:'First Hire',             desc:'Hire your first team member.'},
   {id:'five_hires',  cat:'Team',      icon:'🧑‍🤝‍🧑', name:'Small Team',       desc:'Have 5 people on the team.'},
   {id:'ten_hires',   cat:'Team',      icon:'🏢', name:"It's a Studio",          desc:'Have 10 people on the team.'},
+  {id:'team_25',     cat:'Team',      icon:'🏗', name:'Scaling Up',             desc:'Have 25 people on the team.'},
+  {id:'team_50',     cat:'Team',      icon:'🏙', name:'Mid-Size Studio',        desc:'Have 50 people on the team.'},
+  {id:'team_100',    cat:'Team',      icon:'🌆', name:'Triple-Digit Headcount', desc:'Have 100 people on the team.'},
+  {id:'team_200',    cat:'Team',      icon:'🌃', name:'Enterprise PM',          desc:'Have 200 people on the team.'},
   {id:'full_build',  cat:'Team',      icon:'🏗', name:'Build Team Complete',    desc:'Hire at least one of every build role.'},
   {id:'full_pm',     cat:'Team',      icon:'💼', name:'PM Dream Team',          desc:'Hire at least one of every PM role.'},
   // Games
@@ -667,6 +1157,8 @@ const ACHIEVEMENTS = [
   {id:'influencer_a',cat:'Marketing', icon:'🌟', name:'Influencer Era',         desc:'Run your first Influencer campaign.'},
   {id:'ua_100k',     cat:'Marketing', icon:'📊', name:'Marketing Machine',      desc:'Spend $100,000 total on UA.'},
   {id:'ua_500k',     cat:'Marketing', icon:'🏆', name:'Growth at All Costs',    desc:'Spend $500,000 total on UA.'},
+  {id:'ua_million',  cat:'Marketing', icon:'🚀', name:'UA Whale',               desc:'Spend $1,000,000 total on user acquisition.'},
+  {id:'ua_5m',       cat:'Marketing', icon:'📡', name:'Growth at Any Cost',     desc:'Spend $5,000,000 total on user acquisition.'},
   // Risk
   {id:'debt_100k',   cat:'Risk',      icon:'😰', name:"CFO's Nightmare",        desc:'Carry $100,000 or more in debt.'},
   {id:'debt_paid',   cat:'Risk',      icon:'😅', name:'Comeback Kid',           desc:'Pay off $100,000+ in debt completely.'},
@@ -677,6 +1169,7 @@ const ACHIEVEMENTS = [
   {id:'bad_choice',  cat:'Story',     icon:'🤦', name:'What Were You Thinking', desc:'Make a clearly bad decision in a story event.'},
   {id:'vc_pass',     cat:'Story',     icon:'🦅', name:'Independent',            desc:'Pass on a VC offer.'},
   {id:'morale_max',  cat:'Story',     icon:'😄', name:'Happy Team',             desc:'Have maximum team morale with a live game.'},
+  {id:'turned_down_exit',cat:'Story', icon:'🦅', name:'Turned Down the Exit',   desc:'Decline the MegaCorp acquisition offer.'},
 ];
 
 const IP_LICENSES = [
@@ -685,6 +1178,83 @@ const IP_LICENSES = [
   {id:'sportforce', name:'SportForce', analog:'FIFA/NBA analog', cost:7000000,  royaltyPerDay:250000, launchDAU:40000,  churnBonus:-0.5, desc:'Sports IP. Seasonal engagement spikes. Dedicated audience.'},
   {id:'monsterco',  name:'MonsterCo',  analog:'Pokémon analog',  cost:12000000, royaltyPerDay:500000, launchDAU:100000, churnBonus:-2,   desc:'Collectible IP. Best retention. All audiences. Most expensive.'},
 ];
+
+// ── NEW CONSTANTS ────────────────────────────────────
+
+const ENGINE_TIERS = [
+  { tier: 1, name: 'Code Refactor Sprint',   cost: 5000,   desc: 'Feature ship cost −10%.', reduction: 0.10 },
+  { tier: 2, name: 'Architecture Review',    cost: 20000,  desc: 'Feature ship cost −20% total.', reduction: 0.20 },
+  { tier: 3, name: 'SDK Modernization',      cost: 75000,  desc: 'Feature ship cost −30% total.', reduction: 0.30 },
+  { tier: 4, name: 'Engine Migration',       cost: 250000, desc: 'Feature ship cost −40% total.', reduction: 0.40 },
+  { tier: 5, name: 'Custom Engine (v1.0)',   cost: 800000, desc: 'Feature ship cost −50% total. You built your own engine. It works. Mostly.', reduction: 0.50 },
+];
+
+const ANALYTICS_TIERS = [
+  { tier: 1, name: 'Event Logging',          cost: 2000,   desc: 'Shows exact churn % on game cards (replaces emoji health).', },
+  { tier: 2, name: 'Cohort Dashboard',       cost: 15000,  desc: 'Shows D1/D7 retention estimate on game cards.', },
+  { tier: 3, name: 'Revenue Analytics',      cost: 60000,  desc: 'Shows ARPU and revenue trend on game cards.', },
+  { tier: 4, name: 'Predictive Churn Model', cost: 200000, desc: 'Shows 7-day churn forecast on game cards.', },
+];
+
+const PROTO_QUALITY_TIERS = [
+  { label: 'Polish Pass',     sbCost: 500,   churnBonus: 0.5, dauBonus: 5  },
+  { label: 'UX Audit',        sbCost: 2000,  churnBonus: 1.0, dauBonus: 15 },
+  { label: 'Beta Test Round', sbCost: 5000,  churnBonus: 1.5, dauBonus: 30 },
+  { label: 'Full Pre-launch', sbCost: 15000, churnBonus: 2.0, dauBonus: 50 },
+];
+
+const SOFTWARE_TOOLS = [
+  { id: 'task_tracker',      name: 'Jira Equivalent',        cost: 1000,    desc: 'Bug tickets are now visible. Team no longer argues about what "done" means. SB generation +5%.', sbMult: 0.05 },
+  { id: 'figma_eq',          name: 'Figma Equivalent',       cost: 3000,    desc: 'Designers can actually share files. Design-to-dev handoff −20% friction. SB generation +8%.', sbMult: 0.08 },
+  { id: 'ci_pipeline',       name: 'Basic CI/CD',            cost: 5000,    desc: 'Builds don\'t break on Fridays as often. Feature ship cooldown −10%.', cdReduction: 0.10 },
+  { id: 'unity_eq',          name: 'Unity License',          cost: 15000,   desc: 'The industry standard. Faster prototyping. SB generation +15%.', sbMult: 0.15 },
+  { id: 'analytics_sdk',     name: 'Firebase Suite',         cost: 25000,   desc: 'Real data. Finally. SB generation +10%. Live Ops effectiveness +15%.', sbMult: 0.10, liveOpsMult: 0.15 },
+  { id: 'version_control',   name: 'GitHub Enterprise',      cost: 40000,   desc: 'No one pushes to main by accident anymore. Tech Debt accumulation −25%.', techDebtReduction: 0.25 },
+  { id: 'unreal_eq',         name: 'Unreal License',         cost: 100000,  desc: 'For the ambitious. SB generation +20%.', sbMult: 0.20 },
+  { id: 'ml_platform',       name: 'ML Training Platform',   cost: 150000,  desc: 'Your AI PM Tool is 25% less wrong. SB generation +15%. Tech Debt accumulation −20%.', sbMult: 0.15, techDebtReduction: 0.20 },
+  { id: 'ux_research',       name: 'UserTesting Platform',   cost: 200000,  desc: 'You find out players hate the tutorial before launch. Starting churn −1% on all future games.', launchChurnBonus: 1.0 },
+  { id: 'proprietary_engine',name: 'Proprietary Engine v0.1',cost: 400000,  desc: 'You\'re building your own engine. SB generation +30%. Feature ship cost −15%.', sbMult: 0.30, fscReduction: 0.15 },
+  { id: 'live_platform',     name: 'LiveOps Platform',       cost: 600000,  desc: 'Dedicated live ops infrastructure. Live Ops cooldown −30%.', liveOpsCD: 0.30 },
+  { id: 'full_stack',        name: 'Full Studio Suite',      cost: 1000000, desc: 'You own everything. SB generation +40%. All cooldowns −20%. Tech Debt AI imbalance stops.', sbMult: 0.40, cdReduction: 0.20 },
+];
+
+const OFFICE_TIERS = [
+  { level: 0, name: 'Home Office',     cost: 0,      dailyCost: 0,    moraleMult: 1.00, sbMult: 0,    flavor: 'The all-hands is in the kitchen. The standup is also in the kitchen.' },
+  { level: 1, name: 'Coworking Space', cost: 15000,  dailyCost: 100,  moraleMult: 1.05, sbMult: 0.05, flavor: 'The all-hands is in the "Innovation Pod." There are beanbags. They are non-negotiable.' },
+  { level: 2, name: 'Studio Office',   cost: 75000,  dailyCost: 500,  moraleMult: 1.10, sbMult: 0.10, flavor: 'The all-hands is in the war room. You have a war room now.' },
+  { level: 3, name: 'HQ Campus',       cost: 400000, dailyCost: 2000, moraleMult: 1.20, sbMult: 0.20, flavor: 'The all-hands is live-streamed to the fourth floor. There are four floors.' },
+];
+const REMOTE_MORALE_CAP = 4;
+
+const STUDIO_MATURITY = [
+  { id: 'data_science',   name: 'Data Science Team',    cost: 200000,  desc: 'Surfaces churn forecasts 48h before the churn event triggers. Adds a warning to the log.' },
+  { id: 'localization',   name: 'Localization Pipeline',cost: 350000,  desc: 'All future games launch with +20% DAU globally. One-time cost.' },
+  { id: 'game_jam',       name: 'Internal Game Jam',    cost: 150000,  desc: 'Generates a prototype automatically. 30% chance of excellent quality. 90-day cooldown.', cooldown: 90 },
+  { id: 'player_council', name: 'Player Council',       cost: 500000,  desc: 'Ongoing: $5K/day. Live Ops decay floor lowered to 0.08. One negative event blocked per 7 in-game days.', dailyCost: 5000 },
+  { id: 'acquired_studio',name: 'Acquired Studio',      cost: 5000000, desc: 'A second build team with ~50% of your main team\'s SB output. Unlocks 4th game slot. Has its own morale meter.' },
+];
+
+const GENRE_REPORTS = {
+  'Merge':         { title: 'You are the Merge PM.', body: 'Three Merge games. Studios are starting to notice. A recruiter LinkedIn\'d you specifically to ask about "your Merge experience." You did not respond but you did screenshot it.\n\nMerge Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+  'RPG/Gacha':     { title: 'The Gacha PM.', body: 'Three RPG/Gacha games. Your churn modeling spreadsheet has its own tab called "whale behavior." You\'re not proud of it.\n\nRPG/Gacha Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+  'Puzzle':        { title: 'The Puzzle Specialist.', body: 'Three Puzzle games. Your D1 retention benchmarks are better than anyone else\'s in the building. The building is your apartment.\n\nPuzzle Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+  'Hyper-casual':  { title: 'The Hyper-casual Veteran.', body: 'Three Hyper-casual games. You can estimate CPI by looking at a screenshot. You have tried to explain why this is a skill. It has not landed.\n\nHyper-casual Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+  '4X Strategy':   { title: 'The 4X Niche.', body: 'Three 4X games. You have opinions about tech tree design that most people don\'t know they need. A Discord moderator sent you a thank-you message once.\n\nStrategy Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+  'Battle Royale': { title: 'The BR Veteran.', body: 'Three Battle Royale games. You have seen the hype cycle from the inside. You have also seen what comes after.\n\nBattle Royale Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.' },
+};
+
+const TRAINING_COSTS = {
+  intern: 200, engineer: 1000, qa: 800, designer: 700, artist: 800,
+  junior: 300, senior: 1500, ai: 2000,
+};
+
+const MILESTONE_FLAVORS = {
+  30:  g => `30 days live. ${fmt(Math.floor(g.dau))} players. ${Math.floor(g.churn)}% are leaving every day. The ones staying are the ones who matter.`,
+  60:  g => `60 days live. Lifetime revenue: ${$m(g.lifetimeRev||0)}. The roadmap has changed 4 times. Nobody told the app store description.`,
+  90:  g => `90 days live. You have shipped ${Math.max(1,Math.floor((g.daysLive||0)/10))} features. One of them was requested in a one-star review. It became a five-star review. This does not happen often.`,
+  180: g => `180 days live. Reviews mentioning the tutorial: probably several. The tutorial is however many screens it is. You know what you did.`,
+  365: g => `365 days. One year of ${g.name}. Peak DAU: ${fmt(S.peakDAU)}. Total revenue: ${$m(g.lifetimeRev||0)}. You shipped something that lasted a year. That's not nothing.`,
+};
 
 // ── STATE ─────────────────────────────────────────────
 
@@ -698,8 +1268,7 @@ function mkState(){
     sl:{mon:25,ret:25,ua:25,feat:25},
     spTimer:30, featDebt:0, pmStepTimer:0,
     influencerCooldown:0, platformCooldown:0, pushCooldown:0,
-    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false,respect:false},
-    // opsBoardCooldown moved to per-game state
+    panels:{auto:false,res:false,advRes:false,upgrades:false,premium:false,port:false,sprint:false,ops:false,respect:false,studioMaturity:false},
     popQ:[], fired:[],
     usedNames:[],
     lastClick:Date.now(), lastSave:Date.now(),
@@ -717,6 +1286,50 @@ function mkState(){
     hiddenAt:null,
     achievements:[], totalUASpend:0, maxDebt:0, badChoicesMade:0,
     influencerUsed:false, pivotUsed:false, pmAutoShipped:false,
+    // Tech Debt
+    techDebt: 0,
+    // Genre Expertise
+    genreExpertise: {}, genrePickerUnlocked: false, genreReportFired: {},
+    // Engine Investment
+    engineTier: 0,
+    // Analytics Infrastructure
+    analyticsTier: 0,
+    // Office
+    officeLevel: 0, isRemote: false,
+    // Software Tools
+    softwareTools: [],
+    // Prototype Quality
+    pendingProtoQuality: 0,
+    // Deck Prep
+    deckPrepActive: false, deckPrepTimer: 0,
+    // Algorithm Debuff
+    algorithmDebuff: 0,
+    // Intern Competitor
+    internCompetitorScheduled: false, internCompetitorDay: 0,
+    // Acquired Studio
+    acquiredStudioOwned: false, acquiredStudioMorale: 3,
+    // Player Council
+    playerCouncilActive: false, playerCouncilVetoUsed: 0,
+    // Prestige
+    legacyScore: 0, legacySBBonus: 0, legacyChurnBonus: 0, legacyFreeResearch: null,
+    prestigeAvailable: false,
+    // Milestone banners
+    milestonesDone: {},
+    // One-shot event flags
+    internBrokeProdFired: false, proposeEventFired: false, thinkPieceFired: false,
+    streamerFired: {}, algorithmChangedFired: false, engineerNoticeFired: false,
+    formerInternFired: false, senateFired: false, aiStrategyFired: false,
+    goodJobFired: false,
+    localizationPipelineOwned: false, dataScientistOwned: false,
+    gameJamCooldown: 0,
+    trainingActive: {},
+    jamProtoExcellent: false,
+    // PM LLM arc
+    pmLLMFired: false,
+    pmLLMOwned: false,
+    pmLLMDaysOwned: 0,
+    pmLLMChallengeFired: false,
+    pmLLMSBBoost: false,
   };
 }
 
@@ -775,8 +1388,18 @@ function resetGame(){
 // ── MATH ──────────────────────────────────────────────
 
 function sbps(){
-  const base=AUTOS.reduce((sum,a)=>sum+(a.sbRate||0)*(S.autos[a.id]||0)*S.pppc,0);
-  return base * moraleMultiplier();
+  const trainingMult=(id)=>((S.trainingActive||{})[id]>0)?2:1;
+  const base=AUTOS.reduce((sum,a)=>sum+(a.sbRate||0)*(S.autos[a.id]||0)*S.pppc*trainingMult(a.id),0);
+  const toolSBMult=(S.softwareTools||[]).length?SOFTWARE_TOOLS.filter(t=>(S.softwareTools||[]).includes(t.id)&&t.sbMult).reduce((s,t)=>s+t.sbMult,0):0;
+  const officeSBMult=S.isRemote?0:(OFFICE_TIERS[S.officeLevel]?.sbMult||0);
+  const deckPenalty=S.deckPrepActive?0.80:1.0;
+  const legacyMult=1+(S.legacySBBonus||0);
+  const pmLLMBoost=S.pmLLMSBBoost?1.10:1.0;
+  const sbpsBase=base*moraleMultiplier()*(1+toolSBMult+officeSBMult)*deckPenalty*legacyMult*pmLLMBoost;
+  const acquiredSBBonus=S.acquiredStudioOwned
+    ?(sbpsBase*0.5*(0.7+(S.acquiredStudioMorale-1)*0.15))
+    :0;
+  return sbpsBase+acquiredSBBonus;
 }
 
 function pmClickRate(){
@@ -818,14 +1441,16 @@ function churnPerDayG(g){
   const n=normSl();
   const ml=S.research.includes('ml_ret')?3:0;
   const sub=S.research.includes('sub_model')?3:0;
-  return Math.max(0.5, g.churn*(1-n.ret*0.55)-ml-sub);
+  const techChurnAdd=S.techDebt>50?(S.techDebt-50)*0.04:0;
+  return Math.max(0.5, g.churn*(1-n.ret*0.55)-ml-sub+techChurnAdd);
 }
 
 function growthPerSecG(g){
   if(!g) return 0;
   const n=normSl();
   const loop=S.research.includes('growth_l')?1.5:1;
-  return (0.08+n.ua*3.5)*loop;
+  const algMult=(S.algorithmDebuff||0)>0?0.70:1.0;
+  return (0.08+n.ua*3.5)*loop*algMult;
 }
 
 function invDauMultiplier(){ return S.research.includes('ua_multi')?1.5:1; }
@@ -862,8 +1487,10 @@ const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
 // ── MORALE MECHANICS ──────────────────────────────────
 
 function moraleMultiplier(){
-  // 1:0.70× | 2:0.85× | 3:1.00× | 4:1.15× | 5:1.30×
-  return 0.7 + (S.morale - 1) * 0.15;
+  const officeTier=OFFICE_TIERS[S.officeLevel];
+  const rawMorale=S.isRemote?Math.min(S.morale,REMOTE_MORALE_CAP):S.morale;
+  const officeMoraleMult=S.isRemote?1.0:(officeTier?.moraleMult||1.0);
+  return (0.7+(rawMorale-1)*0.15)*officeMoraleMult;
 }
 
 function opsBonus(){
@@ -900,7 +1527,9 @@ function gamePayrollShare(g){
 
 function opsCD(){
   const totalPMs=(S.autos.junior||0)+(S.autos.senior||0)+(S.autos.ai||0);
-  return Math.max(30, 90 - totalPMs*5);
+  const tools=S.softwareTools||[];
+  const toolCDReduct=SOFTWARE_TOOLS.filter(t=>tools.includes(t.id)&&t.liveOpsCD).reduce((s,t)=>s+t.liveOpsCD,0);
+  return Math.max(15, Math.round((90-totalPMs*5)*(1-toolCDReduct)));
 }
 
 function buildOpsBoard(){ /* no-op: Live Ops now rendered inline per game card */ }
@@ -908,7 +1537,8 @@ function buildOpsBoard(){ /* no-op: Live Ops now rendered inline per game card *
 function liveOpsMult(g){
   const uses=g.liveOpsCount||0;
   const next=g.liveOpsNextBreakthrough||12;
-  const decay=Math.max(0.12, 1-(uses*0.018)); // decays to ~12% floor
+  const floor=S.playerCouncilActive?0.08:0.12;
+  const decay=Math.max(floor, 1-(uses*0.018)); // decays to floor
   if(uses>0 && uses>=next){
     // Breakthrough: set next one 10-20 uses away
     g.liveOpsNextBreakthrough=uses+10+Math.floor(Math.random()*11);
@@ -1016,11 +1646,15 @@ function checkAchievements(){
     fifty_k:      ()=>S.totalRev>=50000,
     hundred_k:    ()=>S.totalRev>=100000,
     million:      ()=>S.totalRev>=1000000,
+    game_5m:      ()=>S.games.some(g=>(g.lifetimeRev||0)>=5000000),
+    game_20m:     ()=>S.games.some(g=>(g.lifetimeRev||0)>=20000000),
     dau_100:      ()=>peak>=100,
     dau_1k:       ()=>peak>=1000,
     dau_10k:      ()=>peak>=10000,
     dau_50k:      ()=>peak>=50000,
     dau_100k:     ()=>peak>=100000,
+    dau_500k:     ()=>peak>=500000,
+    dau_total_1m: ()=>S.games.reduce((s,g)=>s+(g.dau||0),0)>=1000000,
     first_proto:  ()=>S.clicks>=1,
     five_protos:  ()=>S.clicks>=5,
     proto_25:     ()=>S.clicks>=25,
@@ -1029,6 +1663,10 @@ function checkAchievements(){
     first_hire:   ()=>totalHires()>=1,
     five_hires:   ()=>totalHires()>=5,
     ten_hires:    ()=>totalHires()>=10,
+    team_25:      ()=>totalHires()>=25,
+    team_50:      ()=>totalHires()>=50,
+    team_100:     ()=>totalHires()>=100,
+    team_200:     ()=>totalHires()>=200,
     full_build:   ()=>['intern','engineer','qa','designer','artist'].every(id=>(S.autos[id]||0)>=1),
     full_pm:      ()=>['junior','senior','ai'].every(id=>(S.autos[id]||0)>=1),
     first_game:   ()=>S.gLaunched>=1,
@@ -1044,6 +1682,8 @@ function checkAchievements(){
     influencer_a: ()=>!!S.influencerUsed,
     ua_100k:      ()=>(S.totalUASpend||0)>=100000,
     ua_500k:      ()=>(S.totalUASpend||0)>=500000,
+    ua_million:   ()=>(S.totalUASpend||0)>=1000000,
+    ua_5m:        ()=>(S.totalUASpend||0)>=5000000,
     debt_100k:    ()=>(S.maxDebt||0)>=100000,
     debt_paid:    ()=>(S.maxDebt||0)>=100000&&S.debt<1000,
     pivot_used:   ()=>!!S.pivotUsed,
@@ -1052,13 +1692,14 @@ function checkAchievements(){
     bad_choice:   ()=>(S.badChoicesMade||0)>=1,
     vc_pass:      ()=>S.fired.includes('vcOffer'),
     morale_max:   ()=>S.morale>=5&&S.games.length>0,
+    turned_down_exit: ()=>S.achievements.includes('turned_down_exit'),
   };
   ACHIEVEMENTS.forEach(a=>{
     if(!S.achievements.includes(a.id)&&checks[a.id]&&checks[a.id]()){
       S.achievements.push(a.id);
       showAchievementToast(a);
       // Only trigger recognition for high-value milestones with cooldown
-      const HIGH_VALUE=new Set(['first_game','dau_10k','dau_50k','dau_100k','ten_k','hundred_k','million','two_games','basic_done','adv_done']);
+      const HIGH_VALUE=new Set(['first_game','dau_10k','dau_50k','dau_100k','dau_500k','dau_total_1m','ten_k','hundred_k','million','game_5m','game_20m','two_games','basic_done','adv_done','team_25','team_50','team_100','team_200','ua_million','ua_5m']);
       if(HIGH_VALUE.has(a.id) && (ticks-(S.recognitionCooldown||0))>300){
         S.recognitionExpiry=ticks+48; S.recognitionCooldown=ticks;
       }
@@ -1185,6 +1826,54 @@ function tick(){
       }
     }
 
+    // Tech Debt: overdue feature penalty
+    if((g.featureOverdueFor||0)>0){
+      S.techDebt=Math.min(100,S.techDebt+0.05);
+    }
+
+    // Data Science churn warning
+    if(S.research.includes('data_science')){
+      const projChurn=churnPerDayG(g);
+      if(projChurn>8&&(!g._churnWarnedAt||ticks-(g._churnWarnedAt||0)>48)){
+        g._churnWarnedAt=ticks;
+        log(`📊 Data Science: ${g.name} churn forecast >${projChurn.toFixed(1)}%/day. Consider increasing Retention focus.`);
+      }
+    }
+
+    // At-risk events (mature game threats)
+    if((g.daysLive||0)>=90&&g.dau>=10000&&!g.chargebackFired){
+      g.chargebackFired=true; S._atRiskGame=g.name; qEv('chargebackWave');
+    }
+    if((g.lifetimeRev||0)>=1000000&&(g.daysLive||0)>=60&&!g.complianceFired){
+      g.complianceFired=true; S._atRiskGame=g.name; qEv('platformComplianceWarning');
+    }
+    if(g.dau>=50000&&(g.liveOpsCount||0)>=15&&!g.whaleCriticFired){
+      g.whaleCriticFired=true; S._atRiskGame=g.name; qEv('whaleTurnedCritic');
+    }
+    if((g.daysLive||0)>=45&&(g.featureOverdueFor||0)===0&&g.dau>=5000&&!g.saveDataFired){
+      // 0.1% chance per tick once conditions met
+      if(Math.random()<0.001){ g.saveDataFired=true; S._atRiskGame=g.name; qEv('saveDataBug'); }
+    }
+    if((g.daysLive||0)>=120&&g.dau>=20000&&!g.cloneFired){
+      g.cloneFired=true; S._atRiskGame=g.name; qEv('competitorClone');
+    }
+
+    // New acquisition triggers
+    if(!g.earlyAcqOffered&&(g.lifetimeRev||0)>=10000000&&(g.lifetimeRev||0)<100000000){
+      g.earlyAcqOffered=true; S._acqGameName=g.name; qEv('earlyAcquisition');
+    }
+    if(!g.dauAcqOffered&&g.dau>=200000){
+      g.dauAcqOffered=true; S._acqGameName=g.name; qEv('dauAcquisition');
+    }
+
+    // Streamer trigger
+    if(g.dau>=8000&&!(S.streamerFired||{})[g.name]){
+      if(!S.streamerFired) S.streamerFired={};
+      S.streamerFired[g.name]=true;
+      S._streamerGame=g.name;
+      qEv('streamerFound');
+    }
+
     // IP royalty drain
     if(g.ipId && S.ipLicensed){
       const royaltyPerSec=S.ipLicensed.royaltyPerDay/60;
@@ -1206,6 +1895,41 @@ function tick(){
     }
   });
 
+  // AI PM Tool tech debt accumulation (outside games loop)
+  {
+    const aiCount=S.autos.ai||0;
+    const qaCount=S.autos.qa||0;
+    const otherPMs=(S.autos.junior||0)+(S.autos.senior||0);
+    const tools=S.softwareTools||[];
+    const tdReductionMult=1-Math.min(0.99,SOFTWARE_TOOLS.filter(t=>tools.includes(t.id)&&t.techDebtReduction).reduce((s,t)=>s+t.techDebtReduction,0));
+    const fullSuiteOwned=tools.includes('full_stack');
+    if(aiCount>0&&aiCount>(qaCount+otherPMs)&&!fullSuiteOwned){
+      S.techDebt=Math.min(100,S.techDebt+0.02*tdReductionMult);
+    }
+    // Tech debt accumulation reduction also applies to overdue penalty (tracked per-tick above in games loop, but reduce here too)
+    // No extra action needed; tdReductionMult applied to AI imbalance path
+  }
+
+  // Algorithm debuff decrement
+  if((S.algorithmDebuff||0)>0) S.algorithmDebuff--;
+
+  // Deck prep timer decrement
+  if(S.deckPrepActive&&S.deckPrepTimer>0){
+    S.deckPrepTimer--;
+    if(S.deckPrepTimer<=0){
+      S.deckPrepActive=false;
+      log("The AI strategy deck is done. It's 22 slides. Slide 19 is titled 'Synergies.' You're not sure what that means in this context.");
+    }
+  }
+
+  // Training timers decrement
+  if(S.trainingActive){
+    Object.keys(S.trainingActive).forEach(id=>{
+      if(S.trainingActive[id]>0){ S.trainingActive[id]--; }
+      if(S.trainingActive[id]===1) log(`${id} training sprint complete.`);
+    });
+  }
+
   // Day timer (shared — all games tick together)
   S.dayTimer=(S.dayTimer||24)-1;
   if(S.dayTimer<=0){
@@ -1219,6 +1943,48 @@ function tick(){
     // Payroll drain split across games (or just once if no games)
     const drain = S.games.length>0 ? payroll : payroll*0.1;
     S.revenue=Math.max(0,S.revenue-drain);
+
+    // Office daily cost
+    const officeCost=S.isRemote?0:(OFFICE_TIERS[S.officeLevel]?.dailyCost||0);
+    S.revenue=Math.max(0,S.revenue-officeCost);
+
+    // Game Jam cooldown
+    if((S.gameJamCooldown||0)>0) S.gameJamCooldown--;
+
+    // Player Council
+    if(S.playerCouncilActive){
+      S.revenue=Math.max(0,S.revenue-5000);
+      if((S.totalDays%7)===0&&S.popQ.length>0){
+        const NEGATIVE_EVENTS=['highDebt','moraleCollapse','reviewBomb','cpiSpike','bug','algorithmChanged','formerInternCompetitor'];
+        const idx=S.popQ.findIndex(id=>NEGATIVE_EVENTS.includes(id));
+        if(idx>=0){
+          const vetoed=S.popQ.splice(idx,1)[0];
+          S.fired.push(vetoed);
+          log(`🛡 Player Council vetoed an incoming negative event (${vetoed}). Community goodwill used.`);
+        }
+      }
+    }
+
+    // Intern competitor follow-up
+    if(S.internCompetitorScheduled&&S.totalDays>=S.internCompetitorDay){
+      S.internCompetitorScheduled=false;
+      qEv('formerInternCompetitor');
+    }
+
+    // PM LLM daily revenue + challenge trigger
+    if(S.pmLLMOwned){
+      S.revenue+=6000; S.totalRev+=6000;
+      S.pmLLMDaysOwned=(S.pmLLMDaysOwned||0)+1;
+      if(!S.pmLLMChallengeFired&&S.pmLLMDaysOwned>=30){
+        S.pmLLMChallengeFired=true; qEv('pmLLMChallenge');
+      }
+    }
+
+    // PixelGraph data licensing passive income
+    if(S._pixelGraphLicense){ S.revenue+=2000; S.totalRev+=2000; }
+
+    // Milestone banners
+    checkMilestoneBanners();
 
     // Feature debt
     const n=normSl();
@@ -1244,6 +2010,42 @@ function tick(){
   if(!S.conferenceEventFired&&S.respect>=3&&S.games.length>0){ S.conferenceEventFired=true; qEv('conferenceSpeaking'); }
   // Acquisition event fired via unique key per game — check if queued
   if(S._acqGameIdx!==undefined){ qEv('megaAcquisition'); S._acqGameIdx=undefined; }
+
+  // New event triggers
+  if(!S.internBrokeProdFired&&(S.autos.intern||0)>=1&&S.totalDays>=2){
+    S.internBrokeProdFired=true; qEv('internBrokeProd');
+  }
+  if(!S.proposeEventFired&&S.games.some(g=>g.dau>=500)){
+    S.proposeEventFired=true; qEv('playerPropose');
+  }
+  if(!S.thinkPieceFired&&S.totalRev>=50000){
+    S.thinkPieceFired=true; qEv('thinkPiece');
+  }
+  if(!S.algorithmChangedFired&&S.games.some(g=>(g.daysLive||0)>=7)&&S.totalRev>=10000){
+    S.algorithmChangedFired=true; qEv('algorithmChanged');
+  }
+  {
+    const daysSinceHire=S.totalDays||0;
+    const noRaiseRecently=daysSinceHire>=(S.raiseDayNext||0);
+    if(!S.engineerNoticeFired&&noRaiseRecently&&S.morale<=3&&(S.autos.engineer||0)>=1&&S.totalDays>=30){
+      S.engineerNoticeFired=true; qEv('engineerNotice');
+    }
+  }
+  if(!S.formerInternFired&&S.totalDays>=100&&S.gSunset>=1){
+    S.formerInternFired=true; qEv('formerInternStudio');
+  }
+  if(!S.senateFired&&S.totalRev>=5000000){
+    S.senateFired=true; qEv('senateTestimony');
+  }
+  if(!S.aiStrategyFired&&(S.autos.junior||0)>0&&(S.autos.senior||0)>0&&(S.autos.ai||0)>0){
+    S.aiStrategyFired=true; qEv('boardAIStrategy');
+  }
+  if(!S.goodJobFired&&S.morale>=5&&S.games.length>=2&&Math.random()<0.005){
+    S.goodJobFired=true; qEv('goodJob');
+  }
+  if(!S.pmLLMFired&&S.revenue>=20000000){
+    S.pmLLMFired=true; qEv('pmLLMOffer');
+  }
 
   // Cooldowns
   if(S.opsBoardCooldown>0) S.opsBoardCooldown--;
@@ -1329,7 +2131,7 @@ function checkMilestones(){
 
   if(S.games.length>0&&!S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.games.length>0&&!S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked.'); }
-  if(S.games.length>0&&S.research.includes('liveops_training')&&!S.panels.ops){ S.panels.ops=true; reveal('panel-ops'); log('Live Ops board unlocked. Ship events and offers to scale revenue.'); }
+  if(S.games.length>0&&S.research.includes('liveops_training')&&!S.panels.ops){ S.panels.ops=true; /* panel-ops is now inline per game card — no separate panel reveal */ log('Live Ops board unlocked. Ship events and offers to scale revenue.'); }
   if(S.games.length>0&&S.totalRev>=10000&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked. You\'ve earned your first $10K.'); }
 
   if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked.'); }
@@ -1341,6 +2143,22 @@ function checkMilestones(){
   if(advDone&&studioHalf&&!S.panels.premium){ S.panels.premium=true; reveal('panel-premium'); log('💎 Premium Upgrades unlocked. You\'ve come a long way.'); }
 
   if(S.respect>=2&&!S.panels.respect){ S.panels.respect=true; reveal('panel-respect-actions'); log('⭐ Respect actions unlocked. You can now spend Respect on strategic advantages.'); }
+
+  // Engine Investment panel (unlock at $5K total revenue)
+  if(S.totalRev>=5000){const ep=$('panel-engine');if(ep&&ep.classList.contains('hidden'))reveal('panel-engine');}
+
+  // Software/Dev Tools panel (unlock at $1K total revenue)
+  if(S.totalRev>=1000){const sp=$('panel-software');if(sp&&sp.classList.contains('hidden'))reveal('panel-software');}
+
+  // Studio Maturity: unlock when all premium upgrades purchased
+  const premiumAllDone=PREMIUM_UPGRADES.every(u=>S.research.includes(u.id));
+  if(premiumAllDone&&!S.panels.studioMaturity){ S.panels.studioMaturity=true; reveal('panel-studio-maturity'); log('🏛 Studio Maturity research unlocked. Company-level investments are now available.'); }
+
+  // Prestige unlock
+  if(S.totalRev>=100000000&&S.gSunset>=1&&!S.prestigeAvailable){
+    S.prestigeAvailable=true;
+    log('🌟 LEGACY UNLOCK: You can now Found a New Studio. Check the nav bar.');
+  }
 
   checkPanelCollapse();
 }
@@ -1433,11 +2251,13 @@ function updateUI(){
   const burn=calcDailyPayroll();
   const netDay=Math.round(totalRevps()*24-burn);
   const netStr=netDay>=0?'+'+$m(netDay)+'/day':'-'+$m(Math.abs(netDay))+'/day';
-  set('r-revs',S.games.length>0?`net ${netStr}`:'no active games');
+  const llmTag=S.pmLLMOwned?' · 🤖 +$6K/d':'';
+  set('r-revs',S.games.length>0?`net ${netStr}${llmTag}`:'no active games');
   set('r-debt',$m(S.debt));
   set('r-dflav',debtFlavor());
   set('r-resp',S.respect);
   set('r-morale',moraleEmoji());
+  set('r-team-size', totalHires()+' on team');
 
   const ri=$('ri-debt');
   if(ri) ri.classList.toggle('pulsing',S.debt>0);
@@ -1493,6 +2313,26 @@ function updateUI(){
   buildGameCards();
   buildRespectActions();
   buildAchievementsPanel();
+  // Tech Debt display
+  set('r-techdebt', Math.round(S.techDebt)+'/100');
+  const tdFlavor=S.techDebt===0?'clean build':S.techDebt<25?'manageable.':S.techDebt<50?'engineering is sighing.':S.techDebt<75?'the codebase is haunted.':'everything is held together with duct tape.';
+  set('r-techdebt-sub', tdFlavor);
+  const tdEl=$('r-techdebt');
+  if(tdEl) tdEl.style.color=S.techDebt>50?'var(--red)':S.techDebt>25?'var(--yellow)':'var(--t1)';
+
+  // Prestige button
+  const prestBtn=$('btn-prestige');
+  if(prestBtn) prestBtn.style.display=S.prestigeAvailable?'':'none';
+
+  // Office panel
+  buildOfficePanel();
+
+  // Engine/Analytics/Software/StudioMaturity panels
+  buildEngineList();
+  buildAnalyticsList();
+  buildSoftwareList();
+  buildStudioMaturityList();
+
   // Recognition banner
   const bannerEl=$('banner-recognition');
   if(bannerEl) bannerEl.classList.toggle('hidden', !S.recognitionExpiry||ticks>S.recognitionExpiry);
@@ -1517,12 +2357,15 @@ function buildAutoList(){
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.35,owned));
     const nextSB=(owned+1)*a.sbRate;
+    const trainingOn=(S.trainingActive||{})[a.id]>0;
+    const trainCost=TRAINING_COSTS[a.id]||500;
     return `<div class="ai">
       <div><div class="ain">${a.name}</div><div class="aif">${a.flavor}</div></div>
       <div class="air">
         <div class="aio">${owned}×</div>
         <div class="airt${owned>0?' active':''}">+${nextSB}sb/s next</div>
         <button class="bbuy" data-cost="${cost}" data-cur="sb" onclick="buyAuto('${a.id}')">${fmt(cost)} SB</button>
+        ${owned>0?`<button class="bbuy" onclick="trainRole('${a.id}')" ${trainingOn?'disabled':''}>${trainingOn?`⚡ ${(S.trainingActive||{})[a.id]}s`:`Train (${fmt(trainCost)} SB)`}</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -1538,6 +2381,8 @@ function buildAutoList(){
     const cost=Math.floor(a.cost*Math.pow(1.35,owned));
     const rateLabel=owned>0?`${a.pmRate*owned} steps/min`:`${a.pmRate} steps/min`;
     const costLabel=`${fmt(a.sbCost)} SB/step`;
+    const trainingOn=(S.trainingActive||{})[a.id]>0;
+    const trainCost=TRAINING_COSTS[a.id]||500;
     return `<div class="ai" style="align-items:flex-start;gap:.5rem">
       <div style="flex:1;min-width:0">
         <div class="ain">${a.name}</div>
@@ -1548,9 +2393,22 @@ function buildAutoList(){
       </div>
         <div class="aio">${owned}×</div>
         <button class="bbuy" data-cost="${cost}" data-cur="sb" onclick="buyAuto('${a.id}')">${fmt(cost)} SB</button>
+        ${owned>0?`<button class="bbuy" onclick="trainRole('${a.id}')" ${trainingOn?'disabled':''}>${trainingOn?`⚡ ${(S.trainingActive||{})[a.id]}s`:`Train (${fmt(trainCost)} SB)`}</button>`:''}
       </div>
     </div>`;
   }).join('');
+
+  // Tech Debt Pay-Down
+  if(S.techDebt>0){
+    html+=`<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)">
+      <div class="ain">🧱 Pay Down Tech Debt</div>
+      <div class="aif">Current: ${Math.round(S.techDebt)}/100 · Costs 500 SB per point</div>
+      <div style="margin-top:4px;display:flex;gap:.4rem">
+        <button class="bbuy" onclick="payTechDebt(10)">Pay 10pt (5K SB)</button>
+        <button class="bbuy" onclick="payTechDebt(25)">Pay 25pt (12.5K SB)</button>
+      </div>
+    </div>`;
+  }
 
   // Team Raise (available every 90 in-game days, after first game)
   if(S.games.length>0){
@@ -1663,24 +2521,38 @@ function buildGameCards(){
 
 function buildCard(g,i){
   const dau=Math.floor(g.dau);
-  const showChurn=S.research.includes('analytics');
+  const effAnalyticsTier=Math.max(S.analyticsTier, S.research.includes('analytics')?1:0);
+  const showChurn=effAnalyticsTier>=1||S.research.includes('analytics');
   const churnDisplay=showChurn?g.churn.toFixed(1)+'%':health(g.churn);
   const fl=GENRE_FLAVOR[g.genre]?.[g.audience]||'';
   const infCD=S.influencerCooldown, platCD=S.platformCooldown, pushCD=S.pushCooldown;
   const teamShare=$m(gamePayrollShare(g));
   const uaMult=invDauMultiplier();
+  let statsHtml=`
+      <div><div class="gcsl">DAU</div><div class="gcsv">${fmt(dau)}</div>
+        <div class="daubar"><div class="daufill" style="width:${Math.min(100,dau/500*10)}%"></div></div></div>
+      <div><div class="gcsl">Revenue/s</div><div class="gcsv">${$m(revpsG(g))}</div></div>
+      <div><div class="gcsl">${showChurn?'Churn/day':'Health'}</div><div class="gcsv">${churnDisplay}</div></div>
+      <div><div class="gcsl">Days Live</div><div class="gcsv">${g.daysLive||0}</div></div>`;
+  if(effAnalyticsTier>=2){
+    const d1Est=Math.max(20,95-g.churn*3).toFixed(0);
+    statsHtml+=`<div><div class="gcsl">Est. D1 Ret.</div><div class="gcsv">${d1Est}%</div></div>`;
+  }
+  if(effAnalyticsTier>=3){
+    const arpu=g.dau>0?(revpsG(g)*86400/g.dau).toFixed(4):'0.00';
+    statsHtml+=`<div><div class="gcsl">ARPU/day</div><div class="gcsv">$${arpu}</div></div>`;
+  }
+  if(effAnalyticsTier>=4){
+    const proj7=(g.dau*Math.pow(1-churnPerDayG(g)/100,7)).toFixed(0);
+    statsHtml+=`<div><div class="gcsl">DAU in 7d</div><div class="gcsv">${fmt(proj7)}</div></div>`;
+  }
   return `<div class="gcard">
     <div class="gch">
       <div class="gcn">${g.name}</div>
       <div class="gctags"><span class="gctag">${g.genre}</span><span class="gctag">${g.audience}</span></div>
     </div>
     ${fl?`<div style="font-size:.72rem;color:var(--t3);margin-bottom:.7rem;font-style:italic">${fl}</div>`:''}
-    <div class="gcstats">
-      <div><div class="gcsl">DAU</div><div class="gcsv">${fmt(dau)}</div>
-        <div class="daubar"><div class="daufill" style="width:${Math.min(100,dau/500*10)}%"></div></div></div>
-      <div><div class="gcsl">Revenue/s</div><div class="gcsv">${$m(revpsG(g))}</div></div>
-      <div><div class="gcsl">${showChurn?'Churn/day':'Health'}</div><div class="gcsv">${churnDisplay}</div></div>
-      <div><div class="gcsl">Days Live</div><div class="gcsv">${g.daysLive||0}</div></div>
+    <div class="gcstats">${statsHtml}
     </div>
     <div class="gcactions">
       <button class="bact pri" onclick="showUAPopup(${i})">💸 Spend in UA</button>
@@ -1787,6 +2659,9 @@ function applyResearch(id){
   if(id==='exp_cult') log('Experimentation Culture: sprint UA +50%.');
   if(id==='exec_dash') log('Executive Dashboard: payroll −10%.');
   if(id==='franchise') { S.maxGames=3; log('Third game slot unlocked.'); }
+  if(id==='genre_picker') { S.genrePickerUnlocked=true; log('Genre selection unlocked. You can now choose your game genre on launch.'); }
+  if(id==='player_council') { S.playerCouncilActive=true; }
+  if(id==='acquired_studio') { S.acquiredStudioOwned=true; S.maxGames=Math.max(S.maxGames,4); log('Acquired Studio: 4th game slot unlocked. Second team generating SB.'); }
 }
 
 function showUAPopup(gIdx=0){
@@ -1807,7 +2682,9 @@ function doUA(tid,gIdx=0){
   const t=INV.find(x=>x.id===tid); const g=S.games[gIdx];
   if(!t||!g) return;
   if(S.revenue<t.cost){ log('Not enough revenue.'); return; }
-  const dau=Math.round(t.dau*invDauMultiplier());
+  const expLevel=Math.min(5,Math.max(0,(S.genreExpertise[g.genre]||0)-1));
+  const roasBonus=1+(expLevel*0.05);
+  const dau=Math.round(t.dau*invDauMultiplier()*roasBonus);
   S.revenue-=t.cost; S.debt+=t.cost; g.dau+=dau;
   S.totalUASpend=(S.totalUASpend||0)+t.cost;
   log(`UA: ${t.name} on ${g.name}. +${fmt(dau)} DAU. Debt: ${$m(S.debt)}.`);
@@ -1815,8 +2692,12 @@ function doUA(tid,gIdx=0){
 
 function featureShipCost(g){
   const base=Math.max(500,Math.round(g.dau*0.5+(g.daysLive||0)*50));
-  const maturity=1+(g.permRevBoost||0)*2; // grows as ops actions stack
-  return Math.round(base*maturity);
+  const maturity=1+(g.permRevBoost||0)*2;
+  const engineReduction=ENGINE_TIERS[S.engineTier-1]?.reduction||0;
+  const fscToolReduction=SOFTWARE_TOOLS.filter(t=>S.softwareTools.includes(t.id)&&t.fscReduction).reduce((s,t)=>s+t.fscReduction,0);
+  const techMult=1+(S.techDebt/100)*0.5;
+  const cloneRush=g._cloneRushCost?2.0:1.0;
+  return Math.round(base*maturity*(1-engineReduction-fscToolReduction)*techMult*cloneRush);
 }
 
 function shipFeatures(gIdx=0){
@@ -1930,9 +2811,10 @@ function fireNextPop(){
   S.fired.push(id);
   let ev=EVENTS[id]; if(!ev) return;
   if(S.games[0]){
+    const gameName=id==='streamerFound'?(S._streamerGame||S.games[0].name):(S._bcGameName||S.games[0].name);
     ev={...ev,
-      title:ev.title.replace(/\[GAME_NAME\]/g,S._bcGameName||S.games[0].name),
-      body:ev.body.replace(/\[GAME_NAME\]/g,S._bcGameName||S.games[0].name)
+      title:ev.title.replace(/\[GAME_NAME\]/g,gameName),
+      body:ev.body.replace(/\[GAME_NAME\]/g,gameName)
     };
   }
   showPop(ev);
@@ -1970,7 +2852,7 @@ function randGameName(){
 }
 
 function showNamingPopup(){
-  if(popOpen) return; // don't interrupt existing popup
+  if(popOpen) return;
   const genre=GENRES[Math.floor(Math.random()*GENRES.length)];
   const aud=AUDIENCES[Math.floor(Math.random()*AUDIENCES.length)];
   const suggested=randGameName();
@@ -1981,34 +2863,393 @@ function showNamingPopup(){
     ?`After ${S.clicks} shipped prototypes, one made it through.\n\nThe concept: a ${genre} game for ${aud} players. You did not come up with the ${genre} angle. That was Karen from Brand.\n\nYour game needs a name.`
     :`Your team completed another prototype: a ${genre} game for ${aud} players.\n\nYour game needs a name.`
   );
+  const genreInputs=S.genrePickerUnlocked
+    ?`<select class="pinput" id="genre-in">${GENRES.map(g=>`<option value="${g}"${g===genre?' selected':''}>${g}</option>`).join('')}</select>
+       <select class="pinput" id="aud-in" style="margin-top:.4rem">${AUDIENCES.map(a=>`<option value="${a}"${a===aud?' selected':''}>${a}</option>`).join('')}</select>`
+    :`<div style="font-size:.78rem;color:var(--t3);margin-bottom:.5rem">Genre: ${genre} · Audience: ${aud} — <em>unlock Genre Strategy to choose</em></div>`;
+  const qualityButtons=PROTO_QUALITY_TIERS.map((t,i)=>
+    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${t.label} (${fmt(t.sbCost)} SB) — −${t.churnBonus}% churn · +${t.dauBonus} DAU</button>`
+  ).join('');
   $('p-choices').innerHTML=`
     <input type="text" class="pinput" id="gname-in" value="${suggested}" placeholder="Game name..." maxlength="40">
+    ${genreInputs}
+    <div style="font-size:.78rem;color:var(--t2);margin:.6rem 0 .3rem">Optional: Invest in prototype quality before launch</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem">${qualityButtons}</div>
     <button class="pchoice" onclick="launchGame('${genre}','${aud}')">Launch it →</button>
     ${isFirst?`<div style="font-size:.67rem;color:var(--t3);text-align:center;margin-top:.25rem;font-style:italic">"Karen has already emailed the team about naming rights."</div>`:''}`;
   $('poverlay').classList.remove('hidden');
   setTimeout(()=>{ const i=$('gname-in'); if(i)i.focus(); },100);
 }
 
-function launchGame(genre,aud){
+function launchGame(defaultGenre,defaultAud){
   const nameEl=$('gname-in');
   const name=(nameEl?nameEl.value.trim():'')||randGameName();
+  const genreEl=$('genre-in'), audEl=$('aud-in');
+  const genre=(genreEl?genreEl.value:null)||defaultGenre;
+  const aud=(audEl?audEl.value:null)||defaultAud;
   S.usedNames.push(name);
   const startChurn=S.research.includes('user_res')?6:8;
-  // Apply IP licensing bonus if pending
-  const ip = S.pendingIPLaunch ? IP_LICENSES.find(x=>x.id===S.pendingIPLaunch) : null;
-  const launchDAU = ip ? ip.launchDAU : 12;
-  const launchChurn = Math.max(0.5, startChurn + (ip ? ip.churnBonus : 0));
+
+  // IP licensing bonus
+  const ip=S.pendingIPLaunch?IP_LICENSES.find(x=>x.id===S.pendingIPLaunch):null;
+
+  // Genre expertise churn bonus
+  const currentExp=S.genreExpertise[genre]||0;
+  S.genreExpertise[genre]=currentExp+1;
+  const newExp=S.genreExpertise[genre];
+  if(newExp>=2) log(`Genre Expertise: ${genre} level ${Math.min(5,newExp-1)}. Churn bonus and ROAS active.`);
+  if(newExp===4&&!(S.genreReportFired||{})[genre]){
+    if(!S.genreReportFired) S.genreReportFired={};
+    S.genreReportFired[genre]=true;
+    setTimeout(()=>fireGenreReport(genre),3000);
+  }
+  const expLevel=Math.min(5,Math.max(0,newExp-1));
+  const expChurnBonus=expLevel*0.5;
+
+  // Prototype quality bonus
+  const qualityTier=PROTO_QUALITY_TIERS[(S.pendingProtoQuality||0)-1];
+  const qualityChurnBonus=qualityTier?.churnBonus||0;
+  const qualityDauBonus=qualityTier?.dauBonus||0;
+  S.pendingProtoQuality=0;
+
+  // Software tool launch churn bonus
+  const toolChurnBonus=SOFTWARE_TOOLS.filter(t=>S.softwareTools.includes(t.id)&&t.launchChurnBonus).reduce((s,t)=>s+t.launchChurnBonus,0);
+
+  // Jam prototype bonus
+  const jamBonus=S.jamProtoExcellent?2.0:0;
+  S.jamProtoExcellent=false;
+
+  // Localization bonus
+  const locBonus=S.research.includes('localization')?1.20:1.0;
+
+  const baseDAU=ip?ip.launchDAU:12;
+  const launchDAU=Math.round((baseDAU+qualityDauBonus)*locBonus);
+  const launchChurn=Math.max(0.5, startChurn+(ip?ip.churnBonus:0)-expChurnBonus-qualityChurnBonus-toolChurnBonus-jamBonus-(S.legacyChurnBonus||0)*100);
+
   S.games.push({name,genre,audience:aud,dau:launchDAU,churn:launchChurn,daysLive:0,permRevBoost:0,
     lifetimeRev:0, featureDueIn:48, featureOverdueFor:0, acquisitionOffered:false,
     liveOpsCount:0, liveOpsNextBreakthrough:Math.floor(10+Math.random()*8), _directorBlocked:false,
     opsBoardCooldown:0, opsLastResult:'',
     blockchainOffered:false, nftDecline:0,
-    ipId: ip ? ip.id : null, ipName: ip ? ip.name : null});
+    ipId:ip?ip.id:null, ipName:ip?ip.name:null});
   if(ip){ S.ipLicensed=ip; S.pendingIPLaunch=null; log(`🎬 ${ip.name} IP game launching. ${fmt(launchDAU)} launch DAU. Royalty: ${$m(ip.royaltyPerDay)}/day.`); }
   S.gLaunched++; S.dayTimer=24; S.prdProgress=0;
   closePop();
-  log(`🚀 ${name} is live. 12 installs. 3 of them are you.`);
+  log(`🚀 ${name} is live. ${launchDAU} installs. ${launchDAU<=12?'3 of them are you.':'Players are coming in.'}`);
   setTimeout(()=>qEv('firstLaunch'),3000);
+  if((S.legacyScore||0)>0&&S.gLaunched===1) log("You've been here before. That's either wisdom or a warning sign.");
+}
+
+// ── NEW FUNCTIONS ─────────────────────────────────────
+
+function payTechDebt(pts){
+  const cost=pts*500;
+  if(S.pp<cost){ log(`Need ${fmt(cost)} SB to reduce tech debt.`); return; }
+  S.pp-=cost;
+  S.techDebt=Math.max(0,S.techDebt-pts);
+  log(`Tech Debt reduced by ${pts}pt. (${Math.round(S.techDebt)}/100 remaining)`);
+}
+
+function trainRole(id){
+  const cost=TRAINING_COSTS[id]||500;
+  if(S.pp<cost){ log(`Need ${fmt(cost)} SB to train ${id}.`); return; }
+  if(!S.trainingActive) S.trainingActive={};
+  if((S.trainingActive[id]||0)>0){ log(`${id} already in training.`); return; }
+  S.pp-=cost;
+  S.trainingActive[id]=60;
+  log(`📚 ${id} team in training sprint. 2× output for 60 seconds.`);
+}
+
+function investProtoQuality(tierIdx){
+  const t=PROTO_QUALITY_TIERS[tierIdx];
+  if((S.pendingProtoQuality||0)>tierIdx){ log('Already invested at this level or higher.'); return; }
+  const prevCost=(PROTO_QUALITY_TIERS[(S.pendingProtoQuality||0)-1]?.sbCost||0);
+  const costDiff=t.sbCost-prevCost;
+  if(S.pp<costDiff){ log(`Need ${fmt(costDiff)} more SB for ${t.label}.`); return; }
+  S.pp-=costDiff;
+  S.pendingProtoQuality=tierIdx+1;
+  log(`Prototype quality: ${t.label} invested. −${t.churnBonus}% starting churn, +${t.dauBonus} launch DAU.`);
+  // Re-render the naming popup quality buttons
+  const qualityButtons=PROTO_QUALITY_TIERS.map((qt,i)=>
+    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${qt.label} (${fmt(qt.sbCost)} SB) — −${qt.churnBonus}% churn · +${qt.dauBonus} DAU</button>`
+  ).join('');
+  const qContainer=document.querySelector('#p-choices .bbuy')?.parentElement;
+  if(qContainer) qContainer.innerHTML=qualityButtons;
+}
+
+function buyEngineTier(){
+  const next=ENGINE_TIERS[S.engineTier];
+  if(!next){ log('Engine at maximum tier.'); return; }
+  if(S.pp<next.cost){ log(`Need ${fmt(next.cost)} SB for ${next.name}.`); return; }
+  S.pp-=next.cost;
+  S.engineTier++;
+  log(`🔧 ${next.name} complete. Feature ship costs now −${Math.round(next.reduction*100)}% permanently.`);
+}
+
+function buildEngineList(){
+  const c=$('engine-list'); if(!c) return;
+  let html='';
+  ENGINE_TIERS.forEach(t=>{
+    const done=S.engineTier>=t.tier;
+    const isNext=S.engineTier===t.tier-1;
+    html+=`<div class="tier-row">
+      <div>
+        <div class="rin" style="font-size:.85rem">${done?'✓ ':isNext?'→ ':''}${t.name}</div>
+        <div class="rid">${t.desc}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:.5rem">
+        ${done?`<span class="tier-row-done">Active</span>`
+          :isNext?`<button class="bbuy aff" data-cost="${t.cost}" data-cur="sb" onclick="buyEngineTier()">${fmt(t.cost)} SB</button>`
+          :`<span class="tier-row-locked" style="font-size:.72rem;color:var(--t3)">${fmt(t.cost)} SB</span>`}
+      </div>
+    </div>`;
+  });
+  if(S.engineTier>0) html+=`<div style="font-size:.72rem;color:var(--green);margin-top:.4rem">Current reduction: −${Math.round(ENGINE_TIERS[S.engineTier-1].reduction*100)}%</div>`;
+  c.innerHTML=html;
+}
+
+function buyAnalyticsTier(){
+  const effTier=Math.max(S.analyticsTier, S.research.includes('analytics')?1:0);
+  const next=ANALYTICS_TIERS[effTier];
+  if(!next){ log('Analytics at maximum tier.'); return; }
+  if(S.revenue<next.cost){ log(`Need ${$m(next.cost)} for ${next.name}.`); return; }
+  S.revenue-=next.cost;
+  S.analyticsTier=effTier+1;
+  log(`📊 ${next.name} purchased. ${next.desc}`);
+}
+
+function buildAnalyticsList(){
+  // Analytics is shown as part of the research panel — integrated via game cards
+  // No separate panel needed; tier is purchased via studio upgrades list if desired
+}
+
+function buySoftwareTool(id){
+  const t=SOFTWARE_TOOLS.find(x=>x.id===id);
+  if(!t||(S.softwareTools||[]).includes(id)) return;
+  if(S.revenue<t.cost){ log(`Need ${$m(t.cost)} to purchase ${t.name}.`); return; }
+  S.revenue-=t.cost;
+  if(!S.softwareTools) S.softwareTools=[];
+  S.softwareTools.push(id);
+  log(`🛠 ${t.name} purchased. ${t.desc.split('.')[0]}.`);
+  if(t.launchChurnBonus){
+    S.games.forEach(g=>{g.churn=Math.max(0.5,g.churn-t.launchChurnBonus);});
+    log(`All live games: churn −${t.launchChurnBonus}% applied.`);
+  }
+}
+
+function buildSoftwareList(){
+  const c=$('software-list'); if(!c) return;
+  const sections=[
+    {label:'Essentials',ids:['task_tracker','figma_eq','ci_pipeline']},
+    {label:'Mid-tier',ids:['unity_eq','analytics_sdk','version_control']},
+    {label:'Studio Grade',ids:['unreal_eq','ml_platform','ux_research']},
+    {label:'Enterprise',ids:['proprietary_engine','live_platform','full_stack']},
+  ];
+  let html='';
+  sections.forEach(sec=>{
+    html+=`<div class="tool-section-hdr">${sec.label}</div>`;
+    sec.ids.forEach(id=>{
+      const t=SOFTWARE_TOOLS.find(x=>x.id===id); if(!t) return;
+      const owned=(S.softwareTools||[]).includes(id);
+      html+=`<div class="ri">
+        <div class="rin">${t.name}</div>
+        <div class="rid">${t.desc}</div>
+        ${owned?'<div class="ridone">✓ Active</div>'
+          :`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
+              <span class="ric">${$m(t.cost)}</span>
+              <button class="bbuy" data-cost="${t.cost}" data-cur="rev" onclick="buySoftwareTool('${id}')">Purchase</button>
+            </div>`}
+      </div>`;
+    });
+  });
+  c.innerHTML=html;
+}
+
+function upgradeOffice(){
+  const next=OFFICE_TIERS[S.officeLevel+1];
+  if(!next){ log('Already at maximum office tier.'); return; }
+  if(S.revenue<next.cost){ log(`Need ${$m(next.cost)} to upgrade to ${next.name}.`); return; }
+  S.revenue-=next.cost;
+  S.officeLevel++;
+  S.isRemote=false;
+  S.morale=Math.min(5,S.morale+1);
+  log(`🏢 Moved to ${next.name}. ${next.flavor} Daily cost: ${$m(next.dailyCost)}.`);
+}
+
+function offerGoRemote(){
+  showPop({
+    title:'Go fully remote?',
+    body:`Your current office costs ${$m(OFFICE_TIERS[S.officeLevel]?.dailyCost||0)}/day.\n\nGoing fully remote eliminates that cost permanently.\n\nThe trade-off: team morale is capped at 4. The 2pm "vibe check" Slack messages will not compensate for the missing ping pong table.`,
+    choices:[
+      {text:'Go remote. Save the money.',flav:'Daily office cost eliminated. Morale cap: 4.',fx:()=>{
+        S.isRemote=true;
+        S.morale=Math.min(4,S.morale);
+        log('Studio is now fully remote. Office cost: $0/day. Morale capped at 4.');
+      }},
+      {text:'Keep the office.',flav:'Some things are worth the burn.',fx:()=>{}},
+    ]
+  });
+}
+
+function buildOfficePanel(){
+  const c=$('office-body'); if(!c) return;
+  const cur=OFFICE_TIERS[S.officeLevel]||OFFICE_TIERS[0];
+  const next=OFFICE_TIERS[S.officeLevel+1];
+  let html=`<div style="margin-bottom:.5rem">
+    <div class="rin office-tier-active">${S.isRemote?'🌐 Fully Remote':cur.name}</div>
+    <div class="rid" style="font-style:italic">${S.isRemote?'Office cost eliminated. Morale capped at 4.':cur.flavor}</div>
+    <div style="font-size:.72rem;color:var(--t2);margin-top:3px">Daily cost: ${$m(S.isRemote?0:(cur.dailyCost||0))} · Morale mult: ${S.isRemote?'1.0×':cur.moraleMult+'×'} · SB: ${S.isRemote?'—':'+'+Math.round((cur.sbMult||0)*100)+'%'}</div>
+  </div>`;
+  if(next&&!S.isRemote){
+    const canAfford=S.revenue>=next.cost;
+    html+=`<div style="margin-top:.4rem">
+      <button class="bbuy${canAfford?' aff':''}" onclick="upgradeOffice()" ${canAfford?'':'disabled'}>Upgrade to ${next.name} (${$m(next.cost)})</button>
+      <div class="rid" style="margin-top:4px">+${Math.round((next.moraleMult-1)*100)}% morale · +${Math.round(next.sbMult*100)}% SB · ${$m(next.dailyCost)}/day</div>
+    </div>`;
+  }
+  if(!S.isRemote&&(cur.dailyCost||0)>0){
+    html+=`<div style="margin-top:.4rem"><button class="bbuy" onclick="offerGoRemote()">Consider Going Remote</button></div>`;
+  }
+  c.innerHTML=html;
+}
+
+function buyStudioMaturity(id){
+  const item=STUDIO_MATURITY.find(x=>x.id===id);
+  if(!item||S.research.includes(id)) return;
+  if(S.revenue<item.cost){ log(`Need ${$m(item.cost)} for ${item.name}.`); return; }
+  S.revenue-=item.cost;
+  S.research.push(id);
+  applyResearch(id);
+  log(`🏛 ${item.name} acquired.`);
+}
+
+function buildStudioMaturityList(){
+  const c=$('studio-maturity-list'); if(!c) return;
+  let html='';
+  STUDIO_MATURITY.forEach(item=>{
+    const done=S.research.includes(item.id);
+    const isGameJam=item.id==='game_jam';
+    html+=`<div class="ri">
+      <div class="rin">${item.name}</div>
+      <div class="rid">${item.desc}</div>
+      ${done
+        ?(isGameJam?`<div style="margin-top:5px"><button class="bbuy${(S.gameJamCooldown||0)===0?' aff':''}" onclick="runGameJam()" ${(S.gameJamCooldown||0)>0?'disabled':''}>${(S.gameJamCooldown||0)>0?`On cooldown: ${S.gameJamCooldown}d`:'Run Game Jam ($150K)'}</button></div>`:'<div class="ridone">✓ Active</div>')
+        :`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
+            <span class="ric">${$m(item.cost)}</span>
+            <button class="bbuy" data-cost="${item.cost}" data-cur="rev" onclick="buyStudioMaturity('${item.id}')">Purchase</button>
+          </div>`}
+    </div>`;
+  });
+  // Analytics tier purchase row
+  const effTier=Math.max(S.analyticsTier,S.research.includes('analytics')?1:0);
+  const nextA=ANALYTICS_TIERS[effTier];
+  html+=`<div class="ri"><div class="rin">📊 Analytics Tier ${effTier}/${ANALYTICS_TIERS.length}</div>`;
+  if(nextA){
+    html+=`<div class="rid">${nextA.desc}</div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px"><span class="ric">${$m(nextA.cost)}</span><button class="bbuy" data-cost="${nextA.cost}" data-cur="rev" onclick="buyAnalyticsTier()">Upgrade</button></div>`;
+  } else {
+    html+=`<div class="ridone">✓ Max tier</div>`;
+  }
+  html+=`</div>`;
+  c.innerHTML=html;
+}
+
+function runGameJam(){
+  if(!S.research.includes('game_jam')) return;
+  if((S.gameJamCooldown||0)>0){ log(`Game Jam on cooldown. Available in ${S.gameJamCooldown} days.`); return; }
+  if(S.revenue<150000){ log(`Need ${$m(150000)} to run a Game Jam.`); return; }
+  S.revenue-=150000;
+  S.gameJamCooldown=90;
+  const excellent=Math.random()<0.30;
+  S.clicks++;
+  if(excellent){
+    S.jamProtoExcellent=true;
+    log(`🎮 Game Jam complete. The team built something genuinely surprising. Prototype added — lower starting churn.`);
+  } else {
+    log(`🎮 Game Jam complete. "The concept is Minecraft but for PMs." Prototype added.`);
+  }
+  if(S.games.length<S.maxGames) setTimeout(showNamingPopup,1000);
+}
+
+function calcLegacyScore(){
+  const dauPoints=Math.floor(S.peakDAU/1000);
+  const launchPts=S.gLaunched*5;
+  const acqPts=S.gSunset*10;
+  const respPts=S.respect*3;
+  return dauPoints+launchPts+acqPts+respPts;
+}
+
+function triggerPrestige(){
+  const score=calcLegacyScore();
+  const sbBonus=Math.min(0.50,Math.floor(score/50)*0.05);
+  const churnBonus=Math.min(0.05,Math.floor(score/30)*0.005);
+  showPop({
+    title:'Found a New Studio.',
+    body:`You've earned ${score} Legacy Score.\n\nYour career doesn't reset — it compounds.\n\nYou carry:\n· +${Math.round(sbBonus*100)}% SB generation\n· −${churnBonus.toFixed(1)}% starting churn on all new games\n${score>=100?'· One research item pre-completed (you choose below)':''}\n\nEverything else resets.`,
+    choices:[
+      {text:'Start the new studio.',flav:'The log on day one reads: "You\'ve been here before. That\'s either wisdom or a warning sign."',fx:()=>{
+        if(score>=100){ showLegacyResearchPicker(sbBonus,churnBonus); }
+        else { executePrestige(sbBonus,churnBonus,null); }
+      }},
+      {text:'Not yet. Keep building.',flav:'The button stays. The offer doesn\'t expire.',fx:()=>{}},
+    ]
+  });
+}
+
+function showLegacyResearchPicker(sbBonus,churnBonus){
+  const pickable=RESEARCH.filter(r=>r.tier===1).map(r=>({
+    text:r.name,
+    flav:r.desc,
+    fx:()=>executePrestige(sbBonus,churnBonus,r.id)
+  }));
+  showPop({title:'Choose your head start.',body:'One Basic Research item carries over to your new run, already completed.',choices:pickable});
+}
+
+function executePrestige(sbBonus,churnBonus,freeResId){
+  stopTick();
+  window._resetting=true;
+  ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
+  const newState=mkState();
+  newState.legacyScore=calcLegacyScore();
+  newState.legacySBBonus=sbBonus;
+  newState.legacyChurnBonus=churnBonus;
+  newState.legacyFreeResearch=freeResId;
+  if(freeResId) newState.research.push(freeResId);
+  localStorage.setItem('shipIt4',JSON.stringify(newState));
+  location.reload();
+}
+
+function checkMilestoneBanners(){
+  if(!S.milestonesDone) S.milestonesDone={};
+  S.games.forEach(g=>{
+    const done=S.milestonesDone[g.name]||[];
+    const days=g.daysLive||0;
+    [30,60,90,180,365].forEach(milestone=>{
+      if(days>=milestone&&!done.includes(milestone)){
+        done.push(milestone);
+        S.milestonesDone[g.name]=done;
+        const flavorFn=MILESTONE_FLAVORS[milestone];
+        if(flavorFn) log(`📅 ${flavorFn(g)}`);
+        showMilestoneBanner(milestone,g);
+      }
+    });
+  });
+}
+
+function showMilestoneBanner(days,g){
+  const t=$('ach-toast'); if(!t) return;
+  $('ach-toast-icon').textContent=days>=365?'🎂':'📅';
+  const labelEl=t.querySelector('.ach-toast-label'); if(labelEl) labelEl.textContent=`${days}-Day Milestone`;
+  $('ach-toast-name').textContent=g.name;
+  $('ach-toast-desc').textContent=MILESTONE_FLAVORS[days]?.(g)?.split('.')[0]||'';
+  t.style.borderColor='var(--ind)';
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.classList.remove('show');t.style.borderColor='';},5000);
+}
+
+function fireGenreReport(genre){
+  const rep=GENRE_REPORTS[genre]||{title:`${genre} Specialist.`,body:`Three ${genre} games. Expertise Level 3. Starting churn −1.5%. UA ROAS +15%.`};
+  showPop({title:rep.title,body:rep.body,choices:[{text:'Noted.',flav:'You\'ve earned a niche.',fx:()=>{}}]});
 }
 
 // ── TAB VISIBILITY ────────────────────────────────────
@@ -2046,12 +3287,18 @@ if(S.panels.premium) reveal('panel-premium');
 if(S.panels.respect) reveal('panel-respect-actions');
 if(S.panels.port) reveal('panel-port');
 if(S.panels.sprint) reveal('panel-sprint');
-if(S.panels.ops) reveal('panel-ops');
+// panel-ops is inline per-game now — never reveal the standalone panel
+if(S.panels.studioMaturity) reveal('panel-studio-maturity');
+if(S.totalRev>=5000){ reveal('panel-engine'); }
+if(S.totalRev>=1000){ reveal('panel-software'); }
 
 ['mon','ret','ua','feat'].forEach(k=>{ const e=$('sl-'+k); if(e) e.value=S.sl[k]||25; });
 
 if(S.clicks===0&&S.games.length===0) log('Welcome. The button is all you have. For now.');
-else log(`Welcome back. ${S.gLaunched} game(s). ${fmt(S.peakDAU)} peak DAU.`);
+else {
+  log(`Welcome back. ${S.gLaunched} game(s). ${fmt(S.peakDAU)} peak DAU.`);
+  if((S.legacyScore||0)>0) log(`Legacy Score: ${S.legacyScore}. Carrying +${Math.round((S.legacySBBonus||0)*100)}% SB gen, −${((S.legacyChurnBonus||0)*100).toFixed(1)}% churn.`);
+}
 
 updateProtoUI();
 startTick();
