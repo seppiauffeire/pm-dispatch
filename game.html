@@ -2434,7 +2434,7 @@ function buildAutoList(){
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.35,owned));
     const rateLabel=owned>0?`${a.pmRate*owned} steps/min`:`${a.pmRate} steps/min`;
-    const costLabel=`${fmt(a.sbCost)} SB/step`;
+    const costLabel=`−${fmt(a.sbCost)} SB/step`;
     const trainingOn=(S.trainingActive||{})[a.id]>0;
     const trainCost=TRAINING_COSTS[a.id]||500;
     const trainUnlocked=S.research.includes('team_dev');
