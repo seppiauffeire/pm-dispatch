@@ -390,15 +390,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 // sbCost = SB consumed per auto-step
 const AUTOS = [
   // Build team — generates Software Built
-  {id:'intern',   name:'Intern',      cost:15,   sbRate:1,  pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
-  {id:'engineer', name:'Engineer',    cost:200,  sbRate:15, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
-  {id:'qa',       name:'QA',          cost:600,  sbRate:20, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
-  {id:'designer', name:'Designer',    cost:1200, sbRate:30, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
-  {id:'artist',   name:'Artist',      cost:3000, sbRate:50, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
+  {id:'intern',   name:'Intern',      cost:50,   sbRate:0.6,pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
+  {id:'engineer', name:'Engineer',    cost:350,  sbRate:12, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
+  {id:'qa',       name:'QA',          cost:900,  sbRate:16, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
+  {id:'designer', name:'Designer',    cost:1800, sbRate:24, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
+  {id:'artist',   name:'Artist',      cost:4500, sbRate:40, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
   // PM team — auto-advances PRD steps, consumes SB
-  {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:100, payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
-  {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:250, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
-  {id:'ai',       name:'AI PM Tool',  cost:2000, sbRate:0,  pmRate:8, sbCost:500, payroll:300,  flavor:'Rapid automation. Wrong 40% of the time, every time.'},
+  {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:75,  payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
+  {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:200, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
+  {id:'ai',       name:'AI PM Tool',  cost:2000, sbRate:0,  pmRate:8, sbCost:400, payroll:300,  flavor:'Rapid automation. Wrong 40% of the time, every time.'},
   // Director of Product — dual-currency hire, auto-ships features
   {id:'director', name:'Director of Product', cost:50000, revCost:100000, sbRate:0, pmRate:0, sbCost:0, payroll:5000, flavor:'Auto-ships game features. Attends your board meetings. Takes partial credit.', directorOnly:true},
 ];
@@ -1443,7 +1443,7 @@ function revpsG(g){
   if(!g||g.dau<=0) return 0;
   const n=normSl();
   const iap=S.research.includes('prem_iap')?1.3:1;
-  return g.dau*0.018*(1+n.mon*0.6)*iap*(1+(g.permRevBoost||0));
+  return g.dau*0.024*(1+n.mon*0.6)*iap*(1+(g.permRevBoost||0));
 }
 
 function totalRevps(){ return S.games.reduce((sum,g)=>sum+revpsG(g),0); }
@@ -1462,7 +1462,7 @@ function growthPerSecG(g){
   const n=normSl();
   const loop=S.research.includes('growth_l')?1.5:1;
   const algMult=(S.algorithmDebuff||0)>0?0.70:1.0;
-  return (0.08+n.ua*3.5)*loop*algMult;
+  return (0.14+n.ua*3.5)*loop*algMult;
 }
 
 function invDauMultiplier(){ return S.research.includes('ua_multi')?1.5:1; }
@@ -2993,7 +2993,7 @@ function launchGame(defaultGenre,defaultAud){
   // Localization bonus
   const locBonus=S.research.includes('localization')?1.20:1.0;
 
-  const baseDAU=ip?ip.launchDAU:12;
+  const baseDAU=ip?ip.launchDAU:35;
   const launchDAU=Math.round((baseDAU+qualityDauBonus)*locBonus);
   const launchChurn=Math.max(0.5, startChurn+(ip?ip.churnBonus:0)-expChurnBonus-qualityChurnBonus-toolChurnBonus-jamBonus-(S.legacyChurnBonus||0)*100);
 
@@ -3006,7 +3006,7 @@ function launchGame(defaultGenre,defaultAud){
   if(ip){ S.ipLicensed=ip; S.pendingIPLaunch=null; log(`🎬 ${ip.name} IP game launching. ${fmt(launchDAU)} launch DAU. Royalty: ${$m(ip.royaltyPerDay)}/day.`); }
   S.gLaunched++; S.dayTimer=24; S.prdProgress=0;
   closePop();
-  log(`🚀 ${name} is live. ${launchDAU} installs. ${launchDAU<=12?'3 of them are you.':'Players are coming in.'}`);
+  log(`🚀 ${name} is live. ${launchDAU} installs. ${launchDAU<=35?'Some of them might be you.':'Players are coming in.'}`);
   setTimeout(()=>qEv('firstLaunch'),3000);
   if((S.legacyScore||0)>0&&S.gLaunched===1) log("You've been here before. That's either wisdom or a warning sign.");
 }
