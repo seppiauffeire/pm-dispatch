@@ -1036,14 +1036,14 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   <div class="nav-tabs">
     <button class="nav-tab" onclick="switchPage('rice')" data-page="rice">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg><span class="tab-label">Prioritization</span></button>
+    <button class="nav-tab" onclick="switchPage('guides')" data-page="guides">
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="tab-label">PM Playbook</span></button>
     <button class="nav-tab" onclick="switchPage('stats')" data-page="stats">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span class="tab-label">Stats Lab</span></button>
     <button class="nav-tab" onclick="switchPage('growth')" data-page="growth">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span class="tab-label">Growth Tools</span></button>
     <button class="nav-tab" onclick="switchPage('samplesize')" data-page="samplesize">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg><span class="tab-label">A/B Sample Size</span></button>
-    <button class="nav-tab" onclick="switchPage('guides')" data-page="guides">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="tab-label">PM Playbook</span></button>
     <button class="nav-tab" onclick="switchPage('challenge')" data-page="challenge">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span class="tab-label">PM Challenge</span></button>
     <button class="nav-tab" onclick="switchPage('news')" data-page="news">
@@ -1170,45 +1170,36 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <div class="orbit-center-label">Tools</div>
         </div>
         <!-- 0° = right; -90° = top. r=210, center=(280,280) -->
-        <!-- 0: top (-90°) 280,70 -->
+        <!-- 6 nodes at 60° intervals, r=210, center=(280,280) -->
+        <!-- 0°: top 280,70 -->
         <div class="tool-node" style="left:280px;top:70px" onclick="switchPage('rice')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg></div>
           <div class="tool-node-label">Prioritization</div>
         </div>
-        <!-- 1: top-right (-45°) 429,131 -->
-        <div class="tool-node" style="left:429px;top:131px" onclick="switchPage('stats')">
+        <!-- 60°: right-top 462,175 -->
+        <div class="tool-node" style="left:462px;top:175px" onclick="switchPage('stats')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="8"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="12"/></svg></div>
           <div class="tool-node-label">Stats Lab</div>
         </div>
-        <!-- 2: right (0°) 490,280 -->
-        <div class="tool-node" style="left:490px;top:280px" onclick="switchPage('growth')">
+        <!-- 120°: right-bottom 462,385 -->
+        <div class="tool-node" style="left:462px;top:385px" onclick="switchPage('growth')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <div class="tool-node-label">Growth Tools</div>
         </div>
-        <!-- 3: bottom-right (45°) 429,429 -->
-        <div class="tool-node" style="left:429px;top:429px" onclick="switchPage('samplesize')">
+        <!-- 180°: bottom 280,490 -->
+        <div class="tool-node" style="left:280px;top:490px" onclick="switchPage('samplesize')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="7" y1="14" x2="17" y2="14"/></svg></div>
           <div class="tool-node-label">A/B Sample Size</div>
         </div>
-        <!-- 4: bottom (90°) 280,490 -->
-        <div class="tool-node" style="left:280px;top:490px" onclick="switchPage('guides')">
+        <!-- 240°: left-bottom 98,385 -->
+        <div class="tool-node" style="left:98px;top:385px" onclick="switchPage('guides')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
           <div class="tool-node-label">PM Playbook</div>
         </div>
-        <!-- 5: bottom-left (135°) 131,429 -->
-        <div class="tool-node" style="left:131px;top:429px" onclick="switchPage('leaderboard')">
+        <!-- 300°: left-top 98,175 -->
+        <div class="tool-node" style="left:98px;top:175px" onclick="switchPage('leaderboard')">
           <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
           <div class="tool-node-label">Leaderboard</div>
-        </div>
-        <!-- 6: left (180°) 70,280 -->
-        <div class="tool-node" style="left:70px;top:280px" onclick="switchPage('daily')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-          <div class="tool-node-label">Daily Insight</div>
-        </div>
-        <!-- 7: top-left (225°) 131,131 -->
-        <div class="tool-node" style="left:131px;top:131px" onclick="switchPage('about')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <div class="tool-node-label">About</div>
         </div>
       </div>
     </div>
@@ -1415,7 +1406,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
 
   <div class="subtabs">
-    <button class="subtab active" onclick="switchSub('stats','freq-sub')">Frequentist Sig.</button>
+    <button class="subtab active" onclick="switchSub('stats','freq-sub')">t-test</button>
     <button class="subtab" onclick="switchSub('stats','bayes-conv-sub')">Bayesian Conversion</button>
     <button class="subtab" onclick="switchSub('stats','bayes-ret-sub')">Bayesian Retention</button>
     <button class="subtab" onclick="switchSub('stats','arpu-sub')">ARPU Comparison</button>
@@ -2895,10 +2886,10 @@ function renderWS(){
   tbody.innerHTML='';
   wsRows.forEach(row=>{
     while(row.scores.length<wsCrit.length) row.scores.push(5);
-    const total=wsCrit.reduce((s,c,i)=>s+c.weight*row.scores[i]/100,0).toFixed(1);
+    const total=wsCrit.reduce((s,c,i)=>s+c.weight*row.scores[i]/100,0).toFixed(2);
     const tr=document.createElement('tr');
     tr.innerHTML=`<td><input class="name-input" value="${row.name}" oninput="updateWsRow(${row.id},'name',this.value)"></td>`+
-      wsCrit.map((c,i)=>`<td><input class="rice-input" type="number" value="${row.scores[i]}" min="0" max="10" oninput="updateWsScore(${row.id},${i},+this.value)"></td>`).join('')+
+      wsCrit.map((c,i)=>`<td><input class="rice-input" type="number" value="${row.scores[i]}" min="0" max="10" style="min-width:3rem" oninput="updateWsScore(${row.id},${i},+this.value)"></td>`).join('')+
       `<td><span class="score-badge" style="${scoreBadgeStyle(total/10)}">${total}</span></td>`+
       `<td><button style="background:none;border:none;color:var(--t3);cursor:pointer" onclick="wsRows=wsRows.filter(r=>r.id!==${row.id});renderWS()">×</button></td>`;
     tbody.appendChild(tr);
@@ -3157,7 +3148,7 @@ function calcARPU(){
   const z=(ta-ca)/se;
   const pval=2*(1-normCDF(Math.abs(z)));
   const lift=(ta-ca)/ca*100;
-  const totalDiff=(ta-ca)*(cn+tn)/2*days;
+  const totalDiff=(ta-ca)*(cn+tn)/2;
   document.getElementById('arpu-stats').innerHTML=`
     <div class="stat-cell"><div class="stat-cell-label">Control ARPU</div><div class="stat-cell-val">$${ca.toFixed(2)}</div></div>
     <div class="stat-cell"><div class="stat-cell-label">Treatment ARPU</div><div class="stat-cell-val">$${ta.toFixed(2)}</div></div>
@@ -3171,8 +3162,8 @@ function calcARPU(){
       ${pval<0.05?'✅ Statistically significant difference in ARPU':'⚠️ Not statistically significant: wider confidence interval needed'}
     </div>
     <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--t2)">
-      Over ${days} days with ~${((cn+tn)/2/1000).toFixed(0)}K average daily users, the treatment would generate an estimated 
-      <strong style="color:${totalDiff>=0?'var(--green)':'var(--red)'}">$${Math.abs(totalDiff).toLocaleString('en',{maximumFractionDigits:0})} ${totalDiff>=0?'more':'less'}</strong> in revenue.
+      Across ~${((cn+tn)/2/1000).toFixed(1)}K users in the combined sample, the treatment group represents an estimated total revenue difference of
+      <strong style="color:${totalDiff>=0?'var(--green)':'var(--red)'}">$${Math.abs(totalDiff).toLocaleString('en',{maximumFractionDigits:0})} ${totalDiff>=0?'more':'less'}</strong> than control.
     </div>
   `;
   const pts=50;
@@ -3698,7 +3689,7 @@ const guides=[
   {icon:'🗺️',cat:'Strategy',title:'Product Roadmapping',desc:'How to build, prioritize, and communicate a roadmap that stakeholders trust.',
    body:`<h3>What is a Product Roadmap?</h3><p>A roadmap is a strategic communication artifact, not a commitment list. It shows direction, not a delivery schedule. The best roadmaps answer "why" before "what."</p><h3>Roadmap Types</h3><ul><li><strong>Now/Next/Later:</strong> Simple, flexible, resists over-commitment. Best for early-stage or fast-moving teams.</li><li><strong>Theme-based:</strong> Groups work by strategic theme rather than feature. Excellent for quarterly planning.</li><li><strong>Outcome-based:</strong> Tied to measurable KPIs. Forces clarity on "what does success look like."</li></ul><h3>Key Principles</h3><ul><li>Separate the roadmap from the backlog: they serve different audiences.</li><li>Always state the problem being solved, not just the solution.</li><li>Build in explicit uncertainty buffers: use confidence levels per initiative.</li><li>Review and update at least monthly.</li></ul><h3>Common Mistakes</h3><ul><li>Treating the roadmap as a contract. It's a living document.</li><li>Listing features without explaining customer or business value.</li><li>No visible connection to company strategy or OKRs.</li></ul>`},
   {icon:'📐',cat:'Frameworks',title:'Statistical Significance for PMs',desc:'What p-values actually mean, how to read A/B test results, and when to call a test.',
-   body:`<h3>The Core Concept</h3><p>Statistical significance tells you how likely your observed result is if the null hypothesis (no difference) were true. A p-value of 0.05 means: if there was truly no effect, you'd see a result this extreme 5% of the time by chance alone.</p><h3>What PMs Often Get Wrong</h3><ul><li><strong>Peeking:</strong> Stopping a test early when results look good inflates false positive rates. Pre-register your sample size.</li><li><strong>Multiple comparisons:</strong> Testing 10 metrics simultaneously means a ~40% chance of a false positive somewhere. Use Bonferroni correction or limit primary metrics.</li><li><strong>Significance ≠ importance:</strong> A 0.1% lift can be significant with 10M users but meaningless for the business.</li></ul><h3>Practical Thresholds</h3><ul><li>Use α=0.05 for most product decisions.</li><li>Use α=0.01 for high-stakes changes (pricing, monetization).</li><li>Aim for 80%+ power: under-powered tests waste cycles.</li></ul><h3>When to Use Bayesian Instead</h3><p>Use Bayesian methods when you want continuous monitoring, can't wait for a fixed sample, or need probability statements ("87% chance this is better") rather than binary decisions.</p>`},
+   body:`<h3>The Core Concept</h3><p>Statistical significance tells you how likely your observed result is if the null hypothesis (no difference) were true. A p-value of 0.05 means: if there was truly no effect, you'd see a result this extreme 5% of the time by chance alone.</p><h3>What PMs Often Get Wrong</h3><ul><li><strong>Peeking:</strong> Stopping a test early when results look good inflates false positive rates. Pre-register your sample size.</li><li><strong>Multiple comparisons:</strong> Testing 10 metrics simultaneously means a ~40% chance of a false positive somewhere. Use Bonferroni correction or limit primary metrics.</li><li><strong>Significance ≠ importance:</strong> A 0.1% lift can be significant with 10M users but meaningless for the business.</li></ul><h3>Practical Thresholds</h3><ul><li>Use α=0.05 for most product decisions.</li><li>Use α=0.01 for high-stakes changes (pricing, monetization).</li><li>Aim for 80%+ power: under-powered tests waste cycles.</li></ul><h3>The Inconvenient Truth About Stat Sig</h3><p>True statistical significance is expensive and rare in practice. Most games don't have the traffic volume to reach it reliably, and most tests get called early before sample size targets are met. At studios like Kabam or Gree, only a fraction of experiments ever hit a clean stat sig threshold. The rest require judgment calls on imperfect data.</p><h3>When to Use Bayesian Instead</h3><p>Bayesian methods are often more practical for PMs working with limited budgets and small samples. Instead of waiting for a fixed sample, you get continuous probability statements: "87% chance this version is better." This is actionable even before you'd reach traditional significance. Key advantages:</p><ul><li>No peeking problem: check results whenever you want without inflating error rates.</li><li>Works with smaller samples: useful when you can't afford to wait for classical significance.</li><li>Intuitive output: "74% probability B beats A" is easier to communicate than p=0.08.</li><li>Incorporates prior knowledge: if you have history on similar tests, use it.</li></ul>`},
   {icon:'🎲',cat:'Statistics',title:'Bayesian A/B Testing',desc:'How Bayesian methods work and when they beat frequentist approaches for product decisions.',
    body:`<h3>The Bayesian Model</h3><p>Instead of p-values, Bayesian A/B testing gives you: <code>P(Treatment > Control | data)</code>: a direct probability statement. This is what most PMs actually want to know.</p><h3>How It Works</h3><ul><li>Start with a prior (your belief before the test). Uninformative: Beta(1,1). Weak prior: Beta(5,5).</li><li>Update with observed data: Beta(α + conversions, β + non-conversions).</li><li>Sample from both posteriors thousands of times and count how often Treatment wins.</li></ul><h3>Reading Results</h3><ul><li><strong>P(B&gt;A) &gt; 95%:</strong> Ship it with confidence.</li><li><strong>80-95%:</strong> Probably ship: consider business context.</li><li><strong>&lt;80%:</strong> Collect more data or reconsider the hypothesis.</li></ul><h3>Advantages Over Frequentist</h3><ul><li>No peeking problem: you can check results anytime.</li><li>More intuitive output for stakeholders.</li><li>Naturally incorporates prior knowledge.</li><li>Handles small sample sizes more gracefully.</li></ul>`},
   {icon:'💰',cat:'Monetization',title:'IAP Monetization Strategy',desc:'Designing in-app purchase systems that convert without destroying retention.',
@@ -3708,7 +3699,7 @@ const guides=[
   {icon:'📣',cat:'Monetization',title:'Ad Monetization for Mobile Games',desc:'Rewarded video, interstitials, banners: when each works and how to optimize eCPM.',
    body:`<h3>Ad Format Strategy</h3><ul><li><strong>Rewarded Video:</strong> Highest eCPM ($8-20). Player-initiated, opt-in. Zero retention risk if placed correctly: after failure, as optional bonus, for resource top-up.</li><li><strong>Interstitials:</strong> Mid eCPM ($3-8). Session breaks or level transitions. Caps at 2-3 per session max. Overuse is the #1 cause of 1-star reviews.</li><li><strong>Banners:</strong> Lowest eCPM ($0.50-2). Persistent but nearly invisible to users over time. Good for free-to-play games where IAP is not primary.</li></ul><h3>Optimizing eCPM</h3><ul><li>Mediation (MAX, IronSource, AdMob): Run 5+ networks to maximize fill rate and floor prices.</li><li>Floor prices: Set minimum CPMs per network. Removing floors often hurts revenue.</li><li>Geo segmentation: Tier 1 (US/UK/AU) commands 3-5x higher eCPM than Tier 3.</li></ul><h3>The Retention Trade-off</h3><p>Every 1-second decrease in ad-to-game transition reduces churn by ~2-3%. Preloading ads is critical. Monitor retention by ad impression segment.</p>`},
   {icon:'📊',cat:'Analytics',title:'Data Analysis for PMs',desc:'How to go from raw event data to product decisions. SQL patterns, funnel analysis, cohort tables.',
-   body:`<h3>Core Analysis Types</h3><ul><li><strong>Funnel Analysis:</strong> Step-by-step conversion through a flow. Reveals where users drop. Always segment by acquisition source and device.</li><li><strong>Cohort Analysis:</strong> Group users by install week/month, track behavior over time. Essential for retention and LTV.</li><li><strong>Segmentation:</strong> Spenders vs non-spenders, D1 retained vs churned. Find the behavioral patterns that predict outcomes.</li><li><strong>Session Analysis:</strong> Session length, depth, frequency. Proxies for engagement quality.</li></ul><h3>Key SQL Patterns</h3><p><code>SELECT cohort_week, COUNT(DISTINCT user_id), SUM(revenue) FROM events GROUP BY cohort_week</code></p><p><code>SELECT user_id, MIN(event_time) as first_seen, MAX(event_time) as last_seen FROM sessions GROUP BY user_id</code></p><h3>Common PM Mistakes in Data</h3><ul><li>Comparing averages instead of distributions: ARPU is skewed, median is more useful.</li><li>Not controlling for acquisition channel in experiments.</li><li>Confusing correlation with causation in retention analysis.</li></ul>`},
+   body:`<h3>Core Analysis Types</h3><ul><li><strong>Funnel Analysis:</strong> Step-by-step conversion through a flow. Reveals where users drop. Always segment by acquisition source and device.</li><li><strong>Cohort Analysis:</strong> Group users by install week/month, track behavior over time. Essential for retention and LTV.</li><li><strong>Segmentation:</strong> Spenders vs non-spenders, D1 retained vs churned. Find the behavioral patterns that predict outcomes.</li><li><strong>Session Analysis:</strong> Session length, depth, frequency. Proxies for engagement quality.</li></ul><h3>Turning Data into Decisions</h3><p>The PM's job is to translate numbers into direction, not to produce reports. A good analysis answers: "So what do we do next?" Frame every analysis around a decision. If it doesn't change what you'd build, it probably wasn't worth doing.</p><ul><li><strong>Start with the question, not the data:</strong> "Why did D7 retention drop 4 points?" is a better starting point than "let me pull everything."</li><li><strong>Compare distributions, not averages:</strong> ARPU is heavily skewed; the median spender tells you more about the typical player than the mean.</li><li><strong>Segment relentlessly:</strong> Aggregate metrics hide the behavior of the subgroups that matter most. A 2% lift in conversion might be +15% for Tier 1 and -5% for Tier 3.</li><li><strong>Control for channel:</strong> Organic users and paid users behave differently. Never blend them without a reason.</li></ul><h3>Common PM Mistakes</h3><ul><li>Pulling data to confirm a decision already made, not to inform it.</li><li>Confusing correlation with causation in retention analysis: early payers retain better because they're already engaged, not because paying causes retention.</li><li>Optimizing for the metric you can measure instead of the outcome you actually care about.</li></ul>`},
   {icon:'🎯',cat:'Strategy',title:'Feature Prioritization Frameworks',desc:'RICE, ICE, Kano, MoSCoW: when to use each and how to run a prioritization session.',
    body:`<h3>Choosing the Right Framework</h3><ul><li><strong>RICE:</strong> Best for large backlogs with multiple stakeholders. Quantitative and defensible.</li><li><strong>ICE:</strong> Best for fast-moving teams that need quick daily prioritization without much overhead.</li><li><strong>Kano:</strong> Best for understanding user satisfaction impact: distinguishes must-haves from delighters.</li><li><strong>MoSCoW:</strong> Best for sprint/release planning: quickly categorizes by release urgency.</li><li><strong>Weighted Scoring:</strong> Best when multiple strategic criteria must be balanced explicitly.</li></ul><h3>Running a Prioritization Session</h3><ul><li>Align on scoring criteria and weights before scoring features.</li><li>Score independently, then discuss outliers: not average.</li><li>Separate "what we should build" from "what we can build" (capacity).</li><li>Lock the list for the sprint/quarter to protect focus.</li></ul><h3>Anti-patterns</h3><ul><li>HiPPO (Highest Paid Person's Opinion) overriding scores.</li><li>Adding too many criteria: 5 maximum for weighted scoring.</li><li>Scoring features you've already decided to build.</li></ul>`},
   {icon:'🎨',cat:'Design',title:'UI/UX Feedback Frameworks',desc:'How to give and receive design feedback that is actionable, not arbitrary.',
