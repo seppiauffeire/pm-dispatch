@@ -180,7 +180,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 .nav-tabs::-webkit-scrollbar{display:none}
 .nav-tab{
   display:flex;align-items:center;gap:6px;
-  padding:0 1.1rem;height:56px;
+  padding:0 0.85rem;height:56px;
   font-size:0.84rem;font-weight:500;
   color:var(--t2);cursor:pointer;
   border-bottom:2px solid transparent;
@@ -191,6 +191,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 .nav-tab:hover{color:var(--t1)}
 .nav-tab.active{color:var(--t1);border-bottom-color:var(--t1)}
 .nav-tab .tab-icon{font-size:15px;opacity:0.8}
+@media(min-width:901px) and (max-width:1480px){.nav-tab .tab-icon-svg{display:none}}
 .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
 
 /* ═══ BUTTONS ═══ */
@@ -663,6 +664,170 @@ body.light #page-home::before{background:
 .tool-node-label{font-size:0.62rem;color:var(--t2);font-weight:500;white-space:nowrap;letter-spacing:0.02em}
 .tool-node:hover .tool-node-label{color:var(--t1)}
 
+/* ═══ HOME GAME (hero) ═══ */
+#page-home{overflow:visible;min-height:0}
+#page-home.active{display:block}
+#page-home .home-hero{min-height:calc(100vh - 56px)}
+.btn-play{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:1.1rem 3.8rem 1rem;border:none;border-radius:18px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff;font-family:var(--display);font-size:2.3rem;font-weight:900;letter-spacing:0.1em;line-height:1;box-shadow:0 8px 36px rgba(124,58,237,0.55),inset 0 -5px 0 rgba(0,0,0,0.25);transition:transform .15s,box-shadow .15s;animation:playPulse 2.6s ease-in-out infinite}
+.btn-play small{font-family:var(--sans);font-size:0.68rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;opacity:0.8;margin-top:6px}
+.btn-play:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 44px rgba(124,58,237,0.75),inset 0 -5px 0 rgba(0,0,0,0.25)}
+.btn-play:active{transform:translateY(2px);box-shadow:0 4px 18px rgba(124,58,237,0.5),inset 0 -2px 0 rgba(0,0,0,0.25)}
+@keyframes playPulse{0%,100%{box-shadow:0 8px 36px rgba(124,58,237,0.5),inset 0 -5px 0 rgba(0,0,0,0.25)}50%{box-shadow:0 8px 54px rgba(124,58,237,0.85),inset 0 -5px 0 rgba(0,0,0,0.25)}}
+.home-skip{display:inline-block;margin-left:1.2rem;font-size:0.85rem;color:var(--t2);cursor:pointer;text-decoration:underline;text-underline-offset:4px;background:none;border:none;font-family:var(--sans)}
+.home-skip:hover{color:var(--t1)}
+#desk{flex:1;min-width:0;max-width:720px;align-items:stretch;justify-content:center}
+.desk{width:100%;position:relative}
+#page-home.playing .home-left{display:none}
+#page-home.playing #desk{max-width:none}
+.g-panel{width:100%}
+.g-inbox{position:relative;height:380px;display:flex;align-items:center;justify-content:center}
+.g-inbox .postit{position:absolute;width:210px;height:200px;transform:rotate(var(--rot)) translate(var(--tx),var(--ty));animation:floaty 5s ease-in-out infinite;animation-delay:var(--dl)}
+.g-inbox .postit i{display:block;height:7px;border-radius:4px;background:rgba(31,27,13,0.18);margin:15px 0 0}
+.g-inbox .postit i:nth-child(2){width:80%}.g-inbox .postit i:nth-child(3){width:55%}
+.g-inbox-label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:0.78rem;color:var(--t3);letter-spacing:0.14em;text-transform:uppercase}
+@keyframes floaty{0%,100%{transform:rotate(var(--rot)) translate(var(--tx),var(--ty))}50%{transform:rotate(calc(var(--rot) + 1.5deg)) translate(var(--tx),calc(var(--ty) - 8px))}}
+.postit{position:relative;padding:1.05rem 1rem 1.1rem;color:#1f1b0d;background:#fde68a;border-radius:3px 3px 16px 3px;box-shadow:0 12px 26px rgba(0,0,0,0.45),0 2px 0 rgba(0,0,0,0.12);font-family:var(--sans)}
+.postit::before{content:'';position:absolute;top:-8px;left:50%;width:46px;height:16px;margin-left:-23px;background:rgba(255,255,255,0.35);border-radius:2px}
+.postit.c2{background:#fbcfe8}.postit.c3{background:#bae6fd}
+.g-pick-head{text-align:center;margin-bottom:1.4rem}
+.g-pick-head h3{font-family:var(--display);font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1)}
+.g-pick-head p{font-size:0.85rem;color:var(--t2);margin-top:4px}
+.g-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.g-note{cursor:pointer;text-align:left;border:none;transform:rotate(var(--rot));transition:transform .18s,box-shadow .18s;animation:noteIn .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:var(--dl);min-height:210px}
+.g-note:hover{transform:rotate(0deg) translateY(-6px) scale(1.04);box-shadow:0 20px 36px rgba(0,0,0,0.55)}
+.g-note b{display:block;font-size:1rem;line-height:1.3;font-weight:800;margin-bottom:0.6rem}
+.g-note span{display:block;font-size:0.76rem;line-height:1.45;opacity:0.75}
+.g-note em{display:block;margin-top:0.8rem;font-style:normal;font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85}
+@keyframes noteIn{from{opacity:0;transform:rotate(calc(var(--rot) * 3)) translateY(-30px) scale(.8)}to{opacity:1;transform:rotate(var(--rot))}}
+.g-link{display:block;margin:1.2rem auto 0;background:none;border:none;color:var(--t3);font-size:0.78rem;cursor:pointer;font-family:var(--sans)}
+.g-link:hover{color:var(--t1)}
+/* run */
+.g-hud{display:grid;grid-template-columns:230px 1fr;gap:1.2rem;align-items:center;margin-bottom:1rem}
+.g-hud .postit{--rot:-2deg;transform:rotate(-2deg);padding:0.85rem 0.85rem 0.9rem}
+.g-hud .postit b{font-size:0.78rem;line-height:1.35;display:block}
+.g-hud .postit span{display:block;font-size:0.66rem;margin-top:6px;opacity:0.75;font-weight:700;letter-spacing:0.04em;text-transform:uppercase}
+.g-meters{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem}
+.gm-top{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--t2);margin-bottom:5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+.gm-top b{color:var(--t1);font-family:var(--display)}
+.gm-bar{height:7px;border-radius:4px;background:var(--bg3);overflow:hidden}
+.gm-bar i{display:block;height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.g-steps{display:flex;align-items:center;gap:6px;margin:0.4rem 0 0.2rem}
+.g-step{flex:1;height:4px;border-radius:2px;background:var(--bg4)}
+.g-step.done{background:#7c3aed}.g-step.now{background:#c4b5fd}
+.g-qrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.9rem;gap:1rem;flex-wrap:wrap}
+.g-q{font-family:var(--display);font-size:1.45rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1)}
+.g-qn{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);font-weight:700}
+.g-relics{display:flex;gap:6px;flex-wrap:wrap;min-height:24px;margin-bottom:0.9rem}
+.relic{font-size:0.66rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid rgba(167,139,250,0.4);background:rgba(124,58,237,0.14);color:#c4b5fd}
+.g-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.gcard{text-align:left;cursor:pointer;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.1rem 1rem;color:var(--t1);font-family:var(--sans);display:flex;flex-direction:column;gap:0.65rem;transition:transform .16s,border-color .16s,box-shadow .16s,opacity .3s;animation:cardIn .35s ease both;animation-delay:var(--dl)}
+.gcard:hover:not(:disabled){transform:translateY(-4px);border-color:#a78bfa;box-shadow:0 14px 34px rgba(124,58,237,0.28)}
+.gcard:disabled{cursor:default}
+.gcard.out{opacity:0.28}
+.gcard.sel{border-color:#a78bfa;box-shadow:0 0 0 1px #a78bfa,0 14px 34px rgba(124,58,237,0.35)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.gcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.gcard-n{font-weight:800;font-size:1.02rem;line-height:1.25}
+.gcard-tag{font-size:0.58rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--bg4);color:var(--t2);white-space:nowrap}
+.gcard-d{font-size:0.8rem;color:var(--t2);line-height:1.5;flex:1}
+.gcard-fx{display:flex;flex-wrap:wrap;gap:5px}
+.fx{font-size:0.66rem;font-weight:800;padding:3px 7px;border-radius:5px;letter-spacing:0.03em;background:var(--bg3)}
+.fx.up{color:var(--green);background:var(--green-bg)}.fx.dn{color:var(--red);background:var(--red-bg)}.fx.cost{color:var(--amber);background:var(--amber-bg)}
+.g-flash{min-height:44px;margin-top:0.9rem;font-size:0.82rem;color:var(--amber);line-height:1.5}
+.g-flash div{animation:cardIn .3s ease both}
+.g-log{margin-top:0.6rem;border-top:1px solid var(--border);padding-top:0.7rem;display:flex;flex-wrap:wrap;gap:6px}
+.g-log span{font-size:0.68rem;color:var(--t2);background:var(--bg3);padding:3px 9px;border-radius:99px}
+.g-log span b{color:var(--t1);font-weight:700}
+/* end */
+.gend{max-width:880px;margin:0 auto;animation:cardIn .5s ease both}
+.gend-head{display:flex;align-items:center;gap:1.4rem;margin-bottom:1.3rem;flex-wrap:wrap}
+.gend-grade{width:92px;height:92px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:3.4rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#7c3aed,#5b6ef5);box-shadow:0 8px 30px rgba(124,58,237,0.5);flex-shrink:0}
+.gend-arch{font-family:var(--display);font-size:1.9rem;font-weight:900;letter-spacing:-0.03em;color:var(--t1);line-height:1.1}
+.gend-sub{font-size:0.85rem;color:var(--t2);margin-top:6px}
+.gend-sub b.ok{color:var(--green)}.gend-sub b.no{color:var(--red)}
+.gend-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-bottom:1rem}
+.gk{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.75rem 0.85rem}
+.gk-l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:700}
+.gk-v{font-family:var(--display);font-size:1.45rem;font-weight:900;color:var(--t1);margin-top:2px}
+.gk-d{font-size:0.68rem;margin-top:1px}
+.gk-d.up{color:var(--green)}.gk-d.dn{color:var(--red)}
+.gend-chart{height:210px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.8rem;margin-bottom:1rem}
+.gend-notes{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:1.2rem}
+.gend-notes li{font-size:0.82rem;color:var(--t2);line-height:1.5;padding-left:1.1rem;position:relative}
+.gend-notes li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#7c3aed}
+.gend-actions{display:flex;gap:0.6rem;flex-wrap:wrap}
+.gend-actions .btn{font-size:0.82rem}
+.g-best{font-size:0.72rem;color:var(--t3);margin-top:0.9rem}
+/* orbit section */
+.home-tools{position:relative;z-index:1;padding:3rem 1rem 4rem;text-align:center;border-top:1px solid var(--border)}
+.home-tools h2{font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1);margin-bottom:0.3rem}
+.home-tools p{font-size:0.88rem;color:var(--t2);margin-bottom:1.5rem}
+.home-tools .tool-orbit{margin:0 auto}
+@media(max-width:900px){
+  #page-home .home-hero{flex-direction:column;align-items:stretch;padding:2rem 1.25rem 2.5rem;gap:1.75rem}
+  #desk{max-width:none!important;display:flex!important}
+  .g-notes,.g-cards{grid-template-columns:1fr}
+  .g-note{min-height:0}
+  .g-hud{grid-template-columns:1fr}
+  .g-meters{grid-template-columns:repeat(2,1fr)}
+  .gend-kpis{grid-template-columns:repeat(2,1fr)}
+  .g-inbox{height:300px}
+  .btn-play{font-size:1.9rem;padding:1rem 3rem .9rem}
+  .home-tools .tool-orbit{display:none}
+  .home-tools{padding:1.5rem 1rem}
+}
+
+/* ═══ OFFER LAB ═══ */
+.ol-presets{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ol-presets-l{font-size:0.74rem;color:var(--t3);margin-right:2px}
+.ol-grid{display:grid;grid-template-columns:340px 1fr;gap:1.2rem;align-items:start}
+.ol-right{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.ol-tile{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 10px;padding:1.1rem 1rem;margin-bottom:1.1rem;border-radius:12px;background:var(--bg3);border:1px dashed var(--border2);font-family:var(--display)}
+.ol-tile .was{font-size:1rem;color:var(--t3);text-decoration:line-through}
+.ol-tile .now{font-size:2.2rem;font-weight:900;color:var(--t1);letter-spacing:-0.03em}
+.ol-tile .off{font-size:0.72rem;font-weight:800;color:#fff;background:#7c3aed;padding:3px 8px;border-radius:6px}
+.ol-tile .gen{font-family:var(--sans);font-size:0.72rem;color:var(--t2)}
+.ol-field{margin-bottom:1rem}
+.ol-field .label{display:flex;justify-content:space-between;align-items:center}
+.ol-field .label b{color:var(--t1);font-family:var(--display)}
+.ol-field input[type=range]{width:100%;accent-color:#7c3aed;padding:0;background:none;border:none}
+.ol-hint{font-size:0.68rem;color:var(--t3);margin-top:3px;line-height:1.4}
+.ol-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.ol-seg:has(button:nth-child(4)){grid-template-columns:repeat(4,1fr)}
+.ol-seg-2{grid-template-columns:repeat(2,1fr)!important}
+.ol-seg button{padding:7px 4px;font-size:0.72rem;font-weight:600;font-family:var(--sans);border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--t2);cursor:pointer}
+.ol-seg button:hover{color:var(--t1)}
+.ol-seg button.on{background:linear-gradient(135deg,#7c3aed,#5b6ef5);border-color:transparent;color:#fff}
+.ol-actions{display:flex;gap:0.6rem;margin-top:1.2rem}
+.ol-actions .btn{flex:1}
+.ol-ship{margin-top:0.9rem;padding:0.8rem;border-radius:10px;background:var(--bg3);font-size:0.78rem;color:var(--t2);line-height:1.5}
+.ol-ship b{color:var(--t1)}
+.ol-stage{padding-bottom:0.6rem}
+.ol-verdict-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.7rem}
+.ol-verdict{font-family:var(--display);font-weight:900;font-size:0.95rem;padding:4px 12px;border-radius:99px;background:var(--amber-bg);color:var(--amber);letter-spacing:0.02em}
+.ol-verdict.good{background:var(--green-bg);color:var(--green)}
+.ol-verdict.bad{background:var(--red-bg);color:var(--red)}
+.ol-legend{font-size:0.68rem;color:var(--t3);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.ol-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px}
+.lg-buy{background:#22c55e}.lg-pass{background:#9a9a9a}.lg-ann{background:#f43f5e}.lg-none{background:var(--t3);opacity:.5}
+#ol-canvas{width:100%;height:330px;display:block}
+.ol-zones{display:flex;gap:0;font-size:0.7rem;color:var(--t2);padding-top:6px;margin-bottom:4px}
+.ol-zones div{text-align:center;line-height:1.35}
+.ol-zones b{display:block;color:var(--t1);font-weight:700}
+.ol-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0.7rem}
+.ol-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.8rem 0.95rem}
+.ol-kpi-l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:700}
+.ol-kpi-v{font-family:var(--display);font-size:1.5rem;font-weight:900;color:var(--t1);margin-top:3px}
+.ol-split-l{font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:700;margin-bottom:0.5rem}
+.ol-bar{display:grid;grid-template-columns:90px 1fr 46px;gap:8px;align-items:center;font-size:0.74rem;color:var(--t2);margin-bottom:5px}
+.ol-bar i{display:block;height:8px;border-radius:4px;background:#7c3aed;transition:width .4s}
+.ol-bar .tr{height:8px;border-radius:4px;background:var(--bg3);overflow:hidden}
+.ol-bar b{color:var(--t1);text-align:right}
+.ol-insights{list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:7px}
+.ol-insights li{font-size:0.82rem;color:var(--t2);line-height:1.5;padding-left:1.1rem;position:relative}
+.ol-insights li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#7c3aed}
+@media(max-width:900px){.ol-grid{grid-template-columns:1fr}.ol-kpis{grid-template-columns:repeat(2,1fr)}}
+
 /* ═══ THEME TRANSITIONS ═══ */
 body *{transition-property:background-color,border-color,color,box-shadow;transition-duration:0.22s;transition-timing-function:cubic-bezier(0.4,0,0.2,1)}
 .theme-svg,.th-sun,.th-moon{transition-property:opacity,transform;transition-duration:0.45s;transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)}
@@ -913,7 +1078,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
   /* ── Home hero — stack columns, hide 560px orbit ── */
   .home-hero { flex-direction: column; padding: 2rem 1.25rem 2.5rem; gap: 1.75rem; align-items: flex-start; }
-  .home-right { display: none; }
   .home-stats { gap: 1.5rem; }
   .home-sub { max-width: 100%; }
   #page-home { align-items: flex-start; overflow-y: auto; }
@@ -1046,6 +1210,8 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg><span class="tab-label">A/B Sample Size</span></button>
     <button class="nav-tab" onclick="switchPage('challenge')" data-page="challenge">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span class="tab-label">PM Challenge</span></button>
+    <button class="nav-tab" onclick="switchPage('offerlab')" data-page="offerlab">
+      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="tab-label">Offer Lab</span></button>
     <button class="nav-tab" onclick="switchPage('news')" data-page="news">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg><span class="tab-label">Gaming News</span></button>
     <a href="/game.html" class="nav-tab" style="text-decoration:none">
@@ -1101,8 +1267,8 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       <h1 class="home-headline">The toolkit<br>for <em style="-webkit-text-fill-color:inherit;font-style:italic">games PMs.</em></h1>
       <p class="home-sub">Free tools for A/B tests, ROAS, retention, and live ops. Built from 10 years running mobile games at scale.</p>
       <div class="home-actions">
-        <button class="btn btn-primary btn-hero" onclick="switchPage('rice')">Start prioritizing →</button>
-        <button class="btn btn-ghost btn-hero" onclick="switchPage('challenge')">Check Out the PM Challenge</button>
+        <button class="btn-play" onclick="gPlay()">PLAY<small>aka work</small></button>
+        <button class="home-skip" onclick="document.querySelector('.home-tools').scrollIntoView({behavior:'smooth'})">or jump to the tools</button>
       </div>
       <div class="home-stats">
         <div class="home-stat"><div class="home-stat-val">20+</div><div class="home-stat-label">Tools</div></div>
@@ -1146,6 +1312,10 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
           <span>PM Challenge</span>
         </button>
+        <button class="mobile-tool-btn" data-page="offerlab" onclick="switchPage('offerlab')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>Offer Lab</span>
+        </button>
         <button class="mobile-tool-btn" data-page="news" onclick="switchPage('news')">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg>
           <span>Gaming News</span>
@@ -1160,67 +1330,32 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         </button>
       </div>
     </div>
-    <!-- Right: tool orbit — 8 nodes at 45° on r=210, orbit 560×560, center 280,280 -->
-    <div class="home-right">
-      <div class="tool-orbit">
-        <div class="orbit-ring orbit-ring-1"></div>
-        <div class="orbit-ring orbit-ring-2"></div>
-        <div class="orbit-center">
-          <div class="orbit-center-count">20+</div>
-          <div class="orbit-center-label">Tools</div>
+    <!-- Right: the desk (game stage) -->
+    <div class="home-right" id="desk">
+      <div class="desk">
+        <div class="g-panel" id="g-idle">
+          <div class="g-inbox">
+            <div class="postit" style="--rot:-7deg;--tx:-70px;--ty:-20px;--dl:0s"><i></i><i></i><i></i></div>
+            <div class="postit c2" style="--rot:5deg;--tx:70px;--ty:-34px;--dl:-1.6s"><i></i><i></i><i></i></div>
+            <div class="postit c3" style="--rot:-2deg;--tx:0px;--ty:40px;--dl:-3.2s"><i></i><i></i><i></i></div>
+            <div class="g-inbox-label">3 new tickets on your desk</div>
+          </div>
         </div>
-        <!-- 10 nodes at 36° intervals clockwise from top, r=210, center=(280,280) -->
-        <!-- x = 280 + 210*sin(a), y = 280 - 210*cos(a) -->
-        <!-- 0°: PM Playbook 280,70 -->
-        <div class="tool-node" style="left:280px;top:70px" onclick="switchPage('guides')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-          <div class="tool-node-label">PM Playbook</div>
-        </div>
-        <!-- 36°: Prioritization 403,110 -->
-        <div class="tool-node" style="left:403px;top:110px" onclick="switchPage('rice')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg></div>
-          <div class="tool-node-label">Prioritization</div>
-        </div>
-        <!-- 72°: Stats Lab 480,215 -->
-        <div class="tool-node" style="left:480px;top:215px" onclick="switchPage('stats')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="8"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="12"/></svg></div>
-          <div class="tool-node-label">Stats Lab</div>
-        </div>
-        <!-- 108°: Growth Tools 480,345 -->
-        <div class="tool-node" style="left:480px;top:345px" onclick="switchPage('growth')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-          <div class="tool-node-label">Growth Tools</div>
-        </div>
-        <!-- 144°: A/B Sample Size 403,450 -->
-        <div class="tool-node" style="left:403px;top:450px" onclick="switchPage('samplesize')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="7" y1="14" x2="17" y2="14"/></svg></div>
-          <div class="tool-node-label">A/B Sample Size</div>
-        </div>
-        <!-- 180°: PM Challenge 280,490 -->
-        <div class="tool-node" style="left:280px;top:490px" onclick="switchPage('challenge')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
-          <div class="tool-node-label">PM Challenge</div>
-        </div>
-        <!-- 216°: Gaming News 157,450 -->
-        <div class="tool-node" style="left:157px;top:450px" onclick="switchPage('news')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg></div>
-          <div class="tool-node-label">Gaming News</div>
-        </div>
-        <!-- 252°: Ship It 80,345 -->
-        <div class="tool-node" style="left:80px;top:345px" onclick="window.location='/game.html'">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><polyline points="7 8 12 13 17 8"/></svg></div>
-          <div class="tool-node-label">Ship It</div>
-        </div>
-        <!-- 288°: Leaderboard 80,215 -->
-        <div class="tool-node" style="left:80px;top:215px" onclick="switchPage('leaderboard')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-          <div class="tool-node-label">Leaderboard</div>
-        </div>
-        <!-- 324°: About 157,110 -->
-        <div class="tool-node" style="left:157px;top:110px" onclick="switchPage('about')">
-          <div class="tool-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <div class="tool-node-label">About</div>
-        </div>
+        <div class="g-panel" id="g-pick" hidden></div>
+        <div class="g-panel" id="g-run" hidden></div>
+        <div class="g-panel" id="g-end" hidden></div>
+      </div>
+    </div>
+  </div>
+  <div class="home-tools">
+    <h2>Every tool, one click away</h2>
+    <p>Same order as the top bar.</p>
+    <div class="tool-orbit" id="home-orbit">
+      <div class="orbit-ring orbit-ring-1"></div>
+      <div class="orbit-ring orbit-ring-2"></div>
+      <div class="orbit-center">
+        <div class="orbit-center-count">20+</div>
+        <div class="orbit-center-label">Tools</div>
       </div>
     </div>
   </div>
@@ -2701,6 +2836,73 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════
+     OFFER LAB
+══════════════════════════════════════════════ -->
+<div class="page" id="page-offerlab">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-title">Offer Lab</div>
+      <div class="page-sub">Build an offer and watch 10,000 simulated players react. Tune it before you ship it.</div>
+    </div>
+    <div class="page-actions ol-presets">
+      <span class="ol-presets-l">Try:</span>
+      <button class="btn btn-ghost btn-sm" onclick="olPreset('starter')">Starter pack</button>
+      <button class="btn btn-ghost btn-sm" onclick="olPreset('moment')">Moment-matched</button>
+      <button class="btn btn-ghost btn-sm" onclick="olPreset('whale')">Whale bomb</button>
+      <button class="btn btn-ghost btn-sm" onclick="olPreset('fake')">Fake discount</button>
+    </div>
+  </div>
+
+  <div class="ol-grid">
+    <div class="card ol-controls">
+      <div class="card-head"><div class="card-title">Your offer</div><div class="card-sub">Move anything. The players react instantly.</div></div>
+      <div class="card-body">
+        <div class="ol-tile" id="ol-tile"></div>
+
+        <div class="ol-field"><label class="label">Price <b id="ol-price-v">$4.99</b></label><input type="range" id="ol-price" min="0" max="11" step="1" value="3" oninput="olSet('price',+this.value)"></div>
+        <div class="ol-field"><label class="label">Generosity <b id="ol-gen-v">1.0x</b></label><input type="range" id="ol-gen" min="0.5" max="3" step="0.1" value="1" oninput="olSet('gen',+this.value)"><div class="ol-hint">How much player value is inside. More feels better, and inflates your economy.</div></div>
+
+        <div class="ol-field"><label class="label">Anchor discount (strikethrough price)</label>
+          <div class="ol-seg" id="ol-seg-anchor"><button data-v="0" onclick="olSet('anchor',0)">None</button><button data-v="0.2" onclick="olSet('anchor',0.2)">20%</button><button data-v="0.5" onclick="olSet('anchor',0.5)">50%</button><button data-v="0.75" onclick="olSet('anchor',0.75)">75%</button></div></div>
+        <div class="ol-field"><label class="label">When does the player see it?</label>
+          <div class="ol-seg ol-seg-2" id="ol-seg-timing"><button data-v="browse" onclick="olSet('timing','browse')">Store browse</button><button data-v="first" onclick="olSet('timing','first')">First session</button><button data-v="mile" onclick="olSet('timing','mile')">Milestone</button><button data-v="loss" onclick="olSet('timing','loss')">After a loss</button></div></div>
+        <div class="ol-field"><label class="label">Urgency</label>
+          <div class="ol-seg" id="ol-seg-urg"><button data-v="none" onclick="olSet('urg','none')">None</button><button data-v="d1" onclick="olSet('urg','d1')">24 hours</button><button data-v="h4" onclick="olSet('urg','h4')">4 hours</button></div></div>
+
+        <div class="ol-actions">
+          <button class="btn btn-primary" onclick="olShip()">Ship it</button>
+          <button class="btn btn-ghost" onclick="olAB()">A/B it</button>
+        </div>
+        <div class="ol-ship" id="ol-ship" hidden></div>
+      </div>
+    </div>
+
+    <div class="ol-right">
+      <div class="card">
+        <div class="card-body ol-stage">
+          <div class="ol-verdict-row"><span class="ol-verdict" id="ol-verdict">Workable</span><span class="ol-legend"><i class="lg-buy"></i>Bought <i class="lg-pass"></i>Saw it, passed <i class="lg-ann"></i>Annoyed <i class="lg-none"></i>Never saw it</span></div>
+          <canvas id="ol-canvas" height="330"></canvas>
+          <div class="ol-zones" id="ol-zones"></div>
+        </div>
+      </div>
+      <div class="ol-kpis">
+        <div class="ol-kpi"><div class="ol-kpi-l">Conversion</div><div class="ol-kpi-v" id="ol-k-conv">0%</div></div>
+        <div class="ol-kpi"><div class="ol-kpi-l">Net revenue / 10K</div><div class="ol-kpi-v" id="ol-k-rev">$0</div></div>
+        <div class="ol-kpi"><div class="ol-kpi-l">Player trust</div><div class="ol-kpi-v" id="ol-k-trust">100</div></div>
+        <div class="ol-kpi"><div class="ol-kpi-l">Left on the table</div><div class="ol-kpi-v" id="ol-k-left">$0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="ol-split-l">Where the revenue comes from</div>
+          <div id="ol-split"></div>
+          <ul class="ol-insights" id="ol-insights"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════
 // NAVIGATION
@@ -2713,6 +2915,7 @@ function switchPage(name){
   const _nb=document.querySelector('[data-page="'+name+'"]'); if(_nb) _nb.classList.add('active');
   const _mb=document.querySelector('.mobile-tool-btn[data-page="'+name+'"]'); if(_mb) _mb.classList.add('active');
   if(name==='challenge') { setTimeout(initChallenge, 80); }
+  if(name==='offerlab') { setTimeout(olInit, 30); }
   if(name==='stats') { setTimeout(()=>{calcFreq();calcBayesConv();calcBayesRet();calcARPU();},50); }
   if(name==='growth') { setTimeout(()=>{calcROAS();calcLTV();calcAdRev();calcCohort();},50); }
   if(name==='samplesize') { setTimeout(()=>{calcSS();calcSSRet();calcSSARPU();calcMV();},50); }
@@ -5897,6 +6100,407 @@ function renderNews(items){
   </div>
 
 </div>
+
+<script>
+// ═══════════════════════════════════════════════
+// HOME GAME: "Build a Feature" roguelite run
+// ═══════════════════════════════════════════════
+(function(){
+const START={r:20,v:20,t:40}, BUDGET=78;
+const LBL={r:'Retention',v:'Revenue',t:'Trust'}, ABBR={r:'RET',v:'REV',t:'TRUST'};
+const COL={r:'#7dd3fc',v:'#22c55e',t:'#c4b5fd'};
+const TAGS={whale:'Whale Pull',social:'Social Graph',scarce:'Scarcity',gate:'Energy Gate',faucet:'Open Faucet',fomo:'FOMO Engine',transparent:'Open Rates',season:'Season Beat',skill:'Mastery',tested:'Tested',bold:'Big Bang',rushed:'Rushed',moment:'Moment Fit'};
+
+const PROBLEMS=[
+ {t:'D7 retention dropped 4 points after the last update.',goal:{r:65,t:45}},
+ {t:'Top spenders are quietly leaving. Whale revenue is down 30%.',goal:{v:66,r:50}},
+ {t:'Players log in once, play a session, and vanish until tomorrow.',goal:{r:68,v:40}},
+ {t:'Players hoard premium currency. Spend is flat.',goal:{v:65,t:50}},
+ {t:'App store reviews are calling the game pay-to-win.',goal:{t:68,v:45}},
+ {t:'Mid-game players stall around level 40 and churn.',goal:{r:62,v:50}},
+ {t:'Your last event had 3x the traffic and half the revenue per player.',goal:{v:60,t:55}},
+ {t:'New players love week one, then fall off a cliff in week two.',goal:{r:64,t:50}}
+];
+
+const NODES=[
+ {name:'Feature',q:'What do you build?',pool:[
+  {n:'Guild Raids',d:'Co-op boss fights that need your guild online.',fx:{r:12,v:3,t:3,c:14},tags:['social']},
+  {n:'Hero Fusion',d:'Merge duplicate heroes into stronger ones.',fx:{r:6,v:10,t:-2,c:12},tags:['sink']},
+  {n:'Limited Hero Banners',d:'Rotating featured heroes with rate-up pulls.',fx:{r:4,v:16,t:-6,c:8},tags:['whale','fomo']},
+  {n:'Endless Tower',d:'A climbing PvE mode with milestone rewards.',fx:{r:10,v:2,t:2,c:10},tags:['pve']},
+  {n:'Idle Rewards + Auto-Battle',d:'Progress while away, collect when back.',fx:{r:8,v:-2,t:5,c:9},tags:['idle']}]},
+ {name:'Progression',q:'How do players grow?',pool:[
+  {n:'Power Curve',d:'Levels, gear, and stat checks gate content.',fx:{r:8,v:8,t:-1,c:10},tags:['power'],vs:{whale:{fx:{v:6,t:-4},n:'Power creep sells banners. Revenue up, trust down.'}}},
+  {n:'Collection Codex',d:'Set bonuses reward owning many heroes.',fx:{r:9,v:6,t:3,c:11},tags:['collect']},
+  {n:'Mastery Ladder',d:'Skill-based ranks with fair matchmaking.',fx:{r:7,v:1,t:8,c:13},tags:['skill']},
+  {n:'Guild Levels',d:'Guild perks scale with member activity.',fx:{r:10,v:3,t:2,c:12},tags:['social'],vs:{social:{fx:{r:8},n:'Social graph: guild content and guild levels feed each other.'}}},
+  {n:'Seasonal Track',d:'Progress resets each season with fresh goals.',fx:{r:6,v:7,t:0,c:7},tags:['season']}]},
+ {name:'Economy',q:'How does the economy flow?',pool:[
+  {n:'Scarce Premium Currency',d:'Gems are rare. Every pull feels precious.',fx:{r:-4,v:10,t:-4,c:6},tags:['scarce']},
+  {n:'Generous Faucets',d:'Premium currency flows from normal play.',fx:{r:8,v:-6,t:8,c:8},tags:['faucet']},
+  {n:'Dual Currency + Soft Sinks',d:'Upgrade costs drain soft currency steadily.',fx:{r:3,v:8,t:1,c:12},tags:['sink']},
+  {n:'Pity Timer + Open Rates',d:'Published rates and guaranteed pulls.',fx:{r:4,v:2,t:14,c:9},tags:['transparent'],vs:{whale:{fx:{t:6},n:'Open rates soften the banner pressure.'}}},
+  {n:'Energy Gates',d:'Stamina limits sessions. Refills cost gems.',fx:{r:-6,v:9,t:-6,c:6},tags:['gate']}]},
+ {name:'Monetization',q:'How do you make money?',pool:[
+  {n:'Battle Pass',d:'Free and premium tracks over a season.',fx:{r:6,v:14,t:2,c:11},tags:['pass'],vs:{season:{fx:{v:6},n:'The pass has a season to chase. Revenue up.'}}},
+  {n:'Starter Pack',d:'A one-time first purchase at big value.',fx:{r:2,v:12,t:3,c:7},tags:['starter']},
+  {n:'VIP Whale Store',d:'$99 bundles and exclusive spender tiers.',fx:{r:0,v:18,t:-6,c:8},tags:['whale'],vs:{whale:{fx:{r:-6,t:-10},n:'Whale Dependency: revenue now rests on a handful of spenders.'}}},
+  {n:'Rewarded Video',d:'Watch an ad for premium currency.',fx:{r:3,v:7,t:4,c:8},tags:['ads']},
+  {n:'Moment-Matched Offers',d:'Offers fire right when a player is stuck.',fx:{r:2,v:13,t:4,c:14},tags:['moment'],vs:{scarce:{fx:{v:8},n:'Scarce currency gives offers a real problem to solve.'},gate:{fx:{v:6},n:'Energy gates create the exact moments offers need.'},faucet:{fx:{v:-6},n:'Free currency means offers have nothing to solve.'}}}]},
+ {name:'Retention hook',q:'What brings them back tomorrow?',pool:[
+  {n:'Login Streak + Catch-Up',d:'Daily rewards, with a way to recover missed days.',fx:{r:11,v:2,t:3,c:6},tags:['streak']},
+  {n:'Smart Push',d:'Notifications tied to timers and events.',fx:{r:9,v:3,t:-4,c:4},tags:['push']},
+  {n:'Friends and Gifting',d:'Send energy and gifts to friends.',fx:{r:12,v:2,t:4,c:13},tags:['social'],vs:{social:{fx:{r:6},n:'Social graph compounds: more reasons to come back.'}}},
+  {n:'Rotating Daily Quests',d:'Fresh goals every day.',fx:{r:10,v:4,t:1,c:9},tags:['quests']},
+  {n:'Comeback Bonus',d:'Lapsed players return to a welcome-back pack.',fx:{r:8,v:5,t:3,c:8},tags:['comeback']}]},
+ {name:'Live ops',q:'What keeps it fresh?',pool:[
+  {n:'Weekly Limited Events',d:'A new event every seven days.',fx:{r:11,v:9,t:-3,c:15},tags:['fomo'],vs:{scarce:{fx:{r:-5,t:-8},n:'Grind plus FOMO burnout: scarce currency and weekly events.'},gate:{fx:{r:-5,t:-8},n:'Grind plus FOMO burnout: energy gates and weekly events.'},faucet:{fx:{v:-5},n:'Faucets plus weekly events pump currency into the economy: inflation.'},push:{fx:{r:5},n:'Push finally has something worth saying.'}}},
+  {n:'Seasonal Story Arcs',d:'Story chapters and collabs on a quarterly beat.',fx:{r:9,v:8,t:4,c:18},tags:['season'],vs:{pass:{fx:{v:7},n:'The pass has a story to chase. Revenue up.'}}},
+  {n:'Slow-Burn Monthly Themes',d:'One theme a month, deeper content.',fx:{r:7,v:4,t:6,c:10},tags:['cadence']},
+  {n:'Competitive Leagues',d:'Weekly ranked leagues with rewards.',fx:{r:10,v:6,t:-2,c:14},tags:['pvp'],vs:{skill:{fx:{r:8},n:'Mastery needs a stage: ladder and leagues pair up.'}}},
+  {n:'Community-Voted Events',d:'Players pick the next event.',fx:{r:6,v:2,t:10,c:8},tags:['community'],vs:{transparent:{fx:{t:6},n:'Open rates and an open roadmap: trust compounds.'}}}]},
+ {name:'Launch',q:'How do you ship it?',pool:[
+  {n:'Soft Launch + A/B Test',d:'One market, instrumented, then decide.',fx:{r:2,v:2,t:6,c:10},tags:['tested'],noise:1},
+  {n:'Global Friday Launch',d:'Marketing push, all markets, all at once.',fx:{r:4,v:10,t:-4,c:6},tags:['bold'],noise:9},
+  {n:'Staged Rollout 10/50/100',d:'Ramp up as the metrics hold.',fx:{r:3,v:3,t:4,c:8},tags:['tested'],noise:2},
+  {n:'Ship Now, Fix Live',d:'Get it out and patch as you go.',fx:{r:0,v:0,t:-2,c:-6},tags:['rushed'],noise:8},
+  {n:'One More Sprint of Polish',d:'Cut bugs and rough edges first.',fx:{r:2,v:1,t:8,c:12},tags:['polish'],noise:2}]}
+];
+
+let G=null, chart=null;
+const $=id=>document.getElementById(id);
+const cl=v=>Math.max(0,Math.min(100,v));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const goalText=g=>Object.keys(g).map(k=>LBL[k]+' '+g[k]+'+').join(' · ');
+const show=id=>{['g-idle','g-pick','g-run','g-end'].forEach(x=>{$(x).hidden=(x!==id);});};
+let offered=[];
+
+window.gPlay=function(){
+  offered=shuffle(PROBLEMS).slice(0,3);
+  const cs=['','c2','c3'], rots=[-3,2,-1.5];
+  $('g-pick').innerHTML=
+   '<div class="g-pick-head"><h3>Three tickets landed on your desk</h3><p>Pick the one you will own. No pressure. Some pressure.</p></div>'+
+   '<div class="g-notes">'+offered.map((p,i)=>
+     '<button class="g-note postit '+cs[i]+'" style="--rot:'+rots[i]+'deg;--dl:'+(i*0.1)+'s" onclick="gPick('+i+')"><b>'+p.t+'</b><span>Your goal to call it a win:</span><em>'+goalText(p.goal)+'</em></button>').join('')+'</div>'+
+   '<button class="g-link" onclick="gPlay()">Not these. Show me three more.</button>';
+  show('g-pick');
+  $('page-home').scrollTop=0;
+};
+
+window.gPick=function(i){
+  G={prob:offered[i],step:0,r:START.r,v:START.v,t:START.t,spent:0,tags:new Set(),log:[],cur:[],locked:false,notes:[]};
+  $('page-home').classList.add('playing');
+  renderRun();
+};
+
+function meterHTML(){
+  const rem=BUDGET-G.spent, over=rem<0;
+  const m=['r','v','t'].map(k=>'<div><div class="gm-top"><span>'+LBL[k]+'</span><b id="gmv-'+k+'">'+Math.round(cl(G[k]))+'</b></div><div class="gm-bar"><i id="gmb-'+k+'" style="width:'+cl(G[k])+'%;background:'+COL[k]+'"></i></div></div>').join('');
+  const b='<div><div class="gm-top"><span>Sprint budget</span><b id="gmv-b" style="color:'+(over?'var(--red)':'')+'">'+rem+'</b></div><div class="gm-bar"><i id="gmb-b" style="width:'+Math.max(0,Math.min(100,rem))+'%;background:'+(over?'var(--red)':'var(--amber)')+'"></i></div></div>';
+  return m+b;
+}
+function updMeters(){
+  ['r','v','t'].forEach(k=>{$('gmv-'+k).textContent=Math.round(cl(G[k]));$('gmb-'+k).style.width=cl(G[k])+'%';});
+  const rem=BUDGET-G.spent, over=rem<0;
+  $('gmv-b').textContent=rem;$('gmv-b').style.color=over?'var(--red)':'';
+  $('gmb-b').style.width=Math.max(0,Math.min(100,rem))+'%';$('gmb-b').style.background=over?'var(--red)':'var(--amber)';
+}
+function chips(fx){
+  let s='';['r','v','t'].forEach(k=>{const x=fx[k]||0;if(x)s+='<span class="fx '+(x>0?'up':'dn')+'">'+(x>0?'+':'')+x+' '+ABBR[k]+'</span>';});
+  s+='<span class="fx cost">'+(fx.c>=0?fx.c+' pts':'saves '+(-fx.c)+' pts')+'</span>';
+  return s;
+}
+function renderRun(){
+  const n=NODES[G.step];
+  G.cur=shuffle(n.pool).slice(0,3);G.locked=false;
+  const steps=NODES.map((_,i)=>'<div class="g-step '+(i<G.step?'done':i===G.step?'now':'')+'"></div>').join('');
+  const relics=[...G.tags].filter(t=>TAGS[t]).map(t=>'<span class="relic">'+TAGS[t]+'</span>').join('');
+  $('g-run').innerHTML=
+   '<div class="g-hud"><div class="postit"><b>'+G.prob.t+'</b><span>Goal: '+goalText(G.prob.goal)+'</span></div><div class="g-meters" id="g-meters">'+meterHTML()+'</div></div>'+
+   '<div class="g-steps">'+steps+'</div>'+
+   '<div class="g-qrow"><div class="g-q">'+n.q+'</div><div class="g-qn">Step '+(G.step+1)+' of '+NODES.length+' · '+n.name+'</div></div>'+
+   '<div class="g-relics">'+(relics||'<span style="font-size:.72rem;color:var(--t3)">Your choices become relics. Some combine well. Some do not.</span>')+'</div>'+
+   '<div class="g-cards">'+G.cur.map((c,i)=>{
+      const tg=c.tags.find(t=>TAGS[t]);
+      return '<button class="gcard" style="--dl:'+(i*0.07)+'s" onclick="gChoose('+i+')"><div class="gcard-top"><span class="gcard-n">'+c.n+'</span>'+(tg?'<span class="gcard-tag">'+TAGS[tg]+'</span>':'')+'</div><div class="gcard-d">'+c.d+'</div><div class="gcard-fx">'+chips(c.fx)+'</div></button>';
+    }).join('')+'</div>'+
+   '<div class="g-flash" id="g-flash"></div>'+
+   '<div class="g-log">'+G.log.map(l=>'<span><b>'+l.node+':</b> '+l.n+'</span>').join('')+'</div>';
+  show('g-run');
+}
+
+window.gChoose=function(i){
+  if(G.locked)return;G.locked=true;
+  const c=G.cur[i], fx=Object.assign({r:0,v:0,t:0,c:0},c.fx), notes=[];
+  if(c.vs){Object.keys(c.vs).forEach(tag=>{if(G.tags.has(tag)){const e=c.vs[tag];['r','v','t'].forEach(k=>{fx[k]+=(e.fx[k]||0);});notes.push(e.n);}});}
+  G.r+=fx.r;G.v+=fx.v;G.t+=fx.t;G.spent+=fx.c;
+  c.tags.forEach(t=>G.tags.add(t));
+  G.log.push({node:NODES[G.step].name,n:c.n,notes:notes,noise:c.noise});
+  G.notes=G.notes.concat(notes);
+  if(c.noise!==undefined)G.noise=c.noise;
+  document.querySelectorAll('#g-run .gcard').forEach((el,j)=>{el.disabled=true;el.classList.add(j===i?'sel':'out');});
+  updMeters();
+  $('g-flash').innerHTML=notes.map(n=>'<div>Synergy: '+n+'</div>').join('');
+  setTimeout(()=>{G.step++;if(G.step>=NODES.length)finish();else renderRun();},notes.length?1900:850);
+};
+
+// Retention model: power-law decay anchored on D1 / D7 / D30
+function model(m){
+  const D1=24+m.r*0.30+m.t*0.06;
+  const D7=D1*(0.28+m.r*0.0030);
+  const D30=D7*(0.35+m.r*0.0025);
+  const k1=Math.log(D1/D7)/Math.log(7), k2=Math.log(D7/D30)/Math.log(30/7);
+  const ret=d=>d<=7?D1*Math.pow(d,-k1):D7*Math.pow(d/7,-k2);
+  const arpdau=0.02+m.v*0.0016;
+  let sum=1;for(let d=1;d<=30;d++)sum+=ret(d)/100;
+  return {D1,D7,D30,ret,arpdau,ltv:arpdau*sum};
+}
+
+function finish(){
+  const noise=G.noise===undefined?5:G.noise, luck={};
+  ['r','v','t'].forEach(k=>{luck[k]=Math.round((Math.random()*2-1)*noise);});
+  const over=Math.max(0,G.spent-BUDGET);
+  const f={};['r','v','t'].forEach(k=>{f[k]=cl(G[k]+luck[k]-over*0.8);});
+  const goals=Object.keys(G.prob.goal), hit=goals.filter(k=>f[k]>=G.prob.goal[k]);
+  const won=hit.length===goals.length;
+  const avg=(f.r+f.v+f.t)/3;
+  const score=Math.round(Math.min(100,avg*0.6+(hit.length/goals.length)*40));
+  const grade=score>=88?'S':score>=76?'A':score>=62?'B':score>=48?'C':'D';
+  const whales=(G.tags.has('whale')?1:0)+G.log.filter(l=>l.notes.some(n=>n.indexOf('Whale Dependency')===0)).length;
+  let arch='The Generalist';
+  if(over>0)arch='The Scope Creeper';
+  else if(whales>=2)arch='The Whale Hunter';
+  else if(f.v>=70&&f.t>=55)arch='The Systems Architect';
+  else if(f.r>=75)arch='The Retention Engineer';
+  else if(f.t>=70&&f.v<55)arch='The Player Advocate';
+  else if(G.tags.has('tested')&&f.r>=55&&f.v>=55&&f.t>=55)arch='The Disciplined Shipper';
+  const A=model(f), B=model(START);
+  const notes=[];
+  G.log.forEach(l=>l.notes.forEach(n=>notes.push(n)));
+  if(over>0)notes.push('You overspent the sprint budget by '+over+' points. Late scope cost you '+Math.round(over*0.8)+' points on every meter.');
+  if(G.noise!==undefined){
+    const parts=['r','v','t'].filter(k=>luck[k]!==0).map(k=>LBL[k]+' '+(luck[k]>0?'+':'')+luck[k]);
+    notes.push(noise<=2?'Your launch method kept variance low.'+(parts.length?' Market luck: '+parts.join(', ')+'.':''):'Your launch method left results to chance.'+(parts.length?' Market luck: '+parts.join(', ')+'.':''));
+  }
+  if(!won){const miss=goals.filter(k=>f[k]<G.prob.goal[k]).map(k=>LBL[k]+' ('+Math.round(f[k])+' vs '+G.prob.goal[k]+')');notes.push('Missed the goal on '+miss.join(' and ')+'.');}
+  const days=Array.from({length:30},(_,i)=>i+1);
+  const fmt=x=>x.toFixed(1)+'%', dl=(a,b,pre,suf,dp)=>{const d=a-b;return '<div class="gk-d '+(d>=0?'up':'dn')+'">'+(d>=0?'+':'-')+(pre||'')+Math.abs(d).toFixed(dp===undefined?1:dp)+(suf||'')+' vs before</div>';};
+  const best=parseInt(localStorage.getItem('pmd_run_best')||'0',10);
+  if(score>best){try{localStorage.setItem('pmd_run_best',String(score));}catch(e){}}
+  G.share='I ran a feature as a PM on PM Dispatch: '+grade+' ('+score+'), '+arch+', D30 retention '+fmt(A.D30)+'. Beat my run: https://pmdispatch.com';
+  $('g-end').innerHTML=
+   '<div class="gend"><div class="gend-head"><div class="gend-grade">'+grade+'</div><div><div class="gend-arch">'+arch+'</div><div class="gend-sub">'+G.prob.t+' <b class="'+(won?'ok':'no')+'">'+(won?'Goal hit.':'Goal missed.')+'</b></div></div></div>'+
+   '<div class="gend-kpis">'+
+    '<div class="gk"><div class="gk-l">Day 1</div><div class="gk-v">'+fmt(A.D1)+'</div>'+dl(A.D1,B.D1,'',' pts')+'</div>'+
+    '<div class="gk"><div class="gk-l">Day 7</div><div class="gk-v">'+fmt(A.D7)+'</div>'+dl(A.D7,B.D7,'',' pts')+'</div>'+
+    '<div class="gk"><div class="gk-l">Day 30</div><div class="gk-v">'+fmt(A.D30)+'</div>'+dl(A.D30,B.D30,'',' pts')+'</div>'+
+    '<div class="gk"><div class="gk-l">ARPDAU</div><div class="gk-v">$'+A.arpdau.toFixed(3)+'</div>'+dl(A.arpdau,B.arpdau,'$','',3)+'</div>'+
+    '<div class="gk"><div class="gk-l">D30 LTV</div><div class="gk-v">$'+A.ltv.toFixed(2)+'</div>'+dl(A.ltv,B.ltv,'$','',2)+'</div>'+
+   '</div>'+
+   '<div class="gend-chart"><canvas id="g-chart"></canvas></div>'+
+   '<ul class="gend-notes">'+(notes.length?notes:['Clean run. No synergies fired and no traps triggered. Try mixing cards that work together.']).map(n=>'<li>'+n+'</li>').join('')+'</ul>'+
+   '<div class="gend-actions"><button class="btn btn-primary" onclick="gAgain()">Run it back</button><button class="btn btn-ghost" onclick="gShare(this)">Copy my result</button><button class="btn btn-ghost" onclick="switchPage(\'offerlab\')">Try the Offer Lab</button><button class="btn btn-ghost" onclick="switchPage(\'samplesize\')">Size the A/B test</button><button class="btn btn-ghost" onclick="switchPage(\'guides\')">Read the Playbook</button></div>'+
+   '<div class="g-best">Best score on this device: '+Math.max(best,score)+'</div></div>';
+  show('g-end');
+  if(chart){chart.destroy();chart=null;}
+  if(window.Chart){
+    const tc=getComputedStyle(document.body).getPropertyValue('--t2').trim()||'#888';
+    chart=new Chart($('g-chart'),{type:'line',data:{labels:days,datasets:[
+      {label:'Before',data:days.map(d=>+B.ret(d).toFixed(2)),borderColor:'#777',borderDash:[5,4],pointRadius:0,borderWidth:2},
+      {label:'Your launch',data:days.map(d=>+A.ret(d).toFixed(2)),borderColor:'#a78bfa',backgroundColor:'rgba(124,58,237,0.16)',fill:true,pointRadius:0,borderWidth:3,tension:0.3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,boxWidth:12}}},scales:{x:{ticks:{color:tc,maxTicksLimit:8,callback:function(v){return 'D'+this.getLabelForValue(v);}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v+'%'},grid:{color:'rgba(128,128,128,0.15)'}}}}});
+  }
+}
+
+window.gAgain=function(){gPlay();$('page-home').classList.remove('playing');};
+window.gShare=function(btn){
+  const done=()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>{btn.textContent=o;},1400);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(G.share).then(done,done);}else{const t=document.createElement('textarea');t.value=G.share;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();done();}
+};
+
+// Orbit: built from the top nav so the two never drift apart
+function buildOrbit(){
+  const host=$('home-orbit');if(!host)return;
+  const tabs=[...document.querySelectorAll('.nav-tabs .nav-tab')], n=tabs.length;
+  tabs.forEach((tab,i)=>{
+    const a=i*2*Math.PI/n, x=Math.round(280+210*Math.sin(a)), y=Math.round(280-210*Math.cos(a));
+    const label=tab.querySelector('.tab-label').textContent;
+    const svg=tab.querySelector('svg').outerHTML.replace('class="tab-icon-svg"','width="26" height="26" style="width:26px;height:26px"');
+    const d=document.createElement('div');
+    d.className='tool-node';d.style.left=x+'px';d.style.top=y+'px';
+    d.innerHTML='<div class="tool-node-icon">'+svg+'</div><div class="tool-node-label">'+label+'</div>';
+    d.onclick=()=>{if(tab.tagName==='A')window.location=tab.getAttribute('href');else tab.click();};
+    host.appendChild(d);
+  });
+}
+buildOrbit();
+})();
+
+// ═══════════════════════════════════════════════
+// OFFER LAB: 300 simulated players (1 dot = ~33 players)
+// ═══════════════════════════════════════════════
+(function(){
+const PRICES=[0.99,1.99,2.99,4.99,7.99,9.99,14.99,19.99,29.99,49.99,79.99,99.99];
+const POP=10000, N=300, PER=POP/N;
+const TIERS=[
+ {k:'f2p',n:'Free players',pct:'70%',dots:210,med:0.6,sig:0.9,r:3.1,w:0.42},
+ {k:'min',n:'Minnows',pct:'18%',dots:54,med:3,sig:0.6,r:4,w:0.26},
+ {k:'dol',n:'Dolphins',pct:'9%',dots:27,med:14,sig:0.6,r:5,w:0.18},
+ {k:'wha',n:'Whales',pct:'3%',dots:9,med:70,sig:0.55,r:7,w:0.14}];
+const TIMING={browse:{vis:0.11,mult:1},first:{vis:0.17,mult:0.75},mile:{vis:0.19,mult:1.15},loss:{vis:0.28,mult:1.35}};
+const URG={none:{vis:1,mult:1},d1:{vis:1.15,mult:1.08},h4:{vis:1.3,mult:1.15}};
+const PRESETS={
+ starter:{price:3,gen:1.8,anchor:0.5,timing:'first',urg:'none'},
+ moment:{price:3,gen:1.4,anchor:0,timing:'loss',urg:'none'},
+ whale:{price:11,gen:1.2,anchor:0.2,timing:'browse',urg:'d1'},
+ fake:{price:7,gen:0.8,anchor:0.75,timing:'browse',urg:'h4'}};
+let S={price:3,gen:1,anchor:0,timing:'browse',urg:'none'};
+let dots=[], ctx=null, cv=null, W=0, H=330, raf=0, ready=false, last=null;
+const $=id=>document.getElementById(id);
+const money=x=>'$'+Math.round(x).toLocaleString('en');
+
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function build(){
+  const rnd=rng(42), g=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  dots=[];
+  TIERS.forEach((t,ti)=>{for(let i=0;i<t.dots;i++)dots.push({ti,wtp:t.med*Math.exp(t.sig*g()),u:rnd(),v:rnd(),a:rnd(),x:0,y:0,cx:0,cy:0,cr:t.r,ca:0.35,cc:[154,154,154],tx:0,ty:0})});
+}
+function layout(){
+  const gap=10, avail=W-gap*3;let x0=0;
+  TIERS.forEach((t,ti)=>{
+    const zw=avail*t.w, ds=dots.filter(d=>d.ti===ti), zh=H-30;
+    const cols=Math.max(1,Math.ceil(Math.sqrt(ds.length*zw/zh))), rows=Math.ceil(ds.length/cols);
+    const cw=zw/cols, ch=zh/rows;
+    ds.forEach((d,i)=>{const c=i%cols, r=Math.floor(i/cols);d.x=x0+cw*(c+0.5)+(d.u-0.5)*cw*0.5;d.y=15+ch*(r+0.5)+(d.v-0.5)*ch*0.5;if(!d.cx&&!d.cy){d.cx=d.x;d.cy=d.y;}});
+    x0+=zw+gap;
+  });
+  const z=$('ol-zones');
+  z.innerHTML=TIERS.map(t=>'<div style="width:'+(avail*t.w)+'px;margin-right:'+gap+'px"><b>'+t.n+'</b>'+t.pct+' of players</div>').join('');
+  z.lastElementChild.style.marginRight='0';
+}
+function sizeCanvas(){
+  const dpr=window.devicePixelRatio||1;
+  W=cv.parentElement.clientWidth;H=330;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  layout();
+}
+
+function simulate(){
+  const price=PRICES[S.price], tm=TIMING[S.timing], ug=URG[S.urg];
+  const econ=Math.max(0.1,1-0.12*Math.pow(S.gen,1.5));
+  const state=new Array(dots.length);
+  const rev=[0,0,0,0], buyers=[0,0,0,0];
+  let seen=0, buyN=0, annN=0, left=0;
+  dots.forEach((d,i)=>{
+    const t=TIERS[d.ti];
+    const vis=Math.min(0.95,tm.vis*ug.vis);
+    if(d.v>=vis){state[i]=0;return;}
+    seen++;
+    const base=d.wtp*Math.pow(S.gen,0.8)*tm.mult*ug.mult;
+    const W2=base*(1+0.35*S.anchor);
+    const p=1/(1+Math.exp(3*(Math.log(price)-Math.log(W2))));
+    if(d.u<p){state[i]=2;buyN++;buyers[d.ti]++;rev[d.ti]+=price*PER*econ;left+=Math.min(Math.max(0,base-price),price*2)*PER*econ;return;}
+    let ap=(S.urg==='h4'?0.35:S.urg==='d1'?0.12:0)+(S.anchor>0.5?(S.anchor-0.5)*1.2:0)+(S.timing==='first'&&price>9.99?0.25:0)+(price/t.med>15?0.12:0);
+    if(d.a<Math.min(0.9,ap)){state[i]=3;annN++;}else state[i]=1;
+  });
+  const totalRev=rev.reduce((a,b)=>a+b,0);
+  const trust=Math.max(0,Math.round(100-520*annN/N));
+  return {state,rev,totalRev,buyN,conv:buyN/N*100,trust,left,seen,annN,econ,price,
+    whaleShare:totalRev?rev[3]/totalRev:0, buyers};
+}
+
+function colorFor(s){
+  const light=document.body.classList.contains('light');
+  if(s===2)return {c:[34,197,94],a:1,rs:1.5};
+  if(s===3)return {c:[244,63,94],a:0.8,rs:1.1};
+  if(s===1)return {c:[154,154,154],a:0.75,rs:1};
+  return {c:light?[120,120,120]:[110,110,110],a:0.22,rs:0.85};
+}
+function frame(){
+  raf=0;if(!ctx)return;
+  ctx.clearRect(0,0,W,H);
+  let moving=false;
+  dots.forEach(d=>{
+    const k=0.18;
+    d.cr+=(d.tr-d.cr)*k;d.ca+=(d.ta-d.ca)*k;
+    for(let j=0;j<3;j++)d.cc[j]+=(d.tc[j]-d.cc[j])*k;
+    if(Math.abs(d.tr-d.cr)>0.02||Math.abs(d.ta-d.ca)>0.01||Math.abs(d.tc[0]-d.cc[0])>1||Math.abs(d.tc[1]-d.cc[1])>1)moving=true;
+    ctx.beginPath();ctx.arc(d.x,d.y,Math.max(0.5,d.cr),0,Math.PI*2);
+    ctx.fillStyle='rgba('+Math.round(d.cc[0])+','+Math.round(d.cc[1])+','+Math.round(d.cc[2])+','+d.ca.toFixed(2)+')';
+    if(d.tr>d.baseR*1.3){ctx.shadowColor='rgba(34,197,94,0.8)';ctx.shadowBlur=10;}else ctx.shadowBlur=0;
+    ctx.fill();
+  });
+  ctx.shadowBlur=0;
+  if(moving)raf=requestAnimationFrame(frame);
+}
+function paint(r){
+  dots.forEach((d,i)=>{const cf=colorFor(r.state[i]);d.baseR=TIERS[d.ti].r;d.tr=TIERS[d.ti].r*cf.rs;d.ta=cf.a;d.tc=cf.c;});
+  if(!raf)raf=requestAnimationFrame(frame);
+}
+
+function render(){
+  const r=simulate();last=r;
+  const price=PRICES[S.price];
+  $('ol-price-v').textContent='$'+price.toFixed(2);
+  $('ol-gen-v').textContent=S.gen.toFixed(1)+'x';
+  const was=S.anchor>0?price/(1-S.anchor):0;
+  $('ol-tile').innerHTML=(was?'<span class="was">$'+was.toFixed(2)+'</span>':'')+'<span class="now">$'+price.toFixed(2)+'</span>'+(S.anchor>0?'<span class="off">-'+Math.round(S.anchor*100)+'%</span>':'')+'<span class="gen">'+S.gen.toFixed(1)+'x value</span>';
+  [['anchor','ol-seg-anchor'],['timing','ol-seg-timing'],['urg','ol-seg-urg']].forEach(p=>{
+    $(p[1]).querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(b.dataset.v)===String(S[p[0]])));
+  });
+  $('ol-price').value=S.price;$('ol-gen').value=S.gen;
+  $('ol-k-conv').textContent=r.conv.toFixed(1)+'%';
+  $('ol-k-rev').textContent=money(r.totalRev);
+  $('ol-k-trust').textContent=r.trust;
+  $('ol-k-trust').style.color=r.trust<50?'var(--red)':r.trust<75?'var(--amber)':'var(--green)';
+  $('ol-k-left').textContent=money(r.left);
+  $('ol-split').innerHTML=TIERS.map((t,i)=>{const sh=r.totalRev?r.rev[i]/r.totalRev*100:0;return '<div class="ol-bar"><span>'+t.n+'</span><div class="tr"><i style="width:'+sh+'%"></i></div><b>'+Math.round(sh)+'%</b></div>';}).join('');
+  // verdict + insights
+  let v='Workable',cls='';
+  if(r.trust<50){v='Predatory';cls='bad';}
+  else if(r.conv<0.6){v='Priced out';cls='bad';}
+  else if(r.whaleShare>0.7){v='Whale-dependent';cls='';}
+  else if(r.trust>=75&&r.conv>=2.5){v='Healthy';cls='good';}
+  $('ol-verdict').textContent=v;$('ol-verdict').className='ol-verdict '+cls;
+  const ins=[];
+  if(r.totalRev>0&&r.whaleShare>0.65)ins.push('Whale dependency: '+Math.round(r.whaleShare*100)+'% of revenue comes from about 3% of players. One whale churning moves your month.');
+  if(r.conv<0.6)ins.push('Only '+r.conv.toFixed(1)+'% of players buy. Add a lower rung or move the offer to a moment of real need.');
+  if(r.trust<75)ins.push('Pressure is showing (trust '+r.trust+'). '+(S.urg==='h4'?'A 4 hour timer ':S.anchor>0.5?'A '+Math.round(S.anchor*100)+'% anchor ':'This setup ')+'turns passers-by into annoyed players. Expect worse reviews and softer retention.');
+  if(r.totalRev>0&&r.left>r.totalRev*1.0)ins.push('You are leaving about '+money(r.left)+' on the table. Higher spenders would have paid more. Add a second tier instead of raising this one.');
+  if(S.gen>2)ins.push('Generosity '+S.gen.toFixed(1)+'x gives away '+Math.round((1-r.econ)*100)+'% of revenue as economy cost, and every future offer will feel stingy next to it.');
+  if(S.timing==='loss'&&r.trust>=75&&r.conv>=2.5)ins.push('Fair price at the moment of need. This is why timing beats discounting.');
+  if(S.timing==='first'&&price>9.99)ins.push('Asking for $'+price.toFixed(2)+' in the first session is asking before the player has any value to protect.');
+  if(!ins.length)ins.push('Balanced. Nothing is screaming. Now A/B it to see if the model matches your real players.');
+  $('ol-insights').innerHTML=ins.slice(0,4).map(t=>'<li>'+t+'</li>').join('');
+  paint(r);
+}
+
+window.olSet=function(k,v){S[k]=v;if(k==='price'||k==='gen')S[k]=+v;render();};
+window.olPreset=function(n){S=Object.assign({},PRESETS[n]);render();};
+window.olShip=function(){
+  if(!last)return;const el=$('ol-ship');
+  const good=last.trust>=75?'Players barely noticed the pressure.':last.trust>=50?'Some players felt pushed.':'Players felt cornered. Expect uninstalls.';
+  el.hidden=false;
+  el.innerHTML='<b>Shipped.</b> Net '+money(last.totalRev)+' per 10K players at '+last.conv.toFixed(1)+'% conversion. '+good+' Whales would have paid about '+money(last.left)+' more. Real players will not behave exactly like this model, so test it.';
+};
+window.olAB=function(){
+  if(!last)return;
+  switchPage('samplesize');
+  setTimeout(()=>{const b=document.getElementById('ss-base');if(b){b.value=Math.max(0.1,last.conv).toFixed(1);if(typeof calcSS==='function')calcSS();}},80);
+};
+
+window.olInit=function(){
+  if(!ready){
+    cv=$('ol-canvas');ctx=cv.getContext('2d');build();
+    dots.forEach(d=>{d.tr=d.cr;d.ta=d.ca;d.tc=d.cc.slice();d.baseR=d.cr;});
+    ready=true;
+    window.addEventListener('resize',()=>{if($('page-offerlab').classList.contains('active')){sizeCanvas();render();}});
+  }
+  sizeCanvas();render();
+};
+})();
+</script>
 
 </body>
 </html>
