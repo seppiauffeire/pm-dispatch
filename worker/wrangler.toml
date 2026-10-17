@@ -1,0 +1,9 @@
+name = "pmdispatch-leaderboard"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pmdispatch-leaderboard"
+# Run `npx wrangler d1 create pmdispatch-leaderboard` and paste the id it prints here.
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

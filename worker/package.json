@@ -1,0 +1,15 @@
+{
+  "name": "pmdispatch-leaderboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Global leaderboard for the PM Dispatch game (Cloudflare Worker + D1)",
+  "scripts": {
+    "sync": "node sync-game.js",
+    "test": "node --experimental-sqlite test.mjs",
+    "deploy": "npm run sync && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}

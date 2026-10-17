@@ -2763,7 +2763,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
   <!-- ── Feature Runs section ── -->
   <div id="lb-runs-section" style="display:none">
-    <p class="lb-runs-note">Scores from the home page game, "Build a Feature". Every row is a real run. Scores are stored in the browser they were played on.</p>
+    <p class="lb-runs-note" id="lb-runs-note">Loading…</p>
     <div class="col2" style="gap:1.5rem">
       <div class="card">
         <div class="card-head"><div><div class="card-title">Best Runs, All Time</div><div class="card-sub">One best score per player</div></div></div>
@@ -6325,6 +6325,45 @@ function openThreads(G,tags,fromStep){
   });
   return n;
 }
+
+// Deterministic scoring from the picks. The game and the leaderboard Worker both call this,
+// so a submitted run can be re-checked on the server. Returns null for an illegal run.
+function scoreRun(probIdx,picks,luck){
+  const prob=PROBLEMS[probIdx];
+  if(!prob||!Array.isArray(picks)||picks.length!==NODES.length)return null;
+  const G={r:START.r,v:START.v,t:START.t,spent:0,owners:{},fired:new Set()};
+  let noise=5;
+  for(let s=0;s<NODES.length;s++){
+    if(!Number.isInteger(picks[s]))return null;
+    const c=NODES[s].pool[picks[s]];if(!c)return null;
+    const fx=Object.assign({r:0,v:0,t:0,c:0},c.fx);
+    combosFor(G,c).forEach(h=>{['r','v','t'].forEach(k=>{fx[k]+=(h.cb.fx[k]||0);});G.fired.add(h.i);});
+    G.r+=fx.r;G.v+=fx.v;G.t+=fx.t;G.spent+=fx.c;
+    c.tags.forEach(t=>{(G.owners[t]=G.owners[t]||[]).push(s);});
+    if(c.noise!==undefined)noise=c.noise;
+  }
+  const L={r:0,v:0,t:0};
+  if(!luck)return null;
+  for(const k of ['r','v','t']){const x=luck[k];if(!Number.isInteger(x)||Math.abs(x)>noise)return null;L[k]=x;}
+  const clamp=v=>Math.max(0,Math.min(100,v));
+  const over=Math.max(0,G.spent-BUDGET), f={};
+  ['r','v','t'].forEach(k=>{f[k]=clamp(G[k]+L[k]-over*0.8);});
+  const goals=Object.keys(prob.goal), hit=goals.filter(k=>f[k]>=prob.goal[k]);
+  const won=hit.length===goals.length;
+  const avg=(f.r+f.v+f.t)/3;
+  const score=Math.round(Math.min(100,avg*0.6+(hit.length/goals.length)*40));
+  const grade=score>=88?'S':score>=76?'A':score>=62?'B':score>=48?'C':'D';
+  const whaleDep=COMBOS.findIndex(c=>c.p[0]==='whale'&&c.p[1]==='whale');
+  let arch='The Generalist';
+  if(over>0)arch='The Scope Creeper';
+  else if(G.fired.has(whaleDep))arch='The Whale Hunter';
+  else if(G.fired.size>=4&&won)arch='The Connector';
+  else if(f.v>=70&&f.t>=55)arch='The Systems Architect';
+  else if(f.r>=75)arch='The Retention Engineer';
+  else if(f.t>=70&&f.v<55)arch='The Player Advocate';
+  else if(G.owners.tested&&f.r>=55&&f.v>=55&&f.t>=55)arch='The Disciplined Shipper';
+  return {f:f,won:won,score:score,grade:grade,arch:arch,over:over,combos:G.fired.size,noise:noise,spent:G.spent};
+}
 //ENGINE-END
 
 let G=null, chart=null, offered=[];
@@ -6350,7 +6389,7 @@ window.gPlay=function(){
 };
 
 window.gPick=function(i){
-  G={prob:offered[i],step:0,r:START.r,v:START.v,t:START.t,spent:0,owners:{},fired:new Set(),cells:{},threads:[],cur:[],locked:false,notes:[],log:[],noise:undefined,saved:false};
+  G={prob:offered[i],step:0,r:START.r,v:START.v,t:START.t,spent:0,owners:{},fired:new Set(),cells:{},threads:[],cur:[],locked:false,notes:[],log:[],noise:undefined,probIdx:PROBLEMS.indexOf(offered[i]),picks:[],t0:Date.now(),saveState:'idle'};
   G.cells.p={kind:'prob'};G.cells.g={kind:'goal'};
   G.threads.push({a:'p',b:'g',kind:'seq'});
   $('page-home').classList.add('playing');
@@ -6536,6 +6575,7 @@ window.gChoose=function(i){
     notesHtml.push('<div class="'+kind+'">'+(h.cb.good?'✦ Combo: ':'⚠ Clash: ')+esc(h.cb.n)+' ('+fxText(h.cb.fx)+')</div>');
     G.notes.push({good:h.cb.good,text:h.cb.n});
   });
+  G.picks[step]=NODES[step].pool.indexOf(c);
   G.r+=fx.r;G.v+=fx.v;G.t+=fx.t;G.spent+=fx.c;
   c.tags.forEach(t=>{(G.owners[t]=G.owners[t]||[]).push(step);});
   if(c.noise!==undefined)G.noise=c.noise;
@@ -6574,24 +6614,13 @@ function model(m){
 
 function finish(){
   $('g-tray').innerHTML='';
-  const noise=G.noise===undefined?5:G.noise, luck={};
+  const lastCard=NODES[NODES.length-1].pool[G.picks[NODES.length-1]];
+  const noise=lastCard.noise===undefined?5:lastCard.noise, luck={};
   ['r','v','t'].forEach(k=>{luck[k]=Math.round((Math.random()*2-1)*noise);});
-  const over=Math.max(0,G.spent-BUDGET);
-  const f={};['r','v','t'].forEach(k=>{f[k]=cl(G[k]+luck[k]-over*0.8);});
-  const goals=Object.keys(G.prob.goal), hit=goals.filter(k=>f[k]>=G.prob.goal[k]);
-  const won=hit.length===goals.length;
-  const avg=(f.r+f.v+f.t)/3;
-  const score=Math.round(Math.min(100,avg*0.6+(hit.length/goals.length)*40));
-  const grade=score>=88?'S':score>=76?'A':score>=62?'B':score>=48?'C':'D';
-  const whaleDep=COMBOS.findIndex(c=>c.p[0]==='whale'&&c.p[1]==='whale');
-  let arch='The Generalist';
-  if(over>0)arch='The Scope Creeper';
-  else if(G.fired.has(whaleDep))arch='The Whale Hunter';
-  else if(G.fired.size>=4&&won)arch='The Connector';
-  else if(f.v>=70&&f.t>=55)arch='The Systems Architect';
-  else if(f.r>=75)arch='The Retention Engineer';
-  else if(f.t>=70&&f.v<55)arch='The Player Advocate';
-  else if(G.owners.tested&&f.r>=55&&f.v>=55&&f.t>=55)arch='The Disciplined Shipper';
+  G.luck=luck;
+  const R=scoreRun(G.probIdx,G.picks,luck);
+  const f=R.f, won=R.won, score=R.score, grade=R.grade, arch=R.arch, over=R.over;
+  const goals=Object.keys(G.prob.goal);
   const A=model(f), B=model(START);
   const notes=G.notes.map(n=>({k:n.good?'good':'bad',t:(n.good?'Combo: ':'Clash: ')+n.text}));
   if(over>0)notes.push({k:'bad',t:'You overspent the sprint budget by '+over+' points. Late scope cost you '+Math.round(over*0.8)+' points on every meter.'});
@@ -6646,8 +6675,23 @@ window.gShare=function(btn){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(G.share).then(done,done);}else{const t=document.createElement('textarea');t.value=G.share;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();done();}
 };
 
-// ── run leaderboard (real entries only, stored on this device) ──
+// ── run leaderboard: global (Cloudflare Worker) with a local fallback ──
+const LB_API='https://pmdispatch-leaderboard.arturoruizvaldes.workers.dev';
 const RUNS_KEY='pmd_runs';
+function deviceId(){
+  let d=lsGet('pmd_device',null);
+  if(!d||typeof d!=='string'){d=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);lsSet('pmd_device',d);}
+  return d;
+}
+async function apiCall(path,opts){
+  const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),8000);
+  try{
+    const r=await fetch(LB_API+path,Object.assign({signal:ctl.signal},opts||{}));
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){const e=new Error(j.error||('HTTP '+r.status));e.status=r.status;throw e;}
+    return j;
+  }finally{clearTimeout(to);}
+}
 function runKey(r){return (r.email||r.name||'').toLowerCase();}
 function bestPerPlayer(runs){
   const m={};
@@ -6656,38 +6700,70 @@ function bestPerPlayer(runs){
 }
 function rankOf(runs,r,weekly){
   const pool=weekly?runs.filter(x=>x.week===r.week):runs;
-  const list=bestPerPlayer(pool);
-  return list.findIndex(x=>runKey(x)===runKey(r))+1;
+  return bestPerPlayer(pool).findIndex(x=>runKey(x)===runKey(r))+1;
 }
-function storeRun(name,email){
+function storeLocal(name,email){
   const rec={name:name,email:email||'',score:G.result.score,grade:G.result.grade,arch:G.result.arch,prob:G.prob.t,combos:G.fired.size,ts:Date.now(),week:getWeekStart()};
   const runs=lsGet(RUNS_KEY,[]);runs.push(rec);
   lsSet(RUNS_KEY,runs.slice(-300));
-  G.saved=true;G.savedRec=rec;
   return rec;
+}
+async function gSubmit(name,email,retry){
+  const g=G;if(!g||g.saveState==='saving')return;
+  g.saveState='saving';g.savedName=name;g.savedEmail=email||'';
+  if(!retry||!g.savedRec)g.savedRec=storeLocal(name,email);
+  renderSaveBox();
+  try{
+    const res=await apiCall('/api/runs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,device:deviceId(),prob:g.probIdx,picks:g.picks,luck:g.luck,dur:Date.now()-g.t0})});
+    g.rankWeek=res.rank_week;g.rankAll=res.rank_all;g.saveState='remote';
+  }catch(e){
+    if(e.status&&e.status>=400&&e.status<500&&e.status!==404){g.saveState='error';g.saveErr=e.message;}
+    else g.saveState='local';
+  }
+  if(G===g)renderSaveBox();
 }
 function renderSaveBox(){
   const box=$('g-save');if(!box||!G)return;
-  const me=getCurrentUser();
-  if(G.saved){const runs=lsGet(RUNS_KEY,[]);const rec=G.savedRec;box.innerHTML='<span>Saved to the leaderboard as <b>'+esc(rec.name)+'</b>. This week: <b>#'+rankOf(runs,rec,true)+'</b>. All time: <b>#'+rankOf(runs,rec,false)+'</b>.</span>';return;}
-  if(me){const rec=storeRun(me.name||me.email.split('@')[0],me.email);renderSaveBox();return;}
+  const me=getCurrentUser(), st=G.saveState;
+  if(st==='saving'){box.innerHTML='<span>Saving your score…</span>';return;}
+  if(st==='remote'){box.innerHTML='<span>On the global leaderboard as <b>'+esc(G.savedName)+'</b>. This week: <b>#'+G.rankWeek+'</b>. All time: <b>#'+G.rankAll+'</b>.</span>';return;}
+  if(st==='local'){
+    const runs=lsGet(RUNS_KEY,[]);
+    box.innerHTML='<span>Saved on this device as <b>'+esc(G.savedName)+'</b> (#'+rankOf(runs,G.savedRec,false)+' here). The global leaderboard could not be reached, so only you can see this score.</span><button class="btn btn-ghost btn-sm" onclick="gRetrySave()">Try again</button>';
+    return;
+  }
+  if(st==='idle'&&me){gSubmit(me.name||me.email.split('@')[0],me.email);return;}
   const nick=lsGet('pmd_nick','')||'';
-  box.innerHTML='<span>Put this score on the leaderboard:</span><input id="g-nick" maxlength="20" placeholder="Pick a name" value="'+esc(nick)+'"><button class="btn btn-primary btn-sm" onclick="gSaveRun()">Save score</button>';
+  box.innerHTML=(st==='error'?'<span style="color:var(--red);flex-basis:100%">'+esc(G.saveErr)+'</span>':'<span>Put this score on the global leaderboard:</span>')+'<input id="g-nick" maxlength="20" placeholder="Pick a name" value="'+esc(nick)+'"><button class="btn btn-primary btn-sm" onclick="gSaveRun()">Save score</button>';
 }
 window.gSaveRun=function(){
   const v=($('g-nick').value||'').trim().replace(/\s+/g,' ').slice(0,20);
   if(v.length<2){$('g-nick').focus();return;}
-  lsSet('pmd_nick',v);storeRun(v,'');renderSaveBox();
+  lsSet('pmd_nick',v);G.saveState='idle';gSubmit(v,'');
 };
-window.renderRunBoard=function(){
-  const runs=lsGet(RUNS_KEY,[]), me=getCurrentUser(), wk=getWeekStart();
-  const row=(r,i)=>'<tr'+(me&&r.email&&r.email===me.email?' style="background:rgba(91,110,245,0.07)"':'')+'><td style="font-family:var(--mono);font-size:0.85rem;color:'+(i<3?'var(--amber)':'var(--t3)')+'">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1))+'</td>'+
+window.gRetrySave=function(){if(G)gSubmit(G.savedName,G.savedEmail,true);};
+window.renderRunBoard=async function(){
+  const note=$('lb-runs-note'), me=getCurrentUser(), dev=deviceId();
+  const row=(r,i)=>'<tr'+((r.me||(me&&r.email&&r.email===me.email))?' style="background:rgba(91,110,245,0.07)"':'')+'><td style="font-family:var(--mono);font-size:0.85rem;color:'+(i<3?'var(--amber)':'var(--t3)')+'">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1))+'</td>'+
     '<td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">'+esc((r.name||'?')[0].toUpperCase())+'</div><span class="td-name">'+esc(r.name)+'</span></div></td>'+
     '<td style="font-size:0.78rem;color:var(--amber);white-space:nowrap">'+esc(r.arch)+'</td><td><span class="lb-grade">'+esc(r.grade)+'</span></td><td style="font-family:var(--mono);font-weight:600;color:var(--t1)">'+r.score+'</td></tr>';
-  const empty='<tr><td colspan="5"><div class="lb-empty">No runs yet. Hit PLAY on the home page and be the first on the board.</div></td></tr>';
-  const all=bestPerPlayer(runs).slice(0,10), week=bestPerPlayer(runs.filter(r=>r.week===wk)).slice(0,10);
-  $('lb-runs-alltime-body').innerHTML=all.length?all.map(row).join(''):empty;
-  $('lb-runs-weekly-body').innerHTML=week.length?week.map(row).join(''):empty;
+  const msg=t=>'<tr><td colspan="5"><div class="lb-empty">'+t+'</div></td></tr>';
+  const empty=msg('No runs yet. Hit PLAY on the home page and be the first on the board.');
+  const paint=(all,week)=>{
+    $('lb-runs-alltime-body').innerHTML=all.length?all.map(row).join(''):empty;
+    $('lb-runs-weekly-body').innerHTML=week.length?week.map(row).join(''):empty;
+  };
+  $('lb-runs-alltime-body').innerHTML=msg('Loading…');$('lb-runs-weekly-body').innerHTML=msg('Loading…');
+  try{
+    const q=s=>'/api/leaderboard?scope='+s+'&limit=10&d='+encodeURIComponent(dev);
+    const res=await Promise.all([apiCall(q('all')),apiCall(q('week'))]);
+    paint(res[0].rows||[],res[1].rows||[]);
+    if(note)note.textContent='Global leaderboard. The server re-checks every score from the picks that produced it.';
+  }catch(e){
+    const runs=lsGet(RUNS_KEY,[]), wk=getWeekStart();
+    paint(bestPerPlayer(runs).slice(0,10),bestPerPlayer(runs.filter(r=>r.week===wk)).slice(0,10));
+    if(note)note.textContent='Showing scores from this device only. The global leaderboard could not be reached.';
+  }
 };
 
 // Orbit: built from the top nav so the two never drift apart
