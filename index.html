@@ -675,53 +675,93 @@ body.light #page-home::before{background:
 @keyframes playPulse{0%,100%{box-shadow:0 8px 36px rgba(124,58,237,0.5),inset 0 -5px 0 rgba(0,0,0,0.25)}50%{box-shadow:0 8px 54px rgba(124,58,237,0.85),inset 0 -5px 0 rgba(0,0,0,0.25)}}
 .home-skip{display:inline-block;margin-left:1.2rem;font-size:0.85rem;color:var(--t2);cursor:pointer;text-decoration:underline;text-underline-offset:4px;background:none;border:none;font-family:var(--sans)}
 .home-skip:hover{color:var(--t1)}
-#desk{flex:1;min-width:0;max-width:720px;align-items:stretch;justify-content:center}
+#desk{width:100%;max-width:900px;margin:1.6rem auto 2rem}
 .desk{width:100%;position:relative}
-#page-home.playing .home-left{display:none}
-#page-home.playing #desk{max-width:none}
 .g-panel{width:100%}
-.g-inbox{position:relative;height:380px;display:flex;align-items:center;justify-content:center}
-.g-inbox .postit{position:absolute;width:210px;height:200px;transform:rotate(var(--rot)) translate(var(--tx),var(--ty));animation:floaty 5s ease-in-out infinite;animation-delay:var(--dl)}
-.g-inbox .postit i{display:block;height:7px;border-radius:4px;background:rgba(31,27,13,0.18);margin:15px 0 0}
-.g-inbox .postit i:nth-child(2){width:80%}.g-inbox .postit i:nth-child(3){width:55%}
-.g-inbox-label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:0.78rem;color:var(--t3);letter-spacing:0.14em;text-transform:uppercase}
-@keyframes floaty{0%,100%{transform:rotate(var(--rot)) translate(var(--tx),var(--ty))}50%{transform:rotate(calc(var(--rot) + 1.5deg)) translate(var(--tx),calc(var(--ty) - 8px))}}
+.g-teaser{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
+.g-teaser .postit{width:170px;height:150px;transform:rotate(var(--rot));animation:floaty 5s ease-in-out infinite;animation-delay:var(--dl)}
+.g-teaser .postit i{display:block;height:7px;border-radius:4px;background:rgba(31,27,13,0.18);margin:15px 0 0}
+.g-teaser .postit i:nth-child(2){width:80%}.g-teaser .postit i:nth-child(3){width:55%}
+.g-inbox-label{text-align:center;font-size:0.78rem;color:var(--t3);letter-spacing:0.14em;text-transform:uppercase;margin-top:1.2rem}
+@keyframes floaty{0%,100%{transform:rotate(var(--rot))}50%{transform:rotate(calc(var(--rot) + 1.5deg)) translateY(-7px)}}
 .postit{position:relative;padding:1.05rem 1rem 1.1rem;color:#1f1b0d;background:#fde68a;border-radius:3px 3px 16px 3px;box-shadow:0 12px 26px rgba(0,0,0,0.45),0 2px 0 rgba(0,0,0,0.12);font-family:var(--sans)}
 .postit::before{content:'';position:absolute;top:-8px;left:50%;width:46px;height:16px;margin-left:-23px;background:rgba(255,255,255,0.35);border-radius:2px}
 .postit.c2{background:#fbcfe8}.postit.c3{background:#bae6fd}
 .g-pick-head{text-align:center;margin-bottom:1.4rem}
 .g-pick-head h3{font-family:var(--display);font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1)}
 .g-pick-head p{font-size:0.85rem;color:var(--t2);margin-top:4px}
-.g-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.g-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;max-width:860px;margin:0 auto}
 .g-note{cursor:pointer;text-align:left;border:none;transform:rotate(var(--rot));transition:transform .18s,box-shadow .18s;animation:noteIn .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:var(--dl);min-height:210px}
 .g-note:hover{transform:rotate(0deg) translateY(-6px) scale(1.04);box-shadow:0 20px 36px rgba(0,0,0,0.55)}
 .g-note b{display:block;font-size:1rem;line-height:1.3;font-weight:800;margin-bottom:0.6rem}
-.g-note span{display:block;font-size:0.76rem;line-height:1.45;opacity:0.75}
-.g-note em{display:block;margin-top:0.8rem;font-style:normal;font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85}
+.g-note span{display:block;font-size:0.78rem;line-height:1.45;opacity:0.8}
+.g-note em{display:block;margin-top:0.9rem;font-style:normal;font-size:0.66rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6}
 @keyframes noteIn{from{opacity:0;transform:rotate(calc(var(--rot) * 3)) translateY(-30px) scale(.8)}to{opacity:1;transform:rotate(var(--rot))}}
 .g-link{display:block;margin:1.2rem auto 0;background:none;border:none;color:var(--t3);font-size:0.78rem;cursor:pointer;font-family:var(--sans)}
 .g-link:hover{color:var(--t1)}
-/* run */
-.g-hud{display:grid;grid-template-columns:230px 1fr;gap:1.2rem;align-items:center;margin-bottom:1rem}
-.g-hud .postit{--rot:-2deg;transform:rotate(-2deg);padding:0.85rem 0.85rem 0.9rem}
-.g-hud .postit b{font-size:0.78rem;line-height:1.35;display:block}
-.g-hud .postit span{display:block;font-size:0.66rem;margin-top:6px;opacity:0.75;font-weight:700;letter-spacing:0.04em;text-transform:uppercase}
-.g-meters{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem}
+
+/* meters */
+.g-meters{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:0.9rem}
 .gm-top{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--t2);margin-bottom:5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
 .gm-top b{color:var(--t1);font-family:var(--display)}
 .gm-bar{height:7px;border-radius:4px;background:var(--bg3);overflow:hidden}
 .gm-bar i{display:block;height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.g-steps{display:flex;align-items:center;gap:6px;margin:0.4rem 0 0.2rem}
-.g-step{flex:1;height:4px;border-radius:2px;background:var(--bg4)}
-.g-step.done{background:#7c3aed}.g-step.now{background:#c4b5fd}
-.g-qrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.9rem;gap:1rem;flex-wrap:wrap}
+
+/* detective board */
+.g-stage{position:relative}
+.g-board{border-radius:16px;padding:24px 18px 18px;border:7px solid #3b2a1c;box-shadow:inset 0 0 40px rgba(0,0,0,0.55),0 14px 40px rgba(0,0,0,0.5);background-color:#5b4631;background-image:radial-gradient(rgba(0,0,0,0.2) 1px,transparent 1.6px),radial-gradient(rgba(255,255,255,0.06) 1px,transparent 1.6px);background-size:9px 9px,14px 14px;background-position:0 0,4px 5px}
+.g-wall{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px 16px}
+.g-cell{position:relative;min-height:116px}
+.g-slot{height:100%;min-height:112px;border:2px dashed rgba(255,255,255,0.2);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:800;gap:4px}
+.g-slot b{font-size:1.2rem;font-family:var(--display)}
+.g-slot.now{border-color:#fbbf24;color:#fbbf24;animation:slotPulse 1.6s ease-in-out infinite}
+@keyframes slotPulse{0%,100%{background:rgba(251,191,36,0)}50%{background:rgba(251,191,36,0.1)}}
+.pn{height:100%;min-height:112px;display:flex;flex-direction:column;padding:1.35rem 0.75rem 0.6rem;transform:rotate(var(--rot));font-size:0.78rem}
+.pn::before{display:none}
+.pn .pin{position:absolute;top:-9px;left:50%;margin-left:-8px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a80,#d32f2f 60%,#8e1a1a);box-shadow:0 3px 4px rgba(0,0,0,0.5);z-index:2}
+.pn-step{font-size:0.56rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;opacity:0.55}
+.pn b{display:block;font-size:0.88rem;line-height:1.2;margin:3px 0 5px}
+.pn-d{font-size:0.7rem;line-height:1.35;opacity:0.8}
+.pn-fx{display:flex;flex-wrap:wrap;gap:3px}
+.pn-fx span{font-size:0.56rem;font-weight:800;padding:1px 5px;border-radius:4px;background:rgba(0,0,0,0.1)}
+.pn-fx .up{color:#0f6b2e}.pn-fx .dn{color:#a3162e}
+.pn-open{margin-top:auto;display:flex;align-items:center;gap:3px;font-size:0.56rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#7a4a00;padding-top:6px}
+.pn-open i{width:6px;height:6px;border-radius:50%;background:#d97706}
+.pn.k1{background:#fde68a}.pn.k2{background:#fbcfe8}.pn.k3{background:#bae6fd}.pn.k4{background:#bbf7d0}.pn.k5{background:#fed7aa}.pn.k6{background:#ddd6fe}.pn.k7{background:#a7f3d0}.pn.k8{background:#fecdd3}
+.pn.kprob{background:#fecaca}.pn.kgoal{background:#d9f99d}
+.pn.drop{animation:pinDrop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pinDrop{from{opacity:0;transform:translateY(-44px) rotate(calc(var(--rot) * 4)) scale(1.25)}to{opacity:1;transform:rotate(var(--rot))}}
+.pn.glow-good{animation:glowGood 1.8s ease}
+.pn.glow-bad{animation:glowBad 1.8s ease}
+@keyframes glowGood{0%,100%{box-shadow:0 12px 26px rgba(0,0,0,0.45)}30%,70%{box-shadow:0 0 0 3px #fbbf24,0 0 34px 8px rgba(251,191,36,0.8)}}
+@keyframes glowBad{0%,100%{box-shadow:0 12px 26px rgba(0,0,0,0.45)}30%,70%{box-shadow:0 0 0 3px #f43f5e,0 0 34px 8px rgba(244,63,94,0.75)}}
+.gl{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:0.62rem;font-weight:700}
+.gl span{width:48px;flex-shrink:0}
+.gl .tr{flex:1;height:5px;border-radius:3px;background:rgba(0,0,0,0.15);overflow:hidden}
+.gl .tr i{display:block;height:100%;background:#16a34a;border-radius:3px;transition:width .6s}
+.gl.met b{color:#0f6b2e}
+.gl .tk{position:absolute}
+.g-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:4;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.5))}
+.th-seq{stroke:#d3453b;stroke-width:2;fill:none;stroke-linecap:round}
+.th-good{stroke:#fbbf24;stroke-width:3.4;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(251,191,36,0.9))}
+.th-bad{stroke:#f43f5e;stroke-width:3.2;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(244,63,94,0.9))}
+.th-fresh{transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)}
+.th-hint{stroke:#fde68a;stroke-width:2.2;stroke-dasharray:3 7;fill:none;stroke-linecap:round;animation:dashMove .9s linear infinite}
+@keyframes dashMove{to{stroke-dashoffset:-20}}
+.g-labels{position:absolute;inset:0;pointer-events:none;z-index:6}
+.g-pill{position:absolute;transform:translate(-50%,-50%);padding:3px 10px;border-radius:99px;font-size:0.68rem;font-weight:800;pointer-events:auto;white-space:nowrap;cursor:help;animation:pillPop .5s cubic-bezier(.34,1.56,.64,1) .65s both;letter-spacing:0.03em}
+.g-pill.static{animation:none}
+.g-pill.good{background:#fbbf24;color:#3b2a00;box-shadow:0 0 18px rgba(251,191,36,0.85)}
+.g-pill.bad{background:#f43f5e;color:#fff;box-shadow:0 0 18px rgba(244,63,94,0.7)}
+@keyframes pillPop{from{opacity:0;transform:translate(-50%,-50%) scale(0.2)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+/* tray */
+.g-qrow{display:flex;justify-content:space-between;align-items:baseline;margin:1.2rem 0 0.8rem;gap:1rem;flex-wrap:wrap}
 .g-q{font-family:var(--display);font-size:1.45rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1)}
 .g-qn{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);font-weight:700}
-.g-relics{display:flex;gap:6px;flex-wrap:wrap;min-height:24px;margin-bottom:0.9rem}
-.relic{font-size:0.66rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid rgba(167,139,250,0.4);background:rgba(124,58,237,0.14);color:#c4b5fd}
 .g-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 .gcard{text-align:left;cursor:pointer;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.1rem 1rem;color:var(--t1);font-family:var(--sans);display:flex;flex-direction:column;gap:0.65rem;transition:transform .16s,border-color .16s,box-shadow .16s,opacity .3s;animation:cardIn .35s ease both;animation-delay:var(--dl)}
-.gcard:hover:not(:disabled){transform:translateY(-4px);border-color:#a78bfa;box-shadow:0 14px 34px rgba(124,58,237,0.28)}
+.gcard:hover:not(:disabled){transform:translateY(-4px);border-color:#fbbf24;box-shadow:0 14px 34px rgba(251,191,36,0.2)}
 .gcard:disabled{cursor:default}
 .gcard.out{opacity:0.28}
 .gcard.sel{border-color:#a78bfa;box-shadow:0 0 0 1px #a78bfa,0 14px 34px rgba(124,58,237,0.35)}
@@ -733,13 +773,13 @@ body.light #page-home::before{background:
 .gcard-fx{display:flex;flex-wrap:wrap;gap:5px}
 .fx{font-size:0.66rem;font-weight:800;padding:3px 7px;border-radius:5px;letter-spacing:0.03em;background:var(--bg3)}
 .fx.up{color:var(--green);background:var(--green-bg)}.fx.dn{color:var(--red);background:var(--red-bg)}.fx.cost{color:var(--amber);background:var(--amber-bg)}
-.g-flash{min-height:44px;margin-top:0.9rem;font-size:0.82rem;color:var(--amber);line-height:1.5}
-.g-flash div{animation:cardIn .3s ease both}
-.g-log{margin-top:0.6rem;border-top:1px solid var(--border);padding-top:0.7rem;display:flex;flex-wrap:wrap;gap:6px}
-.g-log span{font-size:0.68rem;color:var(--t2);background:var(--bg3);padding:3px 9px;border-radius:99px}
-.g-log span b{color:var(--t1);font-weight:700}
-/* end */
-.gend{max-width:880px;margin:0 auto;animation:cardIn .5s ease both}
+.g-hint-tip{font-size:0.72rem;color:var(--t3);margin-top:0.7rem;text-align:center}
+.g-flash{min-height:44px;margin-top:0.9rem;font-size:0.84rem;line-height:1.5}
+.g-flash div{animation:cardIn .3s ease both;margin-bottom:3px}
+.g-flash .good{color:#fbbf24}.g-flash .bad{color:#fb7185}
+
+/* result */
+.gend{max-width:880px;margin:1.6rem auto 0;animation:cardIn .5s ease both}
 .gend-head{display:flex;align-items:center;gap:1.4rem;margin-bottom:1.3rem;flex-wrap:wrap}
 .gend-grade{width:92px;height:92px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:3.4rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#7c3aed,#5b6ef5);box-shadow:0 8px 30px rgba(124,58,237,0.5);flex-shrink:0}
 .gend-arch{font-family:var(--display);font-size:1.9rem;font-weight:900;letter-spacing:-0.03em;color:var(--t1);line-height:1.1}
@@ -755,78 +795,82 @@ body.light #page-home::before{background:
 .gend-notes{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:1.2rem}
 .gend-notes li{font-size:0.82rem;color:var(--t2);line-height:1.5;padding-left:1.1rem;position:relative}
 .gend-notes li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#7c3aed}
+.gend-notes li.good::before{background:#fbbf24}.gend-notes li.bad::before{background:#f43f5e}
+.gend-save{display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;padding:0.9rem 1rem;margin-bottom:1rem;border:1px solid var(--border2);border-radius:12px;background:var(--bg2);font-size:0.82rem;color:var(--t2)}
+.gend-save input{flex:1;min-width:150px;padding:0.5rem 0.7rem;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--t1);font-family:var(--sans);font-size:0.82rem;outline:none}
+.gend-save b{color:var(--t1)}
 .gend-actions{display:flex;gap:0.6rem;flex-wrap:wrap}
 .gend-actions .btn{font-size:0.82rem}
 .g-best{font-size:0.72rem;color:var(--t3);margin-top:0.9rem}
+
 /* orbit section */
 .home-tools{position:relative;z-index:1;padding:3rem 1rem 4rem;text-align:center;border-top:1px solid var(--border)}
 .home-tools h2{font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:-0.02em;color:var(--t1);margin-bottom:0.3rem}
 .home-tools p{font-size:0.88rem;color:var(--t2);margin-bottom:1.5rem}
 .home-tools .tool-orbit{margin:0 auto}
+
+/* run leaderboard */
+.lb-runs-note{font-size:0.74rem;color:var(--t3);margin:0 0 1rem}
+.lb-grade{display:inline-block;min-width:26px;text-align:center;font-family:var(--display);font-weight:900;font-size:0.8rem;padding:2px 7px;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff}
+.lb-empty{padding:1.6rem 1rem;text-align:center;color:var(--t3);font-size:0.84rem}
+
+@media(max-width:1100px){.g-wall{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:900px){
-  #page-home .home-hero{flex-direction:column;align-items:stretch;padding:2rem 1.25rem 2.5rem;gap:1.75rem}
-  #desk{max-width:none!important;display:flex!important}
   .g-notes,.g-cards{grid-template-columns:1fr}
   .g-note{min-height:0}
-  .g-hud{grid-template-columns:1fr}
   .g-meters{grid-template-columns:repeat(2,1fr)}
   .gend-kpis{grid-template-columns:repeat(2,1fr)}
-  .g-inbox{height:300px}
+    .g-wall{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g-board{padding:22px 12px 16px}
   .btn-play{font-size:1.9rem;padding:1rem 3rem .9rem}
   .home-tools .tool-orbit{display:none}
   .home-tools{padding:1.5rem 1rem}
 }
+@media(max-width:560px){.g-wall{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* ═══ OFFER LAB ═══ */
-.ol-presets{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.ol-presets-l{font-size:0.74rem;color:var(--t3);margin-right:2px}
-.ol-grid{display:grid;grid-template-columns:340px 1fr;gap:1.2rem;align-items:start}
-.ol-right{display:flex;flex-direction:column;gap:1rem;min-width:0}
-.ol-tile{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 10px;padding:1.1rem 1rem;margin-bottom:1.1rem;border-radius:12px;background:var(--bg3);border:1px dashed var(--border2);font-family:var(--display)}
-.ol-tile .was{font-size:1rem;color:var(--t3);text-decoration:line-through}
-.ol-tile .now{font-size:2.2rem;font-weight:900;color:var(--t1);letter-spacing:-0.03em}
-.ol-tile .off{font-size:0.72rem;font-weight:800;color:#fff;background:#7c3aed;padding:3px 8px;border-radius:6px}
-.ol-tile .gen{font-family:var(--sans);font-size:0.72rem;color:var(--t2)}
-.ol-field{margin-bottom:1rem}
-.ol-field .label{display:flex;justify-content:space-between;align-items:center}
-.ol-field .label b{color:var(--t1);font-family:var(--display)}
-.ol-field input[type=range]{width:100%;accent-color:#7c3aed;padding:0;background:none;border:none}
-.ol-hint{font-size:0.68rem;color:var(--t3);margin-top:3px;line-height:1.4}
-.ol-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.ol-seg:has(button:nth-child(4)){grid-template-columns:repeat(4,1fr)}
-.ol-seg-2{grid-template-columns:repeat(2,1fr)!important}
-.ol-seg button{padding:7px 4px;font-size:0.72rem;font-weight:600;font-family:var(--sans);border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--t2);cursor:pointer}
-.ol-seg button:hover{color:var(--t1)}
-.ol-seg button.on{background:linear-gradient(135deg,#7c3aed,#5b6ef5);border-color:transparent;color:#fff}
-.ol-actions{display:flex;gap:0.6rem;margin-top:1.2rem}
-.ol-actions .btn{flex:1}
-.ol-ship{margin-top:0.9rem;padding:0.8rem;border-radius:10px;background:var(--bg3);font-size:0.78rem;color:var(--t2);line-height:1.5}
-.ol-ship b{color:var(--t1)}
-.ol-stage{padding-bottom:0.6rem}
-.ol-verdict-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.7rem}
-.ol-verdict{font-family:var(--display);font-weight:900;font-size:0.95rem;padding:4px 12px;border-radius:99px;background:var(--amber-bg);color:var(--amber);letter-spacing:0.02em}
-.ol-verdict.good{background:var(--green-bg);color:var(--green)}
-.ol-verdict.bad{background:var(--red-bg);color:var(--red)}
-.ol-legend{font-size:0.68rem;color:var(--t3);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.ol-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px}
-.lg-buy{background:#22c55e}.lg-pass{background:#9a9a9a}.lg-ann{background:#f43f5e}.lg-none{background:var(--t3);opacity:.5}
-#ol-canvas{width:100%;height:330px;display:block}
-.ol-zones{display:flex;gap:0;font-size:0.7rem;color:var(--t2);padding-top:6px;margin-bottom:4px}
-.ol-zones div{text-align:center;line-height:1.35}
-.ol-zones b{display:block;color:var(--t1);font-weight:700}
-.ol-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0.7rem}
-.ol-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.8rem 0.95rem}
-.ol-kpi-l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:700}
-.ol-kpi-v{font-family:var(--display);font-size:1.5rem;font-weight:900;color:var(--t1);margin-top:3px}
-.ol-split-l{font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:700;margin-bottom:0.5rem}
-.ol-bar{display:grid;grid-template-columns:90px 1fr 46px;gap:8px;align-items:center;font-size:0.74rem;color:var(--t2);margin-bottom:5px}
-.ol-bar i{display:block;height:8px;border-radius:4px;background:#7c3aed;transition:width .4s}
-.ol-bar .tr{height:8px;border-radius:4px;background:var(--bg3);overflow:hidden}
-.ol-bar b{color:var(--t1);text-align:right}
-.ol-insights{list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:7px}
-.ol-insights li{font-size:0.82rem;color:var(--t2);line-height:1.5;padding-left:1.1rem;position:relative}
-.ol-insights li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#7c3aed}
-@media(max-width:900px){.ol-grid{grid-template-columns:1fr}.ol-kpis{grid-template-columns:repeat(2,1fr)}}
+/* centered hero + full-screen run */
+#page-home .home-hero{flex-direction:column;justify-content:center;align-items:center;padding:2.5rem 1.5rem 3rem;gap:0}
+#page-home .home-left{flex:none;max-width:920px;width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center}
+#page-home .home-headline{font-size:clamp(2.3rem,4.6vw,4rem);margin-bottom:1.1rem}
+#page-home .home-sub{max-width:560px;margin-left:auto;margin-right:auto;margin-bottom:1.8rem}
+#page-home .home-actions{justify-content:center;margin-bottom:0;align-items:center}
+#page-home .home-stats{justify-content:center}
+#page-home .home-left>div[style*="border-top"]{width:100%;max-width:520px;text-align:left}
+body.g-lock{overflow:hidden}
+#page-home.playing .home-hero{z-index:400}
+#page-home.playing #g-run{position:fixed;left:0;top:0;right:0;bottom:0;z-index:350;background:var(--bg);overflow-y:auto;padding:0 clamp(12px,3vw,44px) 56px}
+.g-full-top{position:sticky;top:0;z-index:20;margin:0 calc(-1 * clamp(12px,3vw,44px)) 14px;padding:12px clamp(12px,3vw,44px);background:var(--bg);border-bottom:1px solid var(--border)}
+.g-topin{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:1.6rem}
+.g-full-brand{font-family:var(--display);font-weight:900;font-size:1.05rem;color:var(--t1);white-space:nowrap}
+.g-full-brand span{color:var(--t2)}
+.g-topin .g-meters{flex:1;margin:0}
+.g-exit{flex-shrink:0;background:var(--bg3);border:1px solid var(--border2);color:var(--t2);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.g-exit:hover{color:var(--t1);border-color:var(--t2)}
+.g-body{max-width:1280px;margin:0 auto}
+.g-path{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.pp-lead{font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);font-weight:800;margin-right:4px}
+.pp{display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 4px;border-radius:99px;background:var(--bg2);border:1px solid var(--border2);font-size:0.72rem;color:var(--t2);max-width:100%}
+.pp i{width:20px;height:20px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:0.66rem;flex-shrink:0}
+.pp small{font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:800}
+.pp b{color:var(--t1);font-weight:700;white-space:nowrap}
+.pp.case{padding-left:11px;border-color:rgba(244,63,94,0.5)}
+.pp.case small{color:#fb7185}
+.pp.now{border-color:#fbbf24;background:rgba(251,191,36,0.08)}
+.pp.now i{background:#fbbf24;color:#3b2a00}
+.pp.now b{color:#fbbf24}
+.pp.todo{opacity:0.4}
+.pp-arrow{color:var(--t3);font-size:1rem}
+.cx{font-style:normal;font-size:0.7rem;font-weight:800}
+.cx.good{color:#fbbf24}.cx.bad{color:#fb7185}.cx.mixed{color:#fbbf24}
+.pn-num{position:absolute;top:-9px;left:-9px;width:22px;height:22px;border-radius:50%;background:#14110e;color:#fbbf24;border:2px solid #fbbf24;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:900;z-index:3;font-family:var(--display)}
+@media(max-width:900px){
+  #page-home .home-hero{padding:1.5rem 1rem 2rem}
+  .g-topin{gap:0.8rem;flex-wrap:wrap}
+  .g-full-brand{display:none}
+  .g-topin .g-meters{order:2;flex-basis:100%;gap:0.6rem}
+  .g-exit{margin-left:auto}
+  .g-teaser .postit{width:100px;height:100px;padding:0.7rem}
+}
 
 /* ═══ THEME TRANSITIONS ═══ */
 body *{transition-property:background-color,border-color,color,box-shadow;transition-duration:0.22s;transition-timing-function:cubic-bezier(0.4,0,0.2,1)}
@@ -1210,8 +1254,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-1 0v5.5l3.5 6A4 4 0 0 1 14 21H10a4 4 0 0 1-3.5-6.5L10 8.5V3"/><line x1="6.5" y1="14" x2="17.5" y2="14"/></svg><span class="tab-label">A/B Sample Size</span></button>
     <button class="nav-tab" onclick="switchPage('challenge')" data-page="challenge">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span class="tab-label">PM Challenge</span></button>
-    <button class="nav-tab" onclick="switchPage('offerlab')" data-page="offerlab">
-      <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="tab-label">Offer Lab</span></button>
     <button class="nav-tab" onclick="switchPage('news')" data-page="news">
       <svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg><span class="tab-label">Gaming News</span></button>
     <a href="/game.html" class="nav-tab" style="text-decoration:none">
@@ -1270,6 +1312,20 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         <button class="btn-play" onclick="gPlay()">PLAY<small>aka work</small></button>
         <button class="home-skip" onclick="document.querySelector('.home-tools').scrollIntoView({behavior:'smooth'})">or jump to the tools</button>
       </div>
+      <div id="desk">
+        <div class="desk">
+          <div class="g-panel" id="g-idle">
+            <div class="g-teaser">
+              <div class="postit" style="--rot:-5deg;--dl:0s"><i></i><i></i><i></i></div>
+              <div class="postit c2" style="--rot:3deg;--dl:-1.6s"><i></i><i></i><i></i></div>
+              <div class="postit c3" style="--rot:-2deg;--dl:-3.2s"><i></i><i></i><i></i></div>
+            </div>
+            <div class="g-inbox-label">3 new tickets on your desk</div>
+          </div>
+          <div class="g-panel" id="g-pick" hidden></div>
+          <div class="g-panel" id="g-run" hidden></div>
+        </div>
+      </div>
       <div class="home-stats">
         <div class="home-stat"><div class="home-stat-val">20+</div><div class="home-stat-label">Tools</div></div>
         <div class="home-stat"><div class="home-stat-val">5</div><div class="home-stat-label">Frameworks</div></div>
@@ -1312,10 +1368,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
           <span>PM Challenge</span>
         </button>
-        <button class="mobile-tool-btn" data-page="offerlab" onclick="switchPage('offerlab')">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Offer Lab</span>
-        </button>
         <button class="mobile-tool-btn" data-page="news" onclick="switchPage('news')">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2m-5 4h8m-8 4h5"/></svg>
           <span>Gaming News</span>
@@ -1328,22 +1380,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span>About</span>
         </button>
-      </div>
-    </div>
-    <!-- Right: the desk (game stage) -->
-    <div class="home-right" id="desk">
-      <div class="desk">
-        <div class="g-panel" id="g-idle">
-          <div class="g-inbox">
-            <div class="postit" style="--rot:-7deg;--tx:-70px;--ty:-20px;--dl:0s"><i></i><i></i><i></i></div>
-            <div class="postit c2" style="--rot:5deg;--tx:70px;--ty:-34px;--dl:-1.6s"><i></i><i></i><i></i></div>
-            <div class="postit c3" style="--rot:-2deg;--tx:0px;--ty:40px;--dl:-3.2s"><i></i><i></i><i></i></div>
-            <div class="g-inbox-label">3 new tickets on your desk</div>
-          </div>
-        </div>
-        <div class="g-panel" id="g-pick" hidden></div>
-        <div class="g-panel" id="g-run" hidden></div>
-        <div class="g-panel" id="g-end" hidden></div>
       </div>
     </div>
   </div>
@@ -2594,6 +2630,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   <!-- Tab toggle -->
   <div class="subtabs" style="margin-bottom:1.25rem">
     <button class="subtab active" id="lb-tab-activity" onclick="switchLbTab('activity')">Activity &amp; Streaks</button>
+    <button class="subtab" id="lb-tab-runs" onclick="switchLbTab('runs')">Feature Runs</button>
     <button class="subtab" id="lb-tab-challenge" onclick="switchLbTab('challenge')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px"><path d="M3 1h8v5a4 4 0 0 1-8 0V1z"/><line x1="7" y1="10" x2="7" y2="12"/><line x1="4" y1="12" x2="10" y2="12"/><path d="M3 2H1.5a1 1 0 0 0 0 3H3"/><path d="M11 2h1.5a1 1 0 0 1 0 3H11"/></svg>PM Challenge</button>
   </div>
 
@@ -2724,6 +2761,26 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       </div>
     </div>
   </div>
+  <!-- ── Feature Runs section ── -->
+  <div id="lb-runs-section" style="display:none">
+    <p class="lb-runs-note">Scores from the home page game, "Build a Feature". Every row is a real run. Scores are stored in the browser they were played on.</p>
+    <div class="col2" style="gap:1.5rem">
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Best Runs, All Time</div><div class="card-sub">One best score per player</div></div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th style="width:40px">#</th><th>Player</th><th>Archetype</th><th>Grade</th><th>Score</th></tr></thead>
+          <tbody id="lb-runs-alltime-body"></tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">This Week</div><div class="card-sub">Resets every Monday</div></div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th style="width:40px">#</th><th>Player</th><th>Archetype</th><th>Grade</th><th>Score</th></tr></thead>
+          <tbody id="lb-runs-weekly-body"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -2836,73 +2893,6 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     OFFER LAB
-══════════════════════════════════════════════ -->
-<div class="page" id="page-offerlab">
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="page-title">Offer Lab</div>
-      <div class="page-sub">Build an offer and watch 10,000 simulated players react. Tune it before you ship it.</div>
-    </div>
-    <div class="page-actions ol-presets">
-      <span class="ol-presets-l">Try:</span>
-      <button class="btn btn-ghost btn-sm" onclick="olPreset('starter')">Starter pack</button>
-      <button class="btn btn-ghost btn-sm" onclick="olPreset('moment')">Moment-matched</button>
-      <button class="btn btn-ghost btn-sm" onclick="olPreset('whale')">Whale bomb</button>
-      <button class="btn btn-ghost btn-sm" onclick="olPreset('fake')">Fake discount</button>
-    </div>
-  </div>
-
-  <div class="ol-grid">
-    <div class="card ol-controls">
-      <div class="card-head"><div class="card-title">Your offer</div><div class="card-sub">Move anything. The players react instantly.</div></div>
-      <div class="card-body">
-        <div class="ol-tile" id="ol-tile"></div>
-
-        <div class="ol-field"><label class="label">Price <b id="ol-price-v">$4.99</b></label><input type="range" id="ol-price" min="0" max="11" step="1" value="3" oninput="olSet('price',+this.value)"></div>
-        <div class="ol-field"><label class="label">Generosity <b id="ol-gen-v">1.0x</b></label><input type="range" id="ol-gen" min="0.5" max="3" step="0.1" value="1" oninput="olSet('gen',+this.value)"><div class="ol-hint">How much player value is inside. More feels better, and inflates your economy.</div></div>
-
-        <div class="ol-field"><label class="label">Anchor discount (strikethrough price)</label>
-          <div class="ol-seg" id="ol-seg-anchor"><button data-v="0" onclick="olSet('anchor',0)">None</button><button data-v="0.2" onclick="olSet('anchor',0.2)">20%</button><button data-v="0.5" onclick="olSet('anchor',0.5)">50%</button><button data-v="0.75" onclick="olSet('anchor',0.75)">75%</button></div></div>
-        <div class="ol-field"><label class="label">When does the player see it?</label>
-          <div class="ol-seg ol-seg-2" id="ol-seg-timing"><button data-v="browse" onclick="olSet('timing','browse')">Store browse</button><button data-v="first" onclick="olSet('timing','first')">First session</button><button data-v="mile" onclick="olSet('timing','mile')">Milestone</button><button data-v="loss" onclick="olSet('timing','loss')">After a loss</button></div></div>
-        <div class="ol-field"><label class="label">Urgency</label>
-          <div class="ol-seg" id="ol-seg-urg"><button data-v="none" onclick="olSet('urg','none')">None</button><button data-v="d1" onclick="olSet('urg','d1')">24 hours</button><button data-v="h4" onclick="olSet('urg','h4')">4 hours</button></div></div>
-
-        <div class="ol-actions">
-          <button class="btn btn-primary" onclick="olShip()">Ship it</button>
-          <button class="btn btn-ghost" onclick="olAB()">A/B it</button>
-        </div>
-        <div class="ol-ship" id="ol-ship" hidden></div>
-      </div>
-    </div>
-
-    <div class="ol-right">
-      <div class="card">
-        <div class="card-body ol-stage">
-          <div class="ol-verdict-row"><span class="ol-verdict" id="ol-verdict">Workable</span><span class="ol-legend"><i class="lg-buy"></i>Bought <i class="lg-pass"></i>Saw it, passed <i class="lg-ann"></i>Annoyed <i class="lg-none"></i>Never saw it</span></div>
-          <canvas id="ol-canvas" height="330"></canvas>
-          <div class="ol-zones" id="ol-zones"></div>
-        </div>
-      </div>
-      <div class="ol-kpis">
-        <div class="ol-kpi"><div class="ol-kpi-l">Conversion</div><div class="ol-kpi-v" id="ol-k-conv">0%</div></div>
-        <div class="ol-kpi"><div class="ol-kpi-l">Net revenue / 10K</div><div class="ol-kpi-v" id="ol-k-rev">$0</div></div>
-        <div class="ol-kpi"><div class="ol-kpi-l">Player trust</div><div class="ol-kpi-v" id="ol-k-trust">100</div></div>
-        <div class="ol-kpi"><div class="ol-kpi-l">Left on the table</div><div class="ol-kpi-v" id="ol-k-left">$0</div></div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <div class="ol-split-l">Where the revenue comes from</div>
-          <div id="ol-split"></div>
-          <ul class="ol-insights" id="ol-insights"></ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════
 // NAVIGATION
@@ -2915,7 +2905,6 @@ function switchPage(name){
   const _nb=document.querySelector('[data-page="'+name+'"]'); if(_nb) _nb.classList.add('active');
   const _mb=document.querySelector('.mobile-tool-btn[data-page="'+name+'"]'); if(_mb) _mb.classList.add('active');
   if(name==='challenge') { setTimeout(initChallenge, 80); }
-  if(name==='offerlab') { setTimeout(olInit, 30); }
   if(name==='stats') { setTimeout(()=>{calcFreq();calcBayesConv();calcBayesRet();calcARPU();},50); }
   if(name==='growth') { setTimeout(()=>{calcROAS();calcLTV();calcAdRev();calcCohort();},50); }
   if(name==='samplesize') { setTimeout(()=>{calcSS();calcSSRet();calcSSARPU();calcMV();},50); }
@@ -5091,15 +5080,16 @@ function getWeekStart(){
   return m.toISOString().slice(0,10);
 }
 function switchLbTab(tab){
-  document.getElementById('lb-activity-section').style.display=tab==='activity'?'':'none';
-  document.getElementById('lb-challenge-section').style.display=tab==='challenge'?'':'none';
-  document.getElementById('lb-tab-activity').classList.toggle('active',tab==='activity');
-  document.getElementById('lb-tab-challenge').classList.toggle('active',tab==='challenge');
+  ['activity','challenge','runs'].forEach(t=>{
+    const sec=document.getElementById('lb-'+t+'-section'); if(sec) sec.style.display=tab===t?'':'none';
+    const btn=document.getElementById('lb-tab-'+t); if(btn) btn.classList.toggle('active',tab===t);
+  });
   const me=getCurrentUser();
   if(me){
     document.getElementById('lb-my-card').style.display=tab==='activity'?'block':'none';
     document.getElementById('lb-ch-my-card').style.display=tab==='challenge'?'block':'none';
   }
+  if(tab==='runs'&&window.renderRunBoard) renderRunBoard();
 }
 let lbActivityChart=null;
 function renderLeaderboard(){
@@ -6103,148 +6093,474 @@ function renderNews(items){
 
 <script>
 // ═══════════════════════════════════════════════
-// HOME GAME: "Build a Feature" roguelite run
+// HOME GAME: "Build a Feature" detective board
 // ═══════════════════════════════════════════════
 (function(){
-const START={r:20,v:20,t:40}, BUDGET=78;
+//DATA-START
+const START={r:13,v:8,t:33}, BUDGET=84;
 const LBL={r:'Retention',v:'Revenue',t:'Trust'}, ABBR={r:'RET',v:'REV',t:'TRUST'};
 const COL={r:'#7dd3fc',v:'#22c55e',t:'#c4b5fd'};
-const TAGS={whale:'Whale Pull',social:'Social Graph',scarce:'Scarcity',gate:'Energy Gate',faucet:'Open Faucet',fomo:'FOMO Engine',transparent:'Open Rates',season:'Season Beat',skill:'Mastery',tested:'Tested',bold:'Big Bang',rushed:'Rushed',moment:'Moment Fit'};
+const TAGS={social:'Social',coop:'Co-op',pve:'PvE',pvp:'PvP',idle:'Idle',collect:'Collection',sink:'Sink',power:'Power',skill:'Skill',season:'Season',whale:'Whale Pull',gacha:'Gacha',limited:'Limited',fomo:'FOMO',scarce:'Scarcity',faucet:'Faucet',gate:'Gate',transparent:'Open',pity:'Pity',pass:'Pass',starter:'Starter',ads:'Ads',rewarded:'Rewarded',moment:'Moment',streak:'Streak',push:'Push',quests:'Quests',daily:'Daily',comeback:'Comeback',community:'Community',tested:'Tested',bold:'Big Bang',rushed:'Rushed',polish:'Polish',sub:'Subscription',luck:'Luck',cosmetic:'Cosmetic',trade:'Trading',crafting:'Crafting',story:'Story',minigame:'Mini-games',prestige:'Prestige',builds:'Builds',unlocks:'Unlocks',shards:'Shards',milestones:'Milestones',loot:'Loot',meta:'Meta',exchange:'Exchange',bundle:'Bundle',spendcap:'Spend Cap',timers:'Timers',stableshop:'Stable Shop',vip:'VIP',loyalty:'Loyalty',adfree:'Ad-Free',directbuy:'Direct Buy',groupbuy:'Group Buy',flash:'Flash Sale',piggy:'Piggy Bank',spendgoals:'Spend Goals',personal:'Personal',rotating:'Rotating',ladder:'Price Ladder',freegift:'Free Gift',regional:'Regional',doubler:'Doubler',chat:'Chat',widget:'Widget',freepull:'Free Pull',events:'Events',cadence:'Cadence',leagues:'Leagues',collab:'Collab',creators:'Creators'};
 
 const PROBLEMS=[
- {t:'D7 retention dropped 4 points after the last update.',goal:{r:65,t:45}},
- {t:'Top spenders are quietly leaving. Whale revenue is down 30%.',goal:{v:66,r:50}},
- {t:'Players log in once, play a session, and vanish until tomorrow.',goal:{r:68,v:40}},
- {t:'Players hoard premium currency. Spend is flat.',goal:{v:65,t:50}},
- {t:'App store reviews are calling the game pay-to-win.',goal:{t:68,v:45}},
- {t:'Mid-game players stall around level 40 and churn.',goal:{r:62,v:50}},
- {t:'Your last event had 3x the traffic and half the revenue per player.',goal:{v:60,t:55}},
- {t:'New players love week one, then fall off a cliff in week two.',goal:{r:64,t:50}}
+ {t:'Retention dropped after the last update.',d:'D7 fell from 18% to 14%.',goal:{r:65,t:45}},
+ {t:'Players are churning faster than we can acquire them.',d:'D30 is under 3% and CPI keeps rising.',goal:{r:68,t:45}},
+ {t:'Whales are spending less.',d:'Top 1% revenue is down 30% in a month.',goal:{v:66,r:50}},
+ {t:'Players log in once, play one session, and vanish until tomorrow.',d:'Sessions per day: 1.2.',goal:{r:68,v:40}},
+ {t:'Players hoard premium currency and spend is flat.',d:'Median wallet: 4,000 gems unspent.',goal:{v:65,t:50}},
+ {t:'Store reviews call the game pay-to-win.',d:'Rating slid from 4.5 to 3.9.',goal:{t:68,v:45}},
+ {t:'Mid-game players stall around level 40 and quit.',d:'38% of all churn happens here.',goal:{r:62,v:50}},
+ {t:'The last event had 3x the traffic and half the revenue per player.',d:'ARPDAU: $0.21 down to $0.11.',goal:{v:60,t:55}},
+ {t:'New players love week one, then fall off a cliff in week two.',d:'D7 to D14 drops by 60%.',goal:{r:64,t:50}},
+ {t:'Ad revenue is falling and players say there are too many ads.',d:'Ad eCPM down 25%, 1-star reviews up.',goal:{v:58,t:60}},
+ {t:'Guilds are going quiet. Chat is empty and members are leaving.',d:'Guild activity down 40% in 6 weeks.',goal:{r:66,t:50}},
+ {t:'The economy is inflating. Veterans have millions and nothing to buy.',d:'Soft currency supply grew 5x in a year.',goal:{v:62,t:50}}
 ];
 
 const NODES=[
  {name:'Feature',q:'What do you build?',pool:[
-  {n:'Guild Raids',d:'Co-op boss fights that need your guild online.',fx:{r:12,v:3,t:3,c:14},tags:['social']},
-  {n:'Hero Fusion',d:'Merge duplicate heroes into stronger ones.',fx:{r:6,v:10,t:-2,c:12},tags:['sink']},
-  {n:'Limited Hero Banners',d:'Rotating featured heroes with rate-up pulls.',fx:{r:4,v:16,t:-6,c:8},tags:['whale','fomo']},
+  {n:'Guild Raids',d:'Co-op boss fights that need your guild online.',fx:{r:12,v:3,t:3,c:14},tags:['social','coop','pve']},
+  {n:'Hero Fusion',d:'Merge duplicate heroes into stronger ones.',fx:{r:6,v:10,t:-2,c:12},tags:['sink','collect']},
+  {n:'Limited Hero Banners',d:'Rotating featured heroes with rate-up pulls.',fx:{r:4,v:16,t:-6,c:8},tags:['whale','gacha','limited','fomo']},
   {n:'Endless Tower',d:'A climbing PvE mode with milestone rewards.',fx:{r:10,v:2,t:2,c:10},tags:['pve']},
-  {n:'Idle Rewards + Auto-Battle',d:'Progress while away, collect when back.',fx:{r:8,v:-2,t:5,c:9},tags:['idle']}]},
+  {n:'Idle Rewards + Auto-Battle',d:'Progress while away, collect when back.',fx:{r:8,v:-2,t:5,c:9},tags:['idle']},
+  {n:'Arena PvP',d:'Async ranked battles against other players\' squads.',fx:{r:9,v:6,t:-2,c:13},tags:['pvp']},
+  {n:'Hero Crafting',d:'Craft gear from materials you farm.',fx:{r:7,v:5,t:3,c:11},tags:['crafting','sink']},
+  {n:'Story Campaign Chapters',d:'Narrative levels with cinematic rewards.',fx:{r:8,v:3,t:6,c:15},tags:['story']},
+  {n:'Player Trading Market',d:'Players trade items and heroes with each other.',fx:{r:6,v:8,t:-4,c:14},tags:['trade']},
+  {n:'Mini-Game Hub',d:'Quick puzzle and luck games for rewards.',fx:{r:9,v:4,t:2,c:9},tags:['minigame','luck']},
+  {n:'Hero Skins and Cosmetics',d:'Collectible looks that change nothing in combat.',fx:{r:3,v:11,t:6,c:8},tags:['cosmetic','collect']},
+  {n:'Daily Dungeons',d:'Resource dungeons that rotate by weekday.',fx:{r:9,v:3,t:3,c:9},tags:['pve','daily']}]},
  {name:'Progression',q:'How do players grow?',pool:[
-  {n:'Power Curve',d:'Levels, gear, and stat checks gate content.',fx:{r:8,v:8,t:-1,c:10},tags:['power'],vs:{whale:{fx:{v:6,t:-4},n:'Power creep sells banners. Revenue up, trust down.'}}},
+  {n:'Power Curve',d:'Levels, gear, and stat checks gate content.',fx:{r:8,v:8,t:-1,c:10},tags:['power']},
   {n:'Collection Codex',d:'Set bonuses reward owning many heroes.',fx:{r:9,v:6,t:3,c:11},tags:['collect']},
   {n:'Mastery Ladder',d:'Skill-based ranks with fair matchmaking.',fx:{r:7,v:1,t:8,c:13},tags:['skill']},
-  {n:'Guild Levels',d:'Guild perks scale with member activity.',fx:{r:10,v:3,t:2,c:12},tags:['social'],vs:{social:{fx:{r:8},n:'Social graph: guild content and guild levels feed each other.'}}},
-  {n:'Seasonal Track',d:'Progress resets each season with fresh goals.',fx:{r:6,v:7,t:0,c:7},tags:['season']}]},
+  {n:'Guild Levels',d:'Guild perks scale with member activity.',fx:{r:10,v:3,t:2,c:12},tags:['social']},
+  {n:'Seasonal Track',d:'Progress resets each season with fresh goals.',fx:{r:6,v:7,t:0,c:7},tags:['season']},
+  {n:'Prestige and Rebirth',d:'Reset progress in exchange for permanent bonuses.',fx:{r:11,v:4,t:-1,c:10},tags:['prestige']},
+  {n:'Skill Trees and Builds',d:'Players customize roles and playstyles.',fx:{r:8,v:3,t:5,c:13},tags:['builds','skill']},
+  {n:'Account Level Unlocks',d:'Features open up as the account level rises.',fx:{r:6,v:4,t:2,c:6},tags:['unlocks']},
+  {n:'Star-Up and Evolution',d:'Promote heroes by feeding duplicates and shards.',fx:{r:7,v:10,t:-3,c:10},tags:['sink','shards']},
+  {n:'Achievement Milestones',d:'Long-term goals with showy rewards.',fx:{r:7,v:2,t:6,c:7},tags:['milestones']},
+  {n:'Gear Sets and Affixes',d:'Random-roll gear with set bonuses.',fx:{r:9,v:7,t:-2,c:12},tags:['loot','luck']},
+  {n:'Roguelite Meta-Progression',d:'Permanent perks earned between runs.',fx:{r:10,v:5,t:3,c:14},tags:['meta']}]},
  {name:'Economy',q:'How does the economy flow?',pool:[
   {n:'Scarce Premium Currency',d:'Gems are rare. Every pull feels precious.',fx:{r:-4,v:10,t:-4,c:6},tags:['scarce']},
   {n:'Generous Faucets',d:'Premium currency flows from normal play.',fx:{r:8,v:-6,t:8,c:8},tags:['faucet']},
   {n:'Dual Currency + Soft Sinks',d:'Upgrade costs drain soft currency steadily.',fx:{r:3,v:8,t:1,c:12},tags:['sink']},
-  {n:'Pity Timer + Open Rates',d:'Published rates and guaranteed pulls.',fx:{r:4,v:2,t:14,c:9},tags:['transparent'],vs:{whale:{fx:{t:6},n:'Open rates soften the banner pressure.'}}},
-  {n:'Energy Gates',d:'Stamina limits sessions. Refills cost gems.',fx:{r:-6,v:9,t:-6,c:6},tags:['gate']}]},
+  {n:'Pity Timer + Open Rates',d:'Published rates and guaranteed pulls.',fx:{r:4,v:2,t:14,c:9},tags:['transparent','pity']},
+  {n:'Energy Gates',d:'Stamina limits sessions. Refills cost gems.',fx:{r:-6,v:9,t:-6,c:6},tags:['gate']},
+  {n:'Currency Exchange',d:'Convert soft to premium at a daily-limited rate.',fx:{r:4,v:6,t:2,c:9},tags:['exchange']},
+  {n:'Market Fees',d:'Fees on every trade remove currency from circulation.',fx:{r:2,v:5,t:-2,c:10},tags:['trade','sink']},
+  {n:'Bonus Currency Bundles',d:'Bigger packs give more gems per dollar.',fx:{r:1,v:12,t:-3,c:6},tags:['bundle']},
+  {n:'Duplicate Conversion',d:'Extra copies convert into upgrade shards.',fx:{r:5,v:4,t:7,c:8},tags:['shards']},
+  {n:'Daily Spend Caps',d:'Limit spend per day and show it clearly.',fx:{r:1,v:-4,t:12,c:7},tags:['spendcap','transparent']},
+  {n:'Time-Gated Upgrades',d:'Upgrades take hours. Gems skip the wait.',fx:{r:2,v:11,t:-5,c:7},tags:['timers','gate']},
+  {n:'Fixed-Price Premium Shop',d:'Premium items always buyable at a stable price.',fx:{r:4,v:6,t:6,c:9},tags:['stableshop']}]},
  {name:'Monetization',q:'How do you make money?',pool:[
-  {n:'Battle Pass',d:'Free and premium tracks over a season.',fx:{r:6,v:14,t:2,c:11},tags:['pass'],vs:{season:{fx:{v:6},n:'The pass has a season to chase. Revenue up.'}}},
+  {n:'Battle Pass',d:'Free and premium tracks over a season.',fx:{r:6,v:14,t:2,c:11},tags:['pass']},
+  {n:'Rewarded Video',d:'Watch an ad for premium currency.',fx:{r:3,v:7,t:4,c:8},tags:['ads','rewarded']},
+  {n:'VIP Whale Store',d:'$99 bundles and exclusive spender tiers.',fx:{r:0,v:18,t:-6,c:8},tags:['whale','vip']},
+  {n:'Monthly Subscription',d:'Daily gems and perks for a monthly fee.',fx:{r:5,v:13,t:3,c:10},tags:['sub']},
+  {n:'Gacha Pulls',d:'Randomized hero pulls with rare tiers.',fx:{r:4,v:17,t:-8,c:9},tags:['gacha','luck','whale']},
+  {n:'Cosmetic Store Only',d:'Sell skins, never power.',fx:{r:4,v:8,t:10,c:9},tags:['cosmetic']},
+  {n:'Interstitial Ads',d:'Ads between sessions and levels.',fx:{r:-4,v:10,t:-6,c:4},tags:['ads']},
+  {n:'Loyalty Points',d:'Spending earns points toward perks.',fx:{r:5,v:12,t:3,c:11},tags:['loyalty']},
+  {n:'Ad-Free Purchase',d:'A one-time purchase removes ads.',fx:{r:1,v:6,t:7,c:5},tags:['adfree']},
+  {n:'Direct Hero Purchase',d:'Buy a specific hero outright at a fair price.',fx:{r:3,v:11,t:5,c:8},tags:['directbuy']},
+  {n:'Season Premium Bundle',d:'Pass plus an exclusive hero.',fx:{r:5,v:15,t:-2,c:12},tags:['pass','bundle']},
+  {n:'Guild Group Buy',d:'Guild members unlock shared bonuses together.',fx:{r:8,v:9,t:2,c:12},tags:['social','groupbuy']}]},
+ {name:'Offers',q:'What do you put in front of players?',pool:[
   {n:'Starter Pack',d:'A one-time first purchase at big value.',fx:{r:2,v:12,t:3,c:7},tags:['starter']},
-  {n:'VIP Whale Store',d:'$99 bundles and exclusive spender tiers.',fx:{r:0,v:18,t:-6,c:8},tags:['whale'],vs:{whale:{fx:{r:-6,t:-10},n:'Whale Dependency: revenue now rests on a handful of spenders.'}}},
-  {n:'Rewarded Video',d:'Watch an ad for premium currency.',fx:{r:3,v:7,t:4,c:8},tags:['ads']},
-  {n:'Moment-Matched Offers',d:'Offers fire right when a player is stuck.',fx:{r:2,v:13,t:4,c:14},tags:['moment'],vs:{scarce:{fx:{v:8},n:'Scarce currency gives offers a real problem to solve.'},gate:{fx:{v:6},n:'Energy gates create the exact moments offers need.'},faucet:{fx:{v:-6},n:'Free currency means offers have nothing to solve.'}}}]},
+  {n:'Moment-Matched Offers',d:'Offers fire right when a player is stuck.',fx:{r:2,v:13,t:4,c:14},tags:['moment']},
+  {n:'Flash Sale',d:'Deep discounts behind a hard countdown.',fx:{r:0,v:14,t:-8,c:5},tags:['flash','fomo']},
+  {n:'Piggy Bank',d:'Gems pile up. Pay once to break it open.',fx:{r:3,v:11,t:2,c:8},tags:['piggy']},
+  {n:'Spend Goals',d:'Bonus rewards at spend thresholds.',fx:{r:2,v:13,t:-2,c:9},tags:['spendgoals']},
+  {n:'Welcome-Back Offer',d:'A discounted pack for lapsed players.',fx:{r:6,v:8,t:4,c:8},tags:['comeback']},
+  {n:'Personalized Bundles',d:'Contents tailored to each player\'s roster.',fx:{r:4,v:14,t:2,c:15},tags:['personal']},
+  {n:'Rotating Daily Deals',d:'The shop refreshes daily with a few picks.',fx:{r:5,v:9,t:0,c:8},tags:['daily','rotating']},
+  {n:'Price Ladder',d:'Show $4.99, $19.99 and $99.99 tiers side by side.',fx:{r:1,v:12,t:-2,c:7},tags:['ladder']},
+  {n:'Free Gift + Paid Upgrade',d:'A free daily chest with a paid upgrade.',fx:{r:5,v:8,t:5,c:7},tags:['freegift']},
+  {n:'Limited Hero Offer',d:'Unlock a hero for 3 days only.',fx:{r:3,v:15,t:-5,c:9},tags:['limited','fomo']},
+  {n:'Regional Pricing',d:'Prices localized to what each market can pay.',fx:{r:2,v:10,t:4,c:10},tags:['regional']},
+  {n:'First-Purchase Doubler',d:'Double gems the first time you buy each pack.',fx:{r:3,v:11,t:3,c:6},tags:['doubler']}]},
  {name:'Retention hook',q:'What brings them back tomorrow?',pool:[
   {n:'Login Streak + Catch-Up',d:'Daily rewards, with a way to recover missed days.',fx:{r:11,v:2,t:3,c:6},tags:['streak']},
   {n:'Smart Push',d:'Notifications tied to timers and events.',fx:{r:9,v:3,t:-4,c:4},tags:['push']},
-  {n:'Friends and Gifting',d:'Send energy and gifts to friends.',fx:{r:12,v:2,t:4,c:13},tags:['social'],vs:{social:{fx:{r:6},n:'Social graph compounds: more reasons to come back.'}}},
-  {n:'Rotating Daily Quests',d:'Fresh goals every day.',fx:{r:10,v:4,t:1,c:9},tags:['quests']},
-  {n:'Comeback Bonus',d:'Lapsed players return to a welcome-back pack.',fx:{r:8,v:5,t:3,c:8},tags:['comeback']}]},
+  {n:'Friends and Gifting',d:'Send energy and gifts to friends.',fx:{r:12,v:2,t:4,c:13},tags:['social']},
+  {n:'Rotating Daily Quests',d:'Fresh goals every day.',fx:{r:10,v:4,t:1,c:9},tags:['quests','daily']},
+  {n:'Comeback Bonus',d:'Lapsed players return to a welcome-back pack.',fx:{r:8,v:5,t:3,c:8},tags:['comeback']},
+  {n:'Guild Chat + Social Hub',d:'A place to talk, plan and show off.',fx:{r:9,v:1,t:5,c:10},tags:['social','chat']},
+  {n:'Home Screen Widget',d:'Glanceable timers and rewards on the phone.',fx:{r:7,v:2,t:3,c:8},tags:['widget']},
+  {n:'Daily Free Pull',d:'One free hero pull every day.',fx:{r:10,v:4,t:3,c:7},tags:['freepull']}]},
  {name:'Live ops',q:'What keeps it fresh?',pool:[
-  {n:'Weekly Limited Events',d:'A new event every seven days.',fx:{r:11,v:9,t:-3,c:15},tags:['fomo'],vs:{scarce:{fx:{r:-5,t:-8},n:'Grind plus FOMO burnout: scarce currency and weekly events.'},gate:{fx:{r:-5,t:-8},n:'Grind plus FOMO burnout: energy gates and weekly events.'},faucet:{fx:{v:-5},n:'Faucets plus weekly events pump currency into the economy: inflation.'},push:{fx:{r:5},n:'Push finally has something worth saying.'}}},
-  {n:'Seasonal Story Arcs',d:'Story chapters and collabs on a quarterly beat.',fx:{r:9,v:8,t:4,c:18},tags:['season'],vs:{pass:{fx:{v:7},n:'The pass has a story to chase. Revenue up.'}}},
+  {n:'Weekly Limited Events',d:'A new event every seven days.',fx:{r:11,v:9,t:-3,c:15},tags:['fomo','events']},
+  {n:'Seasonal Story Arcs',d:'Story chapters and collabs on a quarterly beat.',fx:{r:9,v:8,t:4,c:18},tags:['season','story']},
   {n:'Slow-Burn Monthly Themes',d:'One theme a month, deeper content.',fx:{r:7,v:4,t:6,c:10},tags:['cadence']},
-  {n:'Competitive Leagues',d:'Weekly ranked leagues with rewards.',fx:{r:10,v:6,t:-2,c:14},tags:['pvp'],vs:{skill:{fx:{r:8},n:'Mastery needs a stage: ladder and leagues pair up.'}}},
-  {n:'Community-Voted Events',d:'Players pick the next event.',fx:{r:6,v:2,t:10,c:8},tags:['community'],vs:{transparent:{fx:{t:6},n:'Open rates and an open roadmap: trust compounds.'}}}]},
+  {n:'Competitive Leagues',d:'Weekly ranked leagues with rewards.',fx:{r:10,v:6,t:-2,c:14},tags:['pvp','leagues']},
+  {n:'Community-Voted Events',d:'Players pick the next event.',fx:{r:6,v:2,t:10,c:8},tags:['community']},
+  {n:'IP Crossover',d:'Licensed heroes and a themed event.',fx:{r:8,v:13,t:0,c:17},tags:['collab','limited']},
+  {n:'Holiday Mega-Events',d:'Big annual moments with matching rewards.',fx:{r:9,v:11,t:-1,c:14},tags:['events','season']},
+  {n:'Public Roadmap + Dev Streams',d:'Show what is coming and why.',fx:{r:4,v:1,t:11,c:6},tags:['community','transparent']},
+  {n:'Server-Wide Goals',d:'Everyone unlocks rewards together.',fx:{r:10,v:3,t:5,c:11},tags:['community','coop']}]},
  {name:'Launch',q:'How do you ship it?',pool:[
   {n:'Soft Launch + A/B Test',d:'One market, instrumented, then decide.',fx:{r:2,v:2,t:6,c:10},tags:['tested'],noise:1},
   {n:'Global Friday Launch',d:'Marketing push, all markets, all at once.',fx:{r:4,v:10,t:-4,c:6},tags:['bold'],noise:9},
   {n:'Staged Rollout 10/50/100',d:'Ramp up as the metrics hold.',fx:{r:3,v:3,t:4,c:8},tags:['tested'],noise:2},
   {n:'Ship Now, Fix Live',d:'Get it out and patch as you go.',fx:{r:0,v:0,t:-2,c:-6},tags:['rushed'],noise:8},
-  {n:'One More Sprint of Polish',d:'Cut bugs and rough edges first.',fx:{r:2,v:1,t:8,c:12},tags:['polish'],noise:2}]}
+  {n:'One More Sprint of Polish',d:'Cut bugs and rough edges first.',fx:{r:2,v:1,t:8,c:12},tags:['polish'],noise:2},
+  {n:'Creator Beta',d:'Invite creators early and let them build buzz.',fx:{r:3,v:5,t:4,c:9},tags:['creators'],noise:5}]}
 ];
 
-let G=null, chart=null;
+// Each combo fires once, when the second tag of the pair joins the board.
+const COMBOS=[
+ ['social','social',{r:8},'Social graph: two social systems make each other stickier.'],
+ ['whale','whale',{r:-6,t:-10},'Whale Dependency: revenue now rests on a handful of spenders.'],
+ ['transparent','whale',{t:7},'Open rates soften the whale pressure.'],
+ ['pity','gacha',{t:8,v:3},'Pity timers make pulls feel fair, and fair pulls get repeated.'],
+ ['transparent','community',{t:6},'Open rates and an open roadmap: trust compounds.'],
+ ['season','pass',{v:7},'The pass has a season to chase.'],
+ ['skill','pvp',{r:7},'Mastery needs a stage to perform on.'],
+ ['scarce','moment',{v:8},'Scarce currency gives offers a real problem to solve.'],
+ ['gate','moment',{v:6},'Gates create the exact moments offers need.'],
+ ['timers','moment',{v:6},'Wait timers make well-timed offers feel like relief.'],
+ ['faucet','moment',{v:-6},'Free currency means offers have nothing to solve.'],
+ ['scarce','fomo',{r:-5,t:-8},'Grind plus FOMO burnout: scarce currency and limited-time pressure.'],
+ ['gate','fomo',{r:-5,t:-8},'Grind plus FOMO burnout: gates and limited-time pressure.'],
+ ['faucet','events',{v:-5},'Faucets plus events pump currency into the economy: inflation.'],
+ ['push','events',{r:5},'Push finally has something worth saying.'],
+ ['power','whale',{v:6,t:-4},'Power creep sells banners, and players notice.'],
+ ['collect','gacha',{v:8},'The collection chase fuels pulls.'],
+ ['sink','shards',{r:4,t:4},'Duplicates feed upgrades smoothly.'],
+ ['pity','shards',{t:5},'Duplicates protect players from bad luck.'],
+ ['streak','freepull',{r:6},'A free pull on a streak is a daily ritual.'],
+ ['starter','unlocks',{v:6},'The starter pack lands as new features unlock.'],
+ ['personal','collect',{v:7},'Bundles built from the roster feel personal.'],
+ ['loyalty','vip',{v:6},'A loyalty ladder gives big spenders a reason to stay.'],
+ ['spendcap','whale',{t:6,v:-4},'Spend caps reassure the community. Revenue dips a little.'],
+ ['cosmetic','directbuy',{t:5},'Fair purchases for cosmetics build goodwill.'],
+ ['sub','streak',{r:6},'Subscribers keep streaks alive.'],
+ ['trade','scarce',{v:6,t:-4},'Scarcity makes trading profitable, and exploitable.'],
+ ['trade','sink',{t:4,v:3},'Fees on the market keep the economy stable.'],
+ ['trade','faucet',{v:-4,t:-6},'Free currency floods the market and crashes prices.'],
+ ['idle','timers',{r:5,v:4},'Idle progress meets time gates: players check in to collect.'],
+ ['pve','daily',{r:5},'Daily resets give PvE a reason to return.'],
+ ['story','season',{r:5,t:3},'Story arcs give seasons a spine.'],
+ ['crafting','sink',{v:5},'Crafting is a currency sink players enjoy.'],
+ ['prestige','season',{r:6},'Resets line up with season starts.'],
+ ['builds','pvp',{r:6},'Builds need an arena to be tested in.'],
+ ['luck','luck',{t:-5,r:-3},'Luck overload: stacked random systems amplify frustration.'],
+ ['flash','community',{t:-4},'The community calls out fake urgency.'],
+ ['collab','collect',{v:7},'Licensed heroes complete collections.'],
+ ['coop','groupbuy',{r:5,v:4},'Group buys turn spending into a team activity.'],
+ ['comeback','push',{r:5},'Push reaches lapsed players with a reason to return.'],
+ ['bold','whale',{v:6},'A big-bang launch feeds whale spend.'],
+ ['bold','fomo',{t:-3},'Launch week plus FOMO feels like a pile-on.'],
+ ['tested','moment',{v:5},'Tested offers convert better than guessed ones.'],
+ ['polish','story',{t:5},'Polish pays off most in narrative content.'],
+ ['rushed','gacha',{t:-6},'Shipping gacha without testing breaks trust.'],
+ ['rushed','trade',{t:-8},'A rushed trading market gets exploited on day one.'],
+ ['creators','collab',{v:6,r:4},'Creators amplify crossovers.'],
+ ['adfree','ads',{v:5,t:4},'Ad-free is the natural upsell for an ad-supported game.'],
+ ['rewarded','sink',{v:5},'Rewarded video earns currency that players spend into sinks.'],
+ ['ladder','bundle',{v:6},'A price ladder makes bonus bundles legible.'],
+ ['doubler','bundle',{v:4,t:-2},'Doubler plus bonus bundles can feel like a gimmick.'],
+ ['piggy','sink',{v:5},'A piggy bank fills faster when there is plenty to spend on.'],
+ ['meta','tested',{r:4},'Tested meta-progression gets balanced before launch.'],
+ ['collect','sink',{v:4,r:3},'Collection systems give sinks a purpose.'],
+ ['pve','coop',{r:5},'Co-op PvE is where guilds live.'],
+ ['daily','streak',{r:5},'Daily content gives streaks something to protect.'],
+ ['daily','daily',{r:4,t:-2},'Two daily loops build a routine, and start to feel like chores.'],
+ ['fomo','fomo',{v:6,t:-5},'Stacked FOMO converts, then burns people out.'],
+ ['gacha','limited',{v:6,t:-3},'Limited gacha banners drive spikes and complaints.'],
+ ['season','events',{r:5},'Events and seasons share a calendar.'],
+ ['season','season',{r:4,v:3},'A consistent season calendar builds anticipation.'],
+ ['community','coop',{r:4,t:3},'Shared goals grow community.'],
+ ['events','story',{r:5,v:3},'Story events outsell plain ones.'],
+ ['pvp','pvp',{r:5,t:-2},'Two PvP systems feed competition and frustration.'],
+ ['skill','community',{t:5},'Skill communities share builds and guides.'],
+ ['idle','push',{r:4},'Idle timers give push a natural trigger.'],
+ ['comeback','comeback',{r:4,v:3},'A comeback loop plus a comeback offer reactivates lapsed players.'],
+ ['regional','ads',{v:4},'Local ad demand lifts eCPM.'],
+ ['cosmetic','collect',{v:5,t:3},'Cosmetics make collections personal.'],
+ ['sub','pass',{v:-4,t:-3},'A subscription plus a pass is a lot to ask of one wallet.'],
+ ['stableshop','transparent',{t:5},'Stable prices and open rates build a reputation.'],
+ ['stableshop','flash',{t:-5},'Flash sales undermine a stable shop.'],
+ ['freegift','streak',{r:4,v:2},'A free gift on a streak becomes a habit.'],
+ ['shards','collect',{r:4,v:3},'Shards make duplicates useful for collectors.'],
+ ['loot','crafting',{r:5},'Crafting rescues bad loot rolls.'],
+ ['meta','prestige',{r:5},'Two reset layers go deep, if players understand them.'],
+ ['quests','events',{r:4,v:2},'Quests point players at the live event.'],
+ ['limited','whale',{v:5,t:-3},'Limited drops are exactly what big spenders chase.']
+].map(c=>({p:[c[0],c[1]],fx:c[2],n:c[3],good:Object.keys(c[2]).reduce((s,k)=>s+c[2][k],0)>0}));
+//DATA-END
+
+//ENGINE-START
+function combosFor(G,card){
+  const res=[];
+  COMBOS.forEach((cb,i)=>{
+    if(G.fired.has(i))return;
+    const a=cb.p[0],b=cb.p[1],hasA=card.tags.indexOf(a)>=0,hasB=card.tags.indexOf(b)>=0;
+    let partner=null;
+    if(a===b){if(hasA&&(G.owners[a]||[]).length)partner=G.owners[a];}
+    else if(hasA&&(G.owners[b]||[]).length)partner=G.owners[b];
+    else if(hasB&&(G.owners[a]||[]).length)partner=G.owners[a];
+    if(partner)res.push({i:i,cb:cb,partner:partner});
+  });
+  return res;
+}
+function futureHas(tag,fromStep){
+  for(let s=fromStep;s<NODES.length;s++)if(NODES[s].pool.some(c=>c.tags.indexOf(tag)>=0))return true;
+  return false;
+}
+function openThreads(G,tags,fromStep){
+  const seen={};let n=0;
+  COMBOS.forEach((cb,i)=>{
+    if(G.fired.has(i)||seen[i])return;
+    for(let k=0;k<tags.length;k++){
+      const t=tags[k];if(cb.p.indexOf(t)<0)continue;
+      const other=cb.p[0]===t?cb.p[1]:cb.p[0];
+      if(futureHas(other,fromStep)){seen[i]=1;n++;break;}
+    }
+  });
+  return n;
+}
+//ENGINE-END
+
+let G=null, chart=null, offered=[];
 const $=id=>document.getElementById(id);
 const cl=v=>Math.max(0,Math.min(100,v));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const goalText=g=>Object.keys(g).map(k=>LBL[k]+' '+g[k]+'+').join(' · ');
-const show=id=>{['g-idle','g-pick','g-run','g-end'].forEach(x=>{$(x).hidden=(x!==id);});};
-let offered=[];
+const show=id=>{['g-idle','g-pick','g-run'].forEach(x=>{$(x).hidden=(x!==id);});};
+const fxText=fx=>['r','v','t'].filter(k=>fx[k]).map(k=>(fx[k]>0?'+':'')+fx[k]+' '+ABBR[k]).join(' ');
+const ROT=[-2.5,1.8,-1.2,2.4,-2,1.4,-1.8,2.2,-1.4,1.6];
 
 window.gPlay=function(){
   offered=shuffle(PROBLEMS).slice(0,3);
   const cs=['','c2','c3'], rots=[-3,2,-1.5];
   $('g-pick').innerHTML=
-   '<div class="g-pick-head"><h3>Three tickets landed on your desk</h3><p>Pick the one you will own. No pressure. Some pressure.</p></div>'+
+   '<div class="g-pick-head"><h3>Three problems landed on your desk</h3><p>Take one case. The goal stays sealed until you do.</p></div>'+
    '<div class="g-notes">'+offered.map((p,i)=>
-     '<button class="g-note postit '+cs[i]+'" style="--rot:'+rots[i]+'deg;--dl:'+(i*0.1)+'s" onclick="gPick('+i+')"><b>'+p.t+'</b><span>Your goal to call it a win:</span><em>'+goalText(p.goal)+'</em></button>').join('')+'</div>'+
+     '<button class="g-note postit '+cs[i]+'" style="--rot:'+rots[i]+'deg;--dl:'+(i*0.1)+'s" onclick="gPick('+i+')"><b>'+esc(p.t)+'</b><span>'+esc(p.d)+'</span><em>Take the case</em></button>').join('')+'</div>'+
    '<button class="g-link" onclick="gPlay()">Not these. Show me three more.</button>';
   show('g-pick');
-  $('page-home').scrollTop=0;
+  setTimeout(()=>{const p=$('g-pick');if(p)p.scrollIntoView({behavior:'smooth',block:'center'});},60);
 };
 
 window.gPick=function(i){
-  G={prob:offered[i],step:0,r:START.r,v:START.v,t:START.t,spent:0,tags:new Set(),log:[],cur:[],locked:false,notes:[]};
+  G={prob:offered[i],step:0,r:START.r,v:START.v,t:START.t,spent:0,owners:{},fired:new Set(),cells:{},threads:[],cur:[],locked:false,notes:[],log:[],noise:undefined,saved:false};
+  G.cells.p={kind:'prob'};G.cells.g={kind:'goal'};
+  G.threads.push({a:'p',b:'g',kind:'seq'});
   $('page-home').classList.add('playing');
-  renderRun();
+  document.body.classList.add('g-lock');
+  buildRun();
+  renderPath();
+  show('g-run');
+  renderTray();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>drawThreads()));
 };
+
+const CELLS=['p','g',0,1,2,3,4,5,6,7];
+function buildRun(){
+  $('g-run').innerHTML=
+   '<div class="g-full-top"><div class="g-topin"><div class="g-full-brand">PM<span>Dispatch</span></div><div class="g-meters" id="g-meters">'+meterHTML()+'</div><button class="g-exit" onclick="gExit()">Exit \u2715</button></div></div>'+
+   '<div class="g-body"><div class="g-path" id="g-path"></div>'+
+   '<div class="g-stage" id="g-stage">'+
+     '<div class="g-board"><div class="g-wall" id="g-wall">'+CELLS.map(c=>'<div class="g-cell" id="cell-'+c+'"></div>').join('')+'</div></div>'+
+     '<svg class="g-svg" id="g-svg"><g id="g-th"></g><g id="g-hint"></g></svg><div class="g-labels" id="g-labels"></div>'+
+     '<div id="g-tray"></div>'+
+   '</div>'+
+   '<div class="g-flash" id="g-flash"></div><div id="g-result"></div></div>';
+  renderWall(true);
+}
 
 function meterHTML(){
   const rem=BUDGET-G.spent, over=rem<0;
   const m=['r','v','t'].map(k=>'<div><div class="gm-top"><span>'+LBL[k]+'</span><b id="gmv-'+k+'">'+Math.round(cl(G[k]))+'</b></div><div class="gm-bar"><i id="gmb-'+k+'" style="width:'+cl(G[k])+'%;background:'+COL[k]+'"></i></div></div>').join('');
-  const b='<div><div class="gm-top"><span>Sprint budget</span><b id="gmv-b" style="color:'+(over?'var(--red)':'')+'">'+rem+'</b></div><div class="gm-bar"><i id="gmb-b" style="width:'+Math.max(0,Math.min(100,rem))+'%;background:'+(over?'var(--red)':'var(--amber)')+'"></i></div></div>';
+  const b='<div><div class="gm-top"><span>Sprint budget</span><b id="gmv-b" style="color:'+(over?'var(--red)':'')+'">'+rem+'</b></div><div class="gm-bar"><i id="gmb-b" style="width:'+Math.max(0,Math.min(100,rem/BUDGET*100))+'%;background:'+(over?'var(--red)':'var(--amber)')+'"></i></div></div>';
   return m+b;
 }
 function updMeters(){
   ['r','v','t'].forEach(k=>{$('gmv-'+k).textContent=Math.round(cl(G[k]));$('gmb-'+k).style.width=cl(G[k])+'%';});
   const rem=BUDGET-G.spent, over=rem<0;
   $('gmv-b').textContent=rem;$('gmv-b').style.color=over?'var(--red)':'';
-  $('gmb-b').style.width=Math.max(0,Math.min(100,rem))+'%';$('gmb-b').style.background=over?'var(--red)':'var(--amber)';
+  $('gmb-b').style.width=Math.max(0,Math.min(100,rem/BUDGET*100))+'%';$('gmb-b').style.background=over?'var(--red)':'var(--amber)';
+  updGoal();
 }
+function goalHTML(){
+  return '<div class="pin"></div><div class="pn-step">The goal</div><b>Close the case</b>'+Object.keys(G.prob.goal).map(k=>{
+    const tgt=G.prob.goal[k], now=Math.round(cl(G[k]));
+    return '<div class="gl'+(now>=tgt?' met':'')+'" data-k="'+k+'"><span>'+LBL[k]+'</span><div class="tr"><i style="width:'+Math.min(100,now/tgt*100)+'%"></i></div><b>'+now+'/'+tgt+'</b></div>';
+  }).join('');
+}
+function updGoal(){
+  const el=$('cell-g');if(!el)return;const n=el.querySelector('.pn');if(n)n.innerHTML=goalHTML();
+}
+function noteHTML(i){
+  const e=G.cells[i], c=e.card;
+  const fx=Object.assign({},c.fx);
+  const chips=['r','v','t'].filter(k=>fx[k]).map(k=>'<span class="'+(fx[k]>0?'up':'dn')+'">'+(fx[k]>0?'+':'')+fx[k]+' '+ABBR[k]+'</span>').join('');
+  const open=e.open||0;
+  const dots=open?'<div class="pn-open" title="Combos this note could still unlock">'+Array(Math.min(open,5)).fill('<i></i>').join('')+'<span>'+open+' open</span></div>':'';
+  return '<div class="pn postit k'+(i+1)+(e.fresh?' drop':'')+(e.glow?' glow-'+e.glow:'')+'" style="--rot:'+ROT[i]+'deg"><div class="pin"></div><div class="pn-num">'+(i+1)+'</div><div class="pn-step">'+NODES[i].name+'</div><b>'+esc(c.n)+'</b><div class="pn-fx">'+chips+'</div>'+dots+'</div>';
+}
+function renderWall(first){
+  CELLS.forEach(id=>{
+    const el=$('cell-'+id);if(!el)return;
+    if(id==='p'){el.innerHTML='<div class="pn postit kprob'+(first?' drop':'')+'" style="--rot:-1.5deg"><div class="pin"></div><div class="pn-step">The problem</div><b>'+esc(G.prob.t)+'</b><div class="pn-d">'+esc(G.prob.d)+'</div></div>';}
+    else if(id==='g'){el.innerHTML='<div class="pn postit kgoal'+(first?' drop':'')+'" style="--rot:1.6deg;animation-delay:.5s">'+goalHTML()+'</div>';}
+    else if(G.cells[id]){el.innerHTML=noteHTML(id);}
+    else{el.innerHTML='<div class="g-slot'+(id===G.step?' now':'')+'"><b>?</b>'+NODES[id].name+'</div>';}
+  });
+  Object.keys(G.cells).forEach(k=>{if(G.cells[k].fresh)G.cells[k].fresh=false;});
+}
+function refreshOpen(from){
+  Object.keys(G.cells).forEach(k=>{const e=G.cells[k];if(e.card)e.open=openThreads(G,e.card.tags,from);});
+}
+
 function chips(fx){
   let s='';['r','v','t'].forEach(k=>{const x=fx[k]||0;if(x)s+='<span class="fx '+(x>0?'up':'dn')+'">'+(x>0?'+':'')+x+' '+ABBR[k]+'</span>';});
   s+='<span class="fx cost">'+(fx.c>=0?fx.c+' pts':'saves '+(-fx.c)+' pts')+'</span>';
   return s;
 }
-function renderRun(){
+function renderTray(){
   const n=NODES[G.step];
   G.cur=shuffle(n.pool).slice(0,3);G.locked=false;
-  const steps=NODES.map((_,i)=>'<div class="g-step '+(i<G.step?'done':i===G.step?'now':'')+'"></div>').join('');
-  const relics=[...G.tags].filter(t=>TAGS[t]).map(t=>'<span class="relic">'+TAGS[t]+'</span>').join('');
-  $('g-run').innerHTML=
-   '<div class="g-hud"><div class="postit"><b>'+G.prob.t+'</b><span>Goal: '+goalText(G.prob.goal)+'</span></div><div class="g-meters" id="g-meters">'+meterHTML()+'</div></div>'+
-   '<div class="g-steps">'+steps+'</div>'+
+  $('g-tray').innerHTML=
    '<div class="g-qrow"><div class="g-q">'+n.q+'</div><div class="g-qn">Step '+(G.step+1)+' of '+NODES.length+' · '+n.name+'</div></div>'+
-   '<div class="g-relics">'+(relics||'<span style="font-size:.72rem;color:var(--t3)">Your choices become relics. Some combine well. Some do not.</span>')+'</div>'+
    '<div class="g-cards">'+G.cur.map((c,i)=>{
       const tg=c.tags.find(t=>TAGS[t]);
-      return '<button class="gcard" style="--dl:'+(i*0.07)+'s" onclick="gChoose('+i+')"><div class="gcard-top"><span class="gcard-n">'+c.n+'</span>'+(tg?'<span class="gcard-tag">'+TAGS[tg]+'</span>':'')+'</div><div class="gcard-d">'+c.d+'</div><div class="gcard-fx">'+chips(c.fx)+'</div></button>';
+      return '<button class="gcard" style="--dl:'+(i*0.07)+'s" onclick="gChoose('+i+')" onmouseenter="gHint('+i+')" onmouseleave="gHintOff()" onfocus="gHint('+i+')" onblur="gHintOff()"><div class="gcard-top"><span class="gcard-n">'+c.n+'</span>'+(tg?'<span class="gcard-tag">'+TAGS[tg]+'</span>':'')+'</div><div class="gcard-d">'+c.d+'</div><div class="gcard-fx">'+chips(c.fx)+'</div></button>';
     }).join('')+'</div>'+
-   '<div class="g-flash" id="g-flash"></div>'+
-   '<div class="g-log">'+G.log.map(l=>'<span><b>'+l.node+':</b> '+l.n+'</span>').join('')+'</div>';
-  show('g-run');
+   '<div class="g-hint-tip">Hover a card. A dashed thread means it connects to something on your board. You find out how when you pick it.</div>';
+  $('g-flash').innerHTML='';
 }
 
+function renderPath(){
+  const el=$('g-path');if(!el||!G)return;
+  const pt=G.prob.t.length>38?G.prob.t.slice(0,36)+'\u2026':G.prob.t;
+  let h='<span class="pp-lead">Your path</span><span class="pp case" title="'+esc(G.prob.t)+'"><small>Case</small><b>'+esc(pt)+'</b></span>';
+  NODES.forEach((n,i)=>{
+    const e=G.cells[i];
+    h+='<span class="pp-arrow">\u203A</span>';
+    if(e){
+      const cx=e.combo?'<em class="cx '+e.combo+'">'+(e.combo==='good'?'\u2726':e.combo==='bad'?'\u26A0':'\u2726\u26A0')+'</em>':'';
+      h+='<span class="pp done"><i>'+(i+1)+'</i><small>'+n.name+'</small><b>'+esc(e.card.n)+'</b>'+cx+'</span>';
+    }else{
+      h+='<span class="pp '+(i===G.step?'now':'todo')+'"><i>'+(i+1)+'</i><small>'+n.name+'</small><b>'+(i===G.step?'Choosing\u2026':'?')+'</b></span>';
+    }
+  });
+  el.innerHTML=h;
+}
+
+// ── threads ──────────────────────────────────
+function pinPos(id){
+  const el=$('cell-'+id), st=$('g-stage');
+  if(!el||!st)return null;
+  const r=el.getBoundingClientRect(), s=st.getBoundingClientRect();
+  return {x:r.left-s.left+r.width/2,y:r.top-s.top+4};
+}
+function curve(p1,p2,kind){
+  const mx=(p1.x+p2.x)/2, dist=Math.hypot(p2.x-p1.x,p2.y-p1.y);
+  let cy;
+  if(kind==='seq')cy=Math.max(p1.y,p2.y)+Math.min(46,dist*0.12+16);
+  else cy=Math.min(p1.y,p2.y)-(46+dist*0.1);
+  const t=0.5, bx=0.25*p1.x+0.5*mx+0.25*p2.x, by=0.25*p1.y+0.5*cy+0.25*p2.y;
+  return {d:'M'+p1.x+' '+p1.y+' Q'+mx+' '+cy+' '+p2.x+' '+p2.y,mid:{x:bx,y:by}};
+}
+const NS='http://www.w3.org/2000/svg';
+function drawThreads(){
+  const g=$('g-th'), lab=$('g-labels');
+  if(!g||!G)return;
+  g.innerHTML='';lab.innerHTML='';
+  G.threads.forEach(th=>{
+    const p1=pinPos(th.a), p2=pinPos(th.b);if(!p1||!p2)return;
+    if(th.b!=='p'&&th.b!=='g'&&!G.cells[th.b])return;
+    const c=curve(p1,p2,th.kind==='seq'?'seq':'arc');
+    const path=document.createElementNS(NS,'path');
+    path.setAttribute('d',c.d);
+    path.setAttribute('class','th-'+(th.kind==='seq'?'seq':th.kind));
+    g.appendChild(path);
+    if(th.fresh){
+      const len=path.getTotalLength();
+      path.setAttribute('stroke-dasharray',len);path.setAttribute('stroke-dashoffset',len);
+      path.classList.add('th-fresh');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{path.setAttribute('stroke-dashoffset',0);}));
+      setTimeout(()=>{path.removeAttribute('stroke-dasharray');path.removeAttribute('stroke-dashoffset');path.classList.remove('th-fresh');},1000);
+      th.fresh=false;
+      th.animated=true;
+    }
+    if(th.kind!=='seq'){
+      const pill=document.createElement('div');
+      pill.className='g-pill '+th.kind+(th.animated?'':' static');
+      pill.style.left=c.mid.x+'px';pill.style.top=c.mid.y+'px';
+      pill.textContent=(th.kind==='good'?'✦ ':'⚠ ')+th.label;
+      pill.title=th.note;
+      lab.appendChild(pill);
+    }
+  });
+}
+window.gHint=function(i){
+  if(!G||G.locked)return;
+  const c=G.cur[i], btns=document.querySelectorAll('#g-tray .gcard'), btn=btns[i], st=$('g-stage'), h=$('g-hint');
+  if(!btn||!h)return;
+  h.innerHTML='';
+  const hits=combosFor(G,c), br=btn.getBoundingClientRect(), sr=st.getBoundingClientRect();
+  const from={x:br.left-sr.left+br.width/2,y:br.top-sr.top};
+  hits.forEach(hit=>{
+    hit.partner.slice(0,2).forEach(cell=>{
+      const to=pinPos(cell);if(!to)return;
+      const mx=(from.x+to.x)/2, cy=Math.min(from.y,to.y)+(Math.abs(from.y-to.y))*0.5;
+      const path=document.createElementNS(NS,'path');
+      path.setAttribute('d','M'+from.x+' '+from.y+' Q'+mx+' '+cy+' '+to.x+' '+to.y);
+      path.setAttribute('class','th-hint');
+      h.appendChild(path);
+    });
+  });
+};
+window.gHintOff=function(){const h=$('g-hint');if(h)h.innerHTML='';};
+window.addEventListener('resize',()=>{if(G&&!$('g-run').hidden)drawThreads();});
+
+// ── picking ──────────────────────────────────
 window.gChoose=function(i){
-  if(G.locked)return;G.locked=true;
-  const c=G.cur[i], fx=Object.assign({r:0,v:0,t:0,c:0},c.fx), notes=[];
-  if(c.vs){Object.keys(c.vs).forEach(tag=>{if(G.tags.has(tag)){const e=c.vs[tag];['r','v','t'].forEach(k=>{fx[k]+=(e.fx[k]||0);});notes.push(e.n);}});}
+  if(G.locked)return;G.locked=true;gHintOff();
+  const c=G.cur[i], step=G.step, fx=Object.assign({r:0,v:0,t:0,c:0},c.fx);
+  const hits=combosFor(G,c), notesHtml=[];
+  hits.forEach(h=>{
+    ['r','v','t'].forEach(k=>{fx[k]+=(h.cb.fx[k]||0);});
+    G.fired.add(h.i);
+    const kind=h.cb.good?'good':'bad';
+    h.partner.slice(0,2).forEach(cell=>{G.threads.push({a:cell,b:step,kind:kind,label:fxText(h.cb.fx),note:h.cb.n,fresh:true});if(G.cells[cell])G.cells[cell].glow=kind;});
+    notesHtml.push('<div class="'+kind+'">'+(h.cb.good?'✦ Combo: ':'⚠ Clash: ')+esc(h.cb.n)+' ('+fxText(h.cb.fx)+')</div>');
+    G.notes.push({good:h.cb.good,text:h.cb.n});
+  });
   G.r+=fx.r;G.v+=fx.v;G.t+=fx.t;G.spent+=fx.c;
-  c.tags.forEach(t=>G.tags.add(t));
-  G.log.push({node:NODES[G.step].name,n:c.n,notes:notes,noise:c.noise});
-  G.notes=G.notes.concat(notes);
+  c.tags.forEach(t=>{(G.owners[t]=G.owners[t]||[]).push(step);});
   if(c.noise!==undefined)G.noise=c.noise;
-  document.querySelectorAll('#g-run .gcard').forEach((el,j)=>{el.disabled=true;el.classList.add(j===i?'sel':'out');});
+  G.cells[step]={card:c,fresh:true,glow:hits.length?(hits.every(h=>h.cb.good)?'good':'bad'):null,combo:hits.length?(hits.every(h=>h.cb.good)?'good':hits.every(h=>!h.cb.good)?'bad':'mixed'):null};
+  // sequential string from the previous note on the wall
+  const prev=step===0?'g':step-1;
+  G.threads.push({a:prev,b:step,kind:'seq',fresh:true});
+  G.log.push({n:c.n,step:step});
+  document.querySelectorAll('#g-tray .gcard').forEach((el,j)=>{el.disabled=true;el.classList.add(j===i?'sel':'out');});
+  refreshOpen(step+1);
+  renderWall(false);
   updMeters();
-  $('g-flash').innerHTML=notes.map(n=>'<div>Synergy: '+n+'</div>').join('');
-  setTimeout(()=>{G.step++;if(G.step>=NODES.length)finish();else renderRun();},notes.length?1900:850);
+  renderPath();
+  drawThreads();
+  $('g-flash').innerHTML=notesHtml.join('');
+  setTimeout(()=>{
+    Object.keys(G.cells).forEach(k=>{G.cells[k].glow=null;});
+    G.step++;
+    renderPath();
+    if(G.step>=NODES.length){finish();}
+    else{refreshOpen(G.step);renderWall(false);renderTray();drawThreads();}
+  },hits.length?2600:1000);
 };
 
-// Retention model: power-law decay anchored on D1 / D7 / D30
+// ── retention model ──────────────────────────
 function model(m){
   const D1=24+m.r*0.30+m.t*0.06;
   const D7=D1*(0.28+m.r*0.0030);
@@ -6253,10 +6569,11 @@ function model(m){
   const ret=d=>d<=7?D1*Math.pow(d,-k1):D7*Math.pow(d/7,-k2);
   const arpdau=0.02+m.v*0.0016;
   let sum=1;for(let d=1;d<=30;d++)sum+=ret(d)/100;
-  return {D1,D7,D30,ret,arpdau,ltv:arpdau*sum};
+  return {D1:D1,D7:D7,D30:D30,ret:ret,arpdau:arpdau,ltv:arpdau*sum};
 }
 
 function finish(){
+  $('g-tray').innerHTML='';
   const noise=G.noise===undefined?5:G.noise, luck={};
   ['r','v','t'].forEach(k=>{luck[k]=Math.round((Math.random()*2-1)*noise);});
   const over=Math.max(0,G.spent-BUDGET);
@@ -6266,30 +6583,32 @@ function finish(){
   const avg=(f.r+f.v+f.t)/3;
   const score=Math.round(Math.min(100,avg*0.6+(hit.length/goals.length)*40));
   const grade=score>=88?'S':score>=76?'A':score>=62?'B':score>=48?'C':'D';
-  const whales=(G.tags.has('whale')?1:0)+G.log.filter(l=>l.notes.some(n=>n.indexOf('Whale Dependency')===0)).length;
+  const whaleDep=COMBOS.findIndex(c=>c.p[0]==='whale'&&c.p[1]==='whale');
   let arch='The Generalist';
   if(over>0)arch='The Scope Creeper';
-  else if(whales>=2)arch='The Whale Hunter';
+  else if(G.fired.has(whaleDep))arch='The Whale Hunter';
+  else if(G.fired.size>=4&&won)arch='The Connector';
   else if(f.v>=70&&f.t>=55)arch='The Systems Architect';
   else if(f.r>=75)arch='The Retention Engineer';
   else if(f.t>=70&&f.v<55)arch='The Player Advocate';
-  else if(G.tags.has('tested')&&f.r>=55&&f.v>=55&&f.t>=55)arch='The Disciplined Shipper';
+  else if(G.owners.tested&&f.r>=55&&f.v>=55&&f.t>=55)arch='The Disciplined Shipper';
   const A=model(f), B=model(START);
-  const notes=[];
-  G.log.forEach(l=>l.notes.forEach(n=>notes.push(n)));
-  if(over>0)notes.push('You overspent the sprint budget by '+over+' points. Late scope cost you '+Math.round(over*0.8)+' points on every meter.');
+  const notes=G.notes.map(n=>({k:n.good?'good':'bad',t:(n.good?'Combo: ':'Clash: ')+n.text}));
+  if(over>0)notes.push({k:'bad',t:'You overspent the sprint budget by '+over+' points. Late scope cost you '+Math.round(over*0.8)+' points on every meter.'});
   if(G.noise!==undefined){
     const parts=['r','v','t'].filter(k=>luck[k]!==0).map(k=>LBL[k]+' '+(luck[k]>0?'+':'')+luck[k]);
-    notes.push(noise<=2?'Your launch method kept variance low.'+(parts.length?' Market luck: '+parts.join(', ')+'.':''):'Your launch method left results to chance.'+(parts.length?' Market luck: '+parts.join(', ')+'.':''));
+    notes.push({k:'',t:(noise<=2?'Your launch method kept variance low.':'Your launch method left results to chance.')+(parts.length?' Market luck: '+parts.join(', ')+'.':'')});
   }
-  if(!won){const miss=goals.filter(k=>f[k]<G.prob.goal[k]).map(k=>LBL[k]+' ('+Math.round(f[k])+' vs '+G.prob.goal[k]+')');notes.push('Missed the goal on '+miss.join(' and ')+'.');}
+  if(!won){const miss=goals.filter(k=>f[k]<G.prob.goal[k]).map(k=>LBL[k]+' ('+Math.round(f[k])+' vs '+G.prob.goal[k]+')');notes.push({k:'bad',t:'Missed the goal on '+miss.join(' and ')+'.'});}
+  if(!G.fired.size)notes.push({k:'',t:'No combos fired. Hover the cards: a dashed thread shows when one connects to your board.'});
   const days=Array.from({length:30},(_,i)=>i+1);
   const fmt=x=>x.toFixed(1)+'%', dl=(a,b,pre,suf,dp)=>{const d=a-b;return '<div class="gk-d '+(d>=0?'up':'dn')+'">'+(d>=0?'+':'-')+(pre||'')+Math.abs(d).toFixed(dp===undefined?1:dp)+(suf||'')+' vs before</div>';};
   const best=parseInt(localStorage.getItem('pmd_run_best')||'0',10);
   if(score>best){try{localStorage.setItem('pmd_run_best',String(score));}catch(e){}}
-  G.share='I ran a feature as a PM on PM Dispatch: '+grade+' ('+score+'), '+arch+', D30 retention '+fmt(A.D30)+'. Beat my run: https://pmdispatch.com';
-  $('g-end').innerHTML=
-   '<div class="gend"><div class="gend-head"><div class="gend-grade">'+grade+'</div><div><div class="gend-arch">'+arch+'</div><div class="gend-sub">'+G.prob.t+' <b class="'+(won?'ok':'no')+'">'+(won?'Goal hit.':'Goal missed.')+'</b></div></div></div>'+
+  G.result={score:score,grade:grade,arch:arch,won:won};
+  G.share='I closed a PM case on PM Dispatch: '+grade+' ('+score+'), '+arch+', D30 retention '+fmt(A.D30)+', '+G.fired.size+' combos. Beat my run: https://pmdispatch.com';
+  $('g-result').innerHTML=
+   '<div class="gend"><div class="gend-head"><div class="gend-grade">'+grade+'</div><div><div class="gend-arch">'+arch+'</div><div class="gend-sub">'+esc(G.prob.t)+' <b class="'+(won?'ok':'no')+'">'+(won?'Case closed.':'Case unsolved.')+'</b></div></div></div>'+
    '<div class="gend-kpis">'+
     '<div class="gk"><div class="gk-l">Day 1</div><div class="gk-v">'+fmt(A.D1)+'</div>'+dl(A.D1,B.D1,'',' pts')+'</div>'+
     '<div class="gk"><div class="gk-l">Day 7</div><div class="gk-v">'+fmt(A.D7)+'</div>'+dl(A.D7,B.D7,'',' pts')+'</div>'+
@@ -6298,10 +6617,12 @@ function finish(){
     '<div class="gk"><div class="gk-l">D30 LTV</div><div class="gk-v">$'+A.ltv.toFixed(2)+'</div>'+dl(A.ltv,B.ltv,'$','',2)+'</div>'+
    '</div>'+
    '<div class="gend-chart"><canvas id="g-chart"></canvas></div>'+
-   '<ul class="gend-notes">'+(notes.length?notes:['Clean run. No synergies fired and no traps triggered. Try mixing cards that work together.']).map(n=>'<li>'+n+'</li>').join('')+'</ul>'+
-   '<div class="gend-actions"><button class="btn btn-primary" onclick="gAgain()">Run it back</button><button class="btn btn-ghost" onclick="gShare(this)">Copy my result</button><button class="btn btn-ghost" onclick="switchPage(\'offerlab\')">Try the Offer Lab</button><button class="btn btn-ghost" onclick="switchPage(\'samplesize\')">Size the A/B test</button><button class="btn btn-ghost" onclick="switchPage(\'guides\')">Read the Playbook</button></div>'+
+   '<ul class="gend-notes">'+notes.map(n=>'<li class="'+n.k+'">'+esc(n.t)+'</li>').join('')+'</ul>'+
+   '<div class="gend-save" id="g-save"></div>'+
+   '<div class="gend-actions"><button class="btn btn-primary" onclick="gAgain()">Run it back</button><button class="btn btn-ghost" onclick="gShare(this)">Copy my result</button><button class="btn btn-ghost" onclick="gLeave();switchPage(\'leaderboard\');switchLbTab(\'runs\')">Leaderboard</button><button class="btn btn-ghost" onclick="gLeave();switchPage(\'samplesize\')">Size the A/B test</button></div>'+
    '<div class="g-best">Best score on this device: '+Math.max(best,score)+'</div></div>';
-  show('g-end');
+  renderSaveBox();
+  setTimeout(()=>{const r=$('g-result');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});},250);
   if(chart){chart.destroy();chart=null;}
   if(window.Chart){
     const tc=getComputedStyle(document.body).getPropertyValue('--t2').trim()||'#888';
@@ -6312,10 +6633,61 @@ function finish(){
   }
 }
 
-window.gAgain=function(){gPlay();$('page-home').classList.remove('playing');};
+window.gLeave=function(){document.body.classList.remove('g-lock');$('page-home').classList.remove('playing');};
+window.gExit=function(){
+  if(G&&!G.result&&G.step>0&&!confirm('Leave this run? Your progress will be lost.'))return;
+  gLeave();gHintOff();show('g-idle');G=null;
+  $('desk').scrollIntoView({behavior:'smooth',block:'center'});
+};
+window.gAgain=function(){gLeave();gPlay();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('g-lock'))gExit();});
 window.gShare=function(btn){
   const done=()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>{btn.textContent=o;},1400);};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(G.share).then(done,done);}else{const t=document.createElement('textarea');t.value=G.share;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();done();}
+};
+
+// ── run leaderboard (real entries only, stored on this device) ──
+const RUNS_KEY='pmd_runs';
+function runKey(r){return (r.email||r.name||'').toLowerCase();}
+function bestPerPlayer(runs){
+  const m={};
+  runs.forEach(r=>{const k=runKey(r);if(!m[k]||r.score>m[k].score||(r.score===m[k].score&&r.ts<m[k].ts))m[k]=r;});
+  return Object.keys(m).map(k=>m[k]).sort((a,b)=>b.score-a.score||a.ts-b.ts);
+}
+function rankOf(runs,r,weekly){
+  const pool=weekly?runs.filter(x=>x.week===r.week):runs;
+  const list=bestPerPlayer(pool);
+  return list.findIndex(x=>runKey(x)===runKey(r))+1;
+}
+function storeRun(name,email){
+  const rec={name:name,email:email||'',score:G.result.score,grade:G.result.grade,arch:G.result.arch,prob:G.prob.t,combos:G.fired.size,ts:Date.now(),week:getWeekStart()};
+  const runs=lsGet(RUNS_KEY,[]);runs.push(rec);
+  lsSet(RUNS_KEY,runs.slice(-300));
+  G.saved=true;G.savedRec=rec;
+  return rec;
+}
+function renderSaveBox(){
+  const box=$('g-save');if(!box||!G)return;
+  const me=getCurrentUser();
+  if(G.saved){const runs=lsGet(RUNS_KEY,[]);const rec=G.savedRec;box.innerHTML='<span>Saved to the leaderboard as <b>'+esc(rec.name)+'</b>. This week: <b>#'+rankOf(runs,rec,true)+'</b>. All time: <b>#'+rankOf(runs,rec,false)+'</b>.</span>';return;}
+  if(me){const rec=storeRun(me.name||me.email.split('@')[0],me.email);renderSaveBox();return;}
+  const nick=lsGet('pmd_nick','')||'';
+  box.innerHTML='<span>Put this score on the leaderboard:</span><input id="g-nick" maxlength="20" placeholder="Pick a name" value="'+esc(nick)+'"><button class="btn btn-primary btn-sm" onclick="gSaveRun()">Save score</button>';
+}
+window.gSaveRun=function(){
+  const v=($('g-nick').value||'').trim().replace(/\s+/g,' ').slice(0,20);
+  if(v.length<2){$('g-nick').focus();return;}
+  lsSet('pmd_nick',v);storeRun(v,'');renderSaveBox();
+};
+window.renderRunBoard=function(){
+  const runs=lsGet(RUNS_KEY,[]), me=getCurrentUser(), wk=getWeekStart();
+  const row=(r,i)=>'<tr'+(me&&r.email&&r.email===me.email?' style="background:rgba(91,110,245,0.07)"':'')+'><td style="font-family:var(--mono);font-size:0.85rem;color:'+(i<3?'var(--amber)':'var(--t3)')+'">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1))+'</td>'+
+    '<td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b6ef5);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;flex-shrink:0">'+esc((r.name||'?')[0].toUpperCase())+'</div><span class="td-name">'+esc(r.name)+'</span></div></td>'+
+    '<td style="font-size:0.78rem;color:var(--amber);white-space:nowrap">'+esc(r.arch)+'</td><td><span class="lb-grade">'+esc(r.grade)+'</span></td><td style="font-family:var(--mono);font-weight:600;color:var(--t1)">'+r.score+'</td></tr>';
+  const empty='<tr><td colspan="5"><div class="lb-empty">No runs yet. Hit PLAY on the home page and be the first on the board.</div></td></tr>';
+  const all=bestPerPlayer(runs).slice(0,10), week=bestPerPlayer(runs.filter(r=>r.week===wk)).slice(0,10);
+  $('lb-runs-alltime-body').innerHTML=all.length?all.map(row).join(''):empty;
+  $('lb-runs-weekly-body').innerHTML=week.length?week.map(row).join(''):empty;
 };
 
 // Orbit: built from the top nav so the two never drift apart
@@ -6325,7 +6697,7 @@ function buildOrbit(){
   tabs.forEach((tab,i)=>{
     const a=i*2*Math.PI/n, x=Math.round(280+210*Math.sin(a)), y=Math.round(280-210*Math.cos(a));
     const label=tab.querySelector('.tab-label').textContent;
-    const svg=tab.querySelector('svg').outerHTML.replace('class="tab-icon-svg"','width="26" height="26" style="width:26px;height:26px"');
+    const svg=tab.querySelector('svg').outerHTML.replace('class="tab-icon-svg"','width="26" height="26" style="width:26px;height:26px;display:block"');
     const d=document.createElement('div');
     d.className='tool-node';d.style.left=x+'px';d.style.top=y+'px';
     d.innerHTML='<div class="tool-node-icon">'+svg+'</div><div class="tool-node-label">'+label+'</div>';
@@ -6336,170 +6708,6 @@ function buildOrbit(){
 buildOrbit();
 })();
 
-// ═══════════════════════════════════════════════
-// OFFER LAB: 300 simulated players (1 dot = ~33 players)
-// ═══════════════════════════════════════════════
-(function(){
-const PRICES=[0.99,1.99,2.99,4.99,7.99,9.99,14.99,19.99,29.99,49.99,79.99,99.99];
-const POP=10000, N=300, PER=POP/N;
-const TIERS=[
- {k:'f2p',n:'Free players',pct:'70%',dots:210,med:0.6,sig:0.9,r:3.1,w:0.42},
- {k:'min',n:'Minnows',pct:'18%',dots:54,med:3,sig:0.6,r:4,w:0.26},
- {k:'dol',n:'Dolphins',pct:'9%',dots:27,med:14,sig:0.6,r:5,w:0.18},
- {k:'wha',n:'Whales',pct:'3%',dots:9,med:70,sig:0.55,r:7,w:0.14}];
-const TIMING={browse:{vis:0.11,mult:1},first:{vis:0.17,mult:0.75},mile:{vis:0.19,mult:1.15},loss:{vis:0.28,mult:1.35}};
-const URG={none:{vis:1,mult:1},d1:{vis:1.15,mult:1.08},h4:{vis:1.3,mult:1.15}};
-const PRESETS={
- starter:{price:3,gen:1.8,anchor:0.5,timing:'first',urg:'none'},
- moment:{price:3,gen:1.4,anchor:0,timing:'loss',urg:'none'},
- whale:{price:11,gen:1.2,anchor:0.2,timing:'browse',urg:'d1'},
- fake:{price:7,gen:0.8,anchor:0.75,timing:'browse',urg:'h4'}};
-let S={price:3,gen:1,anchor:0,timing:'browse',urg:'none'};
-let dots=[], ctx=null, cv=null, W=0, H=330, raf=0, ready=false, last=null;
-const $=id=>document.getElementById(id);
-const money=x=>'$'+Math.round(x).toLocaleString('en');
-
-function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-function build(){
-  const rnd=rng(42), g=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
-  dots=[];
-  TIERS.forEach((t,ti)=>{for(let i=0;i<t.dots;i++)dots.push({ti,wtp:t.med*Math.exp(t.sig*g()),u:rnd(),v:rnd(),a:rnd(),x:0,y:0,cx:0,cy:0,cr:t.r,ca:0.35,cc:[154,154,154],tx:0,ty:0})});
-}
-function layout(){
-  const gap=10, avail=W-gap*3;let x0=0;
-  TIERS.forEach((t,ti)=>{
-    const zw=avail*t.w, ds=dots.filter(d=>d.ti===ti), zh=H-30;
-    const cols=Math.max(1,Math.ceil(Math.sqrt(ds.length*zw/zh))), rows=Math.ceil(ds.length/cols);
-    const cw=zw/cols, ch=zh/rows;
-    ds.forEach((d,i)=>{const c=i%cols, r=Math.floor(i/cols);d.x=x0+cw*(c+0.5)+(d.u-0.5)*cw*0.5;d.y=15+ch*(r+0.5)+(d.v-0.5)*ch*0.5;if(!d.cx&&!d.cy){d.cx=d.x;d.cy=d.y;}});
-    x0+=zw+gap;
-  });
-  const z=$('ol-zones');
-  z.innerHTML=TIERS.map(t=>'<div style="width:'+(avail*t.w)+'px;margin-right:'+gap+'px"><b>'+t.n+'</b>'+t.pct+' of players</div>').join('');
-  z.lastElementChild.style.marginRight='0';
-}
-function sizeCanvas(){
-  const dpr=window.devicePixelRatio||1;
-  W=cv.parentElement.clientWidth;H=330;
-  cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  layout();
-}
-
-function simulate(){
-  const price=PRICES[S.price], tm=TIMING[S.timing], ug=URG[S.urg];
-  const econ=Math.max(0.1,1-0.12*Math.pow(S.gen,1.5));
-  const state=new Array(dots.length);
-  const rev=[0,0,0,0], buyers=[0,0,0,0];
-  let seen=0, buyN=0, annN=0, left=0;
-  dots.forEach((d,i)=>{
-    const t=TIERS[d.ti];
-    const vis=Math.min(0.95,tm.vis*ug.vis);
-    if(d.v>=vis){state[i]=0;return;}
-    seen++;
-    const base=d.wtp*Math.pow(S.gen,0.8)*tm.mult*ug.mult;
-    const W2=base*(1+0.35*S.anchor);
-    const p=1/(1+Math.exp(3*(Math.log(price)-Math.log(W2))));
-    if(d.u<p){state[i]=2;buyN++;buyers[d.ti]++;rev[d.ti]+=price*PER*econ;left+=Math.min(Math.max(0,base-price),price*2)*PER*econ;return;}
-    let ap=(S.urg==='h4'?0.35:S.urg==='d1'?0.12:0)+(S.anchor>0.5?(S.anchor-0.5)*1.2:0)+(S.timing==='first'&&price>9.99?0.25:0)+(price/t.med>15?0.12:0);
-    if(d.a<Math.min(0.9,ap)){state[i]=3;annN++;}else state[i]=1;
-  });
-  const totalRev=rev.reduce((a,b)=>a+b,0);
-  const trust=Math.max(0,Math.round(100-520*annN/N));
-  return {state,rev,totalRev,buyN,conv:buyN/N*100,trust,left,seen,annN,econ,price,
-    whaleShare:totalRev?rev[3]/totalRev:0, buyers};
-}
-
-function colorFor(s){
-  const light=document.body.classList.contains('light');
-  if(s===2)return {c:[34,197,94],a:1,rs:1.5};
-  if(s===3)return {c:[244,63,94],a:0.8,rs:1.1};
-  if(s===1)return {c:[154,154,154],a:0.75,rs:1};
-  return {c:light?[120,120,120]:[110,110,110],a:0.22,rs:0.85};
-}
-function frame(){
-  raf=0;if(!ctx)return;
-  ctx.clearRect(0,0,W,H);
-  let moving=false;
-  dots.forEach(d=>{
-    const k=0.18;
-    d.cr+=(d.tr-d.cr)*k;d.ca+=(d.ta-d.ca)*k;
-    for(let j=0;j<3;j++)d.cc[j]+=(d.tc[j]-d.cc[j])*k;
-    if(Math.abs(d.tr-d.cr)>0.02||Math.abs(d.ta-d.ca)>0.01||Math.abs(d.tc[0]-d.cc[0])>1||Math.abs(d.tc[1]-d.cc[1])>1)moving=true;
-    ctx.beginPath();ctx.arc(d.x,d.y,Math.max(0.5,d.cr),0,Math.PI*2);
-    ctx.fillStyle='rgba('+Math.round(d.cc[0])+','+Math.round(d.cc[1])+','+Math.round(d.cc[2])+','+d.ca.toFixed(2)+')';
-    if(d.tr>d.baseR*1.3){ctx.shadowColor='rgba(34,197,94,0.8)';ctx.shadowBlur=10;}else ctx.shadowBlur=0;
-    ctx.fill();
-  });
-  ctx.shadowBlur=0;
-  if(moving)raf=requestAnimationFrame(frame);
-}
-function paint(r){
-  dots.forEach((d,i)=>{const cf=colorFor(r.state[i]);d.baseR=TIERS[d.ti].r;d.tr=TIERS[d.ti].r*cf.rs;d.ta=cf.a;d.tc=cf.c;});
-  if(!raf)raf=requestAnimationFrame(frame);
-}
-
-function render(){
-  const r=simulate();last=r;
-  const price=PRICES[S.price];
-  $('ol-price-v').textContent='$'+price.toFixed(2);
-  $('ol-gen-v').textContent=S.gen.toFixed(1)+'x';
-  const was=S.anchor>0?price/(1-S.anchor):0;
-  $('ol-tile').innerHTML=(was?'<span class="was">$'+was.toFixed(2)+'</span>':'')+'<span class="now">$'+price.toFixed(2)+'</span>'+(S.anchor>0?'<span class="off">-'+Math.round(S.anchor*100)+'%</span>':'')+'<span class="gen">'+S.gen.toFixed(1)+'x value</span>';
-  [['anchor','ol-seg-anchor'],['timing','ol-seg-timing'],['urg','ol-seg-urg']].forEach(p=>{
-    $(p[1]).querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(b.dataset.v)===String(S[p[0]])));
-  });
-  $('ol-price').value=S.price;$('ol-gen').value=S.gen;
-  $('ol-k-conv').textContent=r.conv.toFixed(1)+'%';
-  $('ol-k-rev').textContent=money(r.totalRev);
-  $('ol-k-trust').textContent=r.trust;
-  $('ol-k-trust').style.color=r.trust<50?'var(--red)':r.trust<75?'var(--amber)':'var(--green)';
-  $('ol-k-left').textContent=money(r.left);
-  $('ol-split').innerHTML=TIERS.map((t,i)=>{const sh=r.totalRev?r.rev[i]/r.totalRev*100:0;return '<div class="ol-bar"><span>'+t.n+'</span><div class="tr"><i style="width:'+sh+'%"></i></div><b>'+Math.round(sh)+'%</b></div>';}).join('');
-  // verdict + insights
-  let v='Workable',cls='';
-  if(r.trust<50){v='Predatory';cls='bad';}
-  else if(r.conv<0.6){v='Priced out';cls='bad';}
-  else if(r.whaleShare>0.7){v='Whale-dependent';cls='';}
-  else if(r.trust>=75&&r.conv>=2.5){v='Healthy';cls='good';}
-  $('ol-verdict').textContent=v;$('ol-verdict').className='ol-verdict '+cls;
-  const ins=[];
-  if(r.totalRev>0&&r.whaleShare>0.65)ins.push('Whale dependency: '+Math.round(r.whaleShare*100)+'% of revenue comes from about 3% of players. One whale churning moves your month.');
-  if(r.conv<0.6)ins.push('Only '+r.conv.toFixed(1)+'% of players buy. Add a lower rung or move the offer to a moment of real need.');
-  if(r.trust<75)ins.push('Pressure is showing (trust '+r.trust+'). '+(S.urg==='h4'?'A 4 hour timer ':S.anchor>0.5?'A '+Math.round(S.anchor*100)+'% anchor ':'This setup ')+'turns passers-by into annoyed players. Expect worse reviews and softer retention.');
-  if(r.totalRev>0&&r.left>r.totalRev*1.0)ins.push('You are leaving about '+money(r.left)+' on the table. Higher spenders would have paid more. Add a second tier instead of raising this one.');
-  if(S.gen>2)ins.push('Generosity '+S.gen.toFixed(1)+'x gives away '+Math.round((1-r.econ)*100)+'% of revenue as economy cost, and every future offer will feel stingy next to it.');
-  if(S.timing==='loss'&&r.trust>=75&&r.conv>=2.5)ins.push('Fair price at the moment of need. This is why timing beats discounting.');
-  if(S.timing==='first'&&price>9.99)ins.push('Asking for $'+price.toFixed(2)+' in the first session is asking before the player has any value to protect.');
-  if(!ins.length)ins.push('Balanced. Nothing is screaming. Now A/B it to see if the model matches your real players.');
-  $('ol-insights').innerHTML=ins.slice(0,4).map(t=>'<li>'+t+'</li>').join('');
-  paint(r);
-}
-
-window.olSet=function(k,v){S[k]=v;if(k==='price'||k==='gen')S[k]=+v;render();};
-window.olPreset=function(n){S=Object.assign({},PRESETS[n]);render();};
-window.olShip=function(){
-  if(!last)return;const el=$('ol-ship');
-  const good=last.trust>=75?'Players barely noticed the pressure.':last.trust>=50?'Some players felt pushed.':'Players felt cornered. Expect uninstalls.';
-  el.hidden=false;
-  el.innerHTML='<b>Shipped.</b> Net '+money(last.totalRev)+' per 10K players at '+last.conv.toFixed(1)+'% conversion. '+good+' Whales would have paid about '+money(last.left)+' more. Real players will not behave exactly like this model, so test it.';
-};
-window.olAB=function(){
-  if(!last)return;
-  switchPage('samplesize');
-  setTimeout(()=>{const b=document.getElementById('ss-base');if(b){b.value=Math.max(0.1,last.conv).toFixed(1);if(typeof calcSS==='function')calcSS();}},80);
-};
-
-window.olInit=function(){
-  if(!ready){
-    cv=$('ol-canvas');ctx=cv.getContext('2d');build();
-    dots.forEach(d=>{d.tr=d.cr;d.ta=d.ca;d.tc=d.cc.slice();d.baseR=d.cr;});
-    ready=true;
-    window.addEventListener('resize',()=>{if($('page-offerlab').classList.contains('active')){sizeCanvas();render();}});
-  }
-  sizeCanvas();render();
-};
-})();
 </script>
 
 </body>
