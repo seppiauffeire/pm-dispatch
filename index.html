@@ -122,7 +122,7 @@
   --t1:#f2f2f2;
   --t2:#a8a8a8;
   --t3:#8c8c8c;
-  --accent:#ff5a36;
+  --accent:#3ddb7a;
   --on-accent:#0a0a0a;
   --ind:#f2f2f2;
   --ind2:#aaaaaa;
@@ -148,16 +148,16 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 
 
 /* ═══ DECK STYLE: coral, black, bone; Anton + Inter Tight ═══ */
-body.deck{--bg:#000000;--bg2:#0c0c0c;--bg3:#151515;--bg4:#1e1e1e;--border:#2b2b2b;--border2:#3d3d3d;--t1:#efefec;--t2:#bcbcb7;--t3:#97978f;--accent:#ff5757;--accent-ink:#ff5757;--on-accent:#000000;--display:'Anton','Impact',sans-serif;--sans:'Inter Tight',system-ui,sans-serif;--mono:'Inter Tight',system-ui,sans-serif;--r:3px;--r2:4px;font-family:var(--sans);letter-spacing:-0.01em}
-body.deck.light{--bg:#efefec;--bg2:#f8f8f6;--bg3:#e5e5e0;--bg4:#dadad5;--border:#cfcfc9;--border2:#b3b3ac;--t1:#000000;--t2:#34342f;--t3:#55554f;--accent:#ff5757;--accent-ink:#c92b2b;--on-accent:#000000}
+body.deck{--bg:#000000;--bg2:#0c0c0c;--bg3:#151515;--bg4:#1e1e1e;--border:#2b2b2b;--border2:#3d3d3d;--t1:#efefec;--t2:#bcbcb7;--t3:#97978f;--accent:#3ddb7a;--accent-ink:#3ddb7a;--hl:#ff5757;--on-accent:#000000;--display:'Anton','Impact',sans-serif;--sans:'Inter Tight',system-ui,sans-serif;--mono:'Inter Tight',system-ui,sans-serif;--r:3px;--r2:4px;font-family:var(--sans);letter-spacing:-0.01em}
+body.deck.light{--bg:#efefec;--bg2:#f8f8f6;--bg3:#e5e5e0;--bg4:#dadad5;--border:#cfcfc9;--border2:#b3b3ac;--t1:#000000;--t2:#34342f;--t3:#55554f;--accent:#3ddb7a;--accent-ink:#0b7a3b;--hl:#e03a3a;--on-accent:#000000}
 body.deck *{font-synthesis-weight:none}
 body.deck .home-headline,body.deck .page-title,body.deck .home-tools h2,body.deck .guide-panel-title,body.deck .rail-info-title,body.deck .ti-group h3,body.deck .gend-arch,body.deck .ch-start-title{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:-0.005em;line-height:0.94}
 body.deck #page-home .home-headline,body.deck .home-headline{font-size:clamp(4rem,10vw,8.5rem)!important;margin-bottom:1.25rem}
-body.deck .home-headline em{color:var(--accent-ink);font-style:normal}
+body.deck .home-headline em{color:var(--hl);font-style:normal}
 body.deck .page-title{font-size:clamp(2.4rem,5vw,3.6rem);margin-bottom:0.45rem}
 body.deck .home-tools h2{font-size:clamp(2.2rem,4.5vw,3.4rem)}
 body.deck .home-stat-val,body.deck .brand-name,body.deck .btn-play,body.deck .gend-grade{font-family:var(--display);font-weight:400}
-body.deck .home-stat-val{font-size:3rem;color:var(--accent-ink)}
+body.deck .home-stat-val{font-size:3rem;color:var(--t1)}
 body.deck .btn-play{font-size:2.6rem;letter-spacing:0.02em;border-radius:3px;box-shadow:none}
 body.deck .btn-play small{font-family:var(--sans);font-weight:700}
 body.deck .brand-name{font-size:1.25rem;letter-spacing:0.01em;text-transform:uppercase}
@@ -730,8 +730,9 @@ body.light #page-home::before{background:
 .btn-play:active{transform:translateY(2px);box-shadow:0 4px 12px rgba(0,0,0,0.4)}
 .home-skip{display:inline-block;margin-left:1.2rem;font-size:0.85rem;color:var(--t2);cursor:pointer;text-decoration:underline;text-underline-offset:4px;background:none;border:none;font-family:var(--sans)}
 .home-skip:hover{color:var(--t1)}
-.home-ship{text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-left:0}
-.home-ship:hover{text-decoration:underline}
+.home-ship{text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-left:0;padding:0.6rem 1rem;border:1px solid var(--accent);border-radius:3px;color:var(--t1);font-weight:600}
+.home-ship:hover{background:var(--accent);color:var(--on-accent)}
+.home-ship:hover .nav-item-tag{background:var(--on-accent);color:var(--accent)}
 #desk{width:100%;max-width:900px;margin:1.6rem auto 2rem}
 .desk{width:100%;position:relative}
 .g-panel{width:100%}
@@ -821,7 +822,7 @@ body.light #page-home::before{background:
 .gcard:hover:not(:disabled){transform:translateY(-4px);border-color:#fbbf24;box-shadow:0 14px 34px rgba(251,191,36,0.2)}
 .gcard:disabled{cursor:default}
 .gcard.out{opacity:0.28}
-.gcard.sel{border-color:#ff8a6b;box-shadow:0 0 0 1px #ff8a6b,0 14px 34px rgba(0,0,0,0.35)}
+.gcard.sel{border-color:#8cf0b0;box-shadow:0 0 0 1px #8cf0b0,0 14px 34px rgba(0,0,0,0.35)}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .gcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .gcard-n{font-weight:800;font-size:1.02rem;line-height:1.25}
@@ -851,7 +852,7 @@ body.light #page-home::before{background:
 .gend-chart{height:210px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0.8rem;margin-bottom:1rem}
 .gend-notes{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:1.2rem}
 .gend-notes li{font-size:0.82rem;color:var(--t2);line-height:1.5;padding-left:1.1rem;position:relative}
-.gend-notes li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#ff5a36}
+.gend-notes li::before{content:'';position:absolute;left:0;top:0.55em;width:6px;height:6px;border-radius:50%;background:#3ddb7a}
 .gend-notes li.good::before{background:#fbbf24}.gend-notes li.bad::before{background:#f43f5e}
 .gend-save{display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;padding:0.9rem 1rem;margin-bottom:1rem;border:1px solid var(--border2);border-radius:12px;background:var(--bg2);font-size:0.82rem;color:var(--t2)}
 .gend-save input{flex:1;min-width:150px;padding:0.5rem 0.7rem;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--t1);font-family:var(--sans);font-size:0.82rem;outline:none}
@@ -905,7 +906,7 @@ body.g-lock{overflow:hidden}
 .g-path{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 14px}
 .pp-lead{font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);font-weight:800;margin-right:4px}
 .pp{display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 4px;border-radius:99px;background:var(--bg2);border:1px solid var(--border2);font-size:0.75rem;color:var(--t2);max-width:100%}
-.pp i{width:20px;height:20px;border-radius:50%;background:#ff5a36;color:#0a0a0a;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:0.75rem;flex-shrink:0}
+.pp i{width:20px;height:20px;border-radius:50%;background:#3ddb7a;color:#0a0a0a;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:0.75rem;flex-shrink:0}
 .pp small{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);font-weight:800}
 .pp b{color:var(--t1);font-weight:700;white-space:nowrap}
 .pp.case{padding-left:11px;border-color:rgba(244,63,94,0.5)}
@@ -1809,7 +1810,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
           <!-- Drop zone -->
           <div id="rp-dropzone" style="border:2px dashed var(--border2);border-radius:var(--r);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:0.9rem" ondragover="rpDragOver(event)" ondragleave="rpDragLeave(event)" ondrop="rpDrop(event)" onclick="document.getElementById('rp-file').click()">
             <input type="file" id="rp-file" accept=".csv,.tsv,.txt,.xlsx,.xls" style="display:none" onchange="rpFileChosen(event)">
-            <div style="font-size:1.4rem;margin-bottom:0.35rem">📂</div>
+            
             <div style="font-size:0.84rem;color:var(--t2);font-weight:500">Drop file here or click to browse</div>
             <div style="font-size:0.75rem;color:var(--t3);margin-top:0.25rem">.csv · .tsv · .xlsx · .xls</div>
           </div>
@@ -1871,7 +1872,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
           <div style="height:1px;background:var(--border);margin:0.9rem 0"></div>
 
-          <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--ind2);margin-bottom:0.6rem">📉 Retention adjustment <span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0">(optional, refines curve)</span></div>
+          <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--ind2);margin-bottom:0.6rem">Retention adjustment <span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0">(optional, refines curve)</span></div>
           <div class="row2">
             <div class="field">
               <label class="label">D1 Retention (%)</label>
@@ -1896,7 +1897,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
               </select>
             </div>
           </div>
-          <div style="font-size:0.75rem;color:var(--t3);line-height:1.55;padding:0.5rem 0.75rem;background:rgba(255,90,54,0.06);border-radius:var(--r);border-left:2px solid var(--ind)">
+          <div style="font-size:0.75rem;color:var(--t3);line-height:1.55;padding:0.5rem 0.75rem;background:rgba(61,219,122,0.06);border-radius:var(--r);border-left:2px solid var(--ind)">
             When enabled, the projected ROAS curve is multiplied by a retention survival curve fitted to your D1/D7/D30 inputs. Projections beyond your observed data window decay realistically instead of extrapolating linearly.
           </div>
 
@@ -2228,7 +2229,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         <div class="stat-row" id="mv-stats"></div>
         <div class="card"><div class="card-head"><div class="card-title">Variant Comparison Table</div></div><div class="card-body" id="mv-table"></div></div>
         <div class="card" style="margin-top:1rem">
-          <div class="card-head"><div class="card-title">⚠️ Multi-Variant Warnings</div></div>
+          <div class="card-head"><div class="card-title">Multi-Variant Warnings</div></div>
           <div class="card-body" id="mv-warnings"></div>
         </div>
       </div>
@@ -2595,10 +2596,10 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
       </div>
     </div>
     <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap" id="fb-type-row">
-      <button class="fb-type-btn active" data-type="idea" onclick="setFbType(this,'idea')">💡 Idea</button>
-      <button class="fb-type-btn" data-type="bug" onclick="setFbType(this,'bug')">🐛 Bug</button>
-      <button class="fb-type-btn" data-type="praise" onclick="setFbType(this,'praise')">⭐ Praise</button>
-      <button class="fb-type-btn" data-type="other" onclick="setFbType(this,'other')">💬 Other</button>
+      <button class="fb-type-btn active" data-type="idea" onclick="setFbType(this,'idea')">Idea</button>
+      <button class="fb-type-btn" data-type="bug" onclick="setFbType(this,'bug')">Bug</button>
+      <button class="fb-type-btn" data-type="praise" onclick="setFbType(this,'praise')">Praise</button>
+      <button class="fb-type-btn" data-type="other" onclick="setFbType(this,'other')">Other</button>
     </div>
     <textarea id="fb-message" rows="4" placeholder="What's on your mind?" style="width:100%;resize:vertical;margin-bottom:0.85rem;font-size:0.88rem;line-height:1.6"></textarea>
     <input type="email" id="fb-email" placeholder="your@email.com (optional, for a reply)" style="width:100%;text-align:left;font-size:0.88rem;padding:0.7rem 0.9rem;border-radius:10px;margin-bottom:0.85rem">
@@ -2631,7 +2632,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
   <!-- User's own card: Activity tab (shown when logged in + on activity tab) -->
   <div id="lb-my-card" style="display:none;margin-bottom:1.5rem">
-    <div class="card" style="background:linear-gradient(135deg,rgba(255,90,54,0.1),rgba(34,211,238,0.06));border-color:rgba(255,90,54,0.3)">
+    <div class="card" style="background:linear-gradient(135deg,rgba(61,219,122,0.1),rgba(34,211,238,0.06));border-color:rgba(61,219,122,0.3)">
       <div class="card-body" style="padding:1.25rem">
         <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
           <div style="width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--on-accent);flex-shrink:0" id="lb-my-avatar">?</div>
@@ -2646,7 +2647,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
             </div>
             <div style="text-align:center">
               <div style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--cyan)" id="lb-my-streak">0</div>
-              <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3)">Day streak 🔥</div>
+              <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--t3)">Day streak </div>
             </div>
             <div style="text-align:center">
               <div style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--amber)" id="lb-my-rank">n/a</div>
@@ -2660,7 +2661,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
 
   <!-- User's own card: PM Challenge tab (shown when logged in + on challenge tab) -->
   <div id="lb-ch-my-card" style="display:none;margin-bottom:1.5rem">
-    <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(255,90,54,0.06));border-color:rgba(245,158,11,0.3)">
+    <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(61,219,122,0.06));border-color:rgba(245,158,11,0.3)">
       <div class="card-body" style="padding:1.25rem">
         <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
           <div style="width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--on-accent);flex-shrink:0" id="lb-ch-my-avatar">?</div>
@@ -2716,7 +2717,7 @@ body.light .glass-stat-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th style="width:40px">#</th><th>User</th><th>Streak 🔥</th><th>Tool Uses</th><th>Member Since</th></tr></thead>
+            <thead><tr><th style="width:40px">#</th><th>User</th><th>Streak </th><th>Tool Uses</th><th>Member Since</th></tr></thead>
             <tbody id="lb-streak-body"></tbody>
           </table>
         </div>
@@ -3129,7 +3130,7 @@ document.querySelectorAll('.moscow-input').forEach(inp=>{
 // KANO
 // ═══════════════════════════════════════════════
 let kanoRows=[]; let kanoId=0;
-const kanoColors=['#ff5a36','#22d3ee','#22c55e','#f59e0b','#f43f5e','#ff8a6b'];
+const kanoColors=['#3ddb7a','#22d3ee','#22c55e','#f59e0b','#f43f5e','#8cf0b0'];
 function addKanoRow(){
   const id=kanoId++;
   kanoRows.push({id,name:'Feature '+id,functional:7,dysfunctional:3});
@@ -3197,12 +3198,12 @@ function calcFreq(){
   `;
   document.getElementById('freq-result').innerHTML=`
     <div class="verdict-band ${sig?'pos':'neg'}" style="margin-bottom:0.75rem">
-      <span style="font-size:1.2rem">${sig?'✅':'❌'}</span>
+      <span style="font-size:1.2rem">${sig?'✓':'✕'}</span>
       <span>${sig?`Result is <strong>statistically significant</strong> at α=${alpha}. The treatment shows a ${lift>0?'positive':'negative'} effect.`:`Result is <strong>NOT statistically significant</strong> at α=${alpha}. Insufficient evidence to conclude a difference exists.`}</span>
     </div>
     <div style="font-size:0.75rem;color:var(--t3);line-height:1.7">
       <strong style="color:var(--t2)">Interpretation:</strong> With a p-value of <code style="font-family:var(--mono);color:var(--cyan)">${pval.toFixed(4)}</code>, there is a ${((1-pval)*100).toFixed(1)}% probability that this result is not due to chance.
-      The estimated power is ${power.toFixed(1)}%: ${power>=80?'✓ sufficient':'⚠ below the 80% threshold; consider increasing sample size'}.
+      The estimated power is ${power.toFixed(1)}%: ${power>=80?'✓ sufficient':'below the 80% threshold; consider increasing sample size'}.
     </div>
   `;
 }
@@ -3258,7 +3259,7 @@ function calcBayesConv(){
   if(bcChart) bcChart.destroy();
   bcChart=new Chart(document.getElementById('bc-chart'),{
     type:'bar',data:{labels,datasets:[
-      {label:'Control',data:cHist,backgroundColor:'rgba(255,90,54,0.5)',borderColor:'rgba(255,90,54,0.8)',borderWidth:1},
+      {label:'Control',data:cHist,backgroundColor:'rgba(61,219,122,0.5)',borderColor:'rgba(61,219,122,0.8)',borderWidth:1},
       {label:'Treatment',data:tHist,backgroundColor:'rgba(34,211,238,0.4)',borderColor:'rgba(34,211,238,0.7)',borderWidth:1}
     ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}}},scales:{x:{ticks:{color:'#5c6487',font:{size:9},maxTicksLimit:8},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}
   });
@@ -3319,7 +3320,7 @@ function calcBayesRet(){
   `;
   document.getElementById('br-interp').innerHTML=`
     <div class="verdict-band ${prob>=90?'pos':prob>=70?'neutral':'neg'}">
-      <span>${prob>=90?'✅ Strong evidence':prob>=70?'⚠️ Moderate evidence':'❌ Insufficient evidence'} that treatment improves D${day} retention. ${(tM*100).toFixed(1)}% vs ${(cM*100).toFixed(1)}% (${lift>0?'+':''}${lift.toFixed(1)}% relative lift).</span>
+      <span>${prob>=90?'✓ Strong evidence':prob>=70?'Moderate evidence':'✕ Insufficient evidence'} that treatment improves D${day} retention. ${(tM*100).toFixed(1)}% vs ${(cM*100).toFixed(1)}% (${lift>0?'+':''}${lift.toFixed(1)}% relative lift).</span>
     </div>
     <p style="font-size:0.75rem;color:var(--t3);margin-top:0.75rem;line-height:1.7">
       Prior: Beta(${pri},${pri}). Posterior incorporates observed data. A ${prob.toFixed(1)}% probability that treatment is better means: if you shipped this, you'd expect to win ${prob.toFixed(0)} out of 100 times. Bayesian methods don't require a fixed sample size; you can update continuously.
@@ -3333,7 +3334,7 @@ function calcBayesRet(){
   if(brChart) brChart.destroy();
   brChart=new Chart(document.getElementById('br-chart'),{
     type:'bar',data:{labels,datasets:[
-      {label:'Control',data:cH,backgroundColor:'rgba(255,90,54,0.5)',borderColor:'rgba(255,90,54,0.8)',borderWidth:1},
+      {label:'Control',data:cH,backgroundColor:'rgba(61,219,122,0.5)',borderColor:'rgba(61,219,122,0.8)',borderWidth:1},
       {label:'Treatment',data:tH,backgroundColor:'rgba(34,197,94,0.4)',borderColor:'rgba(34,197,94,0.7)',borderWidth:1}
     ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}}},scales:{x:{ticks:{color:'#5c6487',font:{size:9},maxTicksLimit:8},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}
   });
@@ -3367,7 +3368,7 @@ function calcARPU(){
   `;
   document.getElementById('arpu-impact').innerHTML=`
     <div class="verdict-band ${pval<0.05?'pos':'neutral'}">
-      ${pval<0.05?'✅ Statistically significant difference in ARPU':'⚠️ Not statistically significant: wider confidence interval needed'}
+      ${pval<0.05?'✓ Statistically significant difference in ARPU':'Not statistically significant: wider confidence interval needed'}
     </div>
     <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--t2)">
       Across ~${((cn+tn)/2/1000).toFixed(1)}K users in the combined sample, the treatment group represents an estimated total revenue difference of
@@ -3382,7 +3383,7 @@ function calcARPU(){
   if(arpuChart) arpuChart.destroy();
   arpuChart=new Chart(document.getElementById('arpu-chart'),{
     type:'line',data:{labels:cVals.map(v=>'$'+v.toFixed(2)),datasets:[
-      {label:'Control ARPU dist.',data:cDens,borderColor:'rgba(255,90,54,0.9)',backgroundColor:'rgba(255,90,54,0.1)',fill:true,pointRadius:0,tension:0.4,borderWidth:2},
+      {label:'Control ARPU dist.',data:cDens,borderColor:'rgba(61,219,122,0.9)',backgroundColor:'rgba(61,219,122,0.1)',fill:true,pointRadius:0,tension:0.4,borderWidth:2},
       {label:'Treatment ARPU dist.',data:tDens,borderColor:'rgba(34,211,238,0.9)',backgroundColor:'rgba(34,211,238,0.1)',fill:true,pointRadius:0,tension:0.4,borderWidth:2}
     ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}}},scales:{x:{ticks:{color:'#5c6487',font:{size:9},maxTicksLimit:6},grid:{color:'rgba(255,255,255,0.04)'}},y:{display:false}}}
   });
@@ -3400,7 +3401,7 @@ calcARPU();
 // ═══════════════════════════════════════════════
 let rpCohorts=[], rpRoasChart=null, rpCohortChart=null, rpBudgetChart=null;
 
-function rpDragOver(e){e.preventDefault();const d=document.getElementById('rp-dropzone');d.style.borderColor='var(--ind)';d.style.background='rgba(255,90,54,0.05)';}
+function rpDragOver(e){e.preventDefault();const d=document.getElementById('rp-dropzone');d.style.borderColor='var(--ind)';d.style.background='rgba(61,219,122,0.05)';}
 function rpDragLeave(e){const d=document.getElementById('rp-dropzone');d.style.borderColor='var(--border2)';d.style.background='';}
 function rpDrop(e){e.preventDefault();rpDragLeave(e);const f=e.dataTransfer.files[0];if(f)rpReadFile(f);}
 function rpFileChosen(e){const f=e.target.files[0];if(f)rpReadFile(f);}
@@ -3443,7 +3444,7 @@ function rpParseText(raw){
   if(!raw||!raw.trim()){rpSetStatus('');return;}
   const delim=raw.split('\n')[0].includes('\t')?'\t':',';
   const lines=raw.trim().split('\n').filter(l=>l.trim());
-  if(lines.length<2){rpSetStatus('⚠ Need header + at least 1 data row','var(--amber)');return;}
+  if(lines.length<2){rpSetStatus('Need header + at least 1 data row','var(--amber)');return;}
 
   const headers=lines[0].split(delim).map(h=>h.trim().replace(/^["']/,'').replace(/["']$/,''));
   const rows=lines.slice(1).map(l=>{
@@ -3490,7 +3491,7 @@ function rpParseText(raw){
     return{date,installs,spend,cpi,revByDay,roasByDay};
   }).filter(c=>Object.keys(c.revByDay).length||Object.keys(c.roasByDay).length);
 
-  if(!rpCohorts.length){rpSetStatus('⚠ No usable cohort rows found. Check column naming.','var(--red)');return;}
+  if(!rpCohorts.length){rpSetStatus('No usable cohort rows found. Check column naming.','var(--red)');return;}
   rpSetStatus(`✓ ${rpCohorts.length} cohorts · ${revCols.length} revenue day cols · ${roasCols.length} ROAS cols`,'var(--green)');
   rpCalc();
 }
@@ -3563,7 +3564,7 @@ function rpCalc(){
     Object.entries(c.roasByDay).forEach(([d,r])=>{if(!dm[+d])dm[+d]=[];if(r>0)dm[+d].push(r);});
   });
   const avgRoas=Object.entries(dm).map(([d,v])=>({x:+d,y:v.reduce((a,b)=>a+b,0)/v.length})).sort((a,b)=>a.x-b.x);
-  if(!avgRoas.length){rpSetStatus('⚠ No ROAS values found.','var(--red)');return;}
+  if(!avgRoas.length){rpSetStatus('No ROAS values found.','var(--red)');return;}
 
   // Max observed day: only apply retention beyond this
   const maxObsDay = Math.max(...avgRoas.map(p=>p.x));
@@ -3607,18 +3608,18 @@ function rpCalc(){
 
   // ROAS chart: with optional retention-adjusted vs raw overlay
   const datasets = [
-    {label:'Proj. ROAS (retention-adj)',data:projROAS,borderColor:'rgba(255,90,54,0.9)',backgroundColor:'rgba(255,90,54,0.07)',fill:true,pointRadius:0,tension:0.4,borderWidth:2.5},
+    {label:'Proj. ROAS (retention-adj)',data:projROAS,borderColor:'rgba(61,219,122,0.9)',backgroundColor:'rgba(61,219,122,0.07)',fill:true,pointRadius:0,tension:0.4,borderWidth:2.5},
     {label:'Observed avg',data:projDays.map(d=>{const p=avgRoas.find(p=>p.x===d);return p?+p.y.toFixed(1):null;}),borderColor:'#22d3ee',backgroundColor:'#22d3ee',pointRadius:5,showLine:false,borderWidth:0,spanGaps:false},
     {label:`Target ${target}%`,data:projDays.map(()=>target),borderColor:'rgba(244,63,94,0.5)',borderDash:[6,3],pointRadius:0,borderWidth:1.5}
   ];
   if(projROASRaw){
-    datasets.splice(1,0,{label:'Raw curve (no retention)',data:projROASRaw,borderColor:'rgba(255,90,54,0.3)',backgroundColor:'transparent',pointRadius:0,tension:0.4,borderWidth:1.5,borderDash:[3,3]});
+    datasets.splice(1,0,{label:'Raw curve (no retention)',data:projROASRaw,borderColor:'rgba(61,219,122,0.3)',backgroundColor:'transparent',pointRadius:0,tension:0.4,borderWidth:1.5,borderDash:[3,3]});
   }
   if(rpRoasChart)rpRoasChart.destroy();
   rpRoasChart=new Chart(document.getElementById('rp-roas-chart'),{type:'line',data:{labels:projDays.map(d=>'D'+d),datasets},options:rpChartOpts()});
 
   // Per-cohort chart
-  const cc=['rgba(255,90,54,0.7)','rgba(34,211,238,0.7)','rgba(34,197,94,0.65)','rgba(245,158,11,0.7)','rgba(244,63,94,0.65)','rgba(255,90,54,0.7)','rgba(244,168,124,0.7)','rgba(52,211,153,0.7)'];
+  const cc=['rgba(61,219,122,0.7)','rgba(34,211,238,0.7)','rgba(34,197,94,0.65)','rgba(245,158,11,0.7)','rgba(244,63,94,0.65)','rgba(61,219,122,0.7)','rgba(244,168,124,0.7)','rgba(52,211,153,0.7)'];
   if(rpCohortChart)rpCohortChart.destroy();
   rpCohortChart=new Chart(document.getElementById('rp-cohort-chart'),{type:'line',data:{labels:projDays.map(d=>'D'+d),datasets:rpCohorts.slice(0,8).map((c,i)=>({
     label:c.date,
@@ -3642,7 +3643,7 @@ function rpCalc(){
       <td class="td-mono">D${d}</td>
       <td class="td-mono">$${arpu}</td>
       <td><span style="font-family:var(--mono);font-weight:600;color:${cRoas(r)}">${r}%</span></td>
-      <td style="font-size:0.78rem">${r>=target?'✅ Breakeven+':r>=target*0.7?'🟡 Near':'🔴 Below'}</td>
+      <td style="font-size:0.78rem">${r>=target?'✓ Breakeven+':r>=target*0.7?'Near':'Below'}</td>
     </tr>`;
   }).join('');
 
@@ -3662,7 +3663,7 @@ function rpCalc(){
 
   // Analysis
   const d7=atDay(7),d30=atDay(30),d90=atDay(90);
-  const verdict=beDay?(beDay<=30?'🟢 Excellent':beDay<=90?'🟡 Healthy':beDay<=180?'🟠 Marginal':'🔴 Slow'):'🔴 No breakeven';
+  const verdict=beDay?(beDay<=30?'Excellent':beDay<=90?'Healthy':beDay<=180?'Marginal':'Slow'):'No breakeven';
   const retNote = retFn
     ? `<br><strong style="color:var(--t1)">Retention model:</strong> ${retModel==='power'?'Power decay':'Exponential decay'} applied. Survival at D7: <strong style="color:var(--ind2)">${(retFn(7)*100).toFixed(1)}%</strong>, D30: <strong style="color:var(--ind2)">${(retFn(30)*100).toFixed(1)}%</strong>, D90: <strong style="color:var(--ind2)">${(retFn(90)*100).toFixed(1)}%</strong>. Projections beyond D${maxObsDay} are deflated by this survival curve.`
     : '<br><em style="color:var(--t3)">Retention adjustment is off. Projections extrapolate raw curve only. Add D1/D7/D30 retention rates for more reliable long-horizon estimates.</em>';
@@ -3747,7 +3748,7 @@ function calcROAS(){
   roasChart=new Chart(document.getElementById('roas-chart'),{
     type:'line',
     data:{labels:days.map(d=>'D'+d),datasets:[
-      {label:'ROAS %',data:roasVals,borderColor:'#ff5a36',backgroundColor:'rgba(255,90,54,0.08)',fill:true,pointRadius:4,tension:0.4,borderWidth:2.5,pointBackgroundColor:'#ff5a36'},
+      {label:'ROAS %',data:roasVals,borderColor:'#3ddb7a',backgroundColor:'rgba(61,219,122,0.08)',fill:true,pointRadius:4,tension:0.4,borderWidth:2.5,pointBackgroundColor:'#3ddb7a'},
       {label:'100% Breakeven',data:days.map(()=>100),borderColor:'rgba(244,63,94,0.6)',borderDash:[5,3],pointRadius:0,borderWidth:1.5}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}},tooltip:{backgroundColor:'#1a1d27',callbacks:{label:c=>`  ${c.dataset.label}: ${c.raw.toFixed(0)}%`}}},scales:{x:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.04)'}}}}
@@ -3780,7 +3781,7 @@ function calcLTV(){
   `;
   if(ltvChart) ltvChart.destroy();
   ltvChart=new Chart(document.getElementById('ltv-chart'),{
-    type:'line',data:{labels:Array.from({length:periods},(_,i)=>'M'+(i+1)),datasets:[{label:'Cumulative LTV',data:vals,borderColor:'#ff5a36',backgroundColor:'rgba(255,90,54,0.08)',fill:true,pointRadius:0,tension:0.4,borderWidth:2.5}]},
+    type:'line',data:{labels:Array.from({length:periods},(_,i)=>'M'+(i+1)),datasets:[{label:'Cumulative LTV',data:vals,borderColor:'#3ddb7a',backgroundColor:'rgba(61,219,122,0.08)',fill:true,pointRadius:0,tension:0.4,borderWidth:2.5}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c6487',font:{size:9},maxTicksLimit:8},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10},callback:v=>'$'+v.toFixed(0)},grid:{color:'rgba(255,255,255,0.04)'}}}}
   });
 }
@@ -3817,7 +3818,7 @@ function calcAdRev(){
   `;
   if(adChart) adChart.destroy();
   adChart=new Chart(document.getElementById('adrev-chart'),{
-    type:'doughnut',data:{labels:['Rewarded Video','Interstitial','Banner'],datasets:[{data:[rvRev,interRev,banRev],backgroundColor:['rgba(255,90,54,0.8)','rgba(34,211,238,0.7)','rgba(245,158,11,0.7)'],borderColor:'var(--bg2)',borderWidth:2}]},
+    type:'doughnut',data:{labels:['Rewarded Video','Interstitial','Banner'],datasets:[{data:[rvRev,interRev,banRev],backgroundColor:['rgba(61,219,122,0.8)','rgba(34,211,238,0.7)','rgba(245,158,11,0.7)'],borderColor:'var(--bg2)',borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}},tooltip:{callbacks:{label:c=>`$${c.raw.toLocaleString('en',{maximumFractionDigits:0})} (${(c.raw/totalRev*100).toFixed(0)}%)`}}}}
   });
 }
@@ -3854,7 +3855,7 @@ function calcCohort(){
   if(cohChart) cohChart.destroy();
   cohChart=new Chart(document.getElementById('coh-chart'),{
     type:'bar',data:{labels:Array.from({length:months},(_,i)=>'M'+(i+1)),datasets:[
-      {label:'Monthly',data:monthly,backgroundColor:'rgba(255,90,54,0.5)',borderColor:'rgba(255,90,54,0.8)',borderWidth:1,yAxisID:'y'},
+      {label:'Monthly',data:monthly,backgroundColor:'rgba(61,219,122,0.5)',borderColor:'rgba(61,219,122,0.8)',borderWidth:1,yAxisID:'y'},
       {label:'Cumulative',data:cumulative,type:'line',borderColor:'#22d3ee',pointRadius:3,tension:0.4,borderWidth:2,yAxisID:'y1',pointBackgroundColor:'#22d3ee'}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}}},scales:{
@@ -3870,7 +3871,7 @@ calcCohort();
 // GUIDES
 // ═══════════════════════════════════════════════
 // Guide covers: drawn in code, one motif per category, so nothing is hotlinked and nothing is stock
-const COVER_HUE={Strategy:'#ff5a36',Frameworks:'#f5b13a',Statistics:'#6fb1e8',Monetization:'#f5b13a',Retention:'#7fb88c',Analytics:'#6fb1e8',Design:'#e88fb0',Finance:'#7fb88c',Growth:'#ff5a36',Engagement:'#e88fb0',Productivity:'#6fb1e8',Career:'#f5b13a'};
+const COVER_HUE={Strategy:'#3ddb7a',Frameworks:'#f5b13a',Statistics:'#6fb1e8',Monetization:'#f5b13a',Retention:'#7fb88c',Analytics:'#6fb1e8',Design:'#e88fb0',Finance:'#7fb88c',Growth:'#3ddb7a',Engagement:'#e88fb0',Productivity:'#6fb1e8',Career:'#f5b13a'};
 const COVER_ART={
   Strategy:'<circle cx="120" cy="120" r="84"/><circle cx="120" cy="120" r="56"/><circle cx="120" cy="120" r="28"/><circle cx="120" cy="120" r="6" fill="C"/><path d="M120 120L190 50"/>',
   Frameworks:'<rect x="44" y="44" width="68" height="68" rx="6"/><rect x="128" y="44" width="68" height="68" rx="6" fill="C" fill-opacity=".25"/><rect x="44" y="128" width="68" height="68" rx="6" fill="C" fill-opacity=".25"/><rect x="128" y="128" width="68" height="68" rx="6"/>',
@@ -3886,7 +3887,7 @@ const COVER_ART={
   Career:'<path d="M30 190H70V150H110V110H150V70H190V40"/><path d="M190 40h24"/>'
 };
 function guideCover(cat){
-  const c=COVER_HUE[cat]||'#ff5a36';
+  const c=COVER_HUE[cat]||'#3ddb7a';
   const art=(COVER_ART[cat]||COVER_ART.Strategy).split('"C"').join('"'+c+'"');
   const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 330" preserveAspectRatio="xMidYMid slice"><rect width="240" height="330" fill="#141414"/><g transform="translate(0 6)" fill="none" stroke="'+c+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+art+'</g></svg>';
   return 'data:image/svg+xml,'+encodeURIComponent(svg);
@@ -4393,7 +4394,7 @@ function calcSS(){
   if(ssPowerChart) ssPowerChart.destroy();
   const ctx=document.getElementById('ss-power-chart');
   if(ctx){ ssPowerChart=new Chart(ctx,{
-    type:'line',data:{labels:mdeLabels,datasets:[{label:'Sample per variant',data:nVals,borderColor:'#ff5a36',backgroundColor:'rgba(255,90,54,0.08)',fill:true,pointRadius:4,tension:0.4,borderWidth:2,pointBackgroundColor:'#ff5a36'}]},
+    type:'line',data:{labels:mdeLabels,datasets:[{label:'Sample per variant',data:nVals,borderColor:'#3ddb7a',backgroundColor:'rgba(61,219,122,0.08)',fill:true,pointRadius:4,tension:0.4,borderWidth:2,pointBackgroundColor:'#3ddb7a'}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1d27',callbacks:{label:c=>`  n=${c.raw.toLocaleString()}`}}},scales:{x:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},title:{display:true,text:'Relative MDE',color:'#5c6487',font:{size:10}}},y:{ticks:{color:'#5c6487',font:{size:10},callback:v=>v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'},title:{display:true,text:'Sample per variant',color:'#5c6487',font:{size:10}}}}}
   }); }
 }
@@ -4420,7 +4421,7 @@ function calcSSRet(){
 
   document.getElementById('ssr-timeline').innerHTML=`
     <div style="position:relative;height:60px;background:var(--bg3);border-radius:8px;overflow:hidden;margin-bottom:0.75rem">
-      <div style="position:absolute;top:0;left:0;height:100%;width:${Math.min(100,installDays/totalDays*100)}%;background:rgba(255,90,54,0.3);border-right:2px solid var(--ind)"></div>
+      <div style="position:absolute;top:0;left:0;height:100%;width:${Math.min(100,installDays/totalDays*100)}%;background:rgba(61,219,122,0.3);border-right:2px solid var(--ind)"></div>
       <div style="position:absolute;top:0;right:0;height:100%;width:${Math.min(100,day/totalDays*100)}%;background:rgba(34,211,238,0.2);border-left:2px solid var(--cyan)"></div>
       <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-around;font-size:0.75rem">
         <span style="color:var(--ind2)">Install window<br><strong>${installDays}d</strong></span>
@@ -4441,7 +4442,7 @@ function calcSSRet(){
   if(ssrChart) ssrChart.destroy();
   const ctx=document.getElementById('ssr-chart');
   if(ctx){ ssrChart=new Chart(ctx,{
-    type:'line',data:{labels:mdes.slice(0,ns.length).map(m=>(m*100).toFixed(1)+'pp'),datasets:[{label:'Cohort size per variant',data:ns,borderColor:'#ff5a36',backgroundColor:'rgba(255,90,54,0.08)',fill:true,pointRadius:3,tension:0.4,borderWidth:2}]},
+    type:'line',data:{labels:mdes.slice(0,ns.length).map(m=>(m*100).toFixed(1)+'pp'),datasets:[{label:'Cohort size per variant',data:ns,borderColor:'#3ddb7a',backgroundColor:'rgba(61,219,122,0.08)',fill:true,pointRadius:3,tension:0.4,borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c6487',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'},title:{display:true,text:'Absolute MDE (pp)',color:'#5c6487',font:{size:10}}},y:{ticks:{color:'#5c6487',font:{size:9},callback:v=>v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}}}}
   }); }
 }
@@ -4471,7 +4472,7 @@ function calcSSARPU(){
 
   document.getElementById('ssa-guardrails').innerHTML=`
     <div class="verdict-band ${sd/mu>5?'neg':'neutral'}" style="margin-bottom:0.75rem">
-      ${sd/mu>5?'⚠️ High variance warning: ARPU std dev is '+( sd/mu).toFixed(1)+'× the mean. You may need '+Math.ceil(n*2).toLocaleString()+' users or more for reliable results.':'✅ Variance is manageable. Standard t-test should work well.'}
+      ${sd/mu>5?'High variance warning: ARPU std dev is '+( sd/mu).toFixed(1)+'× the mean. You may need '+Math.ceil(n*2).toLocaleString()+' users or more for reliable results.':'✓ Variance is manageable. Standard t-test should work well.'}
     </div>
     <div style="font-size:0.75rem;color:var(--t3);line-height:1.7">
       <strong style="color:var(--t2)">ARPU testing note:</strong> Revenue distributions are heavily right-skewed (a few whales dominate). Consider using a Mann-Whitney U test or log-transforming ARPU before testing.
@@ -4486,7 +4487,7 @@ function calcSSARPU(){
   if(ssaChart) ssaChart.destroy();
   const ctx=document.getElementById('ssa-chart');
   if(ctx){ ssaChart=new Chart(ctx,{
-    type:'bar',data:{labels:['2','4','6','8','10','12','15','20'].map(s=>s+'σ'),datasets:[{label:'Sample per variant',data:sdVals,backgroundColor:sdVals.map(v=>v>10000?'rgba(244,63,94,0.6)':v>5000?'rgba(245,158,11,0.6)':'rgba(255,90,54,0.6)'),borderWidth:0}]},
+    type:'bar',data:{labels:['2','4','6','8','10','12','15','20'].map(s=>s+'σ'),datasets:[{label:'Sample per variant',data:sdVals,backgroundColor:sdVals.map(v=>v>10000?'rgba(244,63,94,0.6)':v>5000?'rgba(245,158,11,0.6)':'rgba(61,219,122,0.6)'),borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'},title:{display:true,text:'Std Deviation ($)',color:'#5c6487',font:{size:10}}},y:{ticks:{color:'#5c6487',font:{size:9},callback:v=>v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}}}}
   }); }
 }
@@ -4523,7 +4524,7 @@ function calcMV(){
   `;
 
   document.getElementById('mv-warnings').innerHTML=`
-    ${vars>3?`<div class="verdict-band neg" style="margin-bottom:0.75rem">⚠️ Testing ${vars} variants simultaneously. Each additional variant increases the minimum test duration and reduces statistical power per comparison.</div>`:''}
+    ${vars>3?`<div class="verdict-band neg" style="margin-bottom:0.75rem">Testing ${vars} variants simultaneously. Each additional variant increases the minimum test duration and reduces statistical power per comparison.</div>`:''}
     <div style="font-size:0.75rem;color:var(--t3);line-height:1.75">
       <strong style="color:var(--t2)">Bonferroni correction</strong> divides α by the number of comparisons (${vars}) to control the family-wise error rate. This makes each individual test more conservative (α = ${corrAlpha.toFixed(4)}).<br><br>
       <strong style="color:var(--t2)">Alternative:</strong> Benjamini-Hochberg (BH) procedure is less conservative and controls the false discovery rate instead of FWER; recommended if you're okay with ~5% of your discoveries being false positives.<br><br>
@@ -4584,7 +4585,7 @@ function calcVW(){
     <div class="stat-cell" style="background:var(--red-bg);border-color:rgba(244,63,94,0.3)"><div class="stat-cell-label" style="color:var(--red)">Marginal Cheapness</div><div class="stat-cell-val" style="color:var(--red)">$${PMC?PMC.toFixed(2):'n/a'}</div></div>
     <div class="stat-cell" style="background:var(--red-bg);border-color:rgba(244,63,94,0.3)"><div class="stat-cell-label" style="color:var(--red)">Marginal Expensive</div><div class="stat-cell-val" style="color:var(--red)">$${PME?PME.toFixed(2):'n/a'}</div></div>
     <div class="stat-cell" style="background:var(--green-bg);border-color:rgba(34,197,94,0.3)"><div class="stat-cell-label" style="color:var(--ind2)">Optimal Price Point</div><div class="stat-cell-val" style="color:var(--ind2)">$${OPP?OPP.toFixed(2):'n/a'}</div></div>
-    <div class="stat-cell" style="background:var(--ind-bg);border-color:rgba(255,90,54,0.3)"><div class="stat-cell-label" style="color:var(--ind2)">Indifference Point</div><div class="stat-cell-val" style="color:var(--ind2)">$${IDP?IDP.toFixed(2):'n/a'}</div></div>
+    <div class="stat-cell" style="background:var(--ind-bg);border-color:rgba(61,219,122,0.3)"><div class="stat-cell-label" style="color:var(--ind2)">Indifference Point</div><div class="stat-cell-val" style="color:var(--ind2)">$${IDP?IDP.toFixed(2):'n/a'}</div></div>
     <div class="stat-cell"><div class="stat-cell-label">Acceptable range</div><div class="stat-cell-val">${PMC?'$'+PMC.toFixed(2):'n/a'} – ${PME?'$'+PME.toFixed(2):'n/a'}</div></div>
   `;
 
@@ -4603,7 +4604,7 @@ function calcVW(){
   const range=PMC&&PME?`$${PMC.toFixed(2)} – $${PME.toFixed(2)}`:'n/a';
   const opp=OPP?`$${OPP.toFixed(2)}`:'n/a';
   document.getElementById('vw-interp').innerHTML=`
-    <div class="verdict-band pos" style="margin-bottom:0.75rem">✅ Acceptable price range: <strong>${range}</strong>. Optimal price point: <strong>${opp}</strong>.</div>
+    <div class="verdict-band pos" style="margin-bottom:0.75rem">✓ Acceptable price range: <strong>${range}</strong>. Optimal price point: <strong>${opp}</strong>.</div>
     <div style="font-size:0.75rem;color:var(--t3);line-height:1.75">
       <strong style="color:var(--t2)">Strategy guidance:</strong>
       <ul style="margin:0.5rem 0 0 1rem">
@@ -4622,7 +4623,7 @@ function calcVW(){
     data:{labels:prices.map(p=>'$'+p.toFixed(2)),datasets:[
       {label:'Too Cheap',data:curveTooC,borderColor:'rgba(244,63,94,0.9)',borderWidth:2,pointRadius:0,tension:0.4,fill:false},
       {label:'Cheap/Bargain',data:curveCheap,borderColor:'rgba(245,158,11,0.9)',borderWidth:2,pointRadius:0,tension:0.4,fill:false},
-      {label:'Expensive',data:curveExp,borderColor:'rgba(255,90,54,0.9)',borderWidth:2,pointRadius:0,tension:0.4,fill:false},
+      {label:'Expensive',data:curveExp,borderColor:'rgba(61,219,122,0.9)',borderWidth:2,pointRadius:0,tension:0.4,fill:false},
       {label:'Too Expensive',data:curveTooE,borderColor:'rgba(34,197,94,0.9)',borderWidth:2.5,pointRadius:0,tension:0.4,fill:false},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
@@ -4752,7 +4753,7 @@ function renderNS(){
     const ctx1=document.getElementById('ns-trend-chart');
     if(ctx1){ nsTrendChart=new Chart(ctx1,{
       type:'line',data:{labels,datasets:[
-        {label:'Composite Score %',data:compositeScores.map(v=>+v.toFixed(1)),borderColor:'#ff5a36',backgroundColor:'rgba(255,90,54,0.1)',fill:true,pointRadius:4,tension:0.4,borderWidth:2.5,pointBackgroundColor:'#ff5a36'},
+        {label:'Composite Score %',data:compositeScores.map(v=>+v.toFixed(1)),borderColor:'#3ddb7a',backgroundColor:'rgba(61,219,122,0.1)',fill:true,pointRadius:4,tension:0.4,borderWidth:2.5,pointBackgroundColor:'#3ddb7a'},
         {label:'Target (100%)',data:labels.map(()=>100),borderColor:'rgba(34,197,94,0.4)',borderDash:[5,3],pointRadius:0,borderWidth:1.5}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9ba3c4',font:{size:10}}}},scales:{x:{ticks:{color:'#5c6487',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.04)'},min:0,max:110}}}
@@ -4760,7 +4761,7 @@ function renderNS(){
 
     // Indicators chart
     if(nsIndChart) nsIndChart.destroy();
-    const colors=['#ff5a36','#22d3ee','#22c55e','#f59e0b','#f43f5e','#ff8a6b'];
+    const colors=['#3ddb7a','#22d3ee','#22c55e','#f59e0b','#f43f5e','#8cf0b0'];
     const datasets=nsIndicators.filter(ind=>ind.col&&nsData.headers.includes(ind.col)).map((ind,i)=>{
       const ci=nsData.headers.indexOf(ind.col);
       const data=nsData.rows.map(r=>+(+r[ci]/ind.target*100).toFixed(1));
@@ -5003,13 +5004,13 @@ function submitAuth(){
     users.push(newUser);
     saveAllUsers(users);
     lsSet(LS_USER,{email,name:newUser.name});
-    st.style.color='var(--green)';st.textContent='Account created! Welcome 🎉';
+    st.style.color='var(--green)';st.textContent='Account created! Welcome ';
     setTimeout(()=>{closeAuthModalBtn();renderNavAuth();renderLeaderboard();},1200);
   } else {
     const u=users.find(u=>u.email===email&&u.passwordHash===hash);
     if(!u){st.style.color='var(--red)';st.textContent='Email or password incorrect.';return;}
     lsSet(LS_USER,{email,name:u.name});
-    st.style.color='var(--green)';st.textContent=`Welcome back, ${u.name}! 👋`;
+    st.style.color='var(--green)';st.textContent=`Welcome back, ${u.name}! `;
     setTimeout(()=>{closeAuthModalBtn();renderNavAuth();renderLeaderboard();},900);
   }
 }
@@ -5155,7 +5156,7 @@ function renderLeaderboardInner(){
   }
 
   const medalFor=()=>'';
-  const rowColor=(u)=>me&&u.email===me.email?'background:rgba(255,90,54,0.07)':'';
+  const rowColor=(u)=>me&&u.email===me.email?'background:rgba(61,219,122,0.07)':'';
 
   document.getElementById('lb-uses-body').innerHTML=sorted.slice(0,10).map((u,i)=>`
     <tr style="${rowColor(u)}">
@@ -5199,7 +5200,7 @@ function renderLeaderboardInner(){
   const ctx=document.getElementById('lb-activity-chart');
   if(ctx){ lbActivityChart=new Chart(ctx,{
     type:'bar',
-    data:{labels:days.map(d=>d.slice(5)),datasets:[{label:'Active users',data:chartData,backgroundColor:'rgba(255,90,54,0.55)',borderColor:'rgba(255,90,54,0.8)',borderWidth:1,borderRadius:4}]},
+    data:{labels:days.map(d=>d.slice(5)),datasets:[{label:'Active users',data:chartData,backgroundColor:'rgba(61,219,122,0.55)',borderColor:'rgba(61,219,122,0.8)',borderWidth:1,borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#5c6487',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#5c6487',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}}}
   }); }
 
@@ -5444,7 +5445,7 @@ function initChallenge(){
   if(pill) pill.textContent=MODE_LABELS[ch.mode]||ch.mode;
   const streak=lsGet(LS_CH_STREAK,{streak:0,lastDate:'',longestStreak:0});
   const meta=document.getElementById('ch-start-meta');
-  if(meta) meta.innerHTML=streak.streak>0?`🔥 <strong style="color:var(--t1)">${streak.streak}-day streak</strong>`:'Start your streak today';
+  if(meta) meta.innerHTML=streak.streak>0?`<strong style="color:var(--t1)">${streak.streak}-day streak</strong>`:'Start your streak today';
   showChState('start');
 }
 
@@ -5572,7 +5573,7 @@ function showEndScreen(){
   document.getElementById('ch-end-score-val').textContent=final;
   const rank=getRankTitle(at.totalPoints), next=getNextRank(at.totalPoints);
   document.getElementById('ch-end-rank').innerHTML=`<span style="font-size:0.9rem;color:var(--t3);font-family:var(--sans);font-weight:400">Rank: </span>${rank.title}`;
-  document.getElementById('ch-end-streak').innerHTML=`🔥 ${sd.streak}-day streak &nbsp;·&nbsp; ${mult>1?mult+'× multiplier applied':'Keep going for a streak bonus!'}`;
+  document.getElementById('ch-end-streak').innerHTML=`${sd.streak}-day streak &nbsp;·&nbsp; ${mult>1?mult+'× multiplier applied':'Keep going for a streak bonus!'}`;
   document.getElementById('ch-end-next').textContent=next?`${next.title} at ${next.min.toLocaleString()} pts · you have ${at.totalPoints.toLocaleString()}`:"You've reached CPO: the highest rank!";
   const LBLS=['Q1','Q2','Q3'];
   document.getElementById('ch-end-breakdown').innerHTML=
@@ -5616,7 +5617,7 @@ function renderHistoryLog(elId='ch-end-history'){
         ${q.bestOptText}
       </div>`:''}
       ${q.rationale?`<div style="font-size:0.77rem;color:var(--t2);font-style:italic;line-height:1.5;margin-bottom:${q.reveal?'0.4rem':'0'}">${q.rationale}</div>`:''}
-      ${q.reveal?`<div style="font-size:0.77rem;color:var(--t3);border-top:1px solid var(--border);padding-top:0.4rem;margin-top:0.4rem;line-height:1.5">💡 ${q.reveal}</div>`:''}
+      ${q.reveal?`<div style="font-size:0.77rem;color:var(--t3);border-top:1px solid var(--border);padding-top:0.4rem;margin-top:0.4rem;line-height:1.5">${q.reveal}</div>`:''}
     </div>`;
   }).join('');
 
@@ -5699,7 +5700,7 @@ async function submitFeedback(){
   if(FORMSPREE_ID){
     try{
       const res=await fetch(`https://formspree.io/f/${FORMSPREE_ID}`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({type:_fbType,message:msg,email:email||'(not provided)'})});
-      if(res.ok){st.style.color='var(--green)';st.textContent='Sent! Thank you 🙏';setTimeout(()=>closeFeedbackModal(),2000);}
+      if(res.ok){st.style.color='var(--green)';st.textContent='Sent! Thank you ';setTimeout(()=>closeFeedbackModal(),2000);}
       else throw new Error('failed');
     }catch{st.style.color='var(--red)';st.textContent='Could not send. Try emailing directly.';}
   } else {
@@ -5903,8 +5904,8 @@ function renderNews(items){
       <button class="btn btn-primary ch-start-btn" onclick="startChallenge()">Start Challenge →</button>
       <div class="ch-start-rules">
         <div class="ch-rule"><span>⏱</span> 2-minute timer per question; speed earns bonus points</div>
-        <div class="ch-rule"><span>🎯</span> Weighted answers: no binary right/wrong</div>
-        <div class="ch-rule"><span>🔥</span> Daily streaks multiply your score</div>
+        <div class="ch-rule"><span></span> Weighted answers: no binary right/wrong</div>
+        <div class="ch-rule"><span></span> Daily streaks multiply your score</div>
       </div>
     </div>
   </div>
@@ -5999,7 +6000,7 @@ function renderNews(items){
 <div class="page" id="page-news">
   <div class="page-header">
     <div class="page-header-left">
-      <div class="page-title">🎮 Gaming News</div>
+      <div class="page-title">Gaming News</div>
       <div class="page-sub">Top 10 headlines from the games industry, refreshed on every visit.</div>
     </div>
     <div class="page-actions">
@@ -6092,7 +6093,7 @@ function renderNews(items){
 //DATA-START
 const START={r:13,v:8,t:33}, BUDGET=84;
 const LBL={r:'Retention',v:'Revenue',t:'Trust'}, ABBR={r:'RET',v:'REV',t:'TRUST'};
-const COL={r:'#7dd3fc',v:'#22c55e',t:'#ff8a6b'};
+const COL={r:'#7dd3fc',v:'#22c55e',t:'#8cf0b0'};
 const TAGS={social:'Social',coop:'Co-op',pve:'PvE',pvp:'PvP',idle:'Idle',collect:'Collection',sink:'Sink',power:'Power',skill:'Skill',season:'Season',whale:'Whale Pull',gacha:'Gacha',limited:'Limited',fomo:'FOMO',scarce:'Scarcity',faucet:'Faucet',gate:'Gate',transparent:'Open',pity:'Pity',pass:'Pass',starter:'Starter',ads:'Ads',rewarded:'Rewarded',moment:'Moment',streak:'Streak',push:'Push',quests:'Quests',daily:'Daily',comeback:'Comeback',community:'Community',tested:'Tested',bold:'Big Bang',rushed:'Rushed',polish:'Polish',sub:'Subscription',luck:'Luck',cosmetic:'Cosmetic',trade:'Trading',crafting:'Crafting',story:'Story',minigame:'Mini-games',prestige:'Prestige',builds:'Builds',unlocks:'Unlocks',shards:'Shards',milestones:'Milestones',loot:'Loot',meta:'Meta',exchange:'Exchange',bundle:'Bundle',spendcap:'Spend Cap',timers:'Timers',stableshop:'Stable Shop',vip:'VIP',loyalty:'Loyalty',adfree:'Ad-Free',directbuy:'Direct Buy',groupbuy:'Group Buy',flash:'Flash Sale',piggy:'Piggy Bank',spendgoals:'Spend Goals',personal:'Personal',rotating:'Rotating',ladder:'Price Ladder',freegift:'Free Gift',regional:'Regional',doubler:'Doubler',chat:'Chat',widget:'Widget',freepull:'Free Pull',events:'Events',cadence:'Cadence',leagues:'Leagues',collab:'Collab',creators:'Creators'};
 
 const PROBLEMS=[
@@ -6528,7 +6529,7 @@ function drawThreads(){
       const pill=document.createElement('div');
       pill.className='g-pill '+th.kind+(th.animated?'':' static');
       pill.style.left=c.mid.x+'px';pill.style.top=c.mid.y+'px';
-      pill.textContent=(th.kind==='good'?'✦ ':'⚠ ')+th.label;
+      pill.textContent=(th.kind==='good'?'✦ ':'')+th.label;
       pill.title=th.note;
       lab.appendChild(pill);
     }
@@ -6565,7 +6566,7 @@ window.gChoose=function(i){
     G.fired.add(h.i);
     const kind=h.cb.good?'good':'bad';
     h.partner.slice(0,2).forEach(cell=>{G.threads.push({a:cell,b:step,kind:kind,label:fxText(h.cb.fx),note:h.cb.n,fresh:true});if(G.cells[cell])G.cells[cell].glow=kind;});
-    notesHtml.push('<div class="'+kind+'">'+(h.cb.good?'✦ Combo: ':'⚠ Clash: ')+esc(h.cb.n)+' ('+fxText(h.cb.fx)+')</div>');
+    notesHtml.push('<div class="'+kind+'">'+(h.cb.good?'✦ Combo: ':'Clash: ')+esc(h.cb.n)+' ('+fxText(h.cb.fx)+')</div>');
     G.notes.push({good:h.cb.good,text:h.cb.n});
   });
   G.picks[step]=NODES[step].pool.indexOf(c);
@@ -6653,7 +6654,7 @@ function finish(){
     const tc=getComputedStyle(document.body).getPropertyValue('--t2').trim()||'#888';
     chart=new Chart($('g-chart'),{type:'line',data:{labels:days,datasets:[
       {label:'Before',data:days.map(d=>+B.ret(d).toFixed(2)),borderColor:'#777',borderDash:[5,4],pointRadius:0,borderWidth:2},
-      {label:'Your launch',data:days.map(d=>+A.ret(d).toFixed(2)),borderColor:'#ff8a6b',backgroundColor:'rgba(0,0,0,0.16)',fill:true,pointRadius:0,borderWidth:3,tension:0.3}]},
+      {label:'Your launch',data:days.map(d=>+A.ret(d).toFixed(2)),borderColor:'#8cf0b0',backgroundColor:'rgba(0,0,0,0.16)',fill:true,pointRadius:0,borderWidth:3,tension:0.3}]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,boxWidth:12}}},scales:{x:{ticks:{color:tc,maxTicksLimit:8,callback:function(v){return 'D'+this.getLabelForValue(v);}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v+'%'},grid:{color:'rgba(128,128,128,0.15)'}}}}});
   }
 }
@@ -6740,7 +6741,7 @@ window.gSaveRun=function(){
 window.gRetrySave=function(){if(G)gSubmit(G.savedName,G.savedEmail,true);};
 window.renderRunBoard=async function(){
   const note=$('lb-runs-note'), me=getCurrentUser(), dev=deviceId();
-  const row=(r,i)=>'<tr'+((r.me||(me&&r.email&&r.email===me.email))?' style="background:rgba(255,90,54,0.07)"':'')+'><td style="font-family:var(--mono);font-size:0.85rem;color:'+(i<3?'var(--amber)':'var(--t3)')+'">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1))+'</td>'+
+  const row=(r,i)=>'<tr'+((r.me||(me&&r.email&&r.email===me.email))?' style="background:rgba(61,219,122,0.07)"':'')+'><td style="font-family:var(--mono);font-size:0.85rem;color:'+(i<3?'var(--amber)':'var(--t3)')+'">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1))+'</td>'+
     '<td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--on-accent);flex-shrink:0">'+esc((r.name||'?')[0].toUpperCase())+'</div><span class="td-name">'+esc(r.name)+'</span></div></td>'+
     '<td style="font-size:0.78rem;color:var(--amber);white-space:nowrap">'+esc(r.arch)+'</td><td><span class="lb-grade">'+esc(r.grade)+'</span></td><td style="font-family:var(--mono);font-weight:600;color:var(--t1)">'+r.score+'</td></tr>';
   const msg=t=>'<tr><td colspan="5"><div class="lb-empty">'+t+'</div></td></tr>';
