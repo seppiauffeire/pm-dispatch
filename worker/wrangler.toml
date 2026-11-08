@@ -6,4 +6,4 @@ compatibility_date = "2025-01-01"
 binding = "DB"
 database_name = "pmdispatch-leaderboard"
 # Run `npx wrangler d1 create pmdispatch-leaderboard` and paste the id it prints here.
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "fd23e447-b5b5-4534-99a2-a69d4d3c0bab"

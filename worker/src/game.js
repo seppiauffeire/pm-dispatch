@@ -2,7 +2,7 @@
 //DATA-START
 const START={r:13,v:8,t:33}, BUDGET=84;
 const LBL={r:'Retention',v:'Revenue',t:'Trust'}, ABBR={r:'RET',v:'REV',t:'TRUST'};
-const COL={r:'#7dd3fc',v:'#22c55e',t:'#c4b5fd'};
+const COL={r:'#7dd3fc',v:'#22c55e',t:'#ff8a6b'};
 const TAGS={social:'Social',coop:'Co-op',pve:'PvE',pvp:'PvP',idle:'Idle',collect:'Collection',sink:'Sink',power:'Power',skill:'Skill',season:'Season',whale:'Whale Pull',gacha:'Gacha',limited:'Limited',fomo:'FOMO',scarce:'Scarcity',faucet:'Faucet',gate:'Gate',transparent:'Open',pity:'Pity',pass:'Pass',starter:'Starter',ads:'Ads',rewarded:'Rewarded',moment:'Moment',streak:'Streak',push:'Push',quests:'Quests',daily:'Daily',comeback:'Comeback',community:'Community',tested:'Tested',bold:'Big Bang',rushed:'Rushed',polish:'Polish',sub:'Subscription',luck:'Luck',cosmetic:'Cosmetic',trade:'Trading',crafting:'Crafting',story:'Story',minigame:'Mini-games',prestige:'Prestige',builds:'Builds',unlocks:'Unlocks',shards:'Shards',milestones:'Milestones',loot:'Loot',meta:'Meta',exchange:'Exchange',bundle:'Bundle',spendcap:'Spend Cap',timers:'Timers',stableshop:'Stable Shop',vip:'VIP',loyalty:'Loyalty',adfree:'Ad-Free',directbuy:'Direct Buy',groupbuy:'Group Buy',flash:'Flash Sale',piggy:'Piggy Bank',spendgoals:'Spend Goals',personal:'Personal',rotating:'Rotating',ladder:'Price Ladder',freegift:'Free Gift',regional:'Regional',doubler:'Doubler',chat:'Chat',widget:'Widget',freepull:'Free Pull',events:'Events',cadence:'Cadence',leagues:'Leagues',collab:'Collab',creators:'Creators'};
 
 const PROBLEMS=[
