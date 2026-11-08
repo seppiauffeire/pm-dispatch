@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ship It: PM Idle | PM Dispatch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&family=Figtree:wght@400;500;600&family=Anton&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*:focus-visible{outline:2px solid var(--ind)!important;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 :root{
-  --bg:#080808;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+  --bg:#000;--bg2:#0c0c0c;--bg3:#151515;--bg4:#1e1e1e;
   --border:#2a2a2a;--border2:#3a3a3a;
-  --t1:#f2f2f2;--t2:#c8c8c8;--t3:#909090;
-  --ind:#a78bfa;--ind2:#c4b5fd;
+  --t1:#efefec;--t2:#c8c8c8;--t3:#909090;
+  --ind:#ff5a36;--ind2:#ff8a6b;
   --green:#4ade80;--red:#f87171;--yellow:#fbbf24;
   --mono:'Figtree',system-ui,sans-serif;
   --sans:'Figtree',system-ui,sans-serif;
@@ -23,7 +25,8 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 #sticky-header{background:var(--bg);z-index:1001}
 .gnav-back{display:flex;align-items:center;gap:5px;color:var(--t2);font-size:0.88rem;text-decoration:none;transition:color .15s;background:none;border:none;cursor:pointer;font-family:var(--sans)}
 .gnav-back:hover{color:var(--t1)}
-.gnav-title{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.04em}
+.gnav-title{font-family:var(--display);font-size:1.15rem;font-weight:400;letter-spacing:0.02em;text-transform:uppercase}
+*{font-synthesis-weight:none}
 .gnav-right{display:flex;gap:0.75rem;align-items:center}
 .gnav-save{font-size:0.78rem;color:var(--t3)}
 .btn-reset{font-size:0.78rem;color:var(--t3);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:2px 6px;border-radius:4px;transition:color .12s}
@@ -31,7 +34,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .res-bar{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto}
 .res-item{flex:1;min-width:110px;padding:0.6rem 1rem;border-right:1px solid var(--border)}
 .res-item:last-child{border-right:none}
-.res-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t2);margin-bottom:3px}
+.res-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t2);margin-bottom:3px}
 .res-val{font-family:var(--mono);font-size:1.1rem;font-weight:600;color:var(--t1);line-height:1}
 .res-sub{font-size:0.78rem;color:var(--t2);margin-top:2px}
 #ri-debt .res-val{color:var(--red)}
@@ -43,10 +46,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .col-left,.col-main,.col-side{display:flex;flex-direction:column;gap:1rem}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem}
 .ptitle{font-size:0.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
-.ptitle:after{content:'▾';font-size:.65rem;color:var(--t3)}
+.ptitle:after{content:'▾';font-size:0.75rem;color:var(--t3)}
 .panel.collapsed .ptitle:after{content:'▸'}
 .panel.collapsed .panel-body{display:none}
-.panel-complete-badge{font-size:.65rem;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:.5rem;text-align:center}
+.panel-complete-badge{font-size:0.75rem;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:.5rem;text-align:center}
 .hidden{display:none!important}
 .fade-in{animation:fi .55s ease forwards}
 @keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
@@ -56,25 +59,25 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 #btn-proto{
   width:100%;max-width:300px;padding:1rem 1.75rem;
   font-size:.95rem;font-weight:800;letter-spacing:.04em;
-  background:linear-gradient(135deg,#7c3aed,#5b6ef5);color:#fff;
+  background:#ff5a36;color:#0a0a0a;
   border:none;border-radius:11px;cursor:pointer;
-  box-shadow:0 4px 22px rgba(124,58,237,.4);transition:background .2s,box-shadow .2s,transform .14s;user-select:none
+  box-shadow:0 4px 22px rgba(255,90,54,.4);transition:background .2s,box-shadow .2s,transform .14s;user-select:none
 }
 #btn-proto:hover{transform:translateY(-2px)}
 #btn-proto:active{transform:scale(.97)}
 .prd-bar-wrap{width:100%;max-width:300px;margin:.65rem auto 0;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
 .prd-bar-fill{height:100%;background:linear-gradient(90deg,var(--ind),var(--ind2));border-radius:3px;transition:width .2s}
-.prd-label{font-size:.72rem;color:var(--t3);margin-top:.35rem;text-align:center}
+.prd-label{font-size:0.75rem;color:var(--t3);margin-top:.35rem;text-align:center}
 .pcount{font-size:.85rem;color:var(--t2);margin-top:.85rem}
 #panel-log{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .log-head{padding:.65rem .9rem;border-bottom:1px solid var(--border);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
 #rlog{height:220px;overflow-y:auto}
 .le{padding:.55rem .9rem;border-bottom:1px solid var(--border);font-size:.88rem;color:var(--t1);line-height:1.55;animation:le .3s ease}
 .le:last-child{border-bottom:none}
-.let{font-size:.72rem;color:var(--t3);margin-right:6px}
+.let{font-size:0.75rem;color:var(--t3);margin-right:6px}
 @keyframes le{from{opacity:0}to{opacity:1}}
 /* Automation - two sections */
-.auto-section-hdr{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin:.6rem 0 .3rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+.auto-section-hdr{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin:.6rem 0 .3rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
 .auto-section-hdr:first-child{margin-top:0}
 .ai{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border)}
 .ai:last-child{border-bottom:none}
@@ -82,7 +85,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .aif{font-size:.78rem;color:var(--t2);margin-top:2px;font-style:italic}
 .air{text-align:right;flex-shrink:0;margin-left:.5rem}
 .aio{font-size:.82rem;color:var(--ind2);font-weight:600}
-.airt{font-size:.72rem;color:var(--t2)}
+.airt{font-size:0.75rem;color:var(--t2)}
 .airt.active{color:var(--green)}
 .bbuy{margin-top:4px;padding:4px 11px;font-size:.78rem;font-weight:600;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--t2);cursor:pointer;font-family:var(--sans);transition:all .12s;white-space:nowrap}
 .bbuy:hover:not(:disabled){background:var(--bg4);color:var(--t1);border-color:var(--t3)}
@@ -99,18 +102,18 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .gch{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;gap:.5rem;flex-wrap:wrap}
 .gcn{font-size:.98rem;font-weight:800;letter-spacing:-.015em}
 .gctags{display:flex;gap:4px;flex-shrink:0}
-.gctag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:rgba(167,139,250,.15);color:var(--ind2)}
+.gctag{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:rgba(255,90,54,.15);color:var(--ind2)}
 .gcstats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.65rem;margin-bottom:.8rem}
 @media(max-width:500px){.gcstats{grid-template-columns:1fr 1fr}}
-.gcsl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:3px;font-weight:700}
+.gcsl{font-size:0.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:3px;font-weight:700}
 .gcsv{font-size:1rem;font-weight:600;color:var(--t1)}
 .daubar{height:3px;background:var(--bg4);border-radius:2px;margin-top:3px;overflow:hidden}
 .daufill{height:100%;background:linear-gradient(90deg,var(--ind),var(--ind2));border-radius:2px;transition:width .6s}
 .gcactions{display:flex;gap:.4rem;flex-wrap:wrap}
 .bact{padding:6px 14px;font-size:.84rem;font-weight:600;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all .12s;border:1px solid var(--border2);background:var(--bg4);color:var(--t1)}
 .bact:hover{background:var(--bg2);border-color:var(--t3)}
-.bact.pri{background:rgba(124,58,237,.15);color:var(--ind2);border-color:var(--ind)}
-.bact.pri:hover{background:rgba(124,58,237,.25)}
+.bact.pri{background:rgba(255,90,54,.15);color:var(--ind2);border-color:var(--ind)}
+.bact.pri:hover{background:rgba(255,90,54,.25)}
 .bact.dan{color:var(--red);border-color:#7f1d1d}
 .bact.dan:hover{background:rgba(248,113,113,.08)}
 .bact:disabled{opacity:.35;cursor:not-allowed}
@@ -122,7 +125,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:var(
 .slname{font-size:.88rem;font-weight:600;color:var(--t1)}
 .slpct{font-size:.84rem;color:var(--ind2);font-weight:600}
 input[type=range]{width:100%;height:4px;border-radius:2px;-webkit-appearance:none;appearance:none;background:var(--border2);outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ind);cursor:pointer;box-shadow:0 0 6px rgba(167,139,250,.5)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ind);cursor:pointer;box-shadow:0 0 6px rgba(255,90,54,.5)}
 .mdots{display:flex;gap:3px;margin-top:3px}
 .md{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:background .3s}
 .md.g{background:var(--green)}.md.y{background:var(--yellow)}.md.r{background:var(--red)}
@@ -148,7 +151,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .ops-btn:hover:not(:disabled){background:var(--bg4);border-color:var(--t2)}
 .ops-btn:disabled{opacity:.4;cursor:not-allowed}
 .ops-btn-name{font-size:.82rem;font-weight:700;color:var(--t1);margin-bottom:4px}
-.ops-btn-effect{font-size:.68rem;color:var(--t2);line-height:1.5}
+.ops-btn-effect{font-size:0.75rem;color:var(--t2);line-height:1.5}
 .ops-btn-effect .pos{color:var(--green)}
 .ops-result{font-size:.75rem;color:var(--t2);text-align:center;margin-top:.6rem;min-height:1em;font-style:italic}
 /* Achievement toast */
@@ -156,7 +159,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 #ach-toast.show{transform:translateX(0)}
 .ach-toast-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem}
 .ach-toast-icon{font-size:1.1rem}
-.ach-toast-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green)}
+.ach-toast-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green)}
 .ach-toast-name{font-size:.9rem;font-weight:700;color:var(--t1)}
 .ach-toast-desc{font-size:.75rem;color:var(--t2);margin-top:2px}
 /* Achievements panel */
@@ -167,10 +170,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .ach-icon{font-size:1rem;flex-shrink:0;line-height:1.4}
 .ach-info{}
 .ach-name{font-size:.82rem;font-weight:600;color:var(--t1);line-height:1.3}
-.ach-desc{font-size:.7rem;color:var(--t2);line-height:1.4}
-.ach-cat-hdr{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin:.6rem 0 .2rem;padding-bottom:.2rem;border-bottom:1px solid var(--border)}
+.ach-desc{font-size:0.75rem;color:var(--t2);line-height:1.4}
+.ach-cat-hdr{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin:.6rem 0 .2rem;padding-bottom:.2rem;border-bottom:1px solid var(--border)}
 .ach-cat-hdr:first-child{margin-top:0}
-.ach-count{font-size:.68rem;color:var(--t3);text-align:right;margin-bottom:.5rem}
+.ach-count{font-size:0.75rem;color:var(--t3);text-align:right;margin-bottom:.5rem}
 /* Tech Debt bar in resource bar */
 #ri-techdebt .res-val { transition: color .3s; }
 /* Office panel tier indicator */
@@ -178,7 +181,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .office-tier-locked { color: var(--t3); }
 /* Software tools panel */
 .tool-section-hdr {
-  font-size: .62rem; font-weight: 700; text-transform: uppercase;
+  font-size:0.75rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .12em; color: var(--t3);
   margin: .6rem 0 .3rem; padding-bottom: .3rem;
   border-bottom: 1px solid var(--border);
@@ -191,7 +194,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 /* Prestige button in nav */
 #btn-prestige { font-weight: 700; border: 1px solid var(--ind); border-radius: 5px; }
 /* Training active indicator */
-.training-active { color: var(--yellow); font-size: .7rem; }
+.training-active { color: var(--yellow); font-size:0.75rem; }
 </style>
 </head>
 <body>
@@ -224,7 +227,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="res-item" id="ri-debt">
     <div class="res-label">Debt</div>
     <div class="res-val" id="r-debt">$0</div>
-    <div class="res-sub" id="r-dflav">—</div>
+    <div class="res-sub" id="r-dflav">n/a</div>
   </div>
   <div class="res-item" id="ri-techdebt">
     <div class="res-label">Tech Debt</div>
@@ -301,7 +304,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     </div>
     <div class="panel hidden" id="panel-sprint">
       <div class="sphead">
-        <div class="sptitle">⚡ PM Focus — Sprint<br><span style="font-size:.6rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--t3)">Affects all live games proportionally</span></div>
+        <div class="sptitle">⚡ PM Focus: Sprint<br><span style="font-size:0.75rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--t3)">Affects all live games proportionally</span></div>
         <div id="sp-timer">30s</div>
       </div>
       <div class="slitem">
@@ -345,7 +348,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="panel hidden" id="panel-respect-actions">
       <div class="ptitle" onclick="togglePanel('panel-respect-actions')">⭐ Use Respect</div>
       <div class="panel-body">
-        <div style="font-size:.72rem;color:var(--t3);margin-bottom:.5rem" id="respect-avail"></div>
+        <div style="font-size:0.75rem;color:var(--t3);margin-bottom:.5rem" id="respect-avail"></div>
         <div id="respect-list"></div>
       </div>
     </div>
@@ -389,17 +392,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 // pmRate = PRD steps per minute automated (consumes SB)
 // sbCost = SB consumed per auto-step
 const AUTOS = [
-  // Build team — generates Software Built
+  // Build team: generates Software Built
   {id:'intern',   name:'Intern',      cost:50,   sbRate:0.6,pmRate:0, sbCost:0,   payroll:50,   flavor:'Generates a trickle of Software Built.'},
   {id:'engineer', name:'Engineer',    cost:350,  sbRate:12, pmRate:0, sbCost:0,   payroll:1500, flavor:'Builds the thing. Sometimes the right thing.'},
   {id:'qa',       name:'QA',          cost:900,  sbRate:16, pmRate:0, sbCost:0,   payroll:1000, flavor:'Finds all the ways it breaks. Before launch.'},
   {id:'designer', name:'Designer',    cost:1800, sbRate:24, pmRate:0, sbCost:0,   payroll:900,  flavor:'Turns concepts into something shippable.'},
   {id:'artist',   name:'Artist',      cost:4500, sbRate:40, pmRate:0, sbCost:0,   payroll:1000, flavor:'Makes it look like someone cares.'},
-  // PM team — auto-advances PRD steps, consumes SB
+  // PM team: auto-advances PRD steps, consumes SB
   {id:'junior',   name:'Junior PM',   cost:80,   sbRate:0,  pmRate:1, sbCost:75,  payroll:200,  flavor:'Clicks through PRD steps automatically. Slowly.'},
   {id:'senior',   name:'Senior PM',   cost:400,  sbRate:0,  pmRate:3, sbCost:200, payroll:800,  flavor:'3× faster. Costs 2.5× more Software Built per step.'},
   {id:'ai',       name:'AI PM Tool',  cost:2000, sbRate:0,  pmRate:8, sbCost:400, payroll:300,  flavor:'Rapid automation. Wrong 40% of the time, every time.'},
-  // Director of Product — dual-currency hire, auto-ships features
+  // Director of Product: dual-currency hire, auto-ships features
   {id:'director', name:'Director of Product', cost:50000, revCost:100000, sbRate:0, pmRate:0, sbCost:0, payroll:5000, flavor:'Auto-ships game features. Attends your board meetings. Takes partial credit.', directorOnly:true},
 ];
 
@@ -516,7 +519,7 @@ const REJECTIONS = [
   "Monetization strategy was 'figure it out post-launch.'",
   "47-slide pitch deck. 15-minute slot. You 'moved quickly.'",
   "Killed by a competitor who shipped it while you were in review.",
-  "Pilot tested well with 10 users — all colleagues.",
+  "Pilot tested well with 10 users: all colleagues.",
   "Roadmap presented. CEO asked why there's no social layer.",
   "Shipped the feature. Users asked for the old version back.",
   "App store description required 3 rounds of legal review.",
@@ -557,7 +560,7 @@ const EVENTS = {
   },
   bug:{
     title:"Something is broken in production.",
-    body:"Players are getting 10,000× their normal currency. Economy on fire.\n\nDiscord: \"FREE GEMS BUG — STACK NOW BEFORE PATCH.\"",
+    body:"Players are getting 10,000× their normal currency. Economy on fire.\n\nDiscord: \"FREE GEMS BUG: STACK NOW BEFORE PATCH.\"",
     choices:[
       {text:"Emergency patch. Rollback immediately.",flav:"Conservative. Churn +1%.",fx:()=>{ if(S.games[0])S.games[0].churn=Math.min(20,S.games[0].churn+1); }},
       {text:"Let it run. Goodwill event, basically.",flav:"Risky. DAU +20%. Churn +4%.",fx:()=>{ if(S.games[0]){S.games[0].dau*=1.2;S.games[0].churn=Math.min(25,S.games[0].churn+4);} }},
@@ -566,7 +569,7 @@ const EVENTS = {
   },
   featDebt:{
     title:"Is [GAME_NAME] dead?",
-    body:"Your players haven't seen new content in 18 days.\n\nReddit: \"Is [GAME_NAME] dead?\" — 847 upvotes.\n\nChurn is spiking.",
+    body:"Your players haven't seen new content in 18 days.\n\nReddit: \"Is [GAME_NAME] dead?\": 847 upvotes.\n\nChurn is spiking.",
     choices:[
       {text:"Divert everything to Feature Dev.",flav:"Conservative. Churn stabilizes.",fx:()=>{ S.sl.feat=60;if(S.games[0])S.games[0].churn=Math.max(3,S.games[0].churn-3);log("Feature sprint started."); }},
       {text:"Ship a monetization event instead.",flav:"Risky. Revenue +30% short term. Churn continues.",fx:()=>{ S.revenue*=1.3;log("Players noticed it wasn't content."); }},
@@ -635,7 +638,7 @@ const EVENTS = {
   },
   megaAcquisition:{
     title:"MegaCorp Interactive wants to buy [GAME_NAME].",
-    body:"$100M in lifetime revenue. They noticed.\n\nThey're offering $35 million for full acquisition. Your game, your team, your data — absorbed into their platform.\n\nThe fine print: two of your other titles get sunset within 6 months.",
+    body:"$100M in lifetime revenue. They noticed.\n\nThey're offering $35 million for full acquisition. Your game, your team, your data: absorbed into their platform.\n\nThe fine print: two of your other titles get sunset within 6 months.",
     choices:[
       {text:"Accept the offer.",flav:"Conservative. +$35M cash. Game sunsetted. +5 Respect. You did it.",fx:()=>{
         const g=S.games[S._acqIdx||0];
@@ -787,7 +790,7 @@ const EVENTS = {
   },
   formerInternStudio:{
     title:"Your old intern launched a studio.",
-    body:"Six months ago they were filing your tickets.\n\nToday: 'Excited to announce [studio name] — building the mobile games we always wanted to make.'\n\nYou recognize the genre. You recognize the core loop. You recognize the feature list from a PRD you wrote in 2023.",
+    body:"Six months ago they were filing your tickets.\n\nToday: 'Excited to announce [studio name]: building the mobile games we always wanted to make.'\n\nYou recognize the genre. You recognize the core loop. You recognize the feature list from a PRD you wrote in 2023.",
     choices:[
       {text:"Mentor them. Send a supportive message.",flav:"Respect +1. Good karma. No competitive hit.",fx:()=>{
         S.respect++;
@@ -867,7 +870,7 @@ const EVENTS = {
   // ── ACQUISITION EVENTS ──────────────────────────────
   earlyAcquisition:{
     title:"Nexus Play wants to talk about [GAME_NAME].",
-    body:"Mid-tier publisher. 12 games in their portfolio, 3 of which you've heard of.\n\nThey've been watching your retention curves.\n\nOffer: $4.5M outright acquisition. They keep the game live, rebrand the studio as \"Nexus Mobile — [Your Studio].\" You get a VP title, a 2-year earnout, and a quarterly all-hands you'll need to attend in Scottsdale.",
+    body:"Mid-tier publisher. 12 games in their portfolio, 3 of which you've heard of.\n\nThey've been watching your retention curves.\n\nOffer: $4.5M outright acquisition. They keep the game live, rebrand the studio as \"Nexus Mobile: [Your Studio].\" You get a VP title, a 2-year earnout, and a quarterly all-hands you'll need to attend in Scottsdale.",
     choices:[
       {text:"Accept. $4.5M and a VP title.",flav:"Conservative. +$4.5M. Game sunsets from your portfolio. Respect +2.",fx:()=>{
         const g=S.games.find(x=>x.name===S._acqGameName)||S.games[0];
@@ -894,9 +897,9 @@ const EVENTS = {
   },
   dauAcquisition:{
     title:"A data platform wants your users.",
-    body:"PixelGraph. They don't make games. They make data infrastructure for game studios — the kind that knows what ads to show you before you know you want to see them.\n\n[GAME_NAME] has 200,000 daily active users. That's a dataset they want.\n\nOffer: $12M. The game keeps running under your brand. They get full analytics access and a data-sharing agreement.\n\nThe contract uses the phrase \"value exchange\" four times.",
+    body:"PixelGraph. They don't make games. They make data infrastructure for game studios: the kind that knows what ads to show you before you know you want to see them.\n\n[GAME_NAME] has 200,000 daily active users. That's a dataset they want.\n\nOffer: $12M. The game keeps running under your brand. They get full analytics access and a data-sharing agreement.\n\nThe contract uses the phrase \"value exchange\" four times.",
     choices:[
-      {text:"Accept. $12M and the game stays live.",flav:"Conservative. +$12M. Churn +1.5% — data harvesting degrades UX. Respect −1.",fx:()=>{
+      {text:"Accept. $12M and the game stays live.",flav:"Conservative. +$12M. Churn +1.5%: data harvesting degrades UX. Respect −1.",fx:()=>{
         S.revenue+=12000000; S.respect=Math.max(0,S.respect-1);
         const g=S.games.find(x=>x.name===S._acqGameName)||S.games[0];
         if(g) g.churn=Math.min(25,g.churn+1.5);
@@ -941,7 +944,7 @@ const EVENTS = {
   },
   platformComplianceWarning:{
     title:"AppVault Compliance: Action Required.",
-    body:"[GAME_NAME] has been flagged.\n\nNew AppVault policy — the store whose 30% cut you've accepted as a fact of life — requires loot box odds to be disclosed in app store listings. You have 7 days.\n\nYour current disclosure is... creative.\n\nThe compliance email is 847 words long. You read 200 of them.",
+    body:"[GAME_NAME] has been flagged.\n\nNew AppVault policy: the store whose 30% cut you've accepted as a fact of life: requires loot box odds to be disclosed in app store listings. You have 7 days.\n\nYour current disclosure is... creative.\n\nThe compliance email is 847 words long. You read 200 of them.",
     choices:[
       {text:"Update immediately. Be fully transparent.",flav:"Conservative. 2,000 SB to redeploy. Churn −0.5% (players notice the honesty).",fx:()=>{
         const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
@@ -1030,7 +1033,7 @@ const EVENTS = {
     title:"A funded studio just launched your game.",
     body:"Same genre. Same core loop. Same onboarding flow. Better art.\n\n$8M Series A. 50K installs in 72 hours. AppVault is featuring them.\n\nThey named it \"[GAME_NAME] but good\" in their internal docs. The internal docs leaked.",
     choices:[
-      {text:"Accelerate the feature roadmap.",flav:"Conservative. Churn −2% — loyal players double down. Feature ship costs temporarily 2×.",fx:()=>{
+      {text:"Accelerate the feature roadmap.",flav:"Conservative. Churn −2%: loyal players double down. Feature ship costs temporarily 2×.",fx:()=>{
         const g=S.games.find(x=>x.name===S._atRiskGame)||S.games[0];
         if(g){ g.churn=Math.max(0.5,g.churn-2); g._cloneRushCost=true; }
         log(`Feature sprint activated. The team knows what's at stake. Churn −2% as loyal players feel the investment. Shipping costs 2× for 7 days.`);
@@ -1058,7 +1061,7 @@ const EVENTS = {
   // ── PM LLM ARC ───────────────────────────────────────
   pmLLMOffer:{
     title:"Someone is selling PM LLM.",
-    body:"You get the cold outreach at 6:47 AM.\n\n\"We built PM LLM 14 months ago. 340K monthly actives. $180K MRR. Subscription-only. Two ex-SearchCorp PMs and two engineers. We're profitable. We're also burnt out.\n\nWe're not looking for a rebrand. We're looking for someone who understands product and won't destroy what we built.\"\n\nAsking price: $10M.\n\nPM LLM is not a game. It's an AI assistant for product managers — spec writer, PRD generator, sprint planner. Users describe it as \"the PM that never sleeps and doesn't go to your 9am.\"\n\nThe product is real. The question is whether you are a games studio or a product company.",
+    body:"You get the cold outreach at 6:47 AM.\n\n\"We built PM LLM 14 months ago. 340K monthly actives. $180K MRR. Subscription-only. Two ex-SearchCorp PMs and two engineers. We're profitable. We're also burnt out.\n\nWe're not looking for a rebrand. We're looking for someone who understands product and won't destroy what we built.\"\n\nAsking price: $10M.\n\nPM LLM is not a game. It's an AI assistant for product managers: spec writer, PRD generator, sprint planner. Users describe it as \"the PM that never sleeps and doesn't go to your 9am.\"\n\nThe product is real. The question is whether you are a games studio or a product company.",
     choices:[
       {text:"Acquire PM LLM for $10M.",flav:"It's a bet on yourself. +$6K/day passive. Respect +2.",fx:()=>{
         if(S.revenue<10000000){ log("Not enough operating income for this acquisition."); return; }
@@ -1070,7 +1073,7 @@ const EVENTS = {
         S.respect++;
         log("You passed on PM LLM. The product ships without you. You'll see their growth charts in your feed occasionally.");
       }},
-      {text:"Counter at $7M.",flav:"Risky. 50%: accepted. 50%: they walk — 'the offer reflected the product's value.'",fx:()=>{
+      {text:"Counter at $7M.",flav:"Risky. 50%: accepted. 50%: they walk: 'the offer reflected the product's value.'",fx:()=>{
         if(Math.random()<0.5){
           if(S.revenue<7000000){ log("Not enough operating income."); return; }
           S.revenue-=7000000; S.pmLLMOwned=true; S.respect+=2;
@@ -1084,7 +1087,7 @@ const EVENTS = {
   },
   pmLLMChallenge:{
     title:"PM LLM wants to pivot.",
-    body:"The PM LLM team came with a deck.\n\nThey want to build a \"game design co-pilot\" — AI that generates first-draft PRDs for game studios. Feature spec, monetization model, live ops calendar. They think your portfolio is the distribution.\n\nThey need $500K and 3 months.\n\n\"We can build it. We just need you to say yes.\"\n\nSlide 7 is a TAM slide. The number is very large. You've seen large TAM slides before.",
+    body:"The PM LLM team came with a deck.\n\nThey want to build a \"game design co-pilot\": AI that generates first-draft PRDs for game studios. Feature spec, monetization model, live ops calendar. They think your portfolio is the distribution.\n\nThey need $500K and 3 months.\n\n\"We can build it. We just need you to say yes.\"\n\nSlide 7 is a TAM slide. The number is very large. You've seen large TAM slides before.",
     choices:[
       {text:"Fund it. $500K.",flav:"SB generation +10% permanently. The co-pilot bleeds into your studio.",fx:()=>{
         if(S.revenue<500000){ log("Not enough revenue to fund PM LLM co-pilot."); return; }
@@ -1374,7 +1377,7 @@ function load(){
     if(sv.game && (!sv.games||sv.games.length===0)) S.games=[sv.game];
     if(!S.games) S.games=[];
     if(!S.autos.artist) S.autos.artist=0;
-    // No offline progress — game pauses when closed
+    // No offline progress: game pauses when closed
     // (small grace: max 30s to cover autosave lag on same session)
     S.lastSave=Date.now(); S.lastClick=Date.now();
   }catch(e){console.warn('load failed',e)}
@@ -1392,7 +1395,7 @@ function resetGame(){
         ['shipIt4','shipIt3','shipIt2'].forEach(k=>localStorage.removeItem(k));
         location.reload();
       }},
-      {text:'Cancel — keep my progress.',flav:'',fx:()=>{}},
+      {text:'Cancel: keep my progress.',flav:'',fx:()=>{}},
     ]
   });
 }
@@ -1580,17 +1583,17 @@ function buildInlineOps(g,i){
   ];
   return `<div style="margin-top:.7rem;border-top:1px solid var(--border);padding-top:.6rem">
     <div class="ops-hdr">
-      <div class="sptitle" style="font-size:.7rem">📋 Live Ops</div>
-      <div class="${cdClass}" style="font-size:.72rem">${cdStr}</div>
+      <div class="sptitle" style="font-size:0.75rem">📋 Live Ops</div>
+      <div class="${cdClass}" style="font-size:0.75rem">${cdStr}</div>
     </div>
-    <div style="font-size:.65rem;color:${isBt?'var(--yellow)':uses>4?'var(--t3)':'var(--t2)'};margin:.2rem 0 .35rem;text-align:center">${effLabel}</div>
+    <div style="font-size:0.75rem;color:${isBt?'var(--yellow)':uses>4?'var(--t3)':'var(--t2)'};margin:.2rem 0 .35rem;text-align:center">${effLabel}</div>
     <div class="ops-grid" style="margin-top:.0rem">
       ${actions.map(a=>`<button class="ops-btn" onclick="fireOpsAction('${a.id}',${i})" ${ready?'':'disabled'}>
         <div class="ops-btn-name" style="font-size:.75rem">${a.name}</div>
         <div class="ops-btn-effect">${a.effects.map(e=>`<span class="pos">${e}</span>`).join(' · ')}</div>
       </button>`).join('')}
     </div>
-    ${g.opsLastResult?`<div class="ops-result" style="font-size:.72rem;color:var(--t2);margin-top:.35rem;text-align:center">${g.opsLastResult}</div>`:''}
+    ${g.opsLastResult?`<div class="ops-result" style="font-size:0.75rem;color:var(--t2);margin-top:.35rem;text-align:center">${g.opsLastResult}</div>`:''}
   </div>`;
 }
 
@@ -1796,7 +1799,7 @@ function tick(){
       } else if(ov===144){ // 6 days overdue
         g.churn=Math.min(25,g.churn+5); g.dau=Math.round(g.dau*0.8);
         log(`💀 ${g.name}: 6 days without features. Churn +5%, DAU -20%. Players leaving fast.`);
-      } else if(ov===192){ // 8 days overdue — story beat / 2-min warning
+      } else if(ov===192){ // 8 days overdue: story beat / 2-min warning
         if(!g._featureWarningFired){
           g._featureWarningFired=true;
           S.fired=S.fired.filter(id=>id!==`featureEmergency_${g.name}`); // ensure it can fire
@@ -1804,7 +1807,7 @@ function tick(){
           S.popQ.unshift(`featureEmergency_${g.name}`); // priority queue
           S._featureEmergencyGame=g.name;
         }
-      } else if(ov===312){ // 2 real minutes after warning — DAU collapse begins
+      } else if(ov===312){ // 2 real minutes after warning: DAU collapse begins
         g.dau=Math.round(g.dau*0.50);
         log(`📉 ${g.name}: Players are leaving en masse. DAU −50%. The window to save this is closing.`);
       } else if(ov===360){
@@ -1814,7 +1817,7 @@ function tick(){
       } else if(ov===420){
         g.dau=Math.round(g.dau*0.70);
         log(`📉 ${g.name}: Almost no one left. Last chance to ship features.`);
-      } else if(ov>=480){ // ~8 minutes total — forced sunset
+      } else if(ov>=480){ // ~8 minutes total: forced sunset
         log(`☠️ ${g.name} is dead. No features shipped in time. The players made the decision for you.`);
         const gIdx=S.games.indexOf(g);
         S.morale=Math.max(1,S.morale-2);
@@ -1959,7 +1962,7 @@ function tick(){
     });
   }
 
-  // Day timer (shared — all games tick together)
+  // Day timer (shared: all games tick together)
   S.dayTimer=(S.dayTimer||24)-1;
   if(S.dayTimer<=0){
     S.dayTimer=24;
@@ -2037,7 +2040,7 @@ function tick(){
   if(!S.fired.includes('moraleCollapse')&&S.morale<=1) qEv('moraleCollapse');
   if(!S.vcOfferDone&&S.totalRev>500000){ S.vcOfferDone=true; qEv('vcOffer'); }
   if(!S.conferenceEventFired&&S.respect>=3&&S.games.length>0){ S.conferenceEventFired=true; qEv('conferenceSpeaking'); }
-  // Acquisition event fired via unique key per game — check if queued
+  // Acquisition event fired via unique key per game: check if queued
   if(S._acqGameIdx!==undefined){ qEv('megaAcquisition'); S._acqGameIdx=undefined; }
 
   // New event triggers
@@ -2122,7 +2125,7 @@ function autoAdvancePRDStep(){
   } else {
     S.prdProgress=0;
     S.clicks++;
-    log(`#${S.clicks} — ${PM_AUTO_SHIP_MSGS[S.clicks % PM_AUTO_SHIP_MSGS.length]}`);
+    log(`#${S.clicks}: ${PM_AUTO_SHIP_MSGS[S.clicks % PM_AUTO_SHIP_MSGS.length]}`);
     S.pmAutoShipped=true;
     // Check if first game should launch
     if(S.clicks>=protoThreshold()&&S.games.length===0&&!S.namedPopDone){
@@ -2160,7 +2163,7 @@ function checkMilestones(){
 
   if(S.games.length>0&&!S.panels.port){ S.panels.port=true; reveal('panel-port'); }
   if(S.games.length>0&&!S.panels.sprint){ S.panels.sprint=true; reveal('panel-sprint'); log('PM Focus Sliders unlocked.'); }
-  if(S.games.length>0&&S.research.includes('liveops_training')&&!S.panels.ops){ S.panels.ops=true; /* panel-ops is now inline per game card — no separate panel reveal */ log('Live Ops board unlocked. Ship events and offers to scale revenue.'); }
+  if(S.games.length>0&&S.research.includes('liveops_training')&&!S.panels.ops){ S.panels.ops=true; /* panel-ops is now inline per game card: no separate panel reveal */ log('Live Ops board unlocked. Ship events and offers to scale revenue.'); }
   if(S.games.length>0&&S.totalRev>=10000&&!S.panels.upgrades){ S.panels.upgrades=true; reveal('panel-upgrades'); log('Studio Upgrades unlocked. You\'ve earned your first $10K.'); }
 
   if(S.research.includes('second_team')&&S.maxGames<2){ S.maxGames=2; log('Second game slot unlocked.'); }
@@ -2287,8 +2290,8 @@ function updateProtoUI(){
   const btn=$('btn-proto');
   if(btn){
     btn.textContent=PRD_STEPS[step];
-    btn.style.background=isShip?'linear-gradient(135deg,#16a34a,#22c55e)':'linear-gradient(135deg,#7c3aed,#5b6ef5)';
-    btn.style.boxShadow=isShip?'0 4px 22px rgba(34,197,94,.5)':'0 4px 22px rgba(124,58,237,.4)';
+    btn.style.background=isShip?'linear-gradient(135deg,#16a34a,#22c55e)':'#ff5a36';
+    btn.style.boxShadow=isShip?'0 4px 22px rgba(34,197,94,.5)':'0 4px 22px rgba(255,90,54,.4)';
   }
   const bar=$('prd-bar');
   if(bar) bar.style.width=Math.round(step/(PRD_STEPS.length-1)*100)+'%';
@@ -2352,7 +2355,7 @@ function updateUI(){
     }
     // (waiting message set in tick)
   } else {
-    // Manual mode — show what they need to hire
+    // Manual mode: show what they need to hire
     if(S.games.length>0&&(S.autos.junior||0)===0&&(S.autos.senior||0)===0&&(S.autos.ai||0)===0){
       set('sp-note','Hire a PM to automate prototype shipping →');
     }
@@ -2405,7 +2408,7 @@ function buildAutoList(){
   const buildTeam=AUTOS.filter(a=>a.sbRate>0);
   const pmTeam=AUTOS.filter(a=>a.pmRate>0);
 
-  let html='<div class="auto-section-hdr">🏗 Build Team — generates Software Built</div>';
+  let html='<div class="auto-section-hdr">🏗 Build Team: generates Software Built</div>';
   html+=buildTeam.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.35,owned));
@@ -2429,7 +2432,7 @@ function buildAutoList(){
   const pmSummary=totalPMs===0
     ?'no PMs hired yet'
     :`${totalPMs} PM${totalPMs!==1?'s':''} · auto-step every ${interval}s · ${fmt(pmStepCost())} SB/step`;
-  html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team — ships prototypes<br><span style="font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};">${pmSummary}</span></div>`;
+  html+=`<div class="auto-section-hdr" style="margin-top:.5rem">👔 PM Team: ships prototypes<br><span style="font-weight:400;text-transform:none;letter-spacing:0;color:${pmRate>0?'var(--green)':'var(--t3)'};">${pmSummary}</span></div>`;
   html+=pmTeam.map(a=>{
     const owned=S.autos[a.id]||0;
     const cost=Math.floor(a.cost*Math.pow(1.35,owned));
@@ -2476,7 +2479,7 @@ function buildAutoList(){
       <div style="margin-top:4px">
         ${raiseReady
           ?`<button class="bbuy aff" onclick="giveRaise()">Available now</button>`
-          :`<span style="font-size:.72rem;color:var(--t3)">Available in ${daysUntil} days</span>`
+          :`<span style="font-size:0.75rem;color:var(--t3)">Available in ${daysUntil} days</span>`
         }
       </div>
     </div>`;
@@ -2491,7 +2494,7 @@ function renderResItems(items){
     const reqMet=r.id!=='second_team'||(
       (S.autos.engineer||0)>=4&&(S.autos.qa||0)>=2&&(S.autos.designer||0)>=2&&(S.autos.artist||0)>=2);
     const reqNote=r.id==='second_team'&&!done&&!reqMet
-      ?`<div style="font-size:.68rem;color:var(--red);margin-top:3px">⚠ Need: 4 Eng · 2 QA · 2 Des · 2 Art (have: ${S.autos.engineer||0}·${S.autos.qa||0}·${S.autos.designer||0}·${S.autos.artist||0})</div>`:'';
+      ?`<div style="font-size:0.75rem;color:var(--red);margin-top:3px">⚠ Need: 4 Eng · 2 QA · 2 Des · 2 Art (have: ${S.autos.engineer||0}·${S.autos.qa||0}·${S.autos.designer||0}·${S.autos.artist||0})</div>`:'';
     return `<div class="ri">
       <div class="rin">${r.name}</div>
       <div class="rid">${r.desc}</div>
@@ -2534,7 +2537,7 @@ function buildUpgradesList(){
   if(hasAcqMoney||ipActive){
     ipHtml=`<div class="ri">
       <div class="rin">🎬 License a Franchise IP</div>
-      <div class="rid">${ipActive?`Active: ${ipActive.name} — royalty ${$m(ipActive.royaltyPerDay)}/day.`:ipPending?`${IP_LICENSES.find(x=>x.id===ipPending)?.name} pending — launch your next game.`:'License a major IP for your next game. Massive launch DAU, ongoing royalty cost.'}</div>
+      <div class="rid">${ipActive?`Active: ${ipActive.name}: royalty ${$m(ipActive.royaltyPerDay)}/day.`:ipPending?`${IP_LICENSES.find(x=>x.id===ipPending)?.name} pending: launch your next game.`:'License a major IP for your next game. Massive launch DAU, ongoing royalty cost.'}</div>
       ${ipActive||ipPending?'':'<div style="margin-top:5px"><button class="bbuy aff" onclick="showIPPopup()">Choose IP</button></div>'}
     </div>`;
   }
@@ -2606,7 +2609,7 @@ function buildCard(g,i){
       <div class="gcn">${g.name}</div>
       <div class="gctags"><span class="gctag">${g.genre}</span><span class="gctag">${g.audience}</span></div>
     </div>
-    ${fl?`<div style="font-size:.72rem;color:var(--t3);margin-bottom:.7rem;font-style:italic">${fl}</div>`:''}
+    ${fl?`<div style="font-size:0.75rem;color:var(--t3);margin-bottom:.7rem;font-style:italic">${fl}</div>`:''}
     <div class="gcstats">${statsHtml}
     </div>
     <div class="gcactions">
@@ -2638,7 +2641,7 @@ function buildCard(g,i){
       })()}
       <button class="bact dan" onclick="confirmSunset(${i})">Sunset</button>
     </div>
-    <div style="margin-top:.65rem;font-size:.72rem;color:var(--t2)">
+    <div style="margin-top:.65rem;font-size:0.75rem;color:var(--t2)">
       Peak DAU: ${fmt(S.peakDAU)} · Lifetime: ${$m(g.lifetimeRev||0)} · Team cost: ${teamShare}/day
     </div>
     ${buildInlineOps(g,i)}
@@ -2658,7 +2661,7 @@ function clickProto(){
   } else {
     S.prdProgress=0;
     S.clicks++;
-    if(S.clicks<=5||S.clicks%3===0) log('#'+S.clicks+' — '+REJECTIONS[S.clicks%REJECTIONS.length]);
+    if(S.clicks<=5||S.clicks%3===0) log('#'+S.clicks+': '+REJECTIONS[S.clicks%REJECTIONS.length]);
   }
   updateProtoUI();
 }
@@ -2726,7 +2729,7 @@ function showUAPopup(gIdx=0){
     title:'Spend in User Acquisition',
     body:`Game: ${g.name}\nRevenue: ${$m(S.revenue)}\nDebt: ${$m(S.debt)}${mult>1?' · UA +50% active':''}`,
     choices: INV.map(t=>({
-      text:`${t.name} — ${$m(t.cost)}`,
+      text:`${t.name}: ${$m(t.cost)}`,
       flav:`+${fmt(Math.round(t.dau*mult))} DAU · ${t.roas}x ROAS${S.revenue<t.cost?' · ⚠ need more revenue':''}`,
       fx:()=>doUA(t.id,gIdx)
     }))
@@ -2781,7 +2784,7 @@ function showIPPopup(){
     title:'License a franchise IP.',
     body:`You have the capital. The IP holders are watching your portfolio.\n\nChoose an IP to license for your next game. Each comes with a launch DAU boost, a recurring royalty, and specific risks.`,
     choices: IP_LICENSES.map(ip=>({
-      text:`${ip.name} — ${$m(ip.cost)} upfront`,
+      text:`${ip.name}: ${$m(ip.cost)} upfront`,
       flav:`+${fmt(ip.launchDAU)} launch DAU · ${$m(ip.royaltyPerDay)}/day royalty · ${ip.desc}`,
       fx:()=>{ S.pendingIPLaunch=ip.id; S.revenue-=ip.cost; log(`${ip.name} license secured. Next game launches with IP bonus.`); }
     }))
@@ -2937,9 +2940,9 @@ function showNamingPopup(){
   const genreInputs=S.genrePickerUnlocked
     ?`<select class="pinput" id="genre-in">${GENRES.map(g=>`<option value="${g}"${g===genre?' selected':''}>${g}</option>`).join('')}</select>
        <select class="pinput" id="aud-in" style="margin-top:.4rem">${AUDIENCES.map(a=>`<option value="${a}"${a===aud?' selected':''}>${a}</option>`).join('')}</select>`
-    :`<div style="font-size:.78rem;color:var(--t3);margin-bottom:.5rem">Genre: ${genre} · Audience: ${aud} — <em>unlock Genre Strategy to choose</em></div>`;
+    :`<div style="font-size:.78rem;color:var(--t3);margin-bottom:.5rem">Genre: ${genre} · Audience: ${aud}: <em>unlock Genre Strategy to choose</em></div>`;
   const qualityButtons=PROTO_QUALITY_TIERS.map((t,i)=>
-    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${t.label} (${fmt(t.sbCost)} SB) — −${t.churnBonus}% churn · +${t.dauBonus} DAU</button>`
+    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${t.label} (${fmt(t.sbCost)} SB): −${t.churnBonus}% churn · +${t.dauBonus} DAU</button>`
   ).join('');
   $('p-choices').innerHTML=`
     <input type="text" class="pinput" id="gname-in" value="${suggested}" placeholder="Game name..." maxlength="40">
@@ -2947,7 +2950,7 @@ function showNamingPopup(){
     <div style="font-size:.78rem;color:var(--t2);margin:.6rem 0 .3rem">Optional: Invest in prototype quality before launch</div>
     <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem">${qualityButtons}</div>
     <button class="pchoice" onclick="launchGame('${genre}','${aud}')">Launch it →</button>
-    ${isFirst?`<div style="font-size:.67rem;color:var(--t3);text-align:center;margin-top:.25rem;font-style:italic">"Karen has already emailed the team about naming rights."</div>`:''}`;
+    ${isFirst?`<div style="font-size:0.75rem;color:var(--t3);text-align:center;margin-top:.25rem;font-style:italic">"Karen has already emailed the team about naming rights."</div>`:''}`;
   $('poverlay').classList.remove('hidden');
   setTimeout(()=>{ const i=$('gname-in'); if(i)i.focus(); },100);
 }
@@ -3042,7 +3045,7 @@ function investProtoQuality(tierIdx){
   log(`Prototype quality: ${t.label} invested. −${t.churnBonus}% starting churn, +${t.dauBonus} launch DAU.`);
   // Re-render the naming popup quality buttons
   const qualityButtons=PROTO_QUALITY_TIERS.map((qt,i)=>
-    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${qt.label} (${fmt(qt.sbCost)} SB) — −${qt.churnBonus}% churn · +${qt.dauBonus} DAU</button>`
+    `<button class="bbuy${(S.pendingProtoQuality||0)>i?' aff':''}" onclick="investProtoQuality(${i})">${qt.label} (${fmt(qt.sbCost)} SB): −${qt.churnBonus}% churn · +${qt.dauBonus} DAU</button>`
   ).join('');
   const qContainer=document.querySelector('#p-choices .bbuy')?.parentElement;
   if(qContainer) qContainer.innerHTML=qualityButtons;
@@ -3071,11 +3074,11 @@ function buildEngineList(){
       <div style="text-align:right;flex-shrink:0;margin-left:.5rem">
         ${done?`<span class="tier-row-done">Active</span>`
           :isNext?`<button class="bbuy aff" data-cost="${t.cost}" data-cur="sb" onclick="buyEngineTier()">${fmt(t.cost)} SB</button>`
-          :`<span class="tier-row-locked" style="font-size:.72rem;color:var(--t3)">${fmt(t.cost)} SB</span>`}
+          :`<span class="tier-row-locked" style="font-size:0.75rem;color:var(--t3)">${fmt(t.cost)} SB</span>`}
       </div>
     </div>`;
   });
-  if(S.engineTier>0) html+=`<div style="font-size:.72rem;color:var(--green);margin-top:.4rem">Current reduction: −${Math.round(ENGINE_TIERS[S.engineTier-1].reduction*100)}%</div>`;
+  if(S.engineTier>0) html+=`<div style="font-size:0.75rem;color:var(--green);margin-top:.4rem">Current reduction: −${Math.round(ENGINE_TIERS[S.engineTier-1].reduction*100)}%</div>`;
   c.innerHTML=html;
 }
 
@@ -3090,7 +3093,7 @@ function buyAnalyticsTier(){
 }
 
 function buildAnalyticsList(){
-  // Analytics is shown as part of the research panel — integrated via game cards
+  // Analytics is shown as part of the research panel: integrated via game cards
   // No separate panel needed; tier is purchased via studio upgrades list if desired
 }
 
@@ -3169,7 +3172,7 @@ function buildOfficePanel(){
   let html=`<div style="margin-bottom:.5rem">
     <div class="rin office-tier-active">${S.isRemote?'🌐 Fully Remote':cur.name}</div>
     <div class="rid" style="font-style:italic">${S.isRemote?'Office cost eliminated. Morale capped at 4.':cur.flavor}</div>
-    <div style="font-size:.72rem;color:var(--t2);margin-top:3px">Daily cost: ${$m(S.isRemote?0:(cur.dailyCost||0))} · Morale mult: ${S.isRemote?'1.0×':cur.moraleMult+'×'} · SB: ${S.isRemote?'—':'+'+Math.round((cur.sbMult||0)*100)+'%'}</div>
+    <div style="font-size:0.75rem;color:var(--t2);margin-top:3px">Daily cost: ${$m(S.isRemote?0:(cur.dailyCost||0))} · Morale mult: ${S.isRemote?'1.0×':cur.moraleMult+'×'} · SB: ${S.isRemote?'n/a':'+'+Math.round((cur.sbMult||0)*100)+'%'}</div>
   </div>`;
   if(next&&!S.isRemote){
     const canAfford=S.revenue>=next.cost;
@@ -3234,7 +3237,7 @@ function runGameJam(){
   S.clicks++;
   if(excellent){
     S.jamProtoExcellent=true;
-    log(`🎮 Game Jam complete. The team built something genuinely surprising. Prototype added — lower starting churn.`);
+    log(`🎮 Game Jam complete. The team built something genuinely surprising. Prototype added: lower starting churn.`);
   } else {
     log(`🎮 Game Jam complete. "The concept is Minecraft but for PMs." Prototype added.`);
   }
@@ -3255,7 +3258,7 @@ function triggerPrestige(){
   const churnBonus=Math.min(0.05,Math.floor(score/30)*0.005);
   showPop({
     title:'Found a New Studio.',
-    body:`You've earned ${score} Legacy Score.\n\nYour career doesn't reset — it compounds.\n\nYou carry:\n· +${Math.round(sbBonus*100)}% SB generation\n· −${churnBonus.toFixed(1)}% starting churn on all new games\n${score>=100?'· One research item pre-completed (you choose below)':''}\n\nEverything else resets.`,
+    body:`You've earned ${score} Legacy Score.\n\nYour career doesn't reset: it compounds.\n\nYou carry:\n· +${Math.round(sbBonus*100)}% SB generation\n· −${churnBonus.toFixed(1)}% starting churn on all new games\n${score>=100?'· One research item pre-completed (you choose below)':''}\n\nEverything else resets.`,
     choices:[
       {text:'Start the new studio.',flav:'The log on day one reads: "You\'ve been here before. That\'s either wisdom or a warning sign."',fx:()=>{
         if(score>=100){ showLegacyResearchPicker(sbBonus,churnBonus); }
@@ -3335,7 +3338,7 @@ document.addEventListener('visibilitychange',()=>{
     stopTick();
     if(!window._resetting) save(); // save state on hide (but not during a reset)
   } else {
-    // No offline progress — game only runs when tab is open
+    // No offline progress: game only runs when tab is open
     if(S.hiddenAt){
       const pausedSec=Math.round((Date.now()-S.hiddenAt)/1000);
       S.lastSave=Date.now(); // reset save time so load() doesn't apply offline progress
@@ -3358,7 +3361,7 @@ if(S.panels.premium) reveal('panel-premium');
 if(S.panels.respect) reveal('panel-respect-actions');
 if(S.panels.port) reveal('panel-port');
 if(S.panels.sprint) reveal('panel-sprint');
-// panel-ops is inline per-game now — never reveal the standalone panel
+// panel-ops is inline per-game now: never reveal the standalone panel
 if(S.panels.studioMaturity) reveal('panel-studio-maturity');
 if(S.pp>=15000){ reveal('panel-engine'); }
 if(RESEARCH.filter(r=>r.tier===1).every(r=>S.research.includes(r.id))&&S.revenue>=20000){ reveal('panel-software'); }
