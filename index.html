@@ -258,8 +258,9 @@ body.light .nav-menu{box-shadow:0 18px 40px rgba(0,0,0,0.14)}
 .ti-group h3{font-family:var(--display);font-size:1.05rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:0.5rem}
 .ti-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;width:100%;min-height:44px;padding:0.7rem 0;background:none;border:0;border-top:1px solid var(--border);color:var(--t1);text-align:left;text-decoration:none;cursor:pointer;font:inherit;transition:padding-left .18s cubic-bezier(0.22,1,0.36,1)}
 .ti-row:hover{padding-left:6px}
-.ti-name{font-size:0.95rem;font-weight:600;display:flex;gap:8px;align-items:center}
-.ti-desc{font-size:0.8rem;color:var(--t2);text-align:right}
+.ti-name{font-size:0.95rem;font-weight:600;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.ti-desc{font-size:0.8rem;color:var(--t2);text-align:right;white-space:nowrap}
+.ti-row{align-items:center}
 .ti-tag{font-style:normal;font-size:0.75rem;font-weight:700;padding:1px 8px;border-radius:99px;background:var(--accent);color:var(--on-accent)}
 @media(max-width:900px){.tool-index{grid-template-columns:1fr;gap:1.75rem}.ti-desc{display:none}}
 
@@ -6820,7 +6821,9 @@ function buildIndex(){
       row.className='ti-row';
       if(it.tagName==='A')row.href=it.getAttribute('href');else{row.type='button';row.onclick=()=>it.click();}
       const tag=it.querySelector('.nav-item-tag');
-      row.innerHTML='<span class="ti-name">'+it.querySelector('.nav-item-name').firstChild.textContent+(tag?'<em class="ti-tag">'+tag.textContent+'</em>':'')+'</span><span class="ti-desc">'+it.querySelector('.nav-item-desc').textContent+'</span>';
+      const nm=it.querySelector('.nav-item-name').firstChild.textContent.trim();
+      const short={'Ship It':'Run a studio','PM Challenge':'Daily case','Leaderboard':'Top scores','Prioritization':'RICE, ICE, Kano','Stats Lab':'Tests, Bayes','Growth Tools':'ROAS, LTV','A/B Sample Size':'Test size','PM Playbook':'Guides','Gaming News':'Headlines'};
+      row.innerHTML='<span class="ti-name">'+nm+(tag?'<em class="ti-tag">'+tag.textContent+'</em>':'')+'</span><span class="ti-desc">'+(short[nm]||it.querySelector('.nav-item-desc').textContent)+'</span>';
       col.appendChild(row);
     });
     host.appendChild(col);
